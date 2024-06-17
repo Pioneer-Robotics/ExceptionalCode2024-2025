@@ -10,9 +10,10 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 public class ColorDetectionPipeline extends OpenCvPipeline{
     //Streaming in 1280x720
-    //
+
     public int width = 1280;
     public int height = 720;
+    public int location = -1;
 
     Scalar lowerRed = new Scalar(108,40,40); // Adjust as needed for light blue
     Scalar upperRed = new Scalar(255,0,0); // Adjust as needed for dark blue
@@ -25,7 +26,6 @@ public class ColorDetectionPipeline extends OpenCvPipeline{
     Mat leftCrop = new Mat();
     Mat rightCrop = new Mat();
 
-    public static int location = -1;
 
     double leftAvgFin;
 
