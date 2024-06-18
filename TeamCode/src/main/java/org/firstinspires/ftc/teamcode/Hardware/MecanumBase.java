@@ -41,6 +41,7 @@ public class MecanumBase {
     public void move(double speed, double angle, double turn) {
 
         double currentAngle = imu.getRadians();
+
         if(northMode) {angle -= currentAngle;}
 
         double power1 = (Math.sin(angle - (Math.PI / 4)) * speed);
