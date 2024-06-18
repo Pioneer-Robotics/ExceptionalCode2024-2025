@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.Config;
-import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
 
 
 /**
@@ -57,39 +56,6 @@ public class MecanumBase {
     }
 
     /**
-     * Set the motor powers to move the robot based on the x and y components of a vector.
-     * Used in TeleOp and with the PID controller.
-     * @param x The x component of the vector to move in the range [-1, 1]
-     * @param y The y component of the vector to move in the range [-1, 1]
-     */
-    public void move_vector(double x, double y) {
-        move_vector(x, y, 0);
-    }
-
-    /**
-     * Set the motor powers to move the robot based on the x and y components of a vector.
-     * Used in TeleOp and with the PID controller.
-     * @param x The x component of the vector to move in the range [-1, 1]
-     * @param y The y component of the vector to move in the range [-1, 1]
-     * @param turn The amount to turn in the range [-1, 1]
-     */
-    public void move_vector(double x, double y, double turn) {
-        double angle = Math.atan2(y, x);
-        double speed = Math.hypot(x, y);
-        move(angle, turn, speed);
-    }
-
-    /**
-     * Set the motor powers to move the robot in a direction at full speed.
-     * Used in TeleOp and with the PID controller.
-     * @param angle The angle to move at in radians
-     * @param turn The amount to turn in the range [-1, 1]
-     */
-    public void move(double angle, double turn) {
-        move(angle, turn, 1);
-    }
-
-    /**
      * Set the motor powers to move the robot in a direction.
      * Used in TeleOp and with the PID controller.
      * @param angle The angle to move at in radians
@@ -116,6 +82,40 @@ public class MecanumBase {
         opMode.telemetry.addData("LB", LB.getPower());
         opMode.telemetry.addData("NorthMode", northMode);
     }
+
+    /**
+     * Set the motor powers to move the robot in a direction at full speed.
+     * Used in TeleOp and with the PID controller.
+     * @param angle The angle to move at in radians
+     * @param turn The amount to turn in the range [-1, 1]
+     */
+    public void move(double angle, double turn) {
+        move(angle, turn, 1);
+    }
+
+    /**
+     * Set the motor powers to move the robot based on the x and y components of a vector.
+     * Used in TeleOp and with the PID controller.
+     * @param x The x component of the vector to move in the range [-1, 1]
+     * @param y The y component of the vector to move in the range [-1, 1]
+     */
+    public void move_vector(double x, double y) {
+        move_vector(x, y, 0);
+    }
+
+    /**
+     * Set the motor powers to move the robot based on the x and y components of a vector.
+     * Used in TeleOp and with the PID controller.
+     * @param x The x component of the vector to move in the range [-1, 1]
+     * @param y The y component of the vector to move in the range [-1, 1]
+     * @param turn The amount to turn in the range [-1, 1]
+     */
+    public void move_vector(double x, double y, double turn) {
+        double angle = Math.atan2(y, x);
+        double speed = Math.hypot(x, y);
+        move(angle, turn, speed);
+    }
+
 
     /**
      * Set north mode.
