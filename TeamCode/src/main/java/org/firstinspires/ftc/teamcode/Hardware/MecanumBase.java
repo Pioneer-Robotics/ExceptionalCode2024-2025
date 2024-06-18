@@ -7,11 +7,20 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
 
+
+/**
+ * MecanumBase is used to control the mecanum drive base.
+ */
 public class MecanumBase {
     LinearOpMode opMode;
     DcMotorEx LF, LB, RF, RB;
     BotIMU imu;
     boolean northMode;
+
+    /**
+     * Constructor for MecanumBase.
+     * @param opMode LinearOpMode
+     */
     public MecanumBase(LinearOpMode opMode) {
         // Contains hardwareMap and telemetry
         this.opMode = opMode;
@@ -34,12 +43,60 @@ public class MecanumBase {
         LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-
     }
 
-    public void move(double speed, double angle, double turn) {
+    /**
+     * Set the zero power behavior of the motors.
+     * @param behavior ZeroPowerBehavior
+     */
+    public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior behavior) {
+        RF.setZeroPowerBehavior(behavior);
+        LF.setZeroPowerBehavior(behavior);
+        RB.setZeroPowerBehavior(behavior);
+        LB.setZeroPowerBehavior(behavior);
+    }
 
+    /**
+     * Set the motor powers to move the robot based on the x and y components of a vector.
+     * Used in TeleOp and with the PID controller.
+     * @param x The x component of the vector to move in the range [-1, 1]
+     * @param y The y component of the vector to move in the range [-1, 1]
+     */
+    public void move_vector(double x, double y) {
+        move_vector(x, y, 0);
+    }
+
+    /**
+     * Set the motor powers to move the robot based on the x and y components of a vector.
+     * Used in TeleOp and with the PID controller.
+     * @param x The x component of the vector to move in the range [-1, 1]
+     * @param y The y component of the vector to move in the range [-1, 1]
+     * @param turn The amount to turn in the range [-1, 1]
+     */
+    public void move_vector(double x, double y, double turn) {
+        double angle = Math.atan2(y, x);
+        double speed = Math.hypot(x, y);
+        move(angle, turn, speed);
+    }
+
+    /**
+     * Set the motor powers to move the robot in a direction at full speed.
+     * Used in TeleOp and with the PID controller.
+     * @param angle The angle to move at in radians
+     * @param turn The amount to turn in the range [-1, 1]
+     */
+    public void move(double angle, double turn) {
+        move(angle, turn, 1);
+    }
+
+    /**
+     * Set the motor powers to move the robot in a direction.
+     * Used in TeleOp and with the PID controller.
+     * @param angle The angle to move at in radians
+     * @param turn The amount to turn in the range [-1, 1]
+     * @param speed The speed to move at in the range [-1, 1]
+     */
+    public void move(double angle, double turn, double speed) {
         double currentAngle = imu.getRadians();
 
         if(northMode) {angle -= currentAngle;}
@@ -60,12 +117,18 @@ public class MecanumBase {
         opMode.telemetry.addData("NorthMode", northMode);
     }
 
+    /**
+     * Set north mode.
+     * @param newMode Boolean value to set north mode
+     */
     public void setNorthMode(boolean newMode) {
         northMode = newMode;
         if(newMode){imu.resetYaw();opMode.telemetry.addLine("RESETING");}
     }
 
+    /**
+     * Get north mode.
+     * @return Boolean value of north mode
+     */
     public boolean getNorthMode() {return northMode;}
-
-
 }

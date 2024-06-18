@@ -1,13 +1,8 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 
 public class LinearSlide {
@@ -36,7 +31,7 @@ public class LinearSlide {
      * @param speed The speed to move the slide at, in the range [-1, 1] where 1 is full speed in the positive direction and -1 is full speed in the negative direction
      */
     public void moveToPosition(double position, double speed) {
-        // Convert position to encoder ticks (3000 is fully extended and 0 is fully retracted)
+        // Convert position to encoder ticks (-3000 is fully extended and 0 is fully retracted)
         int targetPosition = (int) (-3000 * position);
         targetPosition = Math.max(10, targetPosition); // Prevent the motor from moving to 0 and getting stuck
 
