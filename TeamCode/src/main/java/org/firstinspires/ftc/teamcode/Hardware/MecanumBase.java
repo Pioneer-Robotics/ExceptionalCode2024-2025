@@ -23,7 +23,7 @@ public class MecanumBase {
         RB = opMode.hardwareMap.get(DcMotorEx.class, Config.motorRB);
         LB = opMode.hardwareMap.get(DcMotorEx.class, Config.motorLB);
 
-        // LF.setDirection(DcMotor.Direction.REVERSE);
+        LF.setDirection(DcMotor.Direction.REVERSE);
         LB.setDirection(DcMotor.Direction.REVERSE);
         RF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         LF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -41,7 +41,7 @@ public class MecanumBase {
     public void move(double speed, double angle, double turn) {
 
         double currentAngle = imu.getRadians();
-        if(northMode) {angle += currentAngle;}
+        if(northMode) {angle -= currentAngle;}
 
         double power1 = (Math.sin(angle - (Math.PI / 4)) * speed);
         double power2 = (Math.sin(angle + (Math.PI / 4)) * speed);

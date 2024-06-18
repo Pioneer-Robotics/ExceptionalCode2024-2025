@@ -14,7 +14,7 @@ public class Teleop extends LinearOpMode {
         while(opModeIsActive()) {
             double px = gamepad1.left_stick_x;
             double py = -gamepad1.left_stick_y;
-            double turn = gamepad1.right_stick_x;
+            double turn = -gamepad1.right_stick_x;
             double stickAngle = Math.atan2(py, px);
             double speed = Math.sqrt((px * px + py * py));
             boolean aButton = gamepad1.a;
