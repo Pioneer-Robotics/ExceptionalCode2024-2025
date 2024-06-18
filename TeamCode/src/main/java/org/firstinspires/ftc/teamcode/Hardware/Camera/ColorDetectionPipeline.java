@@ -18,8 +18,10 @@ public class ColorDetectionPipeline extends OpenCvPipeline{
     Scalar lowerRed = new Scalar(108,40,40); // Adjust as needed for light blue
     Scalar upperRed = new Scalar(255,0,0); // Adjust as needed for dark blue
 
-    Rect leftHalf = new Rect(1,1,(width/2),height-1);
-    Rect rightHalf = new Rect((width/2)+1,1,width-2,height-1);
+//    Rect leftHalf = new Rect(1,1,(width/2)-1,height-1);
+//    Rect rightHalf = new Rect((width/2)+1,1,(width/2),height-1);
+    Rect leftHalf = new Rect(0, 0, width / 2, height);
+    Rect rightHalf = new Rect(width / 2, 0, width / 2, height);
 
     Mat blurredImg = new Mat();
     Mat modImg = new Mat();
@@ -36,16 +38,16 @@ public class ColorDetectionPipeline extends OpenCvPipeline{
     public Mat processFrame(Mat input){
         Imgproc.cvtColor(input, modImg, Imgproc.COLOR_RGB2YCrCb);
 
-        Imgproc.rectangle(input,leftHalf,new Scalar(0, 255, 0),2);
-        Imgproc.rectangle(input,rightHalf,new Scalar(0, 255, 0),2);
+        Imgproc.rectangle(modImg,leftHalf,new Scalar(0, 255, 0),2);
+        Imgproc.rectangle(modImg,rightHalf,new Scalar(0, 255, 0),2);
 
 //        Imgproc.blur(modImg,blurredImg,new Size(15,15));
 
-        leftCrop = input.submat(leftHalf);
-        rightCrop = input.submat(rightHalf);
+        leftCrop = modImg.submat(leftHalf);
+        rightCrop = modImg.submat(rightHalf);
 
         Core.extractChannel(leftCrop, leftCrop,2);
-        Core.extractChannel(leftCrop, leftCrop,2);
+        Core.extractChannel(rightCrop, rightCrop,2);
 
         Scalar leftAvg = Core.mean(leftCrop);
         Scalar rightAvg = Core.mean(rightCrop);
@@ -59,9 +61,15 @@ public class ColorDetectionPipeline extends OpenCvPipeline{
         } else if (rightAvgFin > leftAvgFin) {
             location = 1;
         }
+        int cols = input.cols();
+        int rows = input.rows();
 
-        return(rightCrop);
+        return(modImg);
 
+    }
+
+    public int getLocation(){
+        return(location);
     }
 
 

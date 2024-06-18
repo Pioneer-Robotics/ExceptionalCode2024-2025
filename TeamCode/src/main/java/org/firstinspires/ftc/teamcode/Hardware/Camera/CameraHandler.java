@@ -4,6 +4,7 @@ import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.checkerframework.checker.units.qual.C;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -20,7 +21,7 @@ public class CameraHandler extends LinearOpMode {
                 "am 1"), cameraMonitorViewId);
 
         webcam.setPipeline(new ColorDetectionPipeline());
-        webcam.setMillisecondsPermissionTimeout(5000); // Timeout for obtaining permission is configurable. Set before opening.
+        webcam.setMillisecondsPermissionTimeout(10000); // Timeout for obtaining permission is configurable. Set before opening. Used to be 5000
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
             @Override
             public void onOpened(){
@@ -32,15 +33,18 @@ public class CameraHandler extends LinearOpMode {
                 //Error idk
             }
         });
-
+        ColorDetectionPipeline pipeline = new ColorDetectionPipeline();
         waitForStart();
         while(opModeIsActive()){
+            int location = pipeline.getLocation();
+            telemetry.addData("Location", location);
             telemetry.addData("Frame Count", webcam.getFrameCount());
             telemetry.addData("FPS", String.format("%.2f", webcam.getFps()));
             telemetry.addData("Total frame time ms", webcam.getTotalFrameTimeMs());
             telemetry.addData("Pipeline time ms", webcam.getPipelineTimeMs());
             telemetry.addData("Overhead time ms", webcam.getOverheadTimeMs());
             telemetry.addData("Theoretical max FPS", webcam.getCurrentPipelineMaxFps());
+
 //            telemetry.addData("Location", )
             telemetry.update();
 
