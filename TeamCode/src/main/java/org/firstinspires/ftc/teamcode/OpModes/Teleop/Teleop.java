@@ -21,11 +21,12 @@ public class Teleop extends LinearOpMode {
             boolean bButton = gamepad1.b;
             boolean xButton = gamepad1.x;
             boolean yButton = gamepad1.y;
+            double maxSpeed = 0.5;
 
             if(xButton) {mecanumBase.setNorthMode(true);}
             if(yButton) {mecanumBase.setNorthMode(false);}
 
-            mecanumBase.move(speed, stickAngle, turn);
+            mecanumBase.move(speed*maxSpeed, stickAngle, turn*maxSpeed);
 
             // Telemetry in movement classes
             telemetry.update();

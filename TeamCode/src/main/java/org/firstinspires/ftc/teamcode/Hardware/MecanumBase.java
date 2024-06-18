@@ -41,7 +41,7 @@ public class MecanumBase {
     public void move(double speed, double angle, double turn) {
 
         double currentAngle = imu.getRadians();
-        if(northMode) {angle -= currentAngle;}
+        if(northMode) {angle += currentAngle;}
 
         double power1 = (Math.sin(angle - (Math.PI / 4)) * speed);
         double power2 = (Math.sin(angle + (Math.PI / 4)) * speed);
@@ -52,14 +52,17 @@ public class MecanumBase {
         LB.setPower(power1 - turn);
 
         opMode.telemetry.addData("Angle", currentAngle);
-        opMode.telemetry.addData("RF", RF.getVelocity());
-        opMode.telemetry.addData("LF", LF.getVelocity());
-        opMode.telemetry.addData("RB", RB.getVelocity());
-        opMode.telemetry.addData("LB", LB.getVelocity());
+        opMode.telemetry.addData("RF", RF.getPower());
+        opMode.telemetry.addData("LF", LF.getPower());
+        opMode.telemetry.addData("RB", RB.getPower());
+        opMode.telemetry.addData("LB", LB.getPower());
         opMode.telemetry.addData("NorthMode", northMode);
     }
 
-    public void setNorthMode(boolean newMode) {northMode = newMode;}
+    public void setNorthMode(boolean newMode) {
+        northMode = newMode;
+        if(newMode){imu.resetYaw();opMode.telemetry.addLine("RESETING");}
+    }
 
     public boolean getNorthMode() {return northMode;}
 
