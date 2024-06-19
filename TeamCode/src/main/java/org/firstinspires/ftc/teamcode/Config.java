@@ -16,10 +16,11 @@ public class Config {
     public static final double[] turnPID = {0.1, 0.001, 1}; // kP, kI, kD
 
     // ---- Hardware Map ----
-    // Odometer names
+    // Odometers
     public static final String odoLeft = "OdoLeft";
     public static final String odoCenter = "hang";
     public static final String odoRight = "collector";
+    public static final double trackWidth = 26.5; //In CM
 
     // Drive motor names
     public static final String motorLF = "LF";

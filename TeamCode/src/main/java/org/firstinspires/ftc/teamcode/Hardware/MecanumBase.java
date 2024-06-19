@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.Config;
  */
 public class MecanumBase {
     LinearOpMode opMode;
-    DcMotorEx LF, LB, RF, RB;
+    DcMotorEx LF, LB, RF, RB, odoLeft, odoRight, odoCenter;
     BotIMU imu;
     boolean northMode;
 
@@ -42,6 +42,15 @@ public class MecanumBase {
         LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        // Set up odometers
+        odoLeft = opMode.hardwareMap.get(DcMotorEx.class, Config.odoLeft);
+        odoRight = opMode.hardwareMap.get(DcMotorEx.class, Config.odoRight);
+        odoCenter = opMode.hardwareMap.get(DcMotorEx.class, Config.odoCenter);
+
+        odoLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        odoRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        odoCenter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     /**
@@ -63,6 +72,11 @@ public class MecanumBase {
      * @param speed The speed to move at in the range [-1, 1]
      */
     public void move(double angle, double turn, double speed) {
+        int odoLeftTicks = -odoLeft.getCurrentPosition();
+        int odoCenterTicks = -odoCenter.getCurrentPosition();
+        int odoRightTicks = -odoRight.getCurrentPosition();
+
+
         double currentAngle = imu.getRadians();
 
         if(northMode) {angle -= currentAngle;}
@@ -75,6 +89,9 @@ public class MecanumBase {
         RB.setPower(power2 + turn);
         LB.setPower(power1 - turn);
 
+        opMode.telemetry.addData("OL", odoLeftTicks);
+        opMode.telemetry.addData("OR", odoRightTicks);
+        opMode.telemetry.addData("OC", odoCenterTicks);
         opMode.telemetry.addData("Angle", currentAngle);
         opMode.telemetry.addData("RF", RF.getPower());
         opMode.telemetry.addData("LF", LF.getPower());
