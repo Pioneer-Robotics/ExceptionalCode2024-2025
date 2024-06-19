@@ -9,23 +9,23 @@ import org.firstinspires.ftc.teamcode.Helpers.GamepadControls;
 public class Teleop extends LinearOpMode {
     public void runOpMode() {
         MecanumBase mecanumBase = new MecanumBase(this);
-        GamepadControls pad = new GamepadControls(this);
+        GamepadControls pad1 = new GamepadControls(gamepad1);
 
         double maxSpeed = 0.5;
         waitForStart();
 
         while(opModeIsActive()) {
-            double px = pad.lStickX1;
-            double py = -pad.lStickY1;
-            double turn = -pad.rStickX1;
+            double px = pad1.lStickX;
+            double py = -pad1.lStickY;
+            double turn = -pad1.rStickX;
             double stickAngle = Math.atan2(py, px);
             double speed = Math.hypot(px, py);
 
-            if(pad.a1) {maxSpeed += 0.01;}
-            if(pad.a1) {maxSpeed -= 0.01;}
+            if(pad1.a) {maxSpeed += 0.01;}
+            if(pad1.b) {maxSpeed -= 0.01;}
 
-            if(pad.x1) {mecanumBase.setNorthMode(true);}
-            if(pad.y1) {mecanumBase.setNorthMode(false);}
+            if(pad1.x) {mecanumBase.setNorthMode(true);}
+            if(pad1.y) {mecanumBase.setNorthMode(false);}
             //Need to make a toggle function
 
             mecanumBase.move(speed*maxSpeed, stickAngle, turn*maxSpeed);
