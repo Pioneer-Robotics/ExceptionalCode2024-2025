@@ -21,6 +21,7 @@ public class Teleop extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()) {
+            pad1.getControls();
             double px = pad1.lStickX;
             double py = -pad1.lStickY;
             double turn = -pad1.rStickX;

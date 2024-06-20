@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
     Here for cleanliness and **completeness!!**
 */
 public class GamepadControls {
+    Gamepad gamepad;
+
     public double lStickX, lStickY, rStickX, rStickY;
 
     public boolean a, b, x, y;
@@ -21,6 +23,11 @@ public class GamepadControls {
     public double rTrigger, lTrigger;
 
     public GamepadControls(Gamepad gamepad) {
+        this.gamepad = gamepad;
+        getControls();
+    }
+
+    public void getControls() {
         // Sticks
         lStickX = gamepad.left_stick_x; lStickY = gamepad.left_stick_y;
         rStickX = gamepad.right_stick_x; rStickY = gamepad.right_stick_y;
