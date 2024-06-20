@@ -35,4 +35,7 @@ public class Config {
 
     // Motor names
     public static final String slideMotor = "slideArm";
+
+    // Other names
+    public static final String led = "LED";
 }
