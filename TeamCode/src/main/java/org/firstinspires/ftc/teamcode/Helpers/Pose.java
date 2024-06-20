@@ -15,7 +15,7 @@ public class Pose{
     DcMotorEx odoLeft, odoRight, odoCenter;
     double theta = 0;
     double normTheta = 0;
-    double[] poseArr;
+    double[] poseArr = new double[3];
     double deltaLeft = 0;
     double deltaRight = 0;
     double curLeftTicks, curRightTicks, prevLeftTicks, prevRightTicks;
@@ -34,9 +34,9 @@ public class Pose{
         double trackWidth = Config.trackWidth;
 
     }
-    public double getY(){return((double) ((odoLeft.getCurrentPosition() - odoRight.getCurrentPosition())/2)*Config.ticsToCM);}
+    public double getY(){return((double) -((odoLeft.getCurrentPosition() + odoRight.getCurrentPosition())/2)*Config.ticsToCM);}
 
-    public double getX(){return((double) (odoCenter.getCurrentPosition())*Config.ticsToCM);}
+    public double getX(){return((double) -(odoCenter.getCurrentPosition())*Config.ticsToCM);}
 
     public double calcHeading(){
 //        opMode.telemetry.addData("Prev Left", prevLeftTicks);
@@ -67,22 +67,18 @@ public class Pose{
 
     }
 
-    //For testing
-    public void displayTheta(LinearOpMode opMode){opMode.telemetry.addData("Theta", calcHeading());}
-
-
     /**
      * 0 is X coord
      * 1 is y coord
      * 2 is theta
      * @param opMode
      */
-    public void returnPose(LinearOpMode opMode){
+    public double[] returnPose(LinearOpMode opMode){
         poseArr[0] = getX();
         poseArr[1] = getY();
         poseArr[2] = calcHeading();
         opMode.telemetry.addData("Pose", poseArr);
-
+        return (poseArr);
     }
 
 }

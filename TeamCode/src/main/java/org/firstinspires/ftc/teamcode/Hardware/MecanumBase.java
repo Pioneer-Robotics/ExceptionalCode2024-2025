@@ -92,9 +92,7 @@ public class MecanumBase {
         double power1 = (Math.sin(angle - (Math.PI / 4)) * speed);
         double power2 = (Math.sin(angle + (Math.PI / 4)) * speed);
 
-
-        pose.displayTheta(opMode);
-        pose.returnPose(opMode);
+        double[] poseArr = pose.returnPose(opMode);
 
 
         RF.setPower(power1 + turn);
@@ -102,7 +100,9 @@ public class MecanumBase {
         RB.setPower(power2 + turn);
         LB.setPower(power1 - turn);
 
-
+        opMode.telemetry.addData("Theta", poseArr[2]);
+        opMode.telemetry.addData("X", poseArr[0]);
+        opMode.telemetry.addData("Y", poseArr[1]);
         opMode.telemetry.addData("OL", odoLeftTicks);
         opMode.telemetry.addData("OR", odoRightTicks);
         opMode.telemetry.addData("OC", odoCenterTicks);
