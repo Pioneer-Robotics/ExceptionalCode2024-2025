@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.teamcode.Helpers.Pose;
 import org.firstinspires.ftc.teamcode.Config;
 
 
@@ -15,6 +16,8 @@ public class MecanumBase {
     DcMotorEx LF, LB, RF, RB, odoLeft, odoRight, odoCenter;
     BotIMU imu;
     boolean northMode;
+    public Pose pose;
+
 
     /**
      * Constructor for MecanumBase.
@@ -24,6 +27,7 @@ public class MecanumBase {
         // Contains hardwareMap and telemetry
         this.opMode = opMode;
         imu = new BotIMU(opMode);
+        pose = new Pose(opMode);
 
         // Set up motors
         RF = opMode.hardwareMap.get(DcMotorEx.class, Config.motorRF);
@@ -72,22 +76,31 @@ public class MecanumBase {
      * @param speed The speed to move at in the range [-1, 1]
      */
     public void move(double angle, double turn, double speed) {
+
         int odoLeftTicks = -odoLeft.getCurrentPosition();
         int odoCenterTicks = -odoCenter.getCurrentPosition();
         int odoRightTicks = -odoRight.getCurrentPosition();
 
+        double odoLeftCm = odoLeftTicks*Config.ticsToCM;
+        double odoRightCm = odoRightTicks*Config.ticsToCM;
+        double odoCenterCm = odoCenterTicks*Config.ticsToCM;
 
-        double currentAngle = imu.getRadians();
+        double currentAngle = -imu.getRadians();
 
         if(northMode) {angle -= currentAngle;}
 
         double power1 = (Math.sin(angle - (Math.PI / 4)) * speed);
         double power2 = (Math.sin(angle + (Math.PI / 4)) * speed);
 
+
+        pose.calcPose(opMode);
+
+
         RF.setPower(power1 + turn);
         LF.setPower(power2 - turn);
         RB.setPower(power2 + turn);
         LB.setPower(power1 - turn);
+
 
         opMode.telemetry.addData("OL", odoLeftTicks);
         opMode.telemetry.addData("OR", odoRightTicks);
