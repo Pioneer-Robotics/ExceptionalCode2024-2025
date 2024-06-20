@@ -92,7 +92,7 @@ public class MecanumBase {
         double power1 = (Math.sin(angle - (Math.PI / 4)) * speed);
         double power2 = (Math.sin(angle + (Math.PI / 4)) * speed);
 
-        double[] poseArr = pose.returnPose(opMode);
+        double[] poseArr = pose.returnPose();
 
 
         RF.setPower(power1 + turn);

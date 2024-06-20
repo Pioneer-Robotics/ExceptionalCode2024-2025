@@ -71,13 +71,11 @@ public class Pose{
      * 0 is X coord
      * 1 is y coord
      * 2 is theta
-     * @param opMode
      */
-    public double[] returnPose(LinearOpMode opMode){
+    public double[] returnPose(){
         poseArr[0] = getX();
         poseArr[1] = getY();
         poseArr[2] = calcHeading();
-        opMode.telemetry.addData("Pose", poseArr);
         return (poseArr);
     }
 
