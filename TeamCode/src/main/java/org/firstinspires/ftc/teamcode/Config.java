@@ -27,8 +27,9 @@ public class Config {
     public static final String motorRF = "RF";
     public static final String motorRB = "RB";
 
-    // IMU name
-    public static final String imu = "expansionIMU";
+    // IMU name - imu for bombot, expansionIMU for hermes
+    public static final String imu = "imu";
+    // public static final String imu = "expansionIMU";
 
     // Servo names
 

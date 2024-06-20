@@ -2,16 +2,22 @@ package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
 import org.firstinspires.ftc.teamcode.Helpers.GamepadControls;
+import org.firstinspires.ftc.teamcode.Helpers.Ticker;
+import org.firstinspires.ftc.teamcode.Helpers.LightPattern;
 
 @TeleOp
 public class Teleop extends LinearOpMode {
     public void runOpMode() {
         MecanumBase mecanumBase = new MecanumBase(this);
         GamepadControls pad1 = new GamepadControls(gamepad1);
+        Ticker tick = new Ticker(0);
+        LightPattern lightPattern = new LightPattern(100000, this);
 
         double maxSpeed = 0.5;
+
         waitForStart();
 
         while(opModeIsActive()) {
@@ -29,9 +35,11 @@ public class Teleop extends LinearOpMode {
             //Need to make a toggle function
 
             mecanumBase.move(speed*maxSpeed, stickAngle, turn*maxSpeed);
+            lightPattern.lights(tick.getTicks());
 
             // Telemetry in movement classes
             telemetry.update();
+            tick.tick();
         }
     }
 }
