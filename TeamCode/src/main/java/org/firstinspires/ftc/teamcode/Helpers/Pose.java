@@ -32,23 +32,27 @@ public class Pose{
         double trackWidth = Config.trackWidth;
 
     }
-    public double getX(){
+    public double getY(){
         return((double) ((odoLeft.getCurrentPosition() - odoRight.getCurrentPosition())/2)*Config.ticsToCM);
     }
 
-    public void calcPose(LinearOpMode opMode){
-        opMode.telemetry.addData("Prev Left", prevLeftTicks);
-        opMode.telemetry.addData("Prev Right", prevRightTicks);
+    public double getX(){
+        return((double) (odoCenter.getCurrentPosition())*Config.ticsToCM);
+    }
+
+    public double calcHeading(LinearOpMode opMode){
+//        opMode.telemetry.addData("Prev Left", prevLeftTicks);
+//        opMode.telemetry.addData("Prev Right", prevRightTicks);
         // Odo readings
         curLeftTicks = -odoLeft.getCurrentPosition();
         curRightTicks = -odoRight.getCurrentPosition();
-        opMode.telemetry.addData("Cur Left", curLeftTicks);
-        opMode.telemetry.addData("Cur Right", curRightTicks);
+//        opMode.telemetry.addData("Cur Left", curLeftTicks);
+//        opMode.telemetry.addData("Cur Right", curRightTicks);
 
         deltaLeft = curLeftTicks - prevLeftTicks;
         deltaRight = curRightTicks - prevRightTicks;
-        opMode.telemetry.addData("dL", deltaLeft);
-        opMode.telemetry.addData("dR", deltaRight);
+//        opMode.telemetry.addData("dL", deltaLeft);
+//        opMode.telemetry.addData("dR", deltaRight);
 
         prevLeftTicks = curLeftTicks;
         prevRightTicks = curRightTicks;
@@ -58,10 +62,14 @@ public class Pose{
         //REMINDER: CAP AT PI/2PI
 
         opMode.telemetry.addData("Theta", theta);
-//        return(theta);
+        return(theta);
     }
 
     public void DANCE(){
+
+    }
+    //
+    public void calcPose(){
 
     }
 
