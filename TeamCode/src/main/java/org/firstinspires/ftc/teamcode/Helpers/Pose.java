@@ -8,17 +8,18 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Config;
+import org.opencv.core.Mat;
 
 public class Pose{
 //    LinearOpMode opMode;
 
     DcMotorEx odoLeft, odoRight, odoCenter;
+    double x, y;
     double theta = 0;
     double normTheta = 0;
     double[] poseArr = new double[3];
-    double deltaLeft = 0;
-    double deltaRight = 0;
-    double curLeftTicks, curRightTicks, prevLeftTicks, prevRightTicks;
+    double deltaLeft, deltaRight, deltaCenter, deltaPerpPos, deltaMiddle;
+    double curLeftTicks, curRightTicks, curCenterTicks, prevLeftTicks, prevRightTicks, prevCenterTicks, deltaX, deltaY, phi;
 
     public Pose(LinearOpMode opMode){
         // Set up odometers
@@ -34,34 +35,40 @@ public class Pose{
         double trackWidth = Config.trackWidth;
 
     }
-    public double getY(){return((double) -((odoLeft.getCurrentPosition() + odoRight.getCurrentPosition())/2)*Config.ticsToCM);}
 
-    public double getX(){return((double) -(odoCenter.getCurrentPosition())*Config.ticsToCM);}
-
-    public double calcHeading(){
-//        opMode.telemetry.addData("Prev Left", prevLeftTicks);
-//        opMode.telemetry.addData("Prev Right", prevRightTicks);
+    public void calculate(){
         // Odo readings
         curLeftTicks = -odoLeft.getCurrentPosition();
         curRightTicks = -odoRight.getCurrentPosition();
-//        opMode.telemetry.addData("Cur Left", curLeftTicks);
-//        opMode.telemetry.addData("Cur Right", curRightTicks);
+        curCenterTicks = -odoCenter.getCurrentPosition();
 
         deltaLeft = curLeftTicks - prevLeftTicks;
         deltaRight = curRightTicks - prevRightTicks;
-//        opMode.telemetry.addData("dL", deltaLeft);
-//        opMode.telemetry.addData("dR", deltaRight);
+        deltaCenter = curCenterTicks - prevCenterTicks;
+
+        deltaPerpPos = deltaCenter - Config.forwardOffest*phi;
+        deltaMiddle = (deltaLeft + deltaRight)/2;
+
+        phi = ((deltaLeft-deltaRight)*Config.ticsToCM)/trackWidth;
+
+        deltaX = deltaMiddle*Math.cos(normTheta) - deltaPerpPos*Math.sin(normTheta);
+        deltaY = deltaMiddle* Math.sin(normTheta) + deltaPerpPos*Math.cos(normTheta);
+
+        x += deltaX*Config.ticsToCM;
+        y += deltaY*Config.ticsToCM;
+        theta += phi;
+        normTheta = AngleUtils.normalizeRadians(theta);
 
         prevLeftTicks = curLeftTicks;
         prevRightTicks = curRightTicks;
-
-        theta += ((deltaLeft-deltaRight)*Config.ticsToCM)/trackWidth;
-//        theta = theta % 2*Math.PI;
-        //REMINDER: CAP AT PI/2PI
-        normTheta = AngleUtils.normalizeRadians(theta);
-
-        return(normTheta);
+        prevCenterTicks = curCenterTicks;
     }
+
+    public double getY(){return(x);}
+
+    public double getX(){return(y);}
+
+    public double getTheta(){return(normTheta);}
 
     public void DANCE(){
 
@@ -73,9 +80,10 @@ public class Pose{
      * 2 is theta
      */
     public double[] returnPose(){
+        calculate();
         poseArr[0] = getX();
         poseArr[1] = getY();
-        poseArr[2] = calcHeading();
+        poseArr[2] = getTheta();
         return (poseArr);
     }
 

@@ -21,6 +21,7 @@ public class Config {
     public static final String odoCenter = "hang";
     public static final String odoRight = "collector";
     public static final double trackWidth = 26.5; //In CM
+    public static final double forwardOffest = 15.5; //In CM
 
     // Drive motor names
     public static final String motorLF = "LF";
