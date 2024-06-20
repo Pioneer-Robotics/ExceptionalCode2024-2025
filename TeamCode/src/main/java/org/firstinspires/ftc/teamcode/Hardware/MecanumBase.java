@@ -93,7 +93,8 @@ public class MecanumBase {
         double power2 = (Math.sin(angle + (Math.PI / 4)) * speed);
 
 
-        pose.calcHeading(opMode);
+        pose.displayTheta(opMode);
+        pose.returnPose(opMode);
 
 
         RF.setPower(power1 + turn);
