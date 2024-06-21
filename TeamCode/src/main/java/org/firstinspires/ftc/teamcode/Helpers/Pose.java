@@ -31,9 +31,6 @@ public class Pose{
         odoRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odoCenter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-
-        double trackWidth = Config.trackWidth;
-
     }
 
     public void calculate(){

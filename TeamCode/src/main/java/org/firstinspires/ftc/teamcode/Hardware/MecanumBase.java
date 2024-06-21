@@ -88,6 +88,11 @@ public class MecanumBase {
         RB.setPower(power2 + turn);
         LB.setPower(power1 - turn);
 
+        double[] poseArr = pose.returnPose();
+
+        opMode.telemetry.addData("Theta",poseArr[2]);
+        opMode.telemetry.addData("X", poseArr[0]);
+        opMode.telemetry.addData("Y", poseArr[1]);
         opMode.telemetry.addData("Angle", currentAngle);
 //        opMode.telemetry.addData("RF", RF.getPower());
 //        opMode.telemetry.addData("LF", LF.getPower());
