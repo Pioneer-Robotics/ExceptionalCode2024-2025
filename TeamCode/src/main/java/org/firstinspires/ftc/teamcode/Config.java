@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 
 /**
  * This class is used to store all of the constants and hardware map names for the robot
+ * These can be called with Config.xxx
  */
 public class Config {
     // ---- Constants ----

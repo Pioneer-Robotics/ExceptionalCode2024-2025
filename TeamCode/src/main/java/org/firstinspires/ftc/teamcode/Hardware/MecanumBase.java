@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.Config;
 
 
 /**
- * MecanumBase is used to control the mecanum drive base.
+ * MecanumBase is used to initialize and control the drive base of the robot
  */
 public class MecanumBase {
     LinearOpMode opMode;
@@ -56,6 +56,7 @@ public class MecanumBase {
     }
 
     /**
+     * Main drive method; other methods call this one
      * Set the motor powers to move the robot in a direction.
      * Used in TeleOp and with the PID controller.
      * @param angle The angle to move at in radians

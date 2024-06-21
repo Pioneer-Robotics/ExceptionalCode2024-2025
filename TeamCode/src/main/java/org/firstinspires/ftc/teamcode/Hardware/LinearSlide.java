@@ -5,6 +5,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.Config;
 
+/**
+ * Class used to control the slide on the robot
+ */
 public class LinearSlide {
     private final DcMotorEx motor;
     private final LinearOpMode opMode;

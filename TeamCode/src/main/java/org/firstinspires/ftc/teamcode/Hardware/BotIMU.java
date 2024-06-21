@@ -7,7 +7,11 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Config;
 
-
+/**
+ * Class used to make accessing IMU easier.
+ * Pass LinearOpMode (or 'this' when class
+ * extends LinearOpMode) into the constructor.
+ */
 public class BotIMU {
     private final IMU imu;
 

@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.Helpers;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-/*
-    Easier access to controller buttons
-    Here for cleanliness and **completeness!!**
-*/
+/**
+ * Class used for easier access to gamepad controls.
+ * Not used that much anymore
+ */
 public class GamepadControls {
     Gamepad gamepad;
 
@@ -27,6 +27,9 @@ public class GamepadControls {
         getControls();
     }
 
+    /**
+     * Must be called every time in the run loop
+     */
     public void getControls() {
         // Sticks
         lStickX = gamepad.left_stick_x; lStickY = gamepad.left_stick_y;

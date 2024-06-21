@@ -8,6 +8,9 @@ import org.firstinspires.ftc.teamcode.Helpers.GamepadControls;
 import org.firstinspires.ftc.teamcode.Helpers.Ticker;
 import org.firstinspires.ftc.teamcode.Helpers.LightPattern;
 
+/**
+ * Main class for running the robot with user input
+ */
 @TeleOp
 public class Teleop extends LinearOpMode {
     public void runOpMode() {
