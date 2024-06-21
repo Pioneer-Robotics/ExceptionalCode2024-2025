@@ -7,10 +7,8 @@ import org.firstinspires.ftc.teamcode.Config;
 
 public class LinearSlide {
     private final DcMotorEx motor;
-    private final LinearOpMode opMode;
 
     public LinearSlide(LinearOpMode opMode) {
-        this.opMode = opMode;
         motor = opMode.hardwareMap.get(DcMotorEx.class, Config.slideMotor);
         motor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -31,15 +29,17 @@ public class LinearSlide {
      * @param speed The speed to move the slide at, in the range [-1, 1] where 1 is full speed in the positive direction and -1 is full speed in the negative direction
      */
     public void moveToPosition(double position, double speed) {
-        // Convert position to encoder ticks (-3000 is fully extended and 0 is fully retracted)
-        int targetPosition = (int) (-3000 * position);
-        targetPosition = Math.max(10, targetPosition); // Prevent the motor from moving to 0 and getting stuck
-
-        while (!opMode.isStopRequested() && Math.abs(motor.getCurrentPosition() - targetPosition) > 10) {
-            motor.setPower(speed);
-        }
-
-        motor.setPower(0);
+        // Not working yet
+        throw new UnsupportedOperationException("Not implemented yet");
+//        // Convert position to encoder ticks (-3000 is fully extended and 0 is fully retracted)
+//        int targetPosition = (int) (-3000 * position);
+//        targetPosition = Math.max(10, targetPosition); // Prevent the motor from moving to 0 and getting stuck
+//
+//        while (!opMode.isStopRequested() && Math.abs(motor.getCurrentPosition() - targetPosition) > 10) {
+//            motor.setPower(speed);
+//        }
+//
+//        motor.setPower(0);
     }
 
     /**

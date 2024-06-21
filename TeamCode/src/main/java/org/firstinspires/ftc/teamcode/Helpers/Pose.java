@@ -10,6 +10,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Config;
 
+/**
+ * This class is used to calculate the robots current position on the field.
+ * It uses the odometer encoders to calculate the robots position.
+ * The robot's position is stored as an X coordinate, Y coordinate, and Theta (Robot Yaw).
+ */
 public class Pose{
 //    LinearOpMode opMode;
 
@@ -17,9 +22,7 @@ public class Pose{
     private double x, y;
     private double theta = 0;
     private double curTheta = 0;
-    private double[] poseArr = new double[3];
-    private double dLeftTicks, dRightTicks, dCenterTicks, dX, dY, dTheta, dLeftCM, dRightCM, dCenterCM, dLeftFinal, dRightFinal;
-    private double curLeftTicks, curRightTicks, curCenterTicks, prevLeftTicks, prevRightTicks, prevCenterTicks, prevTheta, phi;
+    private double prevLeftTicks, prevRightTicks, prevCenterTicks, prevTheta;
 
     public Pose(LinearOpMode opMode){
         // Set up odometers
@@ -30,39 +33,41 @@ public class Pose{
         odoLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odoRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odoCenter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
     }
 
+    /**
+     * This method updates the current position of the robot on the field by using delta values from the odometers
+     */
     public void calculate(){
         // Odo readings
-        curLeftTicks = -odoLeft.getCurrentPosition();
-        curRightTicks = -odoRight.getCurrentPosition();
-        curCenterTicks = -odoCenter.getCurrentPosition();
+        double curLeftTicks = -odoLeft.getCurrentPosition();
+        double curRightTicks = -odoRight.getCurrentPosition();
+        double curCenterTicks = -odoCenter.getCurrentPosition();
 
-        dLeftTicks = curLeftTicks - prevLeftTicks;
-        dRightTicks = curRightTicks - prevRightTicks;
-        dCenterTicks = curCenterTicks - prevCenterTicks;
+        double dLeftTicks = curLeftTicks - prevLeftTicks;
+        double dRightTicks = curRightTicks - prevRightTicks;
+        double dCenterTicks = curCenterTicks - prevCenterTicks;
 
-        dLeftCM = dLeftTicks * Config.ticsToCM;
-        dRightCM = dRightTicks * Config.ticsToCM;
-        dCenterCM = dCenterTicks * Config.ticsToCM;
+        double dLeftCM = dLeftTicks * Config.ticsToCM;
+        double dRightCM = dRightTicks * Config.ticsToCM;
+        double dCenterCM = dCenterTicks * Config.ticsToCM;
 
-        phi = ((dLeftTicks - dRightTicks)*Config.ticsToCM)/Config.trackWidth;
+        double phi = ((dLeftTicks - dRightTicks) * Config.ticsToCM) / Config.trackWidth;
         theta += phi;
         curTheta = AngleUtils.normalizeRadians(theta);
-        dTheta =  AngleUtils.subtractAnglesRad(curTheta,prevTheta);
+        double dTheta = AngleUtils.subtractAnglesRad(curTheta, prevTheta);
 
-        //Arc length travelled by each odometer, in CM
-        double centerArc = dTheta*(Config.center20FullRotationOdosInTicksDiv40pi * Config.ticsToCM);
-        double leftArc = dTheta*(Config.left20FullRotationOdosInTicksDiv40pi * Config.ticsToCM);
-        double rightArc = dTheta*(Config.right20FullRotationOdosInTicksDiv40pi * Config.ticsToCM);
+        // Arc length travelled by each odometer, in CM
+        double centerArc = dTheta *(Config.center20FullRotationOdosInTicksDiv40pi * Config.ticsToCM);
+        double leftArc = dTheta *(Config.left20FullRotationOdosInTicksDiv40pi * Config.ticsToCM);
+        double rightArc = dTheta *(Config.right20FullRotationOdosInTicksDiv40pi * Config.ticsToCM);
 //        double centerArc = dTheta*(Config.forwardOffset);
 //        double leftArc = dTheta*(Config.forwardOffset);
 //        double rightArc = dTheta*(Config.forwardOffset);
 
-        dX = (dCenterCM - centerArc);
-        dLeftFinal = dLeftCM - leftArc;
-        dRightFinal = dRightCM + rightArc;
+        double dX = (dCenterCM - centerArc);
+        double dLeftFinal = dLeftCM - leftArc;
+        double dRightFinal = dRightCM + rightArc;
         double avgDY = (dLeftFinal + dRightFinal)/2;
 
         x += dX;
@@ -82,20 +87,17 @@ public class Pose{
     public double getTheta(){return(curTheta);}
 
     public void DANCE(){
-
+        // TODO: DANCE!
     }
 
     /**
-     * 0 is X coord
-     * 1 is y coord
-     * 2 is theta
+     * Returns the current x, y, and theta values of the robot
+     * Calls calculate() to update the values
+     * @return double[] {x, y, theta}
      */
     public double[] returnPose(){
         calculate();
-        poseArr[0] = getX();
-        poseArr[1] = getY();
-        poseArr[2] = getTheta();
-        return (poseArr);
+        return (new double[]{x, y, curTheta});
     }
 
 }

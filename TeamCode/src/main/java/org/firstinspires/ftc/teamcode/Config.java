@@ -33,7 +33,7 @@ public class Config {
     public static final String motorRB = "RB";
 
     // IMU name
-    public static final String imu = "expansionIMU";
+    public static final String imu = "imu";
 
     // Servo names
 

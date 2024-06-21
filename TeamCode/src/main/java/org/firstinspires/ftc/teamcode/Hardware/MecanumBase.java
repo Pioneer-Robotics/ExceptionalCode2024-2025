@@ -141,12 +141,12 @@ public class MecanumBase {
      */
     public void setNorthMode(boolean newMode) {
         northMode = newMode;
-        if(newMode){imu.resetYaw();opMode.telemetry.addLine("RESETING");}
+        if(newMode){ imu.resetYaw();opMode.telemetry.addLine("RESETING"); }
     }
 
     /**
      * Get north mode.
      * @return Boolean value of north mode
      */
-    public boolean getNorthMode() {return northMode;}
+    public boolean getNorthMode() { return northMode; }
 }

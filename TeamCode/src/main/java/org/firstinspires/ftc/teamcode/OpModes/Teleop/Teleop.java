@@ -2,15 +2,14 @@ package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
-import org.firstinspires.ftc.teamcode.Helpers.Pose;
+
+import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
 @TeleOp
 public class Teleop extends LinearOpMode {
     public void runOpMode() {
-        MecanumBase mecanumBase = new MecanumBase(this);
-        Pose pose = new Pose(this);
+        Bot bot = new Bot(this);
         Toggle northModeToggle = new Toggle(true);
 
         waitForStart();
@@ -23,12 +22,12 @@ public class Teleop extends LinearOpMode {
             double maxSpeed = 1;
 
             northModeToggle.toggle(gamepad1.a); // Toggle north mode
-            mecanumBase.setNorthMode(northModeToggle.get()); // Update north mode
+            bot.mecanumBase.setNorthMode(northModeToggle.get()); // Update north mode
 
-            mecanumBase.move(stickAngle, -gamepad1.right_stick_x*maxSpeed, speed*maxSpeed);
+            bot.mecanumBase.move(stickAngle, -gamepad1.right_stick_x*maxSpeed, speed*maxSpeed);
 
             // Get the pose in the teleop loop
-            double[] pos = pose.returnPose();
+            double[] pos = bot.pose.returnPose();
 
             // Telemetry in movement classes
             telemetry.addData("X", pos[0]);
