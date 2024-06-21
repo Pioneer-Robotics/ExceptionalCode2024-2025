@@ -1,14 +1,11 @@
 package org.firstinspires.ftc.teamcode.Helpers;
 
 import static org.firstinspires.ftc.teamcode.Config.trackWidth;
-import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Config;
-import org.opencv.core.Mat;
 
 public class Pose{
 //    LinearOpMode opMode;
@@ -30,10 +27,6 @@ public class Pose{
         odoLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odoRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odoCenter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-        double trackWidth = Config.trackWidth;
-
     }
 
     public void calculate(){
@@ -71,13 +64,11 @@ public class Pose{
     public double getTheta(){return(normTheta);}
 
     public void DANCE(){
-
+        // TODO: Implement DANCE
     }
 
     /**
-     * 0 is X coord
-     * 1 is y coord
-     * 2 is theta
+     * @return double[] {x, y, theta}
      */
     public double[] returnPose(){
         calculate();
