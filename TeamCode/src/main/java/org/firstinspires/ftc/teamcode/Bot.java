@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
 import org.firstinspires.ftc.teamcode.Hardware.LinearSlide;
+import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
+import org.firstinspires.ftc.teamcode.Helpers.Pose;
 
 /**
  * This class is used to create all of the hardware objects and store them in the bot object
@@ -18,6 +20,8 @@ public class Bot {
     public BotIMU imu;
     public LinearSlide slide;
     public LEDController led;
+    public MecanumBase mecanumBase;
+    public Pose pose;
 
     /**
      * Constructor for Bot.
@@ -27,5 +31,7 @@ public class Bot {
         imu = new BotIMU(opMode);
         slide = new LinearSlide(opMode);
         led = new LEDController(opMode);
+        mecanumBase = new MecanumBase(opMode);
+        pose = new Pose(opMode);
     }
 }

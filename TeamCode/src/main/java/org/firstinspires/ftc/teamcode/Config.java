@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 
 /**
  * This class is used to store all of the constants and hardware map names for the robot
- * These can be called with Config.xxx
  */
 public class Config {
     // ---- Constants ----
@@ -11,13 +10,18 @@ public class Config {
     public static final double wheelDiameter = 4.8;
     public static final double ticsPerRev = 2000;
     public static final double ticsToCM = (wheelDiameter * Math.PI) / ticsPerRev;
+    public static final double trackWidth = 26.5; //In CM
+    public static final double forwardOffset = Math.sqrt((15.5*15.5)-0.4); //In CM
+    public static final double center20FullRotationOdosInTicksDiv40pi = 238278 / (40 * Math.PI);
+    public static final double left20FullRotationOdosInTicksDiv40pi = 238269 / (40 * Math.PI);
+    public static final double right20FullRotationOdosInTicksDiv40pi = 206129 / (40 * Math.PI);
 
     // PID constants
     public static final double[] drivePID = {0.1, 0.001, 1}; // kP, kI, kD
     public static final double[] turnPID = {0.1, 0.001, 1}; // kP, kI, kD
 
     // ---- Hardware Map ----
-    // Odometer names
+    // Odometers
     public static final String odoLeft = "OdoLeft";
     public static final String odoCenter = "hang";
     public static final String odoRight = "collector";
@@ -28,10 +32,6 @@ public class Config {
     public static final String motorRF = "RF";
     public static final String motorRB = "RB";
 
-    // IMU name - imu for bombot, expansionIMU for hermes
-    public static final String imu = "imu";
-    // public static final String imu = "expansionIMU";
-
     // Servo names
 
 
@@ -39,5 +39,6 @@ public class Config {
     public static final String slideMotor = "slideArm";
 
     // Other names
-    public static final String led = "LED";
+    public static final String led = "led";
+    public static final String imu = "imu";
 }

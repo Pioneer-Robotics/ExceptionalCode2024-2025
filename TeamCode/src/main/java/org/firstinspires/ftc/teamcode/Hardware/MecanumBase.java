@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.teamcode.Helpers.Pose;
 import org.firstinspires.ftc.teamcode.Config;
 
 
@@ -16,7 +15,6 @@ public class MecanumBase {
     DcMotorEx LF, LB, RF, RB, odoLeft, odoRight, odoCenter;
     BotIMU imu;
     boolean northMode;
-    public Pose pose;
 
 
     /**
@@ -27,7 +25,6 @@ public class MecanumBase {
         // Contains hardwareMap and telemetry
         this.opMode = opMode;
         imu = new BotIMU(opMode);
-        pose = new Pose(opMode);
 
         // Set up motors
         RF = opMode.hardwareMap.get(DcMotorEx.class, Config.motorRF);
@@ -89,11 +86,7 @@ public class MecanumBase {
         RB.setPower(power2 + turn);
         LB.setPower(power1 - turn);
 
-        double[] poseArr = pose.returnPose();
 
-        opMode.telemetry.addData("Theta",poseArr[2]);
-        opMode.telemetry.addData("X", poseArr[0]);
-        opMode.telemetry.addData("Y", poseArr[1]);
         opMode.telemetry.addData("Angle", currentAngle);
 //        opMode.telemetry.addData("RF", RF.getPower());
 //        opMode.telemetry.addData("LF", LF.getPower());

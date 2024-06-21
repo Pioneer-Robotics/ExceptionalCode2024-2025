@@ -3,47 +3,37 @@ package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
-import org.firstinspires.ftc.teamcode.Helpers.GamepadControls;
-import org.firstinspires.ftc.teamcode.Helpers.Ticker;
-import org.firstinspires.ftc.teamcode.Helpers.LightPattern;
+import org.firstinspires.ftc.teamcode.Bot;
+import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
-/**
- * Main class for running the robot with user input
- */
-@TeleOp
+@TeleOp(name="Teleop", group="Teleop")
 public class Teleop extends LinearOpMode {
     public void runOpMode() {
-        MecanumBase mecanumBase = new MecanumBase(this);
-        GamepadControls pad1 = new GamepadControls(gamepad1);
-        Ticker tick = new Ticker(0);
-        LightPattern lightPattern = new LightPattern(100000, this);
-
-        double maxSpeed = 0.5;
+        Bot bot = new Bot(this);
+        Toggle northModeToggle = new Toggle(true);
 
         waitForStart();
 
         while(opModeIsActive()) {
-            pad1.getControls();
-            double px = pad1.lStickX;
-            double py = -pad1.lStickY;
-            double turn = -pad1.rStickX;
+            double px = gamepad1.left_stick_x;
+            double py = -gamepad1.left_stick_y;
             double stickAngle = Math.atan2(py, px);
-            double speed = Math.hypot(px, py);
+            double speed = Math.sqrt((px * px + py * py));
+            double maxSpeed = 1;
 
-            if(pad1.a) {maxSpeed += 0.01;}
-            if(pad1.b) {maxSpeed -= 0.01;}
+            northModeToggle.toggle(gamepad1.a); // Toggle north mode
+            bot.mecanumBase.setNorthMode(northModeToggle.get()); // Update north mode
 
-            if(pad1.x) {mecanumBase.setNorthMode(true);}
-            if(pad1.y) {mecanumBase.setNorthMode(false);}
-            //Need to make a toggle function
+            bot.mecanumBase.move(stickAngle, -gamepad1.right_stick_x*maxSpeed, speed*maxSpeed);
 
-            mecanumBase.move(speed*maxSpeed, stickAngle, turn*maxSpeed);
-            lightPattern.lights(tick.getTicks());
+            // Get the pose in the teleop loop
+            double[] pos = bot.pose.returnPose();
 
             // Telemetry in movement classes
+            telemetry.addData("X", pos[0]);
+            telemetry.addData("Y", pos[1]);
+            telemetry.addData("Theta", pos[2]);
             telemetry.update();
-            tick.tick();
         }
     }
 }
