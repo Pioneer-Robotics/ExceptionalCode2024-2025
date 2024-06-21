@@ -4,12 +4,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
 import org.firstinspires.ftc.teamcode.Helpers.Pose;
+import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
 @TeleOp
 public class Teleop extends LinearOpMode {
     public void runOpMode() {
         MecanumBase mecanumBase = new MecanumBase(this);
         Pose pose = new Pose(this);
+        Toggle northModeToggle = new Toggle(true);
 
         waitForStart();
 
@@ -20,9 +22,8 @@ public class Teleop extends LinearOpMode {
             double speed = Math.sqrt((px * px + py * py));
             double maxSpeed = 1;
 
-            if(gamepad1.x) {mecanumBase.setNorthMode(true);}
-            if(gamepad1.y) {mecanumBase.setNorthMode(false);}
-            //Need to make a toggle function
+            northModeToggle.toggle(gamepad1.a); // Toggle north mode
+            mecanumBase.setNorthMode(northModeToggle.get()); // Update north mode
 
             mecanumBase.move(stickAngle, -gamepad1.right_stick_x*maxSpeed, speed*maxSpeed);
 
