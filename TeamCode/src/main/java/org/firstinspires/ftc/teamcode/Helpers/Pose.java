@@ -14,12 +14,12 @@ public class Pose{
 //    LinearOpMode opMode;
 
     DcMotorEx odoLeft, odoRight, odoCenter;
-    double x, y;
-    double theta = 0;
-    double curTheta = 0;
-    double[] poseArr = new double[3];
-    double dLeftTicks, dRightTicks, dCenterTicks, dX, dY, dTheta, dLeftCM, dRightCM, dCenterCM, dLeftFinal, dRightFinal;
-    double curLeftTicks, curRightTicks, curCenterTicks, prevLeftTicks, prevRightTicks, prevCenterTicks, prevTheta, phi;
+    private double x, y;
+    private double theta = 0;
+    private double curTheta = 0;
+    private double[] poseArr = new double[3];
+    private double dLeftTicks, dRightTicks, dCenterTicks, dX, dY, dTheta, dLeftCM, dRightCM, dCenterCM, dLeftFinal, dRightFinal;
+    private double curLeftTicks, curRightTicks, curCenterTicks, prevLeftTicks, prevRightTicks, prevCenterTicks, prevTheta, phi;
 
     public Pose(LinearOpMode opMode){
         // Set up odometers
@@ -65,12 +65,6 @@ public class Pose{
         dRightFinal = dRightCM + rightArc;
         double avgDY = (dLeftFinal + dRightFinal)/2;
 
-        //Should this be added instead of divided????
-        //MAIN PROBLEM right now is that the Y keeps changing when just strafing, and things are adding up to quick, X is going into the hundreds, which cant be right because it is in CM
-        //Need to figure out why it increases so much, maybe missing a conversion from ticks to CM at some point, double check variables, can get confusing, might be using the wrong ones in places
-
-//        x += dX*Math.cos(curTheta) + avgDY*Math.sin(curTheta);
-//        y += -dX*Math.sin(curTheta) + avgDY*Math.cos(curTheta);
         x += dX;
         y += avgDY;
 
