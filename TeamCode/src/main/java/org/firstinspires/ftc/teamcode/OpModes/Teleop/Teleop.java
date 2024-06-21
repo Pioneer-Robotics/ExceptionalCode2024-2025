@@ -27,7 +27,7 @@ public class Teleop extends LinearOpMode {
             if(yButton) {mecanumBase.setNorthMode(false);}
             //Need to make a toggle function
 
-            mecanumBase.move(speed*maxSpeed, stickAngle, turn*maxSpeed);
+            mecanumBase.move(stickAngle, turn*maxSpeed, speed*maxSpeed);
 
             // Telemetry in movement classes
             telemetry.update();

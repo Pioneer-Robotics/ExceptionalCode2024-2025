@@ -38,4 +38,19 @@ public class AngleUtils {
         return (temp - Math.floor(temp)) * 360.0;
     }
 
+    /**
+     * meant to allow help you find the shortest angle separating the angle you're
+     * at from the angle you want
+     * @param targetAngle the angle you want the robot to be at
+     * @param currentAngle the current angle of the robot
+     * @return an angle between -pi and pi that is the amount you should turn
+     */
+    public static double subtractAnglesRad(double targetAngle, double currentAngle){
+        targetAngle = normalizeRadians(targetAngle);
+        currentAngle = normalizeRadians(currentAngle);
+        double ans = targetAngle - currentAngle;
+        ans = normalizeRadians(ans);
+        return ans;
+    }
+
 }

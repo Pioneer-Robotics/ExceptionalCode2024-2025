@@ -94,7 +94,6 @@ public class MecanumBase {
 
         double[] poseArr = pose.returnPose();
 
-
         RF.setPower(power1 + turn);
         LF.setPower(power2 - turn);
         RB.setPower(power2 + turn);

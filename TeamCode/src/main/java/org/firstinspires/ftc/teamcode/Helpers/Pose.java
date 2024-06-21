@@ -1,14 +1,14 @@
+/**
+This class is used to calculate the robots current position on the field with 3 values, an X coordinate, Y coordinate, and Theta(Robot Angle).
+ */
+
 package org.firstinspires.ftc.teamcode.Helpers;
 
-import static org.firstinspires.ftc.teamcode.Config.trackWidth;
-import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Config;
-import org.opencv.core.Mat;
 
 public class Pose{
 //    LinearOpMode opMode;
@@ -16,10 +16,10 @@ public class Pose{
     DcMotorEx odoLeft, odoRight, odoCenter;
     double x, y;
     double theta = 0;
-    double normTheta = 0;
+    double curTheta = 0;
     double[] poseArr = new double[3];
-    double deltaLeft, deltaRight, deltaCenter, deltaPerpPos, deltaMiddle;
-    double curLeftTicks, curRightTicks, curCenterTicks, prevLeftTicks, prevRightTicks, prevCenterTicks, deltaX, deltaY, phi;
+    double dLeftTicks, dRightTicks, dCenterTicks, dX, dY, dTheta, dLeftCM, dRightCM, dCenterCM, dLeftFinal, dRightFinal;
+    double curLeftTicks, curRightTicks, curCenterTicks, prevLeftTicks, prevRightTicks, prevCenterTicks, prevTheta, phi;
 
     public Pose(LinearOpMode opMode){
         // Set up odometers
@@ -42,33 +42,53 @@ public class Pose{
         curRightTicks = -odoRight.getCurrentPosition();
         curCenterTicks = -odoCenter.getCurrentPosition();
 
-        deltaLeft = curLeftTicks - prevLeftTicks;
-        deltaRight = curRightTicks - prevRightTicks;
-        deltaCenter = curCenterTicks - prevCenterTicks;
+        dLeftTicks = curLeftTicks - prevLeftTicks;
+        dRightTicks = curRightTicks - prevRightTicks;
+        dCenterTicks = curCenterTicks - prevCenterTicks;
 
-        deltaPerpPos = deltaCenter - Config.forwardOffest*phi;
-        deltaMiddle = (deltaLeft + deltaRight)/2;
+        dLeftCM = dLeftTicks * Config.ticsToCM;
+        dRightCM = dRightTicks * Config.ticsToCM;
+        dCenterCM = dCenterTicks * Config.ticsToCM;
 
-        phi = ((deltaLeft-deltaRight)*Config.ticsToCM)/trackWidth;
-
-        deltaX = deltaMiddle*Math.cos(normTheta) - deltaPerpPos*Math.sin(normTheta);
-        deltaY = deltaMiddle* Math.sin(normTheta) + deltaPerpPos*Math.cos(normTheta);
-
-        x += deltaX*Config.ticsToCM;
-        y += deltaY*Config.ticsToCM;
+        phi = ((dLeftTicks - dRightTicks)*Config.ticsToCM)/Config.trackWidth;
         theta += phi;
-        normTheta = AngleUtils.normalizeRadians(theta);
+        curTheta = AngleUtils.normalizeRadians(theta);
+        dTheta =  AngleUtils.subtractAnglesRad(curTheta,prevTheta);
+
+        //Arc length travelled by each odometer, in CM
+        double centerArc = dTheta*(Config.center20FullRotationOdosInTicksDiv40pi * Config.ticsToCM);
+        double leftArc = dTheta*(Config.left20FullRotationOdosInTicksDiv40pi * Config.ticsToCM);
+        double rightArc = dTheta*(Config.right20FullRotationOdosInTicksDiv40pi * Config.ticsToCM);
+//        double centerArc = dTheta*(Config.forwardOffset);
+//        double leftArc = dTheta*(Config.forwardOffset);
+//        double rightArc = dTheta*(Config.forwardOffset);
+
+        dX = (dCenterCM - centerArc);
+        dLeftFinal = dLeftCM - leftArc;
+        dRightFinal = dRightCM + rightArc;
+        double avgDY = (dLeftFinal + dRightFinal)/2;
+
+        //Should this be added instead of divided????
+        //MAIN PROBLEM right now is that the Y keeps changing when just strafing, and things are adding up to quick, X is going into the hundreds, which cant be right because it is in CM
+        //Need to figure out why it increases so much, maybe missing a conversion from ticks to CM at some point, double check variables, can get confusing, might be using the wrong ones in places
+
+//        x += dX*Math.cos(curTheta) + avgDY*Math.sin(curTheta);
+//        y += -dX*Math.sin(curTheta) + avgDY*Math.cos(curTheta);
+        x += dX;
+        y += avgDY;
 
         prevLeftTicks = curLeftTicks;
         prevRightTicks = curRightTicks;
         prevCenterTicks = curCenterTicks;
+        prevTheta = curTheta;
     }
+
 
     public double getY(){return(x);}
 
     public double getX(){return(y);}
 
-    public double getTheta(){return(normTheta);}
+    public double getTheta(){return(curTheta);}
 
     public void DANCE(){
 

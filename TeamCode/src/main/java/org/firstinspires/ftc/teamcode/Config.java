@@ -10,6 +10,11 @@ public class Config {
     public static final double wheelDiameter = 4.8;
     public static final double ticsPerRev = 2000;
     public static final double ticsToCM = (wheelDiameter * Math.PI) / ticsPerRev;
+    public static final double trackWidth = 26.5; //In CM
+    public static final double forwardOffset = Math.sqrt((15.5*15.5)-0.4); //In CM
+    public static final double center20FullRotationOdosInTicksDiv40pi = 238278 / (40 * Math.PI);
+    public static final double left20FullRotationOdosInTicksDiv40pi = 238269 / (40 * Math.PI);
+    public static final double right20FullRotationOdosInTicksDiv40pi = 206129 / (40 * Math.PI);
 
     // PID constants
     public static final double[] drivePID = {0.1, 0.001, 1}; // kP, kI, kD
@@ -20,8 +25,6 @@ public class Config {
     public static final String odoLeft = "OdoLeft";
     public static final String odoCenter = "hang";
     public static final String odoRight = "collector";
-    public static final double trackWidth = 26.5; //In CM
-    public static final double forwardOffest = 15.5; //In CM
 
     // Drive motor names
     public static final String motorLF = "LF";
