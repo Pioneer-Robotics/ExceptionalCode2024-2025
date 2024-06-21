@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.teamcode.Helpers.Pose;
 import org.firstinspires.ftc.teamcode.Config;
 
 
@@ -12,9 +13,11 @@ import org.firstinspires.ftc.teamcode.Config;
  */
 public class MecanumBase {
     LinearOpMode opMode;
-    DcMotorEx LF, LB, RF, RB;
+    DcMotorEx LF, LB, RF, RB, odoLeft, odoRight, odoCenter;
     BotIMU imu;
     boolean northMode;
+    public Pose pose;
+
 
     /**
      * Constructor for MecanumBase.
@@ -24,6 +27,7 @@ public class MecanumBase {
         // Contains hardwareMap and telemetry
         this.opMode = opMode;
         imu = new BotIMU(opMode);
+        pose = new Pose(opMode);
 
         // Set up motors
         RF = opMode.hardwareMap.get(DcMotorEx.class, Config.motorRF);
@@ -42,6 +46,15 @@ public class MecanumBase {
         LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        // Set up odometers
+        odoLeft = opMode.hardwareMap.get(DcMotorEx.class, Config.odoLeft);
+        odoRight = opMode.hardwareMap.get(DcMotorEx.class, Config.odoRight);
+        odoCenter = opMode.hardwareMap.get(DcMotorEx.class, Config.odoCenter);
+
+        odoLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        odoRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        odoCenter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     /**
@@ -76,11 +89,16 @@ public class MecanumBase {
         RB.setPower(power2 + turn);
         LB.setPower(power1 - turn);
 
+        double[] poseArr = pose.returnPose();
+
+        opMode.telemetry.addData("Theta",poseArr[2]);
+        opMode.telemetry.addData("X", poseArr[0]);
+        opMode.telemetry.addData("Y", poseArr[1]);
         opMode.telemetry.addData("Angle", currentAngle);
-        opMode.telemetry.addData("RF", RF.getPower());
-        opMode.telemetry.addData("LF", LF.getPower());
-        opMode.telemetry.addData("RB", RB.getPower());
-        opMode.telemetry.addData("LB", LB.getPower());
+//        opMode.telemetry.addData("RF", RF.getPower());
+//        opMode.telemetry.addData("LF", LF.getPower());
+//        opMode.telemetry.addData("RB", RB.getPower());
+//        opMode.telemetry.addData("LB", LB.getPower());
         opMode.telemetry.addData("NorthMode", northMode);
     }
 
@@ -124,12 +142,12 @@ public class MecanumBase {
      */
     public void setNorthMode(boolean newMode) {
         northMode = newMode;
-        if(newMode){imu.resetYaw();opMode.telemetry.addLine("RESETING");}
+        if(newMode){ imu.resetYaw();opMode.telemetry.addLine("RESETING"); }
     }
 
     /**
      * Get north mode.
      * @return Boolean value of north mode
      */
-    public boolean getNorthMode() {return northMode;}
+    public boolean getNorthMode() { return northMode; }
 }
