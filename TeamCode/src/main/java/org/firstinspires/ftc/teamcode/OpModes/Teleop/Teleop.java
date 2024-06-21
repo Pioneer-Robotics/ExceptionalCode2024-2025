@@ -3,33 +3,37 @@ package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
+import org.firstinspires.ftc.teamcode.Helpers.Pose;
+import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
 @TeleOp
 public class Teleop extends LinearOpMode {
     public void runOpMode() {
         MecanumBase mecanumBase = new MecanumBase(this);
+        Pose pose = new Pose(this);
+        Toggle northModeToggle = new Toggle(true);
 
         waitForStart();
 
         while(opModeIsActive()) {
             double px = gamepad1.left_stick_x;
             double py = -gamepad1.left_stick_y;
-            double turn = -gamepad1.right_stick_x;
             double stickAngle = Math.atan2(py, px);
             double speed = Math.sqrt((px * px + py * py));
-            boolean aButton = gamepad1.a;
-            boolean bButton = gamepad1.b;
-            boolean xButton = gamepad1.x;
-            boolean yButton = gamepad1.y;
-            double maxSpeed = 0.5;
+            double maxSpeed = 1;
 
-            if(xButton) {mecanumBase.setNorthMode(true);}
-            if(yButton) {mecanumBase.setNorthMode(false);}
-            //Need to make a toggle function
+            northModeToggle.toggle(gamepad1.a); // Toggle north mode
+            mecanumBase.setNorthMode(northModeToggle.get()); // Update north mode
 
-            mecanumBase.move(stickAngle, turn*maxSpeed, speed*maxSpeed);
+            mecanumBase.move(stickAngle, -gamepad1.right_stick_x*maxSpeed, speed*maxSpeed);
+
+            // Get the pose in the teleop loop
+            double[] pos = pose.returnPose();
 
             // Telemetry in movement classes
+            telemetry.addData("X", pos[0]);
+            telemetry.addData("Y", pos[1]);
+            telemetry.addData("Theta", pos[2]);
             telemetry.update();
         }
     }

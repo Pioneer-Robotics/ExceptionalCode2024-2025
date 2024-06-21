@@ -76,40 +76,23 @@ public class MecanumBase {
      * @param speed The speed to move at in the range [-1, 1]
      */
     public void move(double angle, double turn, double speed) {
-
-        int odoLeftTicks = -odoLeft.getCurrentPosition();
-        int odoCenterTicks = -odoCenter.getCurrentPosition();
-        int odoRightTicks = -odoRight.getCurrentPosition();
-
-        double odoLeftCm = odoLeftTicks*Config.ticsToCM;
-        double odoRightCm = odoRightTicks*Config.ticsToCM;
-        double odoCenterCm = odoCenterTicks*Config.ticsToCM;
-
-        double currentAngle = -imu.getRadians();
+        double currentAngle = imu.getRadians();
 
         if(northMode) {angle -= currentAngle;}
 
         double power1 = (Math.sin(angle - (Math.PI / 4)) * speed);
         double power2 = (Math.sin(angle + (Math.PI / 4)) * speed);
 
-        double[] poseArr = pose.returnPose();
-
         RF.setPower(power1 + turn);
         LF.setPower(power2 - turn);
         RB.setPower(power2 + turn);
         LB.setPower(power1 - turn);
 
-        opMode.telemetry.addData("Theta", poseArr[2]);
-        opMode.telemetry.addData("X", poseArr[0]);
-        opMode.telemetry.addData("Y", poseArr[1]);
-        opMode.telemetry.addData("OL", odoLeftTicks);
-        opMode.telemetry.addData("OR", odoRightTicks);
-        opMode.telemetry.addData("OC", odoCenterTicks);
         opMode.telemetry.addData("Angle", currentAngle);
-        opMode.telemetry.addData("RF", RF.getPower());
-        opMode.telemetry.addData("LF", LF.getPower());
-        opMode.telemetry.addData("RB", RB.getPower());
-        opMode.telemetry.addData("LB", LB.getPower());
+//        opMode.telemetry.addData("RF", RF.getPower());
+//        opMode.telemetry.addData("LF", LF.getPower());
+//        opMode.telemetry.addData("RB", RB.getPower());
+//        opMode.telemetry.addData("LB", LB.getPower());
         opMode.telemetry.addData("NorthMode", northMode);
     }
 
