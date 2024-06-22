@@ -19,6 +19,7 @@ public class Pose{
 //    LinearOpMode opMode;
 
     DcMotorEx odoLeft, odoRight, odoCenter;
+
     private double x, y;
     private double theta = 0;
     private double curTheta = 0;
@@ -39,6 +40,7 @@ public class Pose{
      * This method updates the current position of the robot on the field by using delta values from the odometers
      */
     public void calculate(){
+
         // Odo readings
         double curLeftTicks = -odoLeft.getCurrentPosition();
         double curRightTicks = -odoRight.getCurrentPosition();

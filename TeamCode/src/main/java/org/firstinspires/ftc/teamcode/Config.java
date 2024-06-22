@@ -40,5 +40,5 @@ public class Config {
 
     // Other names
     public static final String led = "led";
-    public static final String imu = "imu";
+    public static final String imu = "expansionIMU";
 }
