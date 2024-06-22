@@ -2,13 +2,14 @@
 This class is used to calculate the robots current position on the field with 3 values, an X coordinate, Y coordinate, and Theta(Robot Angle).
  */
 
-package org.firstinspires.ftc.teamcode.Helpers;
+package org.firstinspires.ftc.teamcode.SelfDrivingAuto;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
 
 /**
  * This class is used to calculate the robots current position on the field.
@@ -24,6 +25,11 @@ public class Pose{
     private double curTheta = 0;
     private double prevLeftTicks, prevRightTicks, prevCenterTicks, prevTheta;
 
+    /**
+     * Constructor for Pose
+     *
+     * @param opMode LinearOpMode
+     */
     public Pose(LinearOpMode opMode){
         // Set up odometers
         odoLeft = opMode.hardwareMap.get(DcMotorEx.class, Config.odoLeft);
@@ -33,6 +39,27 @@ public class Pose{
         odoLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odoRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odoCenter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    /**
+     * Constructor for Pose with starting position
+     *
+     * @param opMode   LinearOpMode
+     * @param startPos double[] - starting position of the robot {x, y, theta}
+     */
+    public Pose(LinearOpMode opMode, double[] startPos) {
+        // Set up odometers
+        odoLeft = opMode.hardwareMap.get(DcMotorEx.class, Config.odoLeft);
+        odoRight = opMode.hardwareMap.get(DcMotorEx.class, Config.odoRight);
+        odoCenter = opMode.hardwareMap.get(DcMotorEx.class, Config.odoCenter);
+
+        odoLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        odoRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        odoCenter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        x = startPos[0];
+        y = startPos[1];
+        theta = startPos[2];
     }
 
     /**

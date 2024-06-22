@@ -1,13 +1,13 @@
-package org.firstinspires.ftc.teamcode.PID;
+package org.firstinspires.ftc.teamcode.SelfDrivingAuto;
 
 
 /**
  * PID controller class
  */
 public class PID {
-    public double kP, kI, kD;
-    public double integral, prevError;
-    public boolean haltIntegral; // Stop the integral from accumulating if the system is moving at 100% to prevent windup
+    private final double kP, kI, kD;
+    private double integral, prevError;
+    private boolean haltIntegral; // Stop the integral from accumulating if the system is moving at 100% to prevent windup
 
     /**
      * Constructor for PID controller

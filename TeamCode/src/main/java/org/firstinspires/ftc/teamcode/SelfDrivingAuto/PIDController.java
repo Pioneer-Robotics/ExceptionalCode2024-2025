@@ -1,0 +1,145 @@
+package org.firstinspires.ftc.teamcode.SelfDrivingAuto;
+
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
+
+// Not tested
+
+/**
+ * Controls the mecanum base using PID
+ */
+public class PIDController {
+    private final LinearOpMode opMode;
+    private final MecanumBase base;
+    private final Pose pose;
+
+    /**
+     * Constructor for PID controller
+     *
+     * @param opMode LinearOpMode
+     */
+    public PIDController(LinearOpMode opMode) {
+        this.opMode = opMode;
+        // Initialize pose
+        pose = new Pose(opMode);
+        // Initialize base
+        base = new MecanumBase(opMode);
+    }
+
+    /**
+     * Constructor for PID controller with pose
+     *
+     * @param opMode LinearOpMode
+     * @param pose   Pose object for position tracking
+     */
+    public PIDController(LinearOpMode opMode, Pose pose) {
+        this.opMode = opMode;
+        // Initialize pose
+        this.pose = pose;
+        // Initialize base
+        base = new MecanumBase(opMode);
+    }
+
+    /**
+     * Move to a position using PID
+     *
+     * @param x     double - x position
+     * @param y     double - y position
+     * @param theta double - theta position
+     * @param speed double - speed of the PID [0, 1]
+     */
+    public void moveToPosition(double x, double y, double theta, double speed) {
+        // Get current position
+        double currentX = pose.getX();
+        double currentY = pose.getY();
+        double currentTheta = pose.getTheta();
+
+        // Initialize PID controllers with initial errors
+        PID xPID = new PID(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2], x - currentX);
+        PID yPID = new PID(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2], y - currentY);
+        PID turnPID = new PID(Config.turnPID[0], Config.turnPID[1], Config.turnPID[2], theta - currentTheta);
+
+        // Loop until the robot reaches the target position or the op mode is stopped
+        while (Math.abs(x - currentX) > Config.driveTolerance || Math.abs(y - currentY) > Config.driveTolerance || Math.abs(theta - currentTheta) > Config.turnTolerance && !opMode.isStopRequested()) {
+            // Update current position
+            currentX = pose.getX();
+            currentY = pose.getY();
+            currentTheta = pose.getTheta();
+
+            // Calculate PID outputs
+            double xOutput = xPID.calculate(currentX, x, speed);
+            double yOutput = yPID.calculate(currentY, y, speed);
+            double turnOutput = turnPID.calculate(currentTheta, theta, speed);
+
+            // Move the robot based on the PID outputs
+            base.move_vector(xOutput, yOutput, turnOutput);
+
+            // Telemetry
+            opMode.telemetry.addData("X", currentX);
+            opMode.telemetry.addData("Y", currentY);
+            opMode.telemetry.addData("Theta", currentTheta);
+            opMode.telemetry.addData("X Error", xPID.getError());
+            opMode.telemetry.addData("Y Error", yPID.getError());
+            opMode.telemetry.addData("Theta Error", turnPID.getError());
+            opMode.telemetry.update();
+        }
+
+        // Stop the robot
+        base.stop();
+    }
+
+    /**
+     * Move to a position using PID (stay at current theta)
+     *
+     * @param x     double - x position
+     * @param y     double - y position
+     * @param speed double - speed of the PID [0, 1]
+     */
+    public void moveToPosition(double x, double y, double speed) {
+        moveToPosition(x, y, pose.getTheta(), speed);
+    }
+
+    /**
+     * Move to a position using PID (stay at current theta and speed = 1)
+     *
+     * @param x double - x position
+     * @param y double - y position
+     */
+    public void moveToPosition(double x, double y) {
+        moveToPosition(x, y, 1);
+    }
+
+    /**
+     * Move relative to the current position using PID
+     *
+     * @param x     double - x position
+     * @param y     double - y position
+     * @param theta double - theta position
+     */
+    public void moveRelative(double x, double y, double theta, double speed) {
+        moveToPosition(pose.getX() + x, pose.getY() + y, pose.getTheta() + theta, speed);
+    }
+
+    /**
+     * Move relative to the current position using PID (stay at current theta)
+     *
+     * @param x double - x position
+     * @param y double - y position
+     */
+    public void moveRelative(double x, double y) {
+        moveRelative(x, y, 0, 1);
+    }
+
+    /**
+     * Move relative to the current position using PID (stay at current theta and speed = 1)
+     *
+     * @param x double - x position
+     * @param y double - y position
+     */
+    public void moveRelative(double x, double y, double theta) {
+        moveRelative(x, y, theta, 1);
+    }
+}

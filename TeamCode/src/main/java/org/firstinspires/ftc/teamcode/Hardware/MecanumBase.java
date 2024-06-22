@@ -128,6 +128,15 @@ public class MecanumBase {
         move(angle, turn, speed);
     }
 
+    /**
+     * Sets all motor powers to 0.
+     */
+    public void stop() {
+        RF.setPower(0);
+        LF.setPower(0);
+        RB.setPower(0);
+        LB.setPower(0);
+    }
 
     /**
      * Set north mode.

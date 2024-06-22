@@ -9,7 +9,8 @@ import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
 import org.firstinspires.ftc.teamcode.Hardware.LinearSlide;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
-import org.firstinspires.ftc.teamcode.Helpers.Pose;
+import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PIDController;
+import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Pose;
 
 /**
  * This class is used to create all of the hardware objects and store them in the bot object
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.teamcode.Helpers.Pose;
  * This also makes it easier to create new objects
  */
 public class Bot {
+    public PIDController pidController;
     public BotIMU imu;
     public LinearSlide slide;
     public LEDController led;
@@ -33,5 +35,6 @@ public class Bot {
         led = new LEDController(opMode);
         mecanumBase = new MecanumBase(opMode);
         pose = new Pose(opMode);
+        pidController = new PIDController(opMode, pose); // Uses the same pose object as the bot
     }
 }
