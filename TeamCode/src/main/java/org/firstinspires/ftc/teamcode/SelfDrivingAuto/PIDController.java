@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
+import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
 
 // Not tested
 
@@ -48,11 +49,15 @@ public class PIDController {
      *
      * @param x     double - x position
      * @param y     double - y position
-     * @param theta double - theta position
+     * @param theta double - theta position in degrees
      * @param speed double - speed of the PID [0, 1]
      */
     public void moveToPosition(double x, double y, double theta, double speed) {
+        theta = Math.toRadians(theta);
+        theta = AngleUtils.normalizeRadians(theta);
+
         // Get current position
+        pose.calculate();
         double currentX = pose.getX();
         double currentY = pose.getY();
         double currentTheta = pose.getTheta();
@@ -65,9 +70,11 @@ public class PIDController {
         // Loop until the robot reaches the target position or the op mode is stopped
         while (Math.abs(x - currentX) > Config.driveTolerance || Math.abs(y - currentY) > Config.driveTolerance || Math.abs(theta - currentTheta) > Config.turnTolerance && !opMode.isStopRequested()) {
             // Update current position
+            pose.calculate();
             currentX = pose.getX();
             currentY = pose.getY();
             currentTheta = pose.getTheta();
+
 
             // Calculate PID outputs
             double xOutput = xPID.calculate(currentX, x, speed);
@@ -84,6 +91,9 @@ public class PIDController {
             opMode.telemetry.addData("X Error", xPID.getError());
             opMode.telemetry.addData("Y Error", yPID.getError());
             opMode.telemetry.addData("Theta Error", turnPID.getError());
+            opMode.telemetry.addData("X Output", xOutput);
+            opMode.telemetry.addData("Y Output", yOutput);
+            opMode.telemetry.addData("Rotation Output", turnOutput);
             opMode.telemetry.update();
         }
 
@@ -117,7 +127,7 @@ public class PIDController {
      *
      * @param x     double - x position
      * @param y     double - y position
-     * @param theta double - theta position
+     * @param theta double - theta position in degrees
      */
     public void moveRelative(double x, double y, double theta, double speed) {
         moveToPosition(pose.getX() + x, pose.getY() + y, pose.getTheta() + theta, speed);

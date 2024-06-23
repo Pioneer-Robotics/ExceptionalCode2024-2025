@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes.Autos;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -14,9 +15,14 @@ public class SimpleAuto extends LinearOpMode {
         waitForStart();
 
         // Move the robot in a square
-        bot.pidController.moveToPosition(10, 0);
-        bot.pidController.moveToPosition(10, 10);
-        bot.pidController.moveToPosition(0, 10);
-        bot.pidController.moveToPosition(0, 0);
+        bot.led.lightsOn(RevBlinkinLedDriver.BlinkinPattern.RED);
+        bot.pidController.moveToPosition(0, 50, -90, 1);
+        bot.led.lightsOn(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+        bot.pidController.moveToPosition(0, 0, 0, 1);
+        bot.led.lightsOn(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+        bot.pidController.moveToPosition(0, -50, 90, 1);
+        bot.led.lightsOn(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+        bot.pidController.moveToPosition(0, 0, 0, 1);
+        bot.led.lightsOn(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
     }
 }

@@ -107,9 +107,13 @@ public class Pose{
     }
 
 
-    public double getY(){return(x);}
+    public double getY() {
+        return (y);
+    }
 
-    public double getX(){return(y);}
+    public double getX() {
+        return (x);
+    }
 
     public double getTheta(){return(curTheta);}
 

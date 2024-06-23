@@ -18,10 +18,10 @@ public class Config {
 
     // PID constants
     public static final double[] drivePID = {0.1, 0.001, 1}; // kP, kI, kD
-    public static final double[] turnPID = {0.1, 0.001, 1}; // kP, kI, kD
+    public static final double[] turnPID = {0.1, 0.005, 0.1}; // kP, kI, kD
 
     public static final double driveTolerance = 1; // How close the robot needs to be to the target position to stop (in cm)
-    public static final double turnTolerance = 0.1; // How close the robot needs to be to the target angle to stop (in radians)
+    public static final double turnTolerance = 0.05; // How close the robot needs to be to the target angle to stop (in radians)
 
     // ---- Hardware Map ----
     // Odometers
@@ -43,5 +43,5 @@ public class Config {
 
     // Other names
     public static final String led = "led";
-    public static final String imu = "imu";
+    public static final String imu = "expansionIMU";
 }

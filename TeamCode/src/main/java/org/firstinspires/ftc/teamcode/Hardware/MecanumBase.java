@@ -125,7 +125,7 @@ public class MecanumBase {
     public void move_vector(double x, double y, double turn) {
         double angle = Math.atan2(y, x);
         double speed = Math.hypot(x, y);
-        move(angle, turn, speed);
+        move(angle, -turn, speed);
     }
 
     /**
