@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
 
 /**
  * This class is used to calculate the robots current position on the field.
@@ -19,11 +20,15 @@ public class Pose{
 //    LinearOpMode opMode;
 
     DcMotorEx odoLeft, odoRight, odoCenter;
+    BotIMU imu;
 
     private double x, y;
     private double theta = 0;
     private double curTheta = 0;
-    private double prevLeftTicks, prevRightTicks, prevCenterTicks, prevTheta;
+    private double curIMU = 0;
+    private double dTheta;
+    private double[] poseArr;
+    private double prevLeftTicks, prevRightTicks, prevCenterTicks, prevTheta, prevIMU;
 
     public Pose(LinearOpMode opMode){
         // Set up odometers
@@ -34,12 +39,15 @@ public class Pose{
         odoLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odoRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odoCenter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //Other stuff
+        imu = new BotIMU(opMode);
     }
 
     /**
      * This method updates the current position of the robot on the field by using delta values from the odometers
      */
-    public void calculate(){
+    public void calculate(boolean useIMU){
 
         // Odo readings
         double curLeftTicks = -odoLeft.getCurrentPosition();
@@ -57,7 +65,13 @@ public class Pose{
         double phi = ((dLeftTicks - dRightTicks) * Config.ticsToCM) / Config.trackWidth;
         theta += phi;
         curTheta = AngleUtils.normalizeRadians(theta);
-        double dTheta = AngleUtils.subtractAnglesRad(curTheta, prevTheta);
+        curIMU = imu.getRadians();
+        if(!useIMU){
+            dTheta = AngleUtils.subtractAnglesRad(curTheta, prevTheta);
+        }
+        else if(useIMU){
+            dTheta = AngleUtils.subtractAnglesRad(curIMU, prevIMU);
+        }
 
         // Arc length travelled by each odometer, in CM
         double centerArc = dTheta *(Config.center20FullRotationOdosInTicksDiv40pi * Config.ticsToCM);
@@ -79,6 +93,7 @@ public class Pose{
         prevRightTicks = curRightTicks;
         prevCenterTicks = curCenterTicks;
         prevTheta = curTheta;
+        prevIMU = curIMU;
     }
 
 
@@ -97,9 +112,15 @@ public class Pose{
      * Calls calculate() to update the values
      * @return double[] {x, y, theta}
      */
-    public double[] returnPose(){
-        calculate();
-        return (new double[]{x, y, curTheta});
+    public double[] returnPose(boolean useIMU){
+        calculate(useIMU);
+        if(useIMU){
+            poseArr = new double[]{x, y, curIMU};
+        }
+        else if(!useIMU){
+            poseArr = new double[]{x,y,curTheta};
+        }
+        return (poseArr);
     }
 
 }
