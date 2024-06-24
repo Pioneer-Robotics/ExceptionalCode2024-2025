@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
 import org.firstinspires.ftc.teamcode.Hardware.LinearSlide;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
+import org.firstinspires.ftc.teamcode.Hardware.VoltageHandler;
 import org.firstinspires.ftc.teamcode.Helpers.Pose;
 
 /**
@@ -22,6 +23,7 @@ public class Bot {
     public LEDController led;
     public MecanumBase mecanumBase;
     public Pose pose;
+    public VoltageHandler voltageHandler;
 
     /**
      * Constructor for Bot.
@@ -33,5 +35,6 @@ public class Bot {
         led = new LEDController(opMode);
         mecanumBase = new MecanumBase(opMode);
         pose = new Pose(opMode);
+        voltageHandler = new VoltageHandler(opMode);
     }
 }

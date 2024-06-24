@@ -29,10 +29,16 @@ public class Teleop extends LinearOpMode {
             // Get the pose in the teleop loop
             double[] pos = bot.pose.returnPose(true);
 
+            double voltage = bot.voltageHandler.getVoltage();
+            if (voltage < 10) {
+                telemetry.addData("WARNING: Voltage Low: ", voltage);
+            }
+
             // Telemetry in movement classes
             telemetry.addData("X", pos[0]);
             telemetry.addData("Y", pos[1]);
             telemetry.addData("Theta", pos[2]);
+            telemetry.addData("Voltage", voltage);
             telemetry.update();
         }
     }
