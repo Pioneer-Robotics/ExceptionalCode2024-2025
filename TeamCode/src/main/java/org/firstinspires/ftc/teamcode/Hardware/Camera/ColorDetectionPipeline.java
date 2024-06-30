@@ -20,49 +20,55 @@ public class ColorDetectionPipeline extends OpenCvPipeline{
 
 //    Rect leftHalf = new Rect(1,1,(width/2)-1,height-1);
 //    Rect rightHalf = new Rect((width/2)+1,1,(width/2),height-1);
-    Rect leftHalf = new Rect(0, 0, width / 2, height);
-    Rect rightHalf = new Rect(width / 2, 0, width / 2, height);
+    Rect leftImg = new Rect(0, 0, width/3, height);
+    Rect centerImg = new Rect(width/3, 0,  width/3,height);
+    Rect rightImg = new Rect(2*width/3, 0, width/3, height);
 
     Mat blurredImg = new Mat();
     Mat modImg = new Mat();
     Mat leftCrop = new Mat();
+    Mat centerCrop = new Mat();
     Mat rightCrop = new Mat();
 
 
     double leftAvgFin;
-
+    double centerAvgFin;
     double rightAvgFin;
+    double Max = 0;
 
 
     @Override
     public Mat processFrame(Mat input){
         Imgproc.cvtColor(input, modImg, Imgproc.COLOR_RGB2YCrCb);
 
-        Imgproc.rectangle(modImg,leftHalf,new Scalar(0, 255, 0),2);
-        Imgproc.rectangle(modImg,rightHalf,new Scalar(0, 255, 0),2);
+        Imgproc.rectangle(modImg, leftImg,new Scalar(0, 255, 0),2);
+        Imgproc.rectangle(modImg, rightImg,new Scalar(0, 255, 0),2);
 
 //        Imgproc.blur(modImg,blurredImg,new Size(15,15));
 
-        leftCrop = modImg.submat(leftHalf);
-        rightCrop = modImg.submat(rightHalf);
+        leftCrop = modImg.submat(leftImg);
+        centerCrop = modImg.submat(centerImg);
+        rightCrop = modImg.submat(rightImg);
 
-        Core.extractChannel(leftCrop, leftCrop,2);
-        Core.extractChannel(rightCrop, rightCrop,2);
+        Core.extractChannel(leftCrop, leftCrop,0);
+        Core.extractChannel(centerCrop, centerCrop,0);
+        Core.extractChannel(rightCrop, rightCrop,0);
+
 
         Scalar leftAvg = Core.mean(leftCrop);
+        Scalar centerAvg = Core.mean(centerCrop);
         Scalar rightAvg = Core.mean(rightCrop);
 
         leftAvgFin = leftAvg.val[0];
+        centerAvgFin = centerAvg.val[0];
         rightAvgFin = rightAvg.val[0];
-//        0 is left, 1 is right
 
-        if(leftAvgFin > rightAvgFin){
-            location = 0;
-        } else if (rightAvgFin > leftAvgFin) {
-            location = 1;
-        }
-        int cols = input.cols();
-        int rows = input.rows();
+        Max = Math.max(leftAvgFin, centerAvgFin);
+        Max = Math.max(Max, rightAvgFin);
+
+        if(Max == leftAvgFin){location = 0;}
+        if(Max == centerAvgFin){location = 1;}
+        if(Max == rightAvgFin){location = 2;}
 
         return(modImg);
 
