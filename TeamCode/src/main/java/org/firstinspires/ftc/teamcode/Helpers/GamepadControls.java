@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
  * Class used for easier access to gamepad controls.
  * Not used that much anymore
  */
+@Deprecated
 public class GamepadControls {
     Gamepad gamepad;
 

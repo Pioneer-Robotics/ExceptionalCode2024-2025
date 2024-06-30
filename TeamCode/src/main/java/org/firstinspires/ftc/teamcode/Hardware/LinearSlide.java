@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.Config;
 /**
  * Class used to control the slide on the robot
  */
+@Deprecated
 public class LinearSlide {
     private final DcMotorEx motor;
 
