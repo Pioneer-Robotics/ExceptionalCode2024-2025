@@ -27,7 +27,7 @@ public class Teleop extends LinearOpMode {
             bot.mecanumBase.move(stickAngle, -gamepad1.right_stick_x*maxSpeed, speed*maxSpeed);
 
             // Get the pose in the teleop loop
-            double[] pos = bot.pose.returnPose(true);
+            double[] pos = bot.pose.returnPose();
 
             double voltage = bot.voltageHandler.getVoltage();
             if (voltage < 10) {
