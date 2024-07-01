@@ -1,13 +1,15 @@
-package org.firstinspires.ftc.teamcode.PID;
+package org.firstinspires.ftc.teamcode.SelfDrivingAuto;
 
+
+import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
 
 /**
  * PID controller class
  */
 public class PID {
-    public double kP, kI, kD;
-    public double integral, prevError;
-    public boolean haltIntegral; // Stop the integral from accumulating if the system is moving at 100% to prevent windup
+    private final double kP, kI, kD;
+    private double integral, prevError;
+    private boolean haltIntegral; // Stop the integral from accumulating if the system is moving at 100% to prevent windup
 
     /**
      * Constructor for PID controller
@@ -54,14 +56,31 @@ public class PID {
 
     /**
      * Calculate the move value based on the current and target values
+     *
+     * @param current Current value
+     * @param target  Target value
+     * @param speed   Scalar for the move value
+     * @return Move value in range -1 to 1
+     */
+    public double calculate(double current, double target, double speed) {
+        return calculate(current, target, speed, false);
+    }
+
+    /**
+     * Calculate the move value based on the current and target values
      * @param current Current value
      * @param target Target value
      * @param speed Scalar for the move value
+     * @param normalizeError Used for dealing with wrapping angles such as -pi to pi
      * @return Move value in range -1 to 1
      */
-    public double calculate (double current, double target, double speed) {
+    public double calculate(double current, double target, double speed, boolean normalizeError) {
         // Calculate error
         double error = target - current;
+
+        // Normalize error [-pi to pi] if flag is true
+        if (normalizeError) {
+            error = AngleUtils.normalizeRadians(error); }
 
         // Calculate derivative
         double derivative = error - prevError;

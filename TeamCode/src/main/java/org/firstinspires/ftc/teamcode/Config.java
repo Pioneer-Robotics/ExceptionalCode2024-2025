@@ -11,16 +11,17 @@ public class Config {
     public static final double ticsPerRev = 2000;
     public static final double ticsToCM = (wheelDiameter * Math.PI) / ticsPerRev;
     public static final double trackWidth = 26.5; //In CM
-    public static final double forwardOffset = Math.sqrt((15.5*15.5)-0.4); //In CM
-    //These are the ticks travelled by each odometer after 20 rotations
-    //Used in place of radius between center of rotation and each odometer
+    public static final double forwardOffset = Math.sqrt((15.5 * 15.5) - 0.4); // In CM
     public static final double center20FullRotationOdosInTicksDiv40pi = 238278 / (40 * Math.PI);
     public static final double left20FullRotationOdosInTicksDiv40pi = 238269 / (40 * Math.PI);
     public static final double right20FullRotationOdosInTicksDiv40pi = 206129 / (40 * Math.PI);
 
     // PID constants
-    public static final double[] drivePID = {0.1, 0.001, 1}; // kP, kI, kD
-    public static final double[] turnPID = {0.1, 0.001, 1}; // kP, kI, kD
+    public static final double[] drivePID = {0.1, 0.003, 0.5}; // kP, kI, kD
+    public static final double[] turnPID = {0.8, 0.002, 0.5}; // kP, kI, kD
+
+    public static final double driveTolerance = 1; // How close the robot needs to be to the target position to stop (in cm)
+    public static final double turnTolerance = 0.05; // How close the robot needs to be to the target angle to stop (in radians)
 
     // ---- Hardware Map ----
     // Odometers
