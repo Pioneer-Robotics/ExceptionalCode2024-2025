@@ -33,8 +33,8 @@ public class Bot {
         imu = new BotIMU(opMode);
         slide = new LinearSlide(opMode);
         led = new LEDController(opMode);
-        mecanumBase = new MecanumBase(opMode);
+        mecanumBase = new MecanumBase(opMode, this);
         pose = new Pose(opMode);
-        pidController = new PIDController(opMode, pose); // Uses the same pose object as the bot
+        pidController = new PIDController(opMode, this); // Uses the same pose object as the bot
     }
 }

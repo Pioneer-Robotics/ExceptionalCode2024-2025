@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.SelfDrivingAuto;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
 import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
@@ -18,30 +19,18 @@ public class PIDController {
     private final Pose pose;
 
     /**
-     * Constructor for PID controller
-     *
-     * @param opMode LinearOpMode
-     */
-    public PIDController(LinearOpMode opMode) {
-        this.opMode = opMode;
-        // Initialize pose
-        pose = new Pose(opMode);
-        // Initialize base
-        base = new MecanumBase(opMode);
-    }
-
-    /**
      * Constructor for PID controller with pose
      *
      * @param opMode LinearOpMode
-     * @param pose   Pose object for position tracking
+     * @param bot   Bot object for pose and IMU
      */
-    public PIDController(LinearOpMode opMode, Pose pose) {
+    public PIDController(LinearOpMode opMode, Bot bot) {
         this.opMode = opMode;
-        // Initialize pose
-        this.pose = pose;
-        // Initialize base
-        base = new MecanumBase(opMode);
+        // Define pose
+        this.pose = bot.pose;
+        // Define base
+        base = bot.mecanumBase;
+        base.setNorthMode(true);
     }
 
     /**
@@ -79,7 +68,7 @@ public class PIDController {
             // Calculate PID outputs
             double xOutput = xPID.calculate(currentX, x, speed);
             double yOutput = yPID.calculate(currentY, y, speed);
-            double turnOutput = turnPID.calculate(currentTheta, theta, speed);
+            double turnOutput = turnPID.calculate(currentTheta, theta, speed, true);
 
             // Move the robot based on the PID outputs
             base.move_vector(xOutput, yOutput, turnOutput);

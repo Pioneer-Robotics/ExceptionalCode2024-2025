@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 
 
@@ -13,18 +14,18 @@ import org.firstinspires.ftc.teamcode.Config;
 public class MecanumBase {
     LinearOpMode opMode;
     DcMotorEx LF, LB, RF, RB, odoLeft, odoRight, odoCenter;
-    BotIMU imu;
     boolean northMode;
+    Bot bot;
 
 
     /**
      * Constructor for MecanumBase.
      * @param opMode LinearOpMode
      */
-    public MecanumBase(LinearOpMode opMode) {
+    public MecanumBase(LinearOpMode opMode, Bot bot) {
         // Contains hardwareMap and telemetry
         this.opMode = opMode;
-        imu = new BotIMU(opMode);
+        this.bot = bot;
 
         // Set up motors
         RF = opMode.hardwareMap.get(DcMotorEx.class, Config.motorRF);
@@ -74,7 +75,7 @@ public class MecanumBase {
      * @param speed The speed to move at in the range [-1, 1]
      */
     public void move(double angle, double turn, double speed) {
-        double currentAngle = imu.getRadians();
+        double currentAngle = bot.imu.getRadians();
 
         if(northMode) {angle -= currentAngle;}
 
@@ -144,7 +145,7 @@ public class MecanumBase {
      */
     public void setNorthMode(boolean newMode) {
         northMode = newMode;
-        if(newMode){ imu.resetYaw();opMode.telemetry.addLine("RESETING"); }
+//        if(newMode){ bot.imu.resetYaw();opMode.telemetry.addLine("RESETING"); }
     }
 
     /**

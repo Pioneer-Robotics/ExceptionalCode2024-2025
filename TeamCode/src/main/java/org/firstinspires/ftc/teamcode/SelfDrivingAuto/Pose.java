@@ -20,10 +20,8 @@ public class Pose{
     LinearOpMode opMode;
 
     DcMotorEx odoLeft, odoRight, odoCenter;
-    private double x, y;
-    private double theta = 0;
-    private double curTheta = 0;
-    private double prevLeftTicks, prevRightTicks, prevCenterTicks, prevTheta;
+    private double x, y, theta;
+    private double prevLeftTicks, prevRightTicks, prevCenterTicks;
 
     /**
      * Constructor for Pose
@@ -41,6 +39,8 @@ public class Pose{
         odoCenter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         this.opMode = opMode;
+
+        x = y = theta = 0;
     }
 
     /**
@@ -75,49 +75,42 @@ public class Pose{
         double curRightTicks = -odoRight.getCurrentPosition();
         double curCenterTicks = -odoCenter.getCurrentPosition();
 
-        double dLeftTicks = curLeftTicks - prevLeftTicks;
-        double dRightTicks = curRightTicks - prevRightTicks;
-        double dCenterTicks = curCenterTicks - prevCenterTicks;
+        // Calculate the change in odometers
+        double dLeftCM = (curLeftTicks - prevLeftTicks) * Config.ticsToCM;
+        double dRightCM = (curRightTicks - prevRightTicks) * Config.ticsToCM;
+        double dCenterCM = (curCenterTicks - prevCenterTicks) * Config.ticsToCM;
 
-        double dLeftCM = dLeftTicks * Config.ticsToCM;
-        double dRightCM = dRightTicks * Config.ticsToCM;
-        double dCenterCM = dCenterTicks * Config.ticsToCM;
+        // Calculate the change in angle
+        double dTheta = (dLeftCM - dRightCM) / Config.trackWidth;
 
-        double phi = ((dLeftTicks - dRightTicks) * Config.ticsToCM) / Config.trackWidth;
-        theta += phi;
-        curTheta = AngleUtils.normalizeRadians(theta);
-        double dTheta = AngleUtils.subtractAnglesRad(curTheta, prevTheta);
+        double centerDisplacement = (dLeftCM + dRightCM) / 2;
+        double horizontalDisplacement = dCenterCM - (Config.forwardOffset * dTheta);
 
-        // Arc length travelled by each odometer, in CM
-        double centerArc = dTheta *(Config.center20FullRotationOdosInTicksDiv40pi * Config.ticsToCM);
-        double leftArc = dTheta *(Config.left20FullRotationOdosInTicksDiv40pi * Config.ticsToCM);
-        double rightArc = dTheta *(Config.right20FullRotationOdosInTicksDiv40pi * Config.ticsToCM);
-//        double centerArc = dTheta*(Config.forwardOffset);
-//        double leftArc = dTheta*(Config.forwardOffset);
-//        double rightArc = dTheta*(Config.forwardOffset);
+        // Calculate the change in x and y
+        double a, b;
+        if (dTheta != 0) {
+            a = (Math.sin(dTheta) / dTheta) * centerDisplacement + ((Math.cos(dTheta) - 1) / dTheta) * horizontalDisplacement;
+            b = ((1 - Math.cos(dTheta)) / dTheta) * centerDisplacement + (Math.sin(dTheta) / dTheta) * horizontalDisplacement;
+        } else {
+            a = centerDisplacement;
+            b = horizontalDisplacement;
+        }
 
-        double dX = (dCenterCM - centerArc);
-        double dLeftFinal = dLeftCM - leftArc;
-        double dRightFinal = dRightCM + rightArc;
-        double avgDY = (dLeftFinal + dRightFinal)/2;
+        double dX = Math.sin(theta) * a + Math.cos(theta) * b;
+        double dY = Math.cos(theta) * a - Math.sin(theta) * b;
 
-        opMode.telemetry.addData("Before dX: ", dX);
-        opMode.telemetry.addData("Before avgDY: ", avgDY);
-        opMode.telemetry.addData("Cos theta: ", Math.cos(curTheta));
-        opMode.telemetry.addData("Sin theta: ", Math.sin(curTheta));
+        // Update the current x, y, and theta values
+        x += dX;
+        y += dY;
+        theta += dTheta;
 
-        // dX and dY are relative to the robot
-        // Convert to global coordinate system
-        double globaldX = dX * Math.cos(curTheta) + avgDY * Math.sin(curTheta);
-        double globaldY = dX * Math.sin(curTheta) + avgDY * Math.cos(curTheta);
+        // Normalize theta [-pi to pi]
+        theta = AngleUtils.normalizeRadians(theta);
 
-        x += globaldX;
-        y += globaldY;
-
+        // Set the previous values to the current values
         prevLeftTicks = curLeftTicks;
         prevRightTicks = curRightTicks;
         prevCenterTicks = curCenterTicks;
-        prevTheta = curTheta;
     }
 
 
@@ -129,7 +122,9 @@ public class Pose{
         return (x);
     }
 
-    public double getTheta(){return(curTheta);}
+    public double getTheta() {
+        return (theta);
+    }
 
     public void DANCE(){
         // TODO: DANCE!
@@ -142,7 +137,7 @@ public class Pose{
      */
     public double[] returnPose(){
         calculate();
-        return (new double[]{x, y, curTheta});
+        return (new double[]{x, y, theta});
     }
 
 }

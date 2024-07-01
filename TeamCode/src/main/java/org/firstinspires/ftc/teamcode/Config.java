@@ -18,7 +18,7 @@ public class Config {
 
     // PID constants
     public static final double[] drivePID = {0.1, 0.003, 0.5}; // kP, kI, kD
-    public static final double[] turnPID = {0.5, 0.005, 0.1}; // kP, kI, kD
+    public static final double[] turnPID = {0.8, 0.002, 0.5}; // kP, kI, kD
 
     public static final double driveTolerance = 1; // How close the robot needs to be to the target position to stop (in cm)
     public static final double turnTolerance = 0.05; // How close the robot needs to be to the target angle to stop (in radians)
