@@ -113,13 +113,13 @@ public class PIDController {
     }
 
     /**
-     * Move to a position using PID (stay at current theta and speed = 1)
+     * Move to a position using PID (stay at current theta and speed = 0.8)
      *
      * @param x double - x position
      * @param y double - y position
      */
     public void moveToPosition(double x, double y) {
-        moveToPosition(x, y, 1);
+        moveToPosition(x, y, 0.8);
     }
 
     /**
@@ -140,16 +140,16 @@ public class PIDController {
      * @param y double - y position
      */
     public void moveRelative(double x, double y) {
-        moveRelative(x, y, 0, 1);
+        moveRelative(x, y, 0, 0.8);
     }
 
     /**
-     * Move relative to the current position using PID (stay at current theta and speed = 1)
+     * Move relative to the current position using PID (stay at current theta and speed = 0.8)
      *
      * @param x double - x position
      * @param y double - y position
      */
     public void moveRelative(double x, double y, double theta) {
-        moveRelative(x, y, theta, 1);
+        moveRelative(x, y, theta, 0.8);
     }
 }

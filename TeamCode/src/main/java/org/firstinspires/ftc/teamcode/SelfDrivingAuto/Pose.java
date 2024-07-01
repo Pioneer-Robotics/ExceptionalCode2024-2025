@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
  * The robot's position is stored as an X coordinate, Y coordinate, and Theta (Robot Yaw).
  */
 public class Pose{
-//    LinearOpMode opMode;
+    LinearOpMode opMode;
 
     DcMotorEx odoLeft, odoRight, odoCenter;
     private double x, y;
@@ -39,6 +39,8 @@ public class Pose{
         odoLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odoRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odoCenter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        this.opMode = opMode;
     }
 
     /**
@@ -60,6 +62,8 @@ public class Pose{
         x = startPos[0];
         y = startPos[1];
         theta = startPos[2];
+
+        this.opMode = opMode;
     }
 
     /**
@@ -97,8 +101,18 @@ public class Pose{
         double dRightFinal = dRightCM + rightArc;
         double avgDY = (dLeftFinal + dRightFinal)/2;
 
-        x += dX;
-        y += avgDY;
+        opMode.telemetry.addData("Before dX: ", dX);
+        opMode.telemetry.addData("Before avgDY: ", avgDY);
+        opMode.telemetry.addData("Cos theta: ", Math.cos(curTheta));
+        opMode.telemetry.addData("Sin theta: ", Math.sin(curTheta));
+
+        // dX and dY are relative to the robot
+        // Convert to global coordinate system
+        double globaldX = dX * Math.cos(curTheta) + avgDY * Math.sin(curTheta);
+        double globaldY = dX * Math.sin(curTheta) + avgDY * Math.cos(curTheta);
+
+        x += globaldX;
+        y += globaldY;
 
         prevLeftTicks = curLeftTicks;
         prevRightTicks = curRightTicks;
