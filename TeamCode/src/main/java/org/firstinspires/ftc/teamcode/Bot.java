@@ -5,7 +5,9 @@ import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
+import org.firstinspires.ftc.teamcode.Hardware.Camera.AprilTagProcessor;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
 import org.firstinspires.ftc.teamcode.Hardware.LinearSlide;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
@@ -26,6 +28,8 @@ public class Bot {
     public MecanumBase mecanumBase;
     public Pose pose;
     public VoltageHandler voltageHandler;
+    public WebcamName webcam;
+    public AprilTagProcessor aprilTagProcessor;
 
     /**
      * Constructor for Bot.
@@ -39,5 +43,7 @@ public class Bot {
         pose = new Pose(opMode);
         pidController = new PIDController(opMode, this); // Uses the same pose object as the bot
         voltageHandler = new VoltageHandler(opMode);
+        webcam = opMode.hardwareMap.get(WebcamName.class, Config.webcam);
+        aprilTagProcessor = new AprilTagProcessor(webcam);
     }
 }
