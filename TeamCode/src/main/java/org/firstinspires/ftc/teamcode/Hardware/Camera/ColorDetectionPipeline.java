@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.Hardware.Camera;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
@@ -35,13 +37,16 @@ public class ColorDetectionPipeline extends OpenCvPipeline{
     double centerAvgFin;
     double rightAvgFin;
     double Max = 0;
+    double test = 0;
 
 
     @Override
     public Mat processFrame(Mat input){
-        Imgproc.cvtColor(input, modImg, Imgproc.COLOR_RGB2YCrCb);
+//        Imgproc.cvtColor(input, modImg, Imgproc.COLOR_RGB2YCrCb);
+        modImg = input;
 
         Imgproc.rectangle(modImg, leftImg,new Scalar(0, 255, 0),2);
+        Imgproc.rectangle(modImg, centerImg,new Scalar(0,255,0),2);
         Imgproc.rectangle(modImg, rightImg,new Scalar(0, 255, 0),2);
 
 //        Imgproc.blur(modImg,blurredImg,new Size(15,15));
@@ -63,20 +68,15 @@ public class ColorDetectionPipeline extends OpenCvPipeline{
         centerAvgFin = centerAvg.val[0];
         rightAvgFin = rightAvg.val[0];
 
-        Max = Math.max(leftAvgFin, centerAvgFin);
-        Max = Math.max(Max, rightAvgFin);
+        Max = Math.max(rightAvgFin, Math.max(leftAvgFin, centerAvgFin));
 
         if(Max == leftAvgFin){location = 0;}
         if(Max == centerAvgFin){location = 1;}
         if(Max == rightAvgFin){location = 2;}
+        test += 1;
 
         return(modImg);
 
     }
-
-    public int getLocation(){
-        return(location);
-    }
-
 
 }

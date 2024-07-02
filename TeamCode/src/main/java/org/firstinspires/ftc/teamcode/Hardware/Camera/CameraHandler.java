@@ -13,6 +13,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 @TeleOp
 public class CameraHandler extends LinearOpMode {
     OpenCvWebcam webcam;
+    ColorDetectionPipeline pipeline = new ColorDetectionPipeline();
 
     @Override
     public void runOpMode(){
@@ -20,7 +21,7 @@ public class CameraHandler extends LinearOpMode {
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webc" +
                 "am 1"), cameraMonitorViewId);
 
-        webcam.setPipeline(new ColorDetectionPipeline());
+        webcam.setPipeline(pipeline);
         webcam.setMillisecondsPermissionTimeout(10000); // Timeout for obtaining permission is configurable. Set before opening. Used to be 5000
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
             @Override
@@ -33,10 +34,11 @@ public class CameraHandler extends LinearOpMode {
                 //Error idk
             }
         });
-        ColorDetectionPipeline pipeline = new ColorDetectionPipeline();
+
         waitForStart();
         while(opModeIsActive()){
-            int location = pipeline.getLocation();
+            int location = pipeline.location;
+
             telemetry.addData("Location", location);
             telemetry.addData("Frame Count", webcam.getFrameCount());
             telemetry.addData("FPS", String.format("%.2f", webcam.getFps()));
