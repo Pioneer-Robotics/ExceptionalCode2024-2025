@@ -12,11 +12,10 @@ import org.firstinspires.ftc.teamcode.Config;
  * MecanumBase is used to initialize and control the drive base of the robot
  */
 public class MecanumBase {
-    LinearOpMode opMode;
-    DcMotorEx LF, LB, RF, RB, odoLeft, odoRight, odoCenter;
-    boolean northMode;
-    Bot bot;
-
+    private final LinearOpMode opMode;
+    private final Bot bot;
+    private final DcMotorEx LF, LB, RF, RB;
+    private boolean northMode;
 
     /**
      * Constructor for MecanumBase.
@@ -44,15 +43,6 @@ public class MecanumBase {
         LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        // Set up odometers
-        odoLeft = opMode.hardwareMap.get(DcMotorEx.class, Config.odoLeft);
-        odoRight = opMode.hardwareMap.get(DcMotorEx.class, Config.odoRight);
-        odoCenter = opMode.hardwareMap.get(DcMotorEx.class, Config.odoCenter);
-
-        odoLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        odoRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        odoCenter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     /**
@@ -82,10 +72,11 @@ public class MecanumBase {
         double power1 = (Math.sin(angle - (Math.PI / 4)) * speed);
         double power2 = (Math.sin(angle + (Math.PI / 4)) * speed);
 
-        RF.setPower(power1 + turn);
-        LF.setPower(power2 - turn);
-        RB.setPower(power2 + turn);
-        LB.setPower(power1 - turn);
+        // Set velocity by converting power in range [0, 1] to ticks per second
+        RF.setVelocity((power1 + turn) * Config.maxDriveTicksPerSecond);
+        LF.setVelocity((power2 - turn) * Config.maxDriveTicksPerSecond);
+        RB.setVelocity((power2 + turn) * Config.maxDriveTicksPerSecond);
+        LB.setVelocity((power1 - turn) * Config.maxDriveTicksPerSecond);
 
 
         opMode.telemetry.addData("Angle", currentAngle);
@@ -133,10 +124,10 @@ public class MecanumBase {
      * Sets all motor powers to 0.
      */
     public void stop() {
-        RF.setPower(0);
-        LF.setPower(0);
-        RB.setPower(0);
-        LB.setPower(0);
+        RF.setVelocity(0);
+        LF.setVelocity(0);
+        RB.setVelocity(0);
+        LB.setVelocity(0);
     }
 
     /**

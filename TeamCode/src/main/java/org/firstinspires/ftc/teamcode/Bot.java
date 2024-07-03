@@ -4,11 +4,13 @@ package org.firstinspires.ftc.teamcode;
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
 import org.firstinspires.ftc.teamcode.Hardware.LinearSlide;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
+import org.firstinspires.ftc.teamcode.Hardware.ServoClass;
 import org.firstinspires.ftc.teamcode.Hardware.VoltageHandler;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PIDController;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Pose;
@@ -26,18 +28,28 @@ public class Bot {
     public MecanumBase mecanumBase;
     public Pose pose;
     public VoltageHandler voltageHandler;
+    public ServoClass pixelDropLeft, pixelDropRight;
 
     /**
      * Constructor for Bot.
      * @param opMode LinearOpMode
      */
     public Bot(@NonNull LinearOpMode opMode){
-        imu = new BotIMU(opMode);
-        slide = new LinearSlide(opMode);
-        led = new LEDController(opMode);
+        // Drive base and self driving
+        pose = new Pose(opMode); // Needs to be initialized before pidController
         mecanumBase = new MecanumBase(opMode, this);
-        pose = new Pose(opMode);
         pidController = new PIDController(opMode, this); // Uses the same pose object as the bot
+
+        // Motors
+        slide = new LinearSlide(opMode);
+
+        // Servos
+        pixelDropLeft = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.leftDropServo), Config.leftOpenPos, Config.leftClosedPos, Config.leftClosedPos);
+        pixelDropRight = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.rightDropServo), Config.rightOpenPos, Config.rightClosedPos, Config.rightClosedPos);
+
+        // Other
         voltageHandler = new VoltageHandler(opMode);
+        imu = new BotIMU(opMode);
+        led = new LEDController(opMode);
     }
 }

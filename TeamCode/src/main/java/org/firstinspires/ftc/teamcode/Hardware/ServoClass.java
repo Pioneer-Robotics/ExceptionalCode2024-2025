@@ -1,11 +1,10 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
+import com.qualcomm.robotcore.hardware.Servo;
+
 /**
  * Servo class with presets
  */
-
-import com.qualcomm.robotcore.hardware.Servo;
-
 public class ServoClass {
     private final Servo servo;
     private final double closePos, openPos;
@@ -16,7 +15,6 @@ public class ServoClass {
 
     /**
      * Constructor for ServoClass
-     *
      * @param servo    Servo object
      * @param openPos  double open position in range [0, 1]
      * @param closePos double close position in range [0, 1]
@@ -33,9 +31,45 @@ public class ServoClass {
         pos4 = pos3 + 0.04;
     }
 
+    /**
+     * Constructor for ServoClass
+     *
+     * @param servo    Servo object
+     * @param openPos  double open position in range [0, 1]
+     * @param closePos double close position in range [0, 1]
+     * @param startPos double start position in range [0, 1]
+     */
+    public ServoClass(Servo servo, double openPos, double closePos, double startPos) {
+        this.servo = servo;
+        this.openPos = openPos;
+        this.closePos = closePos;
+
+        //These positions are customizable
+        pos1 = openPos + 0.04;
+        pos2 = pos1 + 0.04;
+        pos3 = pos2 + 0.04;
+        pos4 = pos3 + 0.04;
+
+        this.servo.setPosition(startPos);
+    }
+
     public void closeServo(){servo.setPosition(closePos);}
 
-    public void openServo(){servo.setPosition(openPos);}
+    public void openServo() {
+        servo.setPosition(openPos);
+    }
+
+    /**
+     * Closes/opens servo based on boolean parameter
+     *
+     * @param position boolean position (false is closed and true is open(
+     */
+    public void selectBoolPos(boolean position) {
+        double newPos = position ? openPos : closePos;
+        if (servo.getPosition() != newPos) {
+            servo.setPosition(newPos);
+        }
+    }
 
     /**
      * Set the servo to any value
