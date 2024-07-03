@@ -45,9 +45,11 @@ public class Config {
     public static final String rightDropServo = "PixelDropRight";
     public static final String wristServo = "wristServo";
     public static final String gripperServo = "gripperServo";
+    public static final String intakeServo = "intakeServo";
 
     // Motor names
     public static final String slideMotor = "slideArm";
+    public static final String intakeMotor = "collector";
 
     // Other names
     public static final String led = "led";
@@ -65,4 +67,7 @@ public class Config {
 
     public static final double gripperOpen = .2;
     public static final double gripperClosed = .5;
+
+    public static final double intakeUp = .4;
+    public static final double intakeDown = .02;
 }

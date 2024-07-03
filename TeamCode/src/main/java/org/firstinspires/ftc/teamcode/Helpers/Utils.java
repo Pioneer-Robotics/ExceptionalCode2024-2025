@@ -38,6 +38,7 @@ public class Utils {
      */
     public static double increment(double number, double value, double limit) {
         number += value;
+        number = (double) Math.round(number * 1000) / 1000; // Account for floating point error
         number = Math.min(limit, number);
         return number;
     }
@@ -52,6 +53,7 @@ public class Utils {
      */
     public static double decrement(double number, double value, double limit) {
         number -= value;
+        number = (double) Math.round(number * 1000) / 1000; // Account for floating point error
         number = Math.max(limit, number);
         return number;
     }

@@ -17,6 +17,7 @@ public class Teleop extends LinearOpMode {
         Toggle northModeToggle = new Toggle(true);
         Toggle incSpeedToggle = new Toggle(false);
         Toggle decSpeedToggle = new Toggle(false);
+        Toggle collectorToggle = new Toggle(false);
 
         // Initialize max speed
         double maxSpeed = 0.5;
@@ -24,6 +25,7 @@ public class Teleop extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()) {
+            // ---- GamePad 1 ----
             // Inputs for driving
             double px = gamepad1.left_stick_x;
             double py = -gamepad1.left_stick_y;
@@ -40,40 +42,52 @@ public class Teleop extends LinearOpMode {
             // Speed toggles
             incSpeedToggle.toggle(gamepad1.right_bumper);
             decSpeedToggle.toggle(gamepad1.left_bumper);
-            if (incSpeedToggle.justChanged() && maxSpeed < 1) {
-                maxSpeed += 0.1;
+            if (incSpeedToggle.justChanged()) {
+                maxSpeed = Utils.increment(maxSpeed, 0.1, 1);
             }
-            if (decSpeedToggle.justChanged() && maxSpeed > 0.2) {
-                maxSpeed -= 0.1;
-            }
-            maxSpeed = (double) Math.round(maxSpeed * 10) / 10; // Account for floating point error
-
-            // Slide motor
-            if (gamepad1.x) {
-                bot.slide.moveToPosition(0.5);
-                bot.gripper.closeServo();
-            } else if (gamepad1.y) {
-                bot.slide.moveToPosition(1);
-                bot.gripper.closeServo();
-            } else if (gamepad1.b) {
-                bot.slide.moveToPosition(0);
-                bot.wrist.closeServo();
-                bot.gripper.openServo();
+            if (decSpeedToggle.justChanged()) {
+                maxSpeed = Utils.decrement(maxSpeed, 0.1, 0.2);
             }
 
-            // Servos
+            // Pixel drop
             bot.pixelDropLeft.selectBoolPos(Utils.floatToBool(gamepad1.left_trigger));
             bot.pixelDropRight.selectBoolPos(Utils.floatToBool(gamepad1.right_trigger));
-            if (gamepad1.dpad_up && bot.slide.getPosition() > 0.2) {
+
+            // Collector
+            collectorToggle.toggle(gamepad1.dpad_down);
+            bot.collector.setRunning(collectorToggle.get() && !gamepad1.dpad_up);
+
+            if (gamepad1.dpad_left) {
+                bot.collector.up();
+            }
+            if (gamepad1.dpad_right) {
+                bot.collector.down();
+            }
+            if (gamepad1.dpad_up) {
+                bot.collector.reverse();
+            }
+
+            // ---- GamePad 2 ----
+            // Slide motor
+            if (gamepad2.dpad_right) {
+                bot.commands.armMid();
+            } else if (gamepad2.dpad_up) {
+                bot.commands.armUp();
+            } else if (gamepad2.dpad_down) {
+                bot.commands.armDown();
+            }
+
+            // Slide servos
+            if (gamepad2.b && bot.slide.getPosition() > 0.2) {
                 bot.wrist.openServo();
             }
-            if (gamepad1.dpad_down) {
+            if (gamepad2.a) {
                 bot.wrist.closeServo();
             }
-            if (gamepad1.dpad_right && bot.slide.getPosition() > 0.2) {
+            if (gamepad2.right_bumper && bot.slide.getPosition() > 0.2) {
                 bot.gripper.openServo();
             }
-            if (gamepad1.dpad_left) {
+            if (gamepad2.left_bumper) {
                 bot.gripper.closeServo();
             }
 
@@ -90,6 +104,7 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("X", pos[0]);
             telemetry.addData("Y", pos[1]);
             telemetry.addData("Theta", pos[2]);
+            telemetry.addData("Collector Toggle", collectorToggle.get());
             telemetry.addData("Voltage", voltage);
             telemetry.update();
         }
