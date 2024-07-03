@@ -28,7 +28,7 @@ public class Bot {
     public MecanumBase mecanumBase;
     public Pose pose;
     public VoltageHandler voltageHandler;
-    public ServoClass pixelDropLeft, pixelDropRight;
+    public ServoClass pixelDropLeft, pixelDropRight, gripper, wrist;
 
     /**
      * Constructor for Bot.
@@ -46,6 +46,8 @@ public class Bot {
         // Servos
         pixelDropLeft = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.leftDropServo), Config.leftOpenPos, Config.leftClosedPos, Config.leftClosedPos);
         pixelDropRight = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.rightDropServo), Config.rightOpenPos, Config.rightClosedPos, Config.rightClosedPos);
+        gripper = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.gripperServo), Config.gripperOpen, Config.gripperClosed, Config.gripperOpen);
+        wrist = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.wristServo), Config.wristVertical, Config.wristHorizontal, Config.wristHorizontal);
 
         // Other
         voltageHandler = new VoltageHandler(opMode);

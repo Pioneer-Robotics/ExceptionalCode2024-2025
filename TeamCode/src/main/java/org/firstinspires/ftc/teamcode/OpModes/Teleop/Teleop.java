@@ -48,9 +48,34 @@ public class Teleop extends LinearOpMode {
             }
             maxSpeed = (double) Math.round(maxSpeed * 10) / 10; // Account for floating point error
 
+            // Slide motor
+            if (gamepad1.x) {
+                bot.slide.moveToPosition(0.5);
+                bot.gripper.closeServo();
+            } else if (gamepad1.y) {
+                bot.slide.moveToPosition(1);
+                bot.gripper.closeServo();
+            } else if (gamepad1.b) {
+                bot.slide.moveToPosition(0);
+                bot.wrist.closeServo();
+                bot.gripper.openServo();
+            }
+
             // Servos
             bot.pixelDropLeft.selectBoolPos(Utils.floatToBool(gamepad1.left_trigger));
             bot.pixelDropRight.selectBoolPos(Utils.floatToBool(gamepad1.right_trigger));
+            if (gamepad1.dpad_up && bot.slide.getPosition() > 0.2) {
+                bot.wrist.openServo();
+            }
+            if (gamepad1.dpad_down) {
+                bot.wrist.closeServo();
+            }
+            if (gamepad1.dpad_right && bot.slide.getPosition() > 0.2) {
+                bot.gripper.openServo();
+            }
+            if (gamepad1.dpad_left) {
+                bot.gripper.closeServo();
+            }
 
             // Get data for telemetry
             double[] pos = bot.pose.returnPose();

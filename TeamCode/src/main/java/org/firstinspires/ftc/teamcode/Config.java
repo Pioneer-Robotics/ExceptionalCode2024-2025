@@ -12,9 +12,6 @@ public class Config {
     public static final double ticsToCM = (wheelDiameter * Math.PI) / ticsPerRev;
     public static final double trackWidth = 26.5; //In CM
     public static final double forwardOffset = Math.sqrt((15.5 * 15.5) - 0.4); // In CM
-    public static final double center20FullRotationOdosInTicksDiv40pi = 238278 / (40 * Math.PI);
-    public static final double left20FullRotationOdosInTicksDiv40pi = 238269 / (40 * Math.PI);
-    public static final double right20FullRotationOdosInTicksDiv40pi = 206129 / (40 * Math.PI);
 
     // Encoder constants
     public static final double maxDriveTicksPerSecond = 2700; // ~300 RPM
@@ -46,6 +43,8 @@ public class Config {
     // Servo names
     public static final String leftDropServo = "PixelDropLeft";
     public static final String rightDropServo = "PixelDropRight";
+    public static final String wristServo = "wristServo";
+    public static final String gripperServo = "gripperServo";
 
     // Motor names
     public static final String slideMotor = "slideArm";
@@ -55,9 +54,15 @@ public class Config {
     public static final String imu = "expansionIMU";
 
     // ---- Servo Positions ----
-    public static final double leftOpenPos = 0.475;
-    public static final double leftClosedPos = 0.055;
+    public static final double leftOpenPos = .475;
+    public static final double leftClosedPos = .055;
 
-    public static final double rightOpenPos = 0.61;
-    public static final double rightClosedPos = 0.175;
+    public static final double rightOpenPos = .61;
+    public static final double rightClosedPos = .175;
+
+    public static final double wristVertical = .53;
+    public static final double wristHorizontal = .885;
+
+    public static final double gripperOpen = .2;
+    public static final double gripperClosed = .5;
 }
