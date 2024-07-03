@@ -16,8 +16,9 @@ public class Config {
     public static final double left20FullRotationOdosInTicksDiv40pi = 238269 / (40 * Math.PI);
     public static final double right20FullRotationOdosInTicksDiv40pi = 206129 / (40 * Math.PI);
 
-    // Drive constants
+    // Encoder constants
     public static final double maxDriveTicksPerSecond = 2700; // ~300 RPM
+    public static final double maxSlideTicksPerSecond = 2700;
 
     // PID constants
     public static final double[] drivePID = {0.1, 0.00075, 0.5}; // kP, kI, kD

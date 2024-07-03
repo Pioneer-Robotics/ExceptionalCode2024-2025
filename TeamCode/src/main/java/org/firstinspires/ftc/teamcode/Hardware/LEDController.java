@@ -30,6 +30,7 @@ public class LEDController {
      * Turns off the lights.
      */
     public void lightsOff(){
+        led.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
         led.close();
     }
 }
