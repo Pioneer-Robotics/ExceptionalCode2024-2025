@@ -26,6 +26,10 @@ public class Config {
     public static final double driveTolerance = 1; // How close the robot needs to be to the target position to stop (in cm)
     public static final double turnTolerance = 0.05; // How close the robot needs to be to the target angle to stop (in radians)
 
+    // Used to gradually accelerate
+    // PID speed starts at 0.1 and increments by acceleration each loop up to 1
+    public static final double acceleration = 0.05;
+
     // ---- Hardware Map ----
     // Odometers
     public static final String odoLeft = "OdoLeft";
