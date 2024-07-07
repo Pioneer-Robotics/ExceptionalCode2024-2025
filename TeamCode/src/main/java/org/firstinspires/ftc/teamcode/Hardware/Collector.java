@@ -10,13 +10,13 @@ import org.firstinspires.ftc.teamcode.Config;
 public class Collector {
     private final DcMotorEx motor;
     private final ServoClass servo;
-    private double speed = .6;
+    private double speed = .5;
 
     public Collector(LinearOpMode opMode) {
         motor = opMode.hardwareMap.get(DcMotorEx.class, Config.intakeMotor);
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        servo = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.intakeServo), Config.intakeUp, Config.intakeDown, Config.intakeDown);
+        servo = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.intakeServo), Config.intakeUp, Config.intakeDown, Config.intakeUp);
     }
 
     public void up() {

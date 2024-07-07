@@ -16,11 +16,13 @@ public class Commands {
     public void armUp() {
         bot.gripper.closeServo();
         bot.slide.moveToPosition(1);
+        bot.wrist.openServo();
     }
 
     public void armMid() {
         bot.gripper.closeServo();
         bot.slide.moveToPosition(0.5);
+        bot.wrist.openServo();
     }
 
     public void armDown() {

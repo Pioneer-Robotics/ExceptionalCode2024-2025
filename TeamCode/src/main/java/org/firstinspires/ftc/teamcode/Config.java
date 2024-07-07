@@ -26,7 +26,7 @@ public class Config {
 
     // Used to gradually accelerate
     // PID speed starts at 0.1 and increments by acceleration each loop up to 1
-    public static final double acceleration = 0.05;
+    public static final double acceleration = 0.025;
 
     // ---- Hardware Map ----
     // Odometers
