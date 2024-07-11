@@ -9,7 +9,8 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 public class ColorDetectionPipeline extends OpenCvPipeline {
     int location = -1;
-
+    public int width = 1280;
+    public int height = 720;
 //    Scalar lowerBlue = new Scalar(40.45, 108.54, 26.61);
 //    Scalar upperBlue = new Scalar(130.85, 189.44, 132.09);
 //    Scalar lowerRed = new Scalar(360, 62, 60);
@@ -23,11 +24,20 @@ public class ColorDetectionPipeline extends OpenCvPipeline {
     Mat centerCrop = new Mat();
     Mat rightCrop = new Mat();
 
+    Rect leftImg = new Rect(0, 0, width/3, height);
+    Rect centerImg = new Rect(width/3, 0,  width/3,height);
+    Rect rightImg = new Rect(2*width/3, 0, width/3, height);
+
     @Override
     public Mat processFrame(Mat input){
         Imgproc.cvtColor(input, hsvImg, Imgproc.COLOR_RGB2HSV);
         Core.inRange(hsvImg, lowerRed, upperRed, mask);
-        return(mask);
+
+        leftCrop = mask.submat(leftImg);
+        centerCrop = mask.submat(centerImg);
+        rightCrop = mask.submat(rightImg);
+
+        return(input);
 
     }
 

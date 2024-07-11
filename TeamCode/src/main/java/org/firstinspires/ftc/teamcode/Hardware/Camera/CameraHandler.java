@@ -11,7 +11,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 @TeleOp
 public class CameraHandler extends LinearOpMode {
     OpenCvWebcam webcam;
-    ColorDetectionPipeline pipeline = new ColorDetectionPipeline();
+    extrChanPipeline pipeline = new extrChanPipeline();
 
     @Override
     public void runOpMode(){
