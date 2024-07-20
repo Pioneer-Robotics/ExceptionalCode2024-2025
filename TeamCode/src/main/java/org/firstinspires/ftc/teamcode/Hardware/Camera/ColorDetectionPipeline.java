@@ -31,13 +31,18 @@ public class ColorDetectionPipeline extends OpenCvPipeline {
     @Override
     public Mat processFrame(Mat input){
         Imgproc.cvtColor(input, hsvImg, Imgproc.COLOR_RGB2HSV);
+
+        Imgproc.rectangle(mask, leftImg,new Scalar(0, 255, 0),2);
+        Imgproc.rectangle(mask, centerImg,new Scalar(0,255,0),2);
+        Imgproc.rectangle(mask, rightImg,new Scalar(0, 255, 0),2);
+
         Core.inRange(hsvImg, lowerRed, upperRed, mask);
 
         leftCrop = mask.submat(leftImg);
         centerCrop = mask.submat(centerImg);
         rightCrop = mask.submat(rightImg);
 
-        return(input);
+        return(mask);
 
     }
 
