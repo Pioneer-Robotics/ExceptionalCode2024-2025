@@ -70,4 +70,8 @@ public class Config {
 
     public static final double intakeUp = .4;
     public static final double intakeDown = .02;
+
+    //Other
+    public static final String[] calmDownMessages = new String[]{"Please calm down", "Use courtesy on the field", "Practice defensive driving", "Keep a safe distance from other robots", "AVOID AGGRESSIVE DRIVING BEHAVIOR", "Stay calm and patient", "Do not use your cell phone while driving(Except for the driver station)","Don't drink and drive", "Chance takers are accident makers", "Drive like hell and you'll get there", "All accidents are preventable", "If you try to rush or zoom, you're sure to meet your doom (Rushdie, 13)", "All the dangerous overtakers end up safe at the undertaker's (Rushdie, 13)", "Look out! Slow down! Don't be funny! Life is precious! Cars cost money! (Rushdie, 13)"};
+
 }

@@ -4,8 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Bot;
+import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 import org.firstinspires.ftc.teamcode.Helpers.Utils;
+
 
 @TeleOp(name="Teleop", group="Teleop")
 public class Teleop extends LinearOpMode {
@@ -21,6 +23,9 @@ public class Teleop extends LinearOpMode {
 
         // Initialize max speed
         double maxSpeed = 0.5;
+
+        //Other
+        boolean calmDown = false;
 
         waitForStart();
 
@@ -67,6 +72,11 @@ public class Teleop extends LinearOpMode {
                 bot.collector.reverse();
             }
 
+            //Other
+            if (gamepad1.left_stick_button || gamepad1.right_stick_button){
+                calmDown = true;
+            }
+
             // ---- GamePad 2 ----
             // Slide motor
             if (gamepad2.dpad_right) {
@@ -106,6 +116,10 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("Theta", pos[2]);
             telemetry.addData("Collector Toggle", collectorToggle.get());
             telemetry.addData("Voltage", voltage);
+            if(calmDown == true){
+                telemetry.addLine(Config.calmDownMessages[bot.utils.randNum(Config.calmDownMessages.length)]);
+
+            }
             telemetry.update();
         }
     }
