@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.Helpers;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import java.util.Random;
+
 public class Utils {
     /**
      * Turns float to boolean where <0.5 is false and >0.5 is true.
@@ -56,5 +58,17 @@ public class Utils {
         number = (double) Math.round(number * 1000) / 1000; // Account for floating point error
         number = Math.max(limit, number);
         return number;
+    }
+
+    /**
+     * Generates a random integer from 0 to maxRange
+     *
+     * @param maxRange
+     * @return a random number
+     */
+    public int randNum(int maxRange){
+        Random random = new Random();
+        int number = random.nextInt(maxRange+1);
+        return(number);
     }
 }

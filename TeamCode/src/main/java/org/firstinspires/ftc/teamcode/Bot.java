@@ -14,6 +14,8 @@ import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
 import org.firstinspires.ftc.teamcode.Hardware.ServoClass;
 import org.firstinspires.ftc.teamcode.Hardware.VoltageHandler;
 import org.firstinspires.ftc.teamcode.Helpers.Commands;
+import org.firstinspires.ftc.teamcode.Helpers.Ticker;
+import org.firstinspires.ftc.teamcode.Helpers.Utils;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PIDController;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Pose;
 
@@ -31,8 +33,10 @@ public class Bot {
     public MecanumBase mecanumBase;
     public Pose pose;
     public VoltageHandler voltageHandler;
+    public Ticker ticker;
     public Collector collector;
     public ServoClass pixelDropLeft, pixelDropRight, gripper, wrist;
+    public Utils utils;
 
     /**
      * Constructor for Bot.
@@ -58,6 +62,9 @@ public class Bot {
         voltageHandler = new VoltageHandler(opMode);
         imu = new BotIMU(opMode);
         led = new LEDController(opMode);
+        ticker = new Ticker(0);
+        utils = new Utils();
+
 
         // Commands
         commands = new Commands(this);
