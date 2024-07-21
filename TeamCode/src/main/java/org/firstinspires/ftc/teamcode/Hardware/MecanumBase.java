@@ -136,7 +136,7 @@ public class MecanumBase {
      */
     public void setNorthMode(boolean newMode) {
         northMode = newMode;
-//        if(newMode){ bot.imu.resetYaw();opMode.telemetry.addLine("RESETING"); }
+        // if(newMode) {bot.imu.resetYaw();}
     }
 
     /**

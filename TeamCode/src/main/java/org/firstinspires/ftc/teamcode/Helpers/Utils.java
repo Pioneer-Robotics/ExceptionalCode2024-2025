@@ -63,12 +63,11 @@ public class Utils {
     /**
      * Generates a random integer from 0 to maxRange
      *
-     * @param maxRange
+     * @param maxRange range of possibilities from 0 to n (non-inclusive)
      * @return a random number
      */
     public int randNum(int maxRange){
         Random random = new Random();
-        int number = random.nextInt(maxRange+1);
-        return(number);
+        return(random.nextInt(maxRange));
     }
 }

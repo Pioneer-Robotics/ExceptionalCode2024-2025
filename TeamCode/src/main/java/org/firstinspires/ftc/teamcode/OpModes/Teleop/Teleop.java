@@ -77,6 +77,10 @@ public class Teleop extends LinearOpMode {
                 calmDown = true;
             }
 
+            if (gamepad1.x) {
+                bot.imu.resetYaw();
+            }
+
             // ---- GamePad 2 ----
             // Slide motor
             if (gamepad2.dpad_right) {
@@ -94,6 +98,7 @@ public class Teleop extends LinearOpMode {
             if (gamepad2.a) {
                 bot.wrist.closeServo();
             }
+
             if (gamepad2.right_bumper && bot.slide.getPosition() > 0.2) {
                 bot.gripper.openServo();
             }
@@ -106,7 +111,7 @@ public class Teleop extends LinearOpMode {
 
             double voltage = bot.voltageHandler.getVoltage();
             if (voltage < 10) {
-                telemetry.addData("WARNING: Voltage Low: ", voltage);
+                telemetry.addData("WARNING: Voltage Low", voltage);
             }
 
             // Telemetry and update
@@ -116,7 +121,7 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("Theta", pos[2]);
             telemetry.addData("Collector Toggle", collectorToggle.get());
             telemetry.addData("Voltage", voltage);
-            if(calmDown == true){
+            if(calmDown){
                 telemetry.addLine(Config.calmDownMessages[bot.utils.randNum(Config.calmDownMessages.length)]);
 
             }
