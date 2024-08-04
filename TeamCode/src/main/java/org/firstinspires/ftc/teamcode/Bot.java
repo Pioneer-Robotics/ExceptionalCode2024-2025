@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.Helpers.Ticker;
 import org.firstinspires.ftc.teamcode.Helpers.Utils;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PIDController;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Pose;
+import org.firstinspires.ftc.teamcode.Helpers.Konami;
 
 /**
  * This class is used to create all of the hardware objects and store them in the bot object
@@ -37,6 +38,7 @@ public class Bot {
     public Collector collector;
     public ServoClass pixelDropLeft, pixelDropRight, gripper, wrist;
     public Utils utils;
+    public Konami konami;
 
     /**
      * Constructor for Bot.
@@ -64,6 +66,7 @@ public class Bot {
         led = new LEDController(opMode);
         ticker = new Ticker(0);
         utils = new Utils();
+        konami = new Konami(opMode);
 
 
         // Commands

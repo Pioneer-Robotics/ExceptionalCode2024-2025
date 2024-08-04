@@ -29,6 +29,14 @@ public class Teleop extends LinearOpMode {
 
         waitForStart();
 
+        if(!Config.competition) {
+            try {
+                bot.konami.konamiHard();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         while(opModeIsActive()) {
             // ---- GamePad 1 ----
             // Inputs for driving
