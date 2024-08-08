@@ -22,6 +22,9 @@ public class Teleop extends LinearOpMode {
         // Initialize max speed
         double maxSpeed = 0.5;
 
+        // Set april tag position
+        bot.pose.setAprilTagPos(0, 100, 100); // April tag with id 0 is at (100, 100)
+
         waitForStart();
 
         while(opModeIsActive()) {
@@ -92,7 +95,7 @@ public class Teleop extends LinearOpMode {
             }
 
             // Get data for telemetry
-            double[] pos = bot.pose.returnPose();
+            double[] pos = bot.pose.getPose();
 
             double voltage = bot.voltageHandler.getVoltage();
             if (voltage < 10) {

@@ -9,11 +9,13 @@ public class KalmanFilter {
     // Default system matrices
     private MatrixF A; // State transition matrix
     private MatrixF B; // Control input matrix
-    private MatrixF H; // Measurement matrix
+    private MatrixF H_odom; // Measurement matrix for odometers
+    private MatrixF H_vision; // Measurement matrix for vision
 
     // Default process and measurement noise covariance matrices
     private MatrixF Q; // Process noise covariance
-    private MatrixF R; // Measurement noise covariance
+    private MatrixF R_odom; // Measurement noise covariance for odometers
+    private MatrixF R_vision; // Measurement noise covariance for vision
 
     public KalmanFilter(MatrixF initialX, MatrixF initialP) {
         this.x = initialX;
@@ -21,15 +23,18 @@ public class KalmanFilter {
     }
 
     public KalmanFilter(MatrixF initialX, MatrixF initialP,
-                        MatrixF A, MatrixF B, MatrixF H,
-                        MatrixF Q, MatrixF R) {
+                        MatrixF A, MatrixF B, MatrixF Q,
+                        MatrixF R_odom, MatrixF H_odom,
+                        MatrixF R_vision, MatrixF H_vision) {
         this.x = initialX;
         this.P = initialP;
         this.A = A;
         this.B = B;
-        this.H = H;
         this.Q = Q;
-        this.R = R;
+        this.R_odom = R_odom;
+        this.H_odom = H_odom;
+        this.R_vision = R_vision;
+        this.H_vision = H_vision;
     }
 
     public void setA(MatrixF A) {
@@ -40,16 +45,24 @@ public class KalmanFilter {
         this.B = B;
     }
 
-    public void setH(MatrixF H) {
-        this.H = H;
+    public void setHOdom(MatrixF H) {
+        this.H_odom = H;
+    }
+
+    public void setHVision(MatrixF H) {
+        this.H_vision = H;
     }
 
     public void setQ(MatrixF Q) {
         this.Q = Q;
     }
 
-    public void setR(MatrixF R) {
-        this.R = R;
+    public void setROdom(MatrixF R) {
+        this.R_odom = R;
+    }
+
+    public void setRVision(MatrixF R) {
+        this.R_vision = R;
     }
 
     /**
@@ -69,7 +82,7 @@ public class KalmanFilter {
      *
      * @param z Measurement
      */
-    public void update(MatrixF z) {
+    public void update(MatrixF z, MatrixF H, MatrixF R) {
         // Calculate the Kalman gain
         MatrixF K = P.multiplied(H.transposed()).multiplied(
                 H.multiplied(P).multiplied(H.transposed()).added(R).inverted());
@@ -79,6 +92,14 @@ public class KalmanFilter {
 
         // Update the error covariance
         P = (MatrixF.identityMatrix(P.numCols())).subtracted(K.multiplied(H)).multiplied(P);
+    }
+
+    public void updateOdom(MatrixF z) {
+        update(z, H_odom, R_odom);
+    }
+
+    public void updateVision(MatrixF z) {
+        update(z, H_vision, R_vision);
     }
 
     public MatrixF getState() {

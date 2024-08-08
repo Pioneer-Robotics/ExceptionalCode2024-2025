@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
 import org.firstinspires.ftc.teamcode.Hardware.Collector;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
@@ -32,6 +33,7 @@ public class Bot {
     public Pose pose;
     public VoltageHandler voltageHandler;
     public Collector collector;
+    public WebcamName webcam;
     public ServoClass pixelDropLeft, pixelDropRight, gripper, wrist;
 
     /**
@@ -39,8 +41,11 @@ public class Bot {
      * @param opMode LinearOpMode
      */
     public Bot(@NonNull LinearOpMode opMode){
+        // Define webcam before pose
+        webcam = opMode.hardwareMap.get(WebcamName.class, Config.webcam);
+
         // Drive base and self driving
-        pose = new Pose(opMode); // Needs to be initialized before pidController
+        pose = new Pose(opMode, this); // Needs to be initialized before pidController
         mecanumBase = new MecanumBase(opMode, this);
         pidController = new PIDController(opMode, this); // Uses the same pose object as the bot
 

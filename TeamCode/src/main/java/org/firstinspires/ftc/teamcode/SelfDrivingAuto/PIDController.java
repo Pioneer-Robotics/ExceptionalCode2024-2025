@@ -45,10 +45,10 @@ public class PIDController {
         theta = AngleUtils.normalizeRadians(theta);
 
         // Get current position
-        pose.calculate();
-        double currentX = pose.getX();
-        double currentY = pose.getY();
-        double currentTheta = pose.getTheta();
+        double[] currentPos = pose.getPose();
+        double currentX = currentPos[0];
+        double currentY = currentPos[1];
+        double currentTheta = currentPos[2];
 
         // Initialize PID controllers with initial errors
         PID xPID = new PID(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2], x - currentX);
@@ -61,10 +61,10 @@ public class PIDController {
         // Loop until the robot reaches the target position or the op mode is stopped
         while (Math.abs(x - currentX) > Config.driveTolerance || Math.abs(y - currentY) > Config.driveTolerance || Math.abs(theta - currentTheta) > Config.turnTolerance && !opMode.isStopRequested()) {
             // Update current position
-            pose.calculate();
-            currentX = pose.getX();
-            currentY = pose.getY();
-            currentTheta = pose.getTheta();
+            double[] newPos = pose.getPose();
+            currentX = newPos[0];
+            currentY = newPos[1];
+            currentTheta = newPos[2];
 
             // Calculate PID outputs
             double xOutput = xPID.calculate(currentX, x, speed);
@@ -108,8 +108,7 @@ public class PIDController {
      * @param y double - y position
      */
     public void moveToPosition(double x, double y) {
-        pose.calculate();
-        moveToPosition(x, y, pose.getTheta());
+        moveToPosition(x, y, pose.getPose()[2]);
     }
 
     /**
@@ -120,8 +119,9 @@ public class PIDController {
      * @param speed double - speed of the PID [0, 1]
      */
     public void moveRelative(double x, double y, double theta, double speed) {
-        pose.calculate();
-        moveToPosition(pose.getX() + x, pose.getY() + y, pose.getTheta() + theta, speed);
+        // Get current position
+        double[] currentPos = pose.getPose();
+        moveToPosition(currentPos[0] + x, currentPos[1] + y, currentPos[2] + theta, speed);
     }
 
     /**

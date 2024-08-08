@@ -21,7 +21,7 @@ public class Utils {
      * @param time   float time to wait in seconds
      * @param opMode used to check if opMode is still active
      */
-    public static void sleep(float time, LinearOpMode opMode) {
+    public static void sleep(double time, LinearOpMode opMode) {
         ElapsedTime timer = new ElapsedTime();
         timer.reset();
         while (timer.seconds() < time && opMode.opModeIsActive()) {

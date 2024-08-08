@@ -54,6 +54,7 @@ public class Config {
     // Other names
     public static final String led = "led";
     public static final String imu = "expansionIMU";
+    public static final String webcam = "Webcam 1";
 
     // ---- Servo Positions ----
     public static final double leftOpenPos = .475;
