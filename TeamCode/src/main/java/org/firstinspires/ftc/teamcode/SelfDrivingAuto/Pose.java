@@ -4,10 +4,10 @@ This class is used to calculate the robots current position on the field with 3 
 
 package org.firstinspires.ftc.teamcode.SelfDrivingAuto;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
 
@@ -17,28 +17,19 @@ import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
  * The robot's position is stored as an X coordinate, Y coordinate, and Theta (Robot Yaw).
  */
 public class Pose{
-    LinearOpMode opMode;
-
     DcMotorEx odoLeft, odoRight, odoCenter;
     private double x, y, theta;
     private double prevLeftTicks, prevRightTicks, prevCenterTicks;
 
-    /**
-     * Constructor for Pose
-     *
-     * @param opMode LinearOpMode
-     */
-    public Pose(LinearOpMode opMode){
+    public Pose() {
         // Set up odometers
-        odoLeft = opMode.hardwareMap.get(DcMotorEx.class, Config.odoLeft);
-        odoRight = opMode.hardwareMap.get(DcMotorEx.class, Config.odoRight);
-        odoCenter = opMode.hardwareMap.get(DcMotorEx.class, Config.odoCenter);
+        odoLeft = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.odoLeft);
+        odoRight = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.odoRight);
+        odoCenter = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.odoCenter);
 
         odoLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odoRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odoCenter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        this.opMode = opMode;
 
         x = y = theta = 0;
     }
@@ -46,14 +37,13 @@ public class Pose{
     /**
      * Constructor for Pose with starting position
      *
-     * @param opMode   LinearOpMode
      * @param startPos double[] - starting position of the robot {x, y, theta}
      */
-    public Pose(LinearOpMode opMode, double[] startPos) {
+    public Pose(double[] startPos) {
         // Set up odometers
-        odoLeft = opMode.hardwareMap.get(DcMotorEx.class, Config.odoLeft);
-        odoRight = opMode.hardwareMap.get(DcMotorEx.class, Config.odoRight);
-        odoCenter = opMode.hardwareMap.get(DcMotorEx.class, Config.odoCenter);
+        odoLeft = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.odoLeft);
+        odoRight = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.odoRight);
+        odoCenter = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.odoCenter);
 
         odoLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odoRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -62,8 +52,6 @@ public class Pose{
         x = startPos[0];
         y = startPos[1];
         theta = startPos[2];
-
-        this.opMode = opMode;
     }
 
     /**

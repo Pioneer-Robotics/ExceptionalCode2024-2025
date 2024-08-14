@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -12,25 +11,15 @@ import org.firstinspires.ftc.teamcode.Config;
  * MecanumBase is used to initialize and control the drive base of the robot
  */
 public class MecanumBase {
-    private final LinearOpMode opMode;
-    private final Bot bot;
     private final DcMotorEx LF, LB, RF, RB;
     private boolean northMode;
 
-    /**
-     * Constructor for MecanumBase.
-     * @param opMode LinearOpMode
-     */
-    public MecanumBase(LinearOpMode opMode, Bot bot) {
-        // Contains hardwareMap and telemetry
-        this.opMode = opMode;
-        this.bot = bot;
-
+    public MecanumBase() {
         // Set up motors
-        RF = opMode.hardwareMap.get(DcMotorEx.class, Config.motorRF);
-        LF = opMode.hardwareMap.get(DcMotorEx.class, Config.motorLF);
-        RB = opMode.hardwareMap.get(DcMotorEx.class, Config.motorRB);
-        LB = opMode.hardwareMap.get(DcMotorEx.class, Config.motorLB);
+        RF = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.motorRF);
+        LF = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.motorLF);
+        RB = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.motorRB);
+        LB = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.motorLB);
 
         LF.setDirection(DcMotor.Direction.REVERSE);
         LB.setDirection(DcMotor.Direction.REVERSE);
@@ -65,7 +54,7 @@ public class MecanumBase {
      * @param speed The speed to move at in the range [-1, 1]
      */
     public void move(double angle, double turn, double speed) {
-        double currentAngle = bot.imu.getRadians();
+        double currentAngle = Bot.imu.getRadians();
 
         if(northMode) {angle -= currentAngle;}
 
@@ -79,12 +68,12 @@ public class MecanumBase {
         LB.setVelocity((power1 - turn) * Config.maxDriveTicksPerSecond);
 
 
-        opMode.telemetry.addData("Angle", currentAngle);
+        Bot.opMode.telemetry.addData("Angle", currentAngle);
 //        opMode.telemetry.addData("RF", RF.getPower());
 //        opMode.telemetry.addData("LF", LF.getPower());
 //        opMode.telemetry.addData("RB", RB.getPower());
 //        opMode.telemetry.addData("LB", LB.getPower());
-        opMode.telemetry.addData("NorthMode", northMode);
+        Bot.opMode.telemetry.addData("NorthMode", northMode);
     }
 
     /**

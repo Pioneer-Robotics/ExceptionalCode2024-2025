@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.Helpers;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.Bot;
 
 import java.util.Random;
 
@@ -21,12 +22,11 @@ public class Utils {
      * Waits for a specified amount of time using ElapsedTime
      *
      * @param time   float time to wait in seconds
-     * @param opMode used to check if opMode is still active
      */
-    public static void sleep(double time, LinearOpMode opMode) {
+    public static void sleep(double time) {
         ElapsedTime timer = new ElapsedTime();
         timer.reset();
-        while (timer.seconds() < time && opMode.opModeIsActive()) {
+        while (timer.seconds() < time && Bot.opMode.opModeIsActive()) {
         } // Wait for seconds
     }
 
@@ -66,7 +66,7 @@ public class Utils {
      * @param maxRange range of possibilities from 0 to n (non-inclusive)
      * @return a random number
      */
-    public int randNum(int maxRange){
+    public static int randNum(int maxRange) {
         Random random = new Random();
         return(random.nextInt(maxRange));
     }

@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 
 /**
@@ -10,12 +10,9 @@ import org.firstinspires.ftc.teamcode.Config;
  */
 public class LEDController {
     RevBlinkinLedDriver led;
-    /**
-     * Constructor for LEDController.
-     * @param opMode LinearOpMode
-     */
-    public LEDController(LinearOpMode opMode){
-        led = opMode.hardwareMap.get(RevBlinkinLedDriver.class, Config.led);
+
+    public LEDController() {
+        led = Bot.opMode.hardwareMap.get(RevBlinkinLedDriver.class, Config.led);
     }
 
     /**

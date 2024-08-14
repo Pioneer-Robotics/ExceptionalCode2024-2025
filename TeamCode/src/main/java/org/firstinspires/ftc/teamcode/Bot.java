@@ -13,12 +13,11 @@ import org.firstinspires.ftc.teamcode.Hardware.LinearSlide;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
 import org.firstinspires.ftc.teamcode.Hardware.ServoClass;
 import org.firstinspires.ftc.teamcode.Hardware.VoltageHandler;
-import org.firstinspires.ftc.teamcode.Helpers.Commands;
+import org.firstinspires.ftc.teamcode.Helpers.Konami;
 import org.firstinspires.ftc.teamcode.Helpers.Ticker;
 import org.firstinspires.ftc.teamcode.Helpers.Utils;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PIDController;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Pose;
-import org.firstinspires.ftc.teamcode.Helpers.Konami;
 
 /**
  * This class is used to create all of the hardware objects and store them in the bot object
@@ -26,50 +25,45 @@ import org.firstinspires.ftc.teamcode.Helpers.Konami;
  * This also makes it easier to create new objects
  */
 public class Bot {
-    public Commands commands;
-    public PIDController pidController;
-    public BotIMU imu;
-    public LinearSlide slide;
-    public LEDController led;
-    public MecanumBase mecanumBase;
-    public Pose pose;
-    public VoltageHandler voltageHandler;
-    public Ticker ticker;
-    public Collector collector;
-    public ServoClass pixelDropLeft, pixelDropRight, gripper, wrist;
-    public Utils utils;
-    public Konami konami;
+    public static LinearOpMode opMode;
+    public static PIDController pidController;
+    public static BotIMU imu;
+    public static LinearSlide slide;
+    public static LEDController led;
+    public static MecanumBase mecanumBase;
+    public static Pose pose;
+    public static VoltageHandler voltageHandler;
+    public static Ticker ticker;
+    public static Collector collector;
+    public static ServoClass pixelDropLeft, pixelDropRight, gripper, wrist;
+    public static Utils utils;
+    public static Konami konami;
 
     /**
      * Constructor for Bot.
      * @param opMode LinearOpMode
      */
-    public Bot(@NonNull LinearOpMode opMode){
+    public static void init(@NonNull LinearOpMode opMode) {
+        Bot.opMode = opMode;
+
         // Drive base and self driving
-        pose = new Pose(opMode); // Needs to be initialized before pidController
-        mecanumBase = new MecanumBase(opMode, this);
-        pidController = new PIDController(opMode, this); // Uses the same pose object as the bot
+        Bot.pose = new Pose(); // Needs to be initialized before pidController
+        Bot.mecanumBase = new MecanumBase();
+        Bot.pidController = new PIDController();
 
         // Motors
-        slide = new LinearSlide(opMode);
-        collector = new Collector(opMode);
+        Bot.slide = new LinearSlide();
+        Bot.collector = new Collector();
 
         // Servos
-        pixelDropLeft = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.leftDropServo), Config.leftOpenPos, Config.leftClosedPos, Config.leftClosedPos);
-        pixelDropRight = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.rightDropServo), Config.rightOpenPos, Config.rightClosedPos, Config.rightClosedPos);
-        gripper = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.gripperServo), Config.gripperOpen, Config.gripperClosed, Config.gripperOpen);
-        wrist = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.wristServo), Config.wristVertical, Config.wristHorizontal, Config.wristHorizontal);
+        Bot.pixelDropLeft = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.leftDropServo), Config.leftOpenPos, Config.leftClosedPos, Config.leftClosedPos);
+        Bot.pixelDropRight = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.rightDropServo), Config.rightOpenPos, Config.rightClosedPos, Config.rightClosedPos);
+        Bot.gripper = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.gripperServo), Config.gripperOpen, Config.gripperClosed, Config.gripperOpen);
+        Bot.wrist = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.wristServo), Config.wristVertical, Config.wristHorizontal, Config.wristHorizontal);
 
         // Other
-        voltageHandler = new VoltageHandler(opMode);
-        imu = new BotIMU(opMode);
-        led = new LEDController(opMode);
-        ticker = new Ticker(0);
-        utils = new Utils();
-        konami = new Konami(opMode);
-
-
-        // Commands
-        commands = new Commands(this);
+        Bot.voltageHandler = new VoltageHandler();
+        Bot.imu = new BotIMU();
+        Bot.led = new LEDController();
     }
 }

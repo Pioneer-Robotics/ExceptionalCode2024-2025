@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.Helpers;
 
-import org.firstinspires.ftc.teamcode.Hardware.LEDController;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver.BlinkinPattern;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.teamcode.Hardware.LEDController;
 
 /**
  * Class used to make the LEDs on the robot look cool.
@@ -15,9 +15,9 @@ public class LightPattern {
     LEDController ledController;
 
 
-    public LightPattern(long cycleLength, LinearOpMode opMode) {
+    public LightPattern(long cycleLength, LEDController ledController) {
         this.cycleLength = cycleLength;
-        ledController = new LEDController(opMode);
+        this.ledController = ledController;
 
         Patterns = new BlinkinPattern[]{
                 BlinkinPattern.RAINBOW_RAINBOW_PALETTE,
@@ -34,7 +34,7 @@ public class LightPattern {
      * Called in the run loop.
      * Displays a pattern based on what tick
      * in the cycle (cycleLength) the robot is on
-     * @param ticks
+     * @param ticks the current tick in the cycle
      */
     public void lights(long ticks) {
         double cycleTime = ticks % cycleLength;

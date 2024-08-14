@@ -7,27 +7,21 @@ import org.firstinspires.ftc.teamcode.Bot;
  * Used in both auto and teleop
  */
 public class Commands {
-    private final Bot bot;
-
-    public Commands(Bot bot) {
-        this.bot = bot;
+    public static void armUp() {
+        Bot.gripper.closeServo();
+        Bot.slide.moveToPosition(1);
+        Bot.wrist.openServo();
     }
 
-    public void armUp() {
-        bot.gripper.closeServo();
-        bot.slide.moveToPosition(1);
-        bot.wrist.openServo();
+    public static void armMid() {
+        Bot.gripper.closeServo();
+        Bot.slide.moveToPosition(0.5);
+        Bot.wrist.openServo();
     }
 
-    public void armMid() {
-        bot.gripper.closeServo();
-        bot.slide.moveToPosition(0.5);
-        bot.wrist.openServo();
-    }
-
-    public void armDown() {
-        bot.slide.moveToPosition(0);
-        bot.wrist.closeServo();
-        bot.gripper.openServo();
+    public static void armDown() {
+        Bot.slide.moveToPosition(0);
+        Bot.wrist.closeServo();
+        Bot.gripper.openServo();
     }
 }

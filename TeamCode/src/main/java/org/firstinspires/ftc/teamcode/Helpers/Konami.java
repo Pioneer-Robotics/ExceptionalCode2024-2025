@@ -1,85 +1,121 @@
 package org.firstinspires.ftc.teamcode.Helpers;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class Konami {
-    LinearOpMode opMode;
-    public Konami(LinearOpMode opMode) {
-        this.opMode = opMode;
+    Gamepad gamepad;
+
+    public Konami(Gamepad gamepad) {
+        this.gamepad = gamepad;
     }
 
-    public void checkUp() throws Exception {
+    private void checkUp() throws Exception {
         while(true) {
-            if(opMode.gamepad2.dpad_up) {break;}
-            else if (opMode.gamepad2.dpad_right || opMode.gamepad2.dpad_left || opMode.gamepad2.dpad_down || opMode.gamepad2.a || opMode.gamepad2.b || opMode.gamepad2.x || opMode.gamepad2.y) {throw new Exception("Incorrect Passcode");}
+            if (gamepad.dpad_up) {
+                break;
+            } else if (gamepad.dpad_right || gamepad.dpad_left || gamepad.dpad_down || gamepad.a || gamepad.b || gamepad.x || gamepad.y) {
+                throw new Exception("Incorrect Passcode");
+            }
         }
-        while(opMode.gamepad2.dpad_up) {continue;}
+        while (gamepad.dpad_up) {
+        }
     }
 
-    public void checkRight() throws Exception {
+    private void checkRight() throws Exception {
         while(true) {
-            if(opMode.gamepad2.dpad_right) {break;}
-            else if (opMode.gamepad2.dpad_up || opMode.gamepad2.dpad_left || opMode.gamepad2.dpad_down || opMode.gamepad2.a || opMode.gamepad2.b || opMode.gamepad2.x || opMode.gamepad2.y) {throw new Exception("Incorrect Passcode");}
+            if (gamepad.dpad_right) {
+                break;
+            } else if (gamepad.dpad_up || gamepad.dpad_left || gamepad.dpad_down || gamepad.a || gamepad.b || gamepad.x || gamepad.y) {
+                throw new Exception("Incorrect Passcode");
+            }
         }
-        while(opMode.gamepad2.dpad_right) {continue;}
+        while (gamepad.dpad_right) {
+        }
     }
 
-    public void checkLeft() throws Exception {
+    private void checkLeft() throws Exception {
         while(true) {
-            if(opMode.gamepad2.dpad_left) {break;}
-            else if (opMode.gamepad2.dpad_up || opMode.gamepad2.dpad_right || opMode.gamepad2.dpad_down || opMode.gamepad2.a || opMode.gamepad2.b || opMode.gamepad2.x || opMode.gamepad2.y) {throw new Exception("Incorrect Passcode");}
+            if (gamepad.dpad_left) {
+                break;
+            } else if (gamepad.dpad_up || gamepad.dpad_right || gamepad.dpad_down || gamepad.a || gamepad.b || gamepad.x || gamepad.y) {
+                throw new Exception("Incorrect Passcode");
+            }
         }
-        while(opMode.gamepad2.dpad_left) {continue;}
+        while (gamepad.dpad_left) {
+        }
     }
 
-    public void checkDown() throws Exception {
+    private void checkDown() throws Exception {
         while(true) {
-            if(opMode.gamepad2.dpad_down) {break;}
-            else if (opMode.gamepad2.dpad_up || opMode.gamepad2.dpad_right || opMode.gamepad2.dpad_left || opMode.gamepad2.a || opMode.gamepad2.b || opMode.gamepad2.x || opMode.gamepad2.y) {throw new Exception("Incorrect Passcode");}
+            if (gamepad.dpad_down) {
+                break;
+            } else if (gamepad.dpad_up || gamepad.dpad_right || gamepad.dpad_left || gamepad.a || gamepad.b || gamepad.x || gamepad.y) {
+                throw new Exception("Incorrect Passcode");
+            }
         }
-        while(opMode.gamepad2.dpad_down) {continue;}
+        while (gamepad.dpad_down) {
+        }
     }
 
-    public void checkA() throws Exception {
+    private void checkA() throws Exception {
         while(true) {
-            if(opMode.gamepad2.a) {break;}
-            else if (opMode.gamepad2.dpad_up || opMode.gamepad2.dpad_right || opMode.gamepad2.dpad_left || opMode.gamepad2.dpad_down || opMode.gamepad2.b || opMode.gamepad2.x || opMode.gamepad2.y) {throw new Exception("Incorrect Passcode");}
+            if (gamepad.a) {
+                break;
+            } else if (gamepad.dpad_up || gamepad.dpad_right || gamepad.dpad_left || gamepad.dpad_down || gamepad.b || gamepad.x || gamepad.y) {
+                throw new Exception("Incorrect Passcode");
+            }
         }
-        while(opMode.gamepad2.a) {continue;}
+        while (gamepad.a) {
+        }
     }
 
-    public void checkB() throws Exception {
+    private void checkB() throws Exception {
         while(true) {
-            if(opMode.gamepad2.b) {break;}
-            else if (opMode.gamepad2.dpad_up || opMode.gamepad2.dpad_right || opMode.gamepad2.dpad_left || opMode.gamepad2.dpad_down || opMode.gamepad2.a || opMode.gamepad2.x || opMode.gamepad2.y) {throw new Exception("Incorrect Passcode");}
+            if (gamepad.b) {
+                break;
+            } else if (gamepad.dpad_up || gamepad.dpad_right || gamepad.dpad_left || gamepad.dpad_down || gamepad.a || gamepad.x || gamepad.y) {
+                throw new Exception("Incorrect Passcode");
+            }
         }
-        while(opMode.gamepad2.b) {continue;}
+        while (gamepad.b) {
+        }
     }
 
-    public void checkX() throws Exception {
+    private void checkX() throws Exception {
         while(true) {
-            if(opMode.gamepad2.x) {break;}
-            else if (opMode.gamepad2.dpad_up || opMode.gamepad2.dpad_right || opMode.gamepad2.dpad_left || opMode.gamepad2.dpad_down || opMode.gamepad2.a || opMode.gamepad2.b || opMode.gamepad2.y) {throw new Exception("Incorrect Passcode");}
+            if (gamepad.x) {
+                break;
+            } else if (gamepad.dpad_up || gamepad.dpad_right || gamepad.dpad_left || gamepad.dpad_down || gamepad.a || gamepad.b || gamepad.y) {
+                throw new Exception("Incorrect Passcode");
+            }
         }
-        while(opMode.gamepad2.x) {continue;}
+        while (gamepad.x) {
+        }
     }
 
-    public void checkY() throws Exception {
+    private void checkY() throws Exception {
         while(true) {
-            if(opMode.gamepad2.y) {break;}
-            else if (opMode.gamepad2.dpad_up || opMode.gamepad2.dpad_right || opMode.gamepad2.dpad_left || opMode.gamepad2.dpad_down || opMode.gamepad2.a || opMode.gamepad2.b || opMode.gamepad2.x) {throw new Exception("Incorrect Passcode");}
+            if (gamepad.y) {
+                break;
+            } else if (gamepad.dpad_up || gamepad.dpad_right || gamepad.dpad_left || gamepad.dpad_down || gamepad.a || gamepad.b || gamepad.x) {
+                throw new Exception("Incorrect Passcode");
+            }
         }
-        while(opMode.gamepad2.y) {continue;}
+        while (gamepad.y) {
+        }
     }
-
-
 
     public void konamiEasy() throws Exception {
         checkUp();
-        checkRight();
         checkUp();
-        checkLeft();
         checkDown();
+        checkDown();
+        checkLeft();
+        checkRight();
+        checkLeft();
+        checkRight();
+        checkB();
+        checkA();
     }
 
     public void konamiHard() throws Exception {
@@ -104,6 +140,4 @@ public class Konami {
         checkUp();
         checkA();
     }
-
-
 }

@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.Helpers.Commands;
+import org.firstinspires.ftc.teamcode.Helpers.Konami;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 import org.firstinspires.ftc.teamcode.Helpers.Utils;
 
@@ -12,8 +14,7 @@ import org.firstinspires.ftc.teamcode.Helpers.Utils;
 @TeleOp(name="Teleop", group="Teleop")
 public class Teleop extends LinearOpMode {
     public void runOpMode() {
-        // Bot object
-        Bot bot = new Bot(this);
+        Bot.init(this);
 
         // Toggles
         Toggle northModeToggle = new Toggle(true);
@@ -31,7 +32,8 @@ public class Teleop extends LinearOpMode {
 
         if(!Config.competition) {
             try {
-                bot.konami.konamiHard();
+                Konami konami = new Konami(gamepad2);
+                konami.konamiEasy();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -46,11 +48,11 @@ public class Teleop extends LinearOpMode {
             double speed = Math.sqrt((px * px + py * py));
 
             // Move
-            bot.mecanumBase.move(stickAngle, -gamepad1.right_stick_x*maxSpeed, speed*maxSpeed);
+            Bot.mecanumBase.move(stickAngle, -gamepad1.right_stick_x * maxSpeed, speed * maxSpeed);
 
             // Toggle for field centric
             northModeToggle.toggle(gamepad1.a); // Toggle north mode
-            bot.mecanumBase.setNorthMode(northModeToggle.get()); // Update north mode
+            Bot.mecanumBase.setNorthMode(northModeToggle.get()); // Update north mode
 
             // Speed toggles
             incSpeedToggle.toggle(gamepad1.right_bumper);
@@ -63,21 +65,21 @@ public class Teleop extends LinearOpMode {
             }
 
             // Pixel drop
-            bot.pixelDropLeft.selectBoolPos(Utils.floatToBool(gamepad1.left_trigger));
-            bot.pixelDropRight.selectBoolPos(Utils.floatToBool(gamepad1.right_trigger));
+            Bot.pixelDropLeft.selectBoolPos(Utils.floatToBool(gamepad1.left_trigger));
+            Bot.pixelDropRight.selectBoolPos(Utils.floatToBool(gamepad1.right_trigger));
 
             // Collector
             collectorToggle.toggle(gamepad1.dpad_down);
-            bot.collector.setRunning(collectorToggle.get() && !gamepad1.dpad_up);
+            Bot.collector.setRunning(collectorToggle.get() && !gamepad1.dpad_up);
 
             if (gamepad1.dpad_left) {
-                bot.collector.up();
+                Bot.collector.up();
             }
             if (gamepad1.dpad_right) {
-                bot.collector.down();
+                Bot.collector.down();
             }
             if (gamepad1.dpad_up) {
-                bot.collector.reverse();
+                Bot.collector.reverse();
             }
 
             //Other
@@ -86,38 +88,38 @@ public class Teleop extends LinearOpMode {
             }
 
             if (gamepad1.x) {
-                bot.imu.resetYaw();
+                Bot.imu.resetYaw();
             }
 
             // ---- GamePad 2 ----
             // Slide motor
             if (gamepad2.dpad_right) {
-                bot.commands.armMid();
+                Commands.armMid();
             } else if (gamepad2.dpad_up) {
-                bot.commands.armUp();
+                Commands.armUp();
             } else if (gamepad2.dpad_down) {
-                bot.commands.armDown();
+                Commands.armDown();
             }
 
             // Slide servos
-            if (gamepad2.b && bot.slide.getPosition() > 0.2) {
-                bot.wrist.openServo();
+            if (gamepad2.b && Bot.slide.getPosition() > 0.2) {
+                Bot.wrist.openServo();
             }
             if (gamepad2.a) {
-                bot.wrist.closeServo();
+                Bot.wrist.closeServo();
             }
 
-            if (gamepad2.right_bumper && bot.slide.getPosition() > 0.2) {
-                bot.gripper.openServo();
+            if (gamepad2.right_bumper && Bot.slide.getPosition() > 0.2) {
+                Bot.gripper.openServo();
             }
             if (gamepad2.left_bumper) {
-                bot.gripper.closeServo();
+                Bot.gripper.closeServo();
             }
 
             // Get data for telemetry
-            double[] pos = bot.pose.returnPose();
+            double[] pos = Bot.pose.returnPose();
 
-            double voltage = bot.voltageHandler.getVoltage();
+            double voltage = Bot.voltageHandler.getVoltage();
             if (voltage < 10) {
                 telemetry.addData("WARNING: Voltage Low", voltage);
             }
@@ -129,9 +131,8 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("Theta", pos[2]);
             telemetry.addData("Collector Toggle", collectorToggle.get());
             telemetry.addData("Voltage", voltage);
-            if(calmDown){
-                telemetry.addLine(Config.calmDownMessages[bot.utils.randNum(Config.calmDownMessages.length)]);
-
+            if (calmDown) {
+                telemetry.addLine(Config.calmDownMessages[Utils.randNum(Config.calmDownMessages.length)]);
             }
             telemetry.update();
         }

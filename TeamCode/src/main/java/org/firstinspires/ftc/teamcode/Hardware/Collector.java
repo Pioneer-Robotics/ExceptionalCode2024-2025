@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 
 public class Collector {
@@ -12,11 +12,11 @@ public class Collector {
     private final ServoClass servo;
     private double speed = .5;
 
-    public Collector(LinearOpMode opMode) {
-        motor = opMode.hardwareMap.get(DcMotorEx.class, Config.intakeMotor);
+    public Collector() {
+        motor = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.intakeMotor);
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        servo = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.intakeServo), Config.intakeUp, Config.intakeDown, Config.intakeUp);
+        servo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeServo), Config.intakeUp, Config.intakeDown, Config.intakeUp);
     }
 
     public void up() {

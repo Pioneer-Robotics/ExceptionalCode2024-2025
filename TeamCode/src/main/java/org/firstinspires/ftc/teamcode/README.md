@@ -44,10 +44,26 @@ This is **Exceptional Code 2024-2025**. Our programming experts have graduated, 
 
 **Classes To Know**
 Note: `~` refers to the directory `TeamCode/src/main/java/org/firstinspires/ftc/teamcode`
-- Bot (`~/Bot.java`): This is perhaps the most important class in our code. It is way to complicated and unreadable to import every hardware class and helper class into some teleop or auto class and then have to initialize all of them individually. Instead, this all happens in the Bot class. Once all of the classes are initialized in Bot, they are very easy to access. For example, instead of having to import and initialize MecanumBase, Pose, and many other classes, you can just import and initialize Bot, and then call `bot.base.move()`, `bot.pose.returnPose()`, etc. This cleans up the constructor class, the imports, and makes it easier to keep track of classes.
+
+- Bot (`~/Bot.java`): This is perhaps the most important class in our code. It is a way to
+  initialize hardware objects all at once instead of having to do them individually in the
+  teleop/auto class. Once all of the classes are initialized in Bot, they are very easy to access.
+  For example, instead of having to import and initialize MecanumBase, Pose, and many other classes,
+  you can just import and initialize Bot using `Bot.init()` in the main teleop/auto class, and then
+  call `Bot.base.move()`, `Bot.pose.returnPose()`, etc. from anywhere in the code. This cleans up
+  the constructor class, the imports, and makes it easier to keep track of classes.
 - Config (`~/Config.java`): Config stores the configurations for many things on the robot, like motor, servo, and odometer names, odometer constants, PID constants, servo positions, and more. These values can be easily accessed through `Config.*value*` (after importing Config).
-- Pose (`~/SelfDrivingAuto/Pose.java`): Pose allows the robot to always know where it is in space. This is needed for PID (implementation of PID) and autos. Pose uses odometry and april tag (WIP) data to calculate the pose of the robot. `pose.returnPose()` returns the robot's x, y, and theta position.
-- General teleop class (`~/OpModes/Teleop/*`): The teleop class/classes are the classes that control the robot with human input. Whenever a human is driving the robot, this class is used. This class imports Bot, LinearOpMode, and a few other classes to run. It contains the main run loop for driving, which is why it is important to **write other classes so they *don't* have while loops**, as this will prevent the program from running. If you need to do something that needs to be in a loop, like moving the linear slide, use the run loop and update the slide class each loop, instead of placing a loop inside the slide class.
+- Pose (`~/SelfDrivingAuto/Pose.java`): Pose allows the robot to always know where it is in space.
+  This is needed for PID (implementation of PID) and autos. Pose uses odometry and april tag (WIP)
+  data to calculate the pose of the robot. Pose is already initialized in Bot, so you can access it
+  using `Bot.pose.returnPose()` to get the robot's x, y, and theta.
+- General teleop class (`~/OpModes/Teleop/*`): The teleop class/classes are the classes that control
+  the robot with human input. Whenever a human is driving the robot, this class is used. This class
+  imports Bot, LinearOpMode, and a few other classes to run. It contains the main run loop for
+  driving, which is why it is important to **not have while loops in the main thread (teleop class)
+  **, as this will prevent the program from running. If you need to do something that needs to be in
+  a loop, like moving the linear slide, use the run loop and update the slide class each loop,
+  instead of placing a loop inside the slide class.
 - General auto class (`~/OpModes/Autos/*`): The auto class/classes are very similar to teleop classes, except that they are autonomous (no human control). The auto class also uses Bot and LinearOpMode, but makes more use of PID, pose, and the camera.
 
 **File and Code Structure**

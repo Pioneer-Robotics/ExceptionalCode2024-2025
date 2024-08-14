@@ -1,14 +1,15 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
+
+import org.firstinspires.ftc.teamcode.Bot;
 
 public class VoltageHandler {
     private final HardwareMap.DeviceMapping<VoltageSensor> voltageSensors;
 
-    public VoltageHandler(LinearOpMode opMode) {
-        voltageSensors = opMode.hardwareMap.voltageSensor;
+    public VoltageHandler() {
+        voltageSensors = Bot.opMode.hardwareMap.voltageSensor;
     }
 
     /**

@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 
 /**
@@ -14,8 +15,8 @@ public class LinearSlide {
     private final DcMotorEx motor;
     private double defaultSpeed;
 
-    public LinearSlide(LinearOpMode opMode) {
-        motor = opMode.hardwareMap.get(DcMotorEx.class, Config.slideMotor);
+    public LinearSlide() {
+        motor = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.slideMotor);
         motor.setTargetPositionTolerance(5);
         motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
