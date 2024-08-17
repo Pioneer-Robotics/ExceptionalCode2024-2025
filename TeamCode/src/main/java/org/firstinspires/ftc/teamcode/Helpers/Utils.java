@@ -70,4 +70,13 @@ public class Utils {
         Random random = new Random();
         return(random.nextInt(maxRange));
     }
+
+    public static long factorial(int n) {
+        if(n==1) {return 1;}
+        return(n*factorial(n-1));
+    }
+
+    public static long choose(int n, int k) {
+        return((factorial(n)) / (factorial(k) * factorial(n-k)));
+    }
 }
