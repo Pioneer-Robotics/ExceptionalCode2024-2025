@@ -4,7 +4,7 @@ package org.firstinspires.ftc.teamcode.Helpers;
 
 public class BezierCalc {
 
-    public double[][] linearBez(double[] p0, double[] p1, int samples) {
+    public static double[][] linearBez(double[] p0, double[] p1, int samples) {
         double[][] points = new double[samples][2];
         for(int i=0;i<samples;i++) {
             double t = (double) i /(samples-1);
@@ -14,7 +14,7 @@ public class BezierCalc {
         return(points);
     }
 
-    public double[][] quadBez(double[] p0, double[] p1, double[] p2, int samples) {
+    public static double[][] quadBez(double[] p0, double[] p1, double[] p2, int samples) {
         double[][] points = new double[samples][2];
         for(int i=0;i<samples;i++) {
             double t = (double) i /(samples-1);
@@ -23,7 +23,8 @@ public class BezierCalc {
         }
         return(points);
     }
-    public double[][] cubicBez(double[] p0, double[] p1, double[] p2, double[] p3, int samples) {
+
+    public static double[][] cubicBez(double[] p0, double[] p1, double[] p2, double[] p3, int samples) {
         double[][] points = new double[samples][2];
         for(int i=0;i<samples;i++) {
             double t = (double) i /(samples-1);
@@ -33,9 +34,9 @@ public class BezierCalc {
         return(points);
     }
 
-    public double[][] nDegBez(double[] px, double[] py, int samples) throws Exception {
+    public static double[][] nDegBez(double[] px, double[] py, int samples) throws Exception {
         if (px.length != py.length) {
-            throw new Exception("X coords do not math Y coords");
+            throw new Exception("X coords do not match Y coords");
         }
         double[][] points = new double[samples][2];
         int degree = px.length - 1;
