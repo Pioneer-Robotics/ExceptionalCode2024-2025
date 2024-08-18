@@ -9,12 +9,18 @@ import org.firstinspires.ftc.teamcode.Helpers.Commands;
 import org.firstinspires.ftc.teamcode.Helpers.Konami;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 import org.firstinspires.ftc.teamcode.Helpers.Utils;
+import org.firstinspires.ftc.teamcode.Helpers.BezierCalc;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
 
 
 @TeleOp(name="Teleop", group="Teleop")
 public class Teleop extends LinearOpMode {
     public void runOpMode() {
         Bot.init(this);
+        BezierCalc bezierCalc = new BezierCalc();
 
         // Toggles
         Toggle northModeToggle = new Toggle(true);
@@ -37,6 +43,21 @@ public class Teleop extends LinearOpMode {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+        }
+
+        double[][] linear = null;
+        try {
+            linear = bezierCalc.nDegBez(new double[] {0.0,3,6.2,9.3,12.5,9.3}, new double[] {0.0,10,2.5,7.5,5,2.5},31);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            FileWriter writer = new FileWriter("/sdcard/bezierPoints.csv");
+            writer.write(Arrays.deepToString(linear) + "\n");
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         while(opModeIsActive()) {
