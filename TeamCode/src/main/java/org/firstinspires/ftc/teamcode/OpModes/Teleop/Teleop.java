@@ -6,21 +6,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.Commands;
-import org.firstinspires.ftc.teamcode.Helpers.Konami;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 import org.firstinspires.ftc.teamcode.Helpers.Utils;
-import org.firstinspires.ftc.teamcode.Helpers.BezierCalc;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Arrays;
 
 
 @TeleOp(name="Teleop", group="Teleop")
 public class Teleop extends LinearOpMode {
     public void runOpMode() {
         Bot.init(this);
-        BezierCalc bezierCalc = new BezierCalc();
 
         // Toggles
         Toggle northModeToggle = new Toggle(true);
@@ -35,30 +28,6 @@ public class Teleop extends LinearOpMode {
         boolean calmDown = false;
 
         waitForStart();
-
-        if(!Config.competition) {
-            try {
-                Konami konami = new Konami(gamepad2);
-                konami.konamiEasy();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        double[][] linear = null;
-        try {
-            linear = bezierCalc.nDegBez(new double[] {0.0,3,6.2,9.3,12.5,9.3}, new double[] {0.0,10,2.5,7.5,5,2.5},31);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            FileWriter writer = new FileWriter("/sdcard/bezierPoints.csv");
-            writer.write(Arrays.deepToString(linear) + "\n");
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         while(opModeIsActive()) {
             // ---- GamePad 1 ----
@@ -142,20 +111,20 @@ public class Teleop extends LinearOpMode {
 
             double voltage = Bot.voltageHandler.getVoltage();
             if (voltage < 10) {
-                telemetry.addData("WARNING: Voltage Low", voltage);
+                Bot.telemetryAddData("WARNING: Voltage Low", voltage);
             }
 
             // Telemetry and update
-            telemetry.addData("Speed", maxSpeed);
-            telemetry.addData("X", pos[0]);
-            telemetry.addData("Y", pos[1]);
-            telemetry.addData("Theta", pos[2]);
-            telemetry.addData("Collector Toggle", collectorToggle.get());
-            telemetry.addData("Voltage", voltage);
+            Bot.telemetryAddData("Speed", maxSpeed);
+            Bot.telemetryAddData("X", pos[0]);
+            Bot.telemetryAddData("Y", pos[1]);
+            Bot.telemetryAddData("Theta", pos[2]);
+            Bot.telemetryAddData("Collector Toggle", collectorToggle.get());
+            Bot.telemetryAddData("Voltage", voltage);
             if (calmDown) {
                 telemetry.addLine(Config.calmDownMessages[Utils.randNum(Config.calmDownMessages.length)]);
             }
-            telemetry.update();
+            Bot.telemetryUpdate();
         }
     }
 }

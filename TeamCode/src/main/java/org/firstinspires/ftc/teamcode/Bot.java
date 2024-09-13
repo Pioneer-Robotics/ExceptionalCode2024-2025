@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
 import org.firstinspires.ftc.teamcode.Hardware.Collector;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
@@ -38,6 +40,8 @@ public class Bot {
     public static ServoClass pixelDropLeft, pixelDropRight, gripper, wrist;
     public static Utils utils;
     public static Konami konami;
+    public static FtcDashboard dashboard = FtcDashboard.getInstance();
+    public static Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
     /**
      * Constructor for Bot.
@@ -65,5 +69,20 @@ public class Bot {
         Bot.voltageHandler = new VoltageHandler();
         Bot.imu = new BotIMU();
         Bot.led = new LEDController();
+    }
+
+    public static void telemetryAddData(String caption, Double value) {
+        opMode.telemetry.addData(caption, value);
+        dashboardTelemetry.addData(caption, value);
+    }
+
+    public static void telemetryAddData(String caption, Boolean value) {
+        opMode.telemetry.addData(caption, value);
+        dashboardTelemetry.addData(caption, value);
+    }
+
+    public static void telemetryUpdate() {
+        opMode.telemetry.update();
+        dashboardTelemetry.update();
     }
 }
