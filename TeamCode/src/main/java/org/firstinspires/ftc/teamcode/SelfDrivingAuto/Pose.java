@@ -114,10 +114,6 @@ public class Pose{
         return (theta);
     }
 
-    public void DANCE(){
-        // TODO: DANCE!
-    }
-
     /**
      * Returns the current x, y, and theta values of the robot
      * Calls calculate() to update the values
@@ -127,5 +123,4 @@ public class Pose{
         calculate();
         return (new double[]{x, y, theta});
     }
-
 }
