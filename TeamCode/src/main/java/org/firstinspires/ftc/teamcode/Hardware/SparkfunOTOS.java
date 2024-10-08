@@ -10,7 +10,11 @@ import org.firstinspires.ftc.teamcode.Bot;
 public class SparkfunOTOS {
     SparkFunOTOS otos;
 
-    public void init() {
+    public SparkfunOTOS() {
+        this(new double[]{0, 0, 0});
+    }
+
+    public SparkfunOTOS(double[] startPos) {
         otos = Bot.opMode.hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
         otos.setLinearUnit(DistanceUnit.CM);
         otos.setAngularUnit(AngleUnit.RADIANS);
@@ -27,7 +31,7 @@ public class SparkfunOTOS {
         otos.resetTracking();
         
         // Set the initial position to 0, 0, 0
-        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(0, 0, 0);
+        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(startPos[0], startPos[1], startPos[2]);
         otos.setPosition(currentPosition);
     }
 
