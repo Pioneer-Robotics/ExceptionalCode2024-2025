@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.SelfDrivingAuto;
 
 
+import com.acmerobotics.dashboard.FtcDashboard;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
@@ -45,9 +48,9 @@ public class PIDController {
         while (Math.abs(x - currentX) > Config.driveTolerance || Math.abs(y - currentY) > Config.driveTolerance || Math.abs(theta - currentTheta) > Config.turnTolerance && !Bot.opMode.isStopRequested()) {
             // Update current position
             Bot.pose.calculate();
-            currentX = Bot.pose.getX();
-            currentY = Bot.pose.getY();
-            currentTheta = Bot.pose.getTheta();
+            currentX = Bot.pose.getRawOTOS()[0];
+            currentY = Bot.pose.getRawOTOS()[1];
+            currentTheta = Bot.pose.getRawOTOS()[2];
 
             // Calculate PID outputs
             double xOutput = xPID.calculate(currentX, x, speed);
@@ -58,9 +61,23 @@ public class PIDController {
             Bot.mecanumBase.move_vector(xOutput * speedMultiplier, yOutput * speedMultiplier, turnOutput * speedMultiplier);
             speedMultiplier = Utils.increment(speedMultiplier, Config.acceleration, 1);
 
+            FtcDashboard dashboard = FtcDashboard.getInstance();
+            Telemetry dashboardTelemetry = dashboard.getTelemetry();
+            dashboardTelemetry.addData("X", currentX);
+            dashboardTelemetry.addData("Y", currentY);
+            dashboardTelemetry.addData("Odo X", Bot.pose.getRawOdometer()[0]);
+            dashboardTelemetry.addData("Odo Y", Bot.pose.getRawOdometer()[1]);
+            dashboardTelemetry.addData("OTOS X", Bot.pose.getRawOTOS()[0]);
+            dashboardTelemetry.addData("OTOS Y", Bot.pose.getRawOTOS()[1]);
+            dashboardTelemetry.update();
+
             // Telemetry
             Bot.opMode.telemetry.addData("X", currentX);
             Bot.opMode.telemetry.addData("Y", currentY);
+            Bot.opMode.telemetry.addData("Odo X", Bot.pose.getRawOdometer()[0]);
+            Bot.opMode.telemetry.addData("Odo Y", Bot.pose.getRawOdometer()[1]);
+            Bot.opMode.telemetry.addData("OTOS X", Bot.pose.getRawOTOS()[0]);
+            Bot.opMode.telemetry.addData("OTOS Y", Bot.pose.getRawOTOS()[1]);
             Bot.opMode.telemetry.addData("Theta", currentTheta);
             Bot.opMode.telemetry.addData("X Error", xPID.getError());
             Bot.opMode.telemetry.addData("Y Error", yPID.getError());
@@ -82,7 +99,7 @@ public class PIDController {
      * @param theta double - theta position in degrees
      */
     public void moveToPosition(double x, double y, double theta) {
-        moveToPosition(x, y, theta, 0.6);
+        moveToPosition(x, y, theta, 0.8);
     }
 
     /**
@@ -114,7 +131,7 @@ public class PIDController {
      * @param theta - theta position in degrees
      */
     public void moveRelative(double x, double y, double theta) {
-        moveRelative(x, y, theta, 0.6);
+        moveRelative(x, y, theta, 0.8);
     }
 
     /**
@@ -123,6 +140,6 @@ public class PIDController {
      * @param y double - y position
      */
     public void moveRelative(double x, double y) {
-        moveRelative(x, y, 0, 0.6);
+        moveRelative(x, y, 0, 0.8);
     }
 }

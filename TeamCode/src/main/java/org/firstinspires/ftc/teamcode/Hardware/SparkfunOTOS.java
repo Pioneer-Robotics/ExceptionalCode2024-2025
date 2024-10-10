@@ -1,14 +1,19 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Bot;
+import org.firstinspires.ftc.teamcode.Config;
 
 
 public class SparkfunOTOS {
     SparkFunOTOS otos;
+    FtcDashboard dashboard = FtcDashboard.getInstance();
+    Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
     public SparkfunOTOS() {
         this(new double[]{0, 0, 0});
@@ -16,41 +21,40 @@ public class SparkfunOTOS {
 
     public SparkfunOTOS(double[] startPos) {
         otos = Bot.opMode.hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
-        otos.setLinearUnit(DistanceUnit.CM);
-        otos.setAngularUnit(AngleUnit.RADIANS);
-
-        // If the sensor is mounted off-center, set the offset here (x, y, theta)
-        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0, 0, 0);
-        otos.setOffset(offset);
-
-        // Used to compensate for scaling errors in sensor readings
-        otos.setLinearScalar(1.0);
-        otos.setAngularScalar(1.0);
 
         otos.calibrateImu();
         otos.resetTracking();
-        
-        // Set the initial position to 0, 0, 0
+
+        otos.setLinearUnit(DistanceUnit.CM);
+        otos.setAngularUnit(AngleUnit.RADIANS);
+
+        // Used to compensate for scaling errors in sensor readings
+//        otos.setLinearScalar(Config.OTOSLinearScale);
+        otos.setAngularScalar(1.0);
+
         SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(startPos[0], startPos[1], startPos[2]);
         otos.setPosition(currentPosition);
     }
 
     public double[] getPose() {
         SparkFunOTOS.Pose2D pose = otos.getPosition();
-        return new double[]{pose.x, pose.y, pose.h};
+        // TODO: Use OTOS instead of IMU for angle
+        double cosTheta = Math.cos(Bot.imu.getRadians());
+        double sinTheta = Math.sin(Bot.imu.getRadians());
+        // Rotate offset by theta
+        double[] offset = new double[] {Config.OTOSOffset[0]*cosTheta - Config.OTOSOffset[1]*sinTheta, Config.OTOSOffset[0]*sinTheta + Config.OTOSOffset[1]*cosTheta};
+        dashboardTelemetry.addData("Offset X", offset[0]);
+        dashboardTelemetry.addData("Offset Y", offset[1]);
+        dashboardTelemetry.update();
+        double[] adjustment = new double[] {offset[0] - Config.OTOSOffset[0], offset[1] - Config.OTOSOffset[1]};
+        return new double[]{(-pose.x - adjustment[0])*1.01, (-pose.y - adjustment[1])*1.015, -pose.h};
     }
 
-    public double getHeading() {
-        return otos.getPosition().h;
-    }
+    public double getHeading() { return getPose()[2]; }
 
-    public double getX() {
-        return otos.getPosition().x;
-    }
+    public double getX() { return getPose()[0]; }
 
-    public double getY() {
-        return otos.getPosition().y;
-    }
+    public double getY() { return getPose()[1]; }
 
     public void setPose(double x, double y, double h) {
         SparkFunOTOS.Pose2D pose = new SparkFunOTOS.Pose2D(x, y, h);
@@ -72,4 +76,6 @@ public class SparkfunOTOS {
     public void setAngularUnit(AngleUnit unit) {
         otos.setAngularUnit(unit);
     }
+
+    public void setOffset(double[] offset) { otos.setOffset(new SparkFunOTOS.Pose2D(offset[0], offset[1], offset[2])); }
 }

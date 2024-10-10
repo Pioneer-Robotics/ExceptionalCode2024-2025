@@ -121,7 +121,7 @@ public class Pose{
      * Calls calculate() to update the values
      * @return double[] {x, y, theta}
      */
-    public double[] returnPose(){
+    public double[] getPose(){
         calculate();
         return (new double[]{x, y, theta});
     }
@@ -134,14 +134,14 @@ public class Pose{
         // A - State transition matrix - 3x3 diagonal matrix
         MatrixF A = new GeneralMatrixF(3, 3, new float[]{1, 0, 0, 0, 1, 0, 0, 0, 1});
         // B - Control input matrix - 3x1 matrix - no control input
-        MatrixF B = new GeneralMatrixF(3, 1, new float[]{0, 0, 0});
+        MatrixF B = new GeneralMatrixF(3, 3, new float[]{0, 0, 0, 0, 0, 0, 0, 0, 0});
         // Q - Process noise covariance - 3x3 diagonal matrix - how much we trust the model
         MatrixF Q = new GeneralMatrixF(3, 3, new float[]{0.005f, 0, 0, 0, 0.005f, 0, 0, 0, 0.005f});
         // R Odometer - Measurement noise covariance for odometers - 3x3 diagonal matrix - how much we trust the measurements
         MatrixF R_odom = new GeneralMatrixF(3, 3, new float[]{0.5f, 0, 0, 0, 0.5f, 0, 0, 0, 0.5f});
         // H Odometer - Measurement matrix - 3x3 diagonal matrix - how we map the measurements to the state
-//        MatrixF H_odom = new GeneralMatrixF(3, 3, new float[]{1, 0, 0, 0, 1, 0, 0, 0, 1});
-        MatrixF H_odom = new GeneralMatrixF(3, 3, new float[]{0, 0, 0, 0, 0, 0, 0, 0, 0}); // Don't include the odometer in position measurements
+        MatrixF H_odom = new GeneralMatrixF(3, 3, new float[]{1, 0, 0, 0, 1, 0, 0, 0, 1});
+//        MatrixF H_odom = new GeneralMatrixF(3, 3, new float[]{0, 0, 0, 0, 0, 0, 0, 0, 0}); // Don't include the odometer in position measurements
         // R OTOS - Measurement noise covariance for OTOS - 3x3 diagonal matrix - how much we trust the measurements
         MatrixF R_OTOS = new GeneralMatrixF(3, 3, new float[]{0.5f, 0, 0, 0, 0.5f, 0, 0, 0, 0.5f});
         // H OTOS - Measurement matrix - 3x3 diagonal matrix - how we map the measurements to the state

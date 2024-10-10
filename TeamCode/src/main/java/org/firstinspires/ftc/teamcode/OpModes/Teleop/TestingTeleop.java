@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.Commands;
@@ -16,8 +19,8 @@ import java.io.IOException;
 import java.util.Arrays;
 
 
-@TeleOp(name="Teleop", group="Teleop")
-public class Teleop extends LinearOpMode {
+@TeleOp(name="TestingTeleop", group="Teleop")
+public class TestingTeleop extends LinearOpMode {
     public void runOpMode() {
         Bot.init(this);
 
@@ -33,16 +36,10 @@ public class Teleop extends LinearOpMode {
         //Other
         boolean calmDown = false;
 
-        waitForStart();
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
-        if(!Config.competition) {
-            try {
-                Konami konami = new Konami(gamepad2);
-                konami.konamiEasy();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
+        waitForStart();
 
         while(opModeIsActive()) {
             // ---- GamePad 1 ----
@@ -127,6 +124,9 @@ public class Teleop extends LinearOpMode {
             double voltage = Bot.voltageHandler.getVoltage();
             if (voltage < 10) {
                 telemetry.addData("WARNING: Voltage Low", voltage);
+                Bot.led.lightsOn(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+            } else {
+                Bot.led.lightsOff();
             }
 
             // Telemetry and update
@@ -136,10 +136,18 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("Theta", pos[2]);
             telemetry.addData("Collector Toggle", collectorToggle.get());
             telemetry.addData("Voltage", voltage);
-            if (calmDown) {
-                telemetry.addLine(Config.calmDownMessages[Utils.randNum(Config.calmDownMessages.length)]);
-            }
             telemetry.update();
+
+            dashboardTelemetry.addData("OTOS X", Bot.pose.getRawOTOS()[0]);
+            dashboardTelemetry.addData("OTOS Y", Bot.pose.getRawOTOS()[1]);
+            dashboardTelemetry.addData("OTOS Z", Bot.pose.getRawOTOS()[2]);
+            dashboardTelemetry.addData("Odometry X", Bot.pose.getRawOdometer()[0]);
+            dashboardTelemetry.addData("Odometry Y", Bot.pose.getRawOdometer()[1]);
+            dashboardTelemetry.addData("Odometry Z", Bot.pose.getRawOdometer()[2]);
+            dashboardTelemetry.addData("Final X", Bot.pose.getPose()[0]);
+            dashboardTelemetry.addData("Final Y", Bot.pose.getPose()[1]);
+            dashboardTelemetry.addData("Final Z", Bot.pose.getPose()[2]);
+            dashboardTelemetry.update();
         }
     }
 }

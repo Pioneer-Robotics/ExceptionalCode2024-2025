@@ -12,17 +12,22 @@ public class Config {
     public static final double ticsToCM = (wheelDiameter * Math.PI) / ticsPerRev;
     public static final double trackWidth = 26.5; //In CM
     public static final double forwardOffset = Math.sqrt((15.5 * 15.5) - 0.4); // In CM
+    public static final double[] OTOSOffset = new double[] {6, 17, 0};
+//    public static final double[] OTOSOffset = new double[] {0, 0, 0};
+    public static final double OTOSLinearScale = 1.09;
 
     // Encoder constants
     public static final double maxDriveTicksPerSecond = 2700; // ~300 RPM
     public static final double maxSlideTicksPerSecond = 2700;
 
     // PID constants
-    public static final double[] drivePID = {0.1, 0.00075, 0.5}; // kP, kI, kD
-    public static final double[] turnPID = {2, 0.00075, 0.5}; // kP, kI, kD
+    public static final double[] drivePID = {0.05, 0.000001, 0.1}; // kP, kI, kD (OTOS)
+//    public static final double[] drivePID = {0.1, 0.00075, 0.5};
 
-    public static final double driveTolerance = 1; // How close the robot needs to be to the target position to stop (in cm)
-    public static final double turnTolerance = 0.05; // How close the robot needs to be to the target angle to stop (in radians)
+    public static final double[] turnPID = {3, 0.00075, 0.5}; // kP, kI, kD
+
+    public static final double driveTolerance = 0.5; // How close the robot needs to be to the target position to stop (in cm)
+    public static final double turnTolerance = 0.025; // How close the robot needs to be to the target angle to stop (in radians)
 
     // Used to gradually accelerate
     // PID speed starts at 0.1 and increments by acceleration each loop up to 1
