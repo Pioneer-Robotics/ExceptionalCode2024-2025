@@ -125,4 +125,6 @@ public class PIDController {
     public void moveRelative(double x, double y) {
         moveRelative(x, y, 0, 0.6);
     }
+
+    public void setOrigin() {}
 }

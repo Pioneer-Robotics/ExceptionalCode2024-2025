@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.Hardware.SpecimenArm;
 import org.firstinspires.ftc.teamcode.Hardware.VoltageHandler;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PIDController;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Pose;
+import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PurePursuit;
 
 /**
  * This class is used to create all of the hardware objects and store them in the bot object
@@ -31,6 +32,7 @@ public class Bot {
     public static Pose pose;
     public static VoltageHandler voltageHandler;
     public static SpecimenArm specimenArm;
+    public static PurePursuit purePursuit;
 
     /**
      * Constructor for Bot.
@@ -41,6 +43,7 @@ public class Bot {
 
         // Drive base and self driving
         Bot.mecanumBase = new MecanumBase();
+        Bot.purePursuit = new PurePursuit(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2]);
 
         // Motors
         specimenArm = new SpecimenArm();
