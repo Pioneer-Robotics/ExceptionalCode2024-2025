@@ -18,6 +18,7 @@ public class SMAuto extends LinearOpMode {
     public void runOpMode() {
         Bot.init(this);
 
+        waitForStart();
         while (opModeIsActive()) {
 
             switch (state) {
@@ -31,6 +32,7 @@ public class SMAuto extends LinearOpMode {
 
                 case SPECIMIN_HANG_1:
                     telemetry.addLine("Inside Case SPECIMIN_HANG_1");
+                    Bot.purePursuit.update();
                     if (Bot.purePursuit.reachedTarget()) {
                         Bot.specimenArm.moveToPos2(0.5);
                         state = State.SPECIMIN_HANG_2;

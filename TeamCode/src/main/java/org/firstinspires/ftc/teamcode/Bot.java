@@ -43,6 +43,7 @@ public class Bot {
 
         // Drive base and self driving
         Bot.mecanumBase = new MecanumBase();
+        Bot.pose = new Pose();
         Bot.purePursuit = new PurePursuit(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2]);
 
         // Motors

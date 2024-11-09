@@ -47,21 +47,21 @@ public class SpecimenArm {
     }
 
     public void moveToPos1(double speed) {
-        motor.setTargetPosition(700);
+        motor.setTargetPosition(-700);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor.setVelocity(Config.maxSlideTicksPerSecond * speed);
         wrist.closeServo();
     }
 
     public void moveToPos2(double speed) {
-        motor.setTargetPosition(450);
+        motor.setTargetPosition(-450);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor.setVelocity(Config.maxSlideTicksPerSecond * speed);
         wrist.closeServo();
     }
 
     public void moveToPos3(double speed) {
-        motor.setTargetPosition(1650);
+        motor.setTargetPosition(-1650);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor.setVelocity(Config.maxSlideTicksPerSecond * speed);
         wrist.openServo();
