@@ -21,6 +21,8 @@ import org.firstinspires.ftc.teamcode.Helpers.KalmanFilter;
  * It uses a kalman filter to combine data from the odometers and OTOS
  * The robot's position is stored as an X coordinate, Y coordinate, and Theta (Robot Yaw).
  */
+// TODO: Clean up pose class
+// Probably not going to use kalman filter
 public class Pose{
     private double x, y, theta;
     private KalmanFilter kalmanFilter;
@@ -86,6 +88,10 @@ public class Pose{
         return (theta);
     }
 
+    /**
+     * Get the raw odometer data
+     * @return double[] {x, y, theta}
+     */
     public double[] getRawOdometer() {
         return odometry.returnPose();
     }
@@ -93,6 +99,8 @@ public class Pose{
     public double[] getRawOTOS() {
         return otos.getPose();
     }
+
+    public double[] getVelocityOTOS() {return otos.getVelocity();}
 
     // Enable or disable each sensor
     // Useful for testing or if a sensor is broken/inaccurate
