@@ -27,6 +27,8 @@ public class SpecimenArm {
         double clawOpen = 0.5;
         double clawClose = 1.0;
         claw = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, "clawServo"), clawOpen, clawClose);
+        wrist.closeServo();
+        claw.closeServo();
     }
     public void move(double speed) {
         motor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
@@ -54,7 +56,7 @@ public class SpecimenArm {
     }
 
     public void moveToPos2(double speed) {
-        motor.setTargetPosition(-450);
+        motor.setTargetPosition(-500);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor.setVelocity(Config.maxSlideTicksPerSecond * speed);
         wrist.closeServo();

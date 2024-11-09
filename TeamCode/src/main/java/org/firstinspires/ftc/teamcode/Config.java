@@ -18,7 +18,7 @@ public class Config {
     public static final double maxSlideTicksPerSecond = 2700;
 
     // PID constants
-    public static final double[] drivePID = {0.1, 0.00075, 0.5}; // kP, kI, kD
+    public static final double[] drivePID = {0.13, 0.0006, 0.5}; // kP, kI, kD
     public static final double[] turnPID = {2, 0.00075, 0.5}; // kP, kI, kD
 
     public static final double driveTolerance = 0.5; // How close the robot needs to be to the target position to stop (in cm)

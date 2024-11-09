@@ -25,7 +25,7 @@ public class SMAuto extends LinearOpMode {
                 case INIT:
                     telemetry.addLine("Inside Case INIT");
 
-                    Bot.purePursuit.setTargetPath(new double[][]{{0, 0}, {-31.3, 63.3}});
+                    Bot.purePursuit.setTargetPath(new double[][]{{0, 0}, {-30.0, 55.0}});
                     Bot.specimenArm.moveToPos1(0.5);
 
                     state = State.SPECIMIN_HANG_1;

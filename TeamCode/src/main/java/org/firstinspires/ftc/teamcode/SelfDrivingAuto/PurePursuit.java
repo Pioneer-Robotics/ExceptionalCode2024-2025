@@ -136,8 +136,8 @@ public class PurePursuit {
         double[] targetPoint = getTargetPoint(lookAhead);
         // Get current position and calculate the movement
         double[] pos = Bot.pose.getRawOTOS();
-        double moveX = xPID.calculate(pos[0], targetPoint[0], 0.5);
-        double moveY = yPID.calculate(pos[1], targetPoint[1], 0.5);
+        double moveX = xPID.calculate(pos[0], targetPoint[0], 0.25);
+        double moveY = yPID.calculate(pos[1], targetPoint[1], 0.25);
         double moveTheta = turnPID.calculate(Bot.pose.getRawOdometer()[2], 0);
         // Move the robot
         Bot.mecanumBase.move_vector(moveX, moveY, moveTheta);
