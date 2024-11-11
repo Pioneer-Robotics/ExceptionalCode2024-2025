@@ -130,17 +130,19 @@ public class PurePursuit {
         return Math.sqrt(dx*dx + dy*dy);
     }
 
-    public void update() {
+    public void update(double speed) {
         // Get target point
         double[] targetPoint = getTargetPoint(Config.lookAhead);
         // Get current position and calculate the movement
         double[] pos = Bot.pose.getRawOTOS();
-        double moveX = xPID.calculate(pos[0], targetPoint[0], 0.25);
-        double moveY = yPID.calculate(pos[1], targetPoint[1], 0.25);
+        double moveX = xPID.calculate(pos[0], targetPoint[0], speed);
+        double moveY = yPID.calculate(pos[1], targetPoint[1], speed);
         double moveTheta = turnPID.calculate(Bot.pose.getRawOdometer()[2], 0);
         // Move the robot
         Bot.mecanumBase.move_vector(moveX, moveY, moveTheta);
     }
+
+    public void update() { update(0.25); }
 
     public void stop() {
         Bot.mecanumBase.stop();

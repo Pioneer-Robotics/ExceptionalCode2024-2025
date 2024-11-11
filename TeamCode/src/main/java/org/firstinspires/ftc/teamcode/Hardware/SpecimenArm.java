@@ -18,13 +18,13 @@ public class SpecimenArm {
         motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        defaultSpeed = 0.75;
+        defaultSpeed = 0.5;
 
         // Servos
         double wristOpen = 0.0;
         double wristClose = 1.0;
         wrist = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, "wristServo"), wristOpen, wristClose);
-        double clawOpen = 0.5;
+        double clawOpen = 0.35;
         double clawClose = 1.0;
         claw = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, "clawServo"), clawOpen, clawClose);
         wrist.closeServo();
@@ -48,18 +48,18 @@ public class SpecimenArm {
         motor.setVelocity(Config.maxSlideTicksPerSecond * speed);
     }
 
-    public void moveToPos1(double speed) {
-        moveToPos(-700);
+    public void movePrepHang(double speed) {
+        moveToPos(850, speed);
         wrist.closeServo();
     }
 
-    public void moveToPos2(double speed) {
-        moveToPos(-500);
+    public void moveHangDown(double speed) {
+        moveToPos(550, speed);
         wrist.closeServo();
     }
 
-    public void moveToPos3(double speed) {
-        moveToPos(-1650);
+    public void moveToCollect(double speed) {
+        moveToPos(1850, speed);
         wrist.openServo();
     }
 

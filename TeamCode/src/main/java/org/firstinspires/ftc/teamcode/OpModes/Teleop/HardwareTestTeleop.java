@@ -68,11 +68,11 @@ public class HardwareTestTeleop extends LinearOpMode {
 //            Bot.specimenArm.setWristPos(gamepad1.left_trigger);
 
             if (gamepad1.dpad_up) {
-                Bot.specimenArm.moveToPos1(0.5);
+                Bot.specimenArm.movePrepHang(0.5);
             } else if (gamepad1.dpad_down) {
-                Bot.specimenArm.moveToPos2(1.0);
+                Bot.specimenArm.moveHangDown(1.0);
             } else if (gamepad1.dpad_left) {
-                Bot.specimenArm.moveToPos3(0.5);
+                Bot.specimenArm.moveToCollect(0.5);
             }
 
             // ---- GamePad 2 ----
