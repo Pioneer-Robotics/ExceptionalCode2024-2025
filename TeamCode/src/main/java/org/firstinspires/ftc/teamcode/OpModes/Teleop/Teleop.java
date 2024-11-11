@@ -20,7 +20,6 @@ import java.util.Arrays;
 public class Teleop extends LinearOpMode {
     public void runOpMode() {
         Bot.init(this);
-        BezierCalc bezierCalc = new BezierCalc();
 
         // Toggles
         Toggle northModeToggle = new Toggle(true);
@@ -31,34 +30,7 @@ public class Teleop extends LinearOpMode {
         // Initialize max speed
         double maxSpeed = 0.5;
 
-        //Other
-        boolean calmDown = false;
-
         waitForStart();
-
-        if(!Config.competition) {
-            try {
-                Konami konami = new Konami(gamepad2);
-                konami.konamiEasy();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        double[][] linear = null;
-        try {
-            linear = bezierCalc.nDegBez(new double[] {0.0,3,6.2,9.3,12.5,9.3}, new double[] {0.0,10,2.5,7.5,5,2.5},31);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            FileWriter writer = new FileWriter("/sdcard/bezierPoints.csv");
-            writer.write(Arrays.deepToString(linear) + "\n");
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         while(opModeIsActive()) {
             // ---- GamePad 1 ----
@@ -103,11 +75,6 @@ public class Teleop extends LinearOpMode {
                 Bot.collector.reverse();
             }
 
-            //Other
-            if (gamepad1.left_stick_button || gamepad1.right_stick_button){
-                calmDown = true;
-            }
-
             if (gamepad1.x) {
                 Bot.imu.resetYaw();
             }
@@ -138,7 +105,7 @@ public class Teleop extends LinearOpMode {
             }
 
             // Get data for telemetry
-            double[] pos = Bot.pose.returnPose();
+            double[] pos = Bot.optical_odom.getPose();
 
             double voltage = Bot.voltageHandler.getVoltage();
             if (voltage < 10) {
@@ -152,9 +119,6 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("Theta", pos[2]);
             telemetry.addData("Collector Toggle", collectorToggle.get());
             telemetry.addData("Voltage", voltage);
-            if (calmDown) {
-                telemetry.addLine(Config.calmDownMessages[Utils.randNum(Config.calmDownMessages.length)]);
-            }
             telemetry.update();
         }
     }

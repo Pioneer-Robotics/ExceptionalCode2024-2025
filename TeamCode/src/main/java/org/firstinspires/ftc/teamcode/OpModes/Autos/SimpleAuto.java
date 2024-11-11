@@ -14,15 +14,15 @@ public class SimpleAuto extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            Bot.pidController.moveToPosition(-60, 75, -90);
+            Bot.pidDrive.moveToPosition(-60, 75, -90);
             Bot.pixelDropLeft.openServo();
             Utils.sleep(1);
             Bot.pixelDropLeft.closeServo();
-            Bot.pidController.moveToPosition(0, 70, -90);
+            Bot.pidDrive.moveToPosition(0, 70, -90);
             Bot.pixelDropRight.openServo();
             Utils.sleep(1);
             Bot.pixelDropRight.closeServo();
-            Bot.pidController.moveToPosition(0, 0, 0);
+            Bot.pidDrive.moveToPosition(0, 0, 0);
             terminateOpModeNow();
         }
     }

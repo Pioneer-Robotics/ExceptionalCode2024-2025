@@ -13,11 +13,9 @@ import org.firstinspires.ftc.teamcode.Hardware.LinearSlide;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
 import org.firstinspires.ftc.teamcode.Hardware.ServoClass;
 import org.firstinspires.ftc.teamcode.Hardware.VoltageHandler;
-import org.firstinspires.ftc.teamcode.Helpers.Konami;
-import org.firstinspires.ftc.teamcode.Helpers.Ticker;
-import org.firstinspires.ftc.teamcode.Helpers.Utils;
-import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PIDController;
-import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Pose;
+import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Odometry;
+import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PIDDrive;
+import org.firstinspires.ftc.teamcode.SelfDrivingAuto.SparkfunOTOS;
 
 /**
  * This class is used to create all of the hardware objects and store them in the bot object
@@ -26,18 +24,16 @@ import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Pose;
  */
 public class Bot {
     public static LinearOpMode opMode;
-    public static PIDController pidController;
+    public static PIDDrive pidDrive;
     public static BotIMU imu;
     public static LinearSlide slide;
     public static LEDController led;
     public static MecanumBase mecanumBase;
-    public static Pose pose;
+    public static SparkfunOTOS optical_odom;
+    public static Odometry deadwheel_odom;
     public static VoltageHandler voltageHandler;
-    public static Ticker ticker;
     public static Collector collector;
     public static ServoClass pixelDropLeft, pixelDropRight, gripper, wrist;
-    public static Utils utils;
-    public static Konami konami;
 
     /**
      * Constructor for Bot.
@@ -47,9 +43,10 @@ public class Bot {
         Bot.opMode = opMode;
 
         // Drive base and self driving
-        Bot.pose = new Pose(); // Needs to be initialized before pidController
+        Bot.optical_odom = new SparkfunOTOS();
+        Bot.deadwheel_odom = new Odometry();
         Bot.mecanumBase = new MecanumBase();
-        Bot.pidController = new PIDController();
+        Bot.pidDrive = new PIDDrive();
 
         // Motors
         Bot.slide = new LinearSlide();

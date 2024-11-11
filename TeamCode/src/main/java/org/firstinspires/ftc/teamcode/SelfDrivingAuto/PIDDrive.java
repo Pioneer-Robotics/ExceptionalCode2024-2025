@@ -9,10 +9,10 @@ import org.firstinspires.ftc.teamcode.Helpers.Utils;
 // Not tested
 
 /**
- * Controls the mecanum base using PID
+ * Simple point to point using PID
  */
-public class PIDController {
-    public PIDController() {
+public class PIDDrive {
+    public PIDDrive() {
         Bot.mecanumBase.setNorthMode(true);
     }
 
@@ -28,10 +28,9 @@ public class PIDController {
         theta = AngleUtils.normalizeRadians(theta);
 
         // Get current position
-        Bot.pose.calculate();
-        double currentX = Bot.pose.getX();
-        double currentY = Bot.pose.getY();
-        double currentTheta = Bot.pose.getTheta();
+        double currentX = Bot.optical_odom.getX();
+        double currentY = Bot.optical_odom.getY();
+        double currentTheta = Bot.optical_odom.getHeading();
 
         // Initialize PID controllers with initial errors
         PID xPID = new PID(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2], x - currentX);
@@ -44,10 +43,9 @@ public class PIDController {
         // Loop until the robot reaches the target position or the op mode is stopped
         while (Math.abs(x - currentX) > Config.driveTolerance || Math.abs(y - currentY) > Config.driveTolerance || Math.abs(theta - currentTheta) > Config.turnTolerance && !Bot.opMode.isStopRequested()) {
             // Update current position
-            Bot.pose.calculate();
-            currentX = Bot.pose.getX();
-            currentY = Bot.pose.getY();
-            currentTheta = Bot.pose.getTheta();
+            currentX = Bot.optical_odom.getX();
+            currentY = Bot.optical_odom.getY();
+            currentTheta = Bot.optical_odom.getHeading();
 
             // Calculate PID outputs
             double xOutput = xPID.calculate(currentX, x, speed);
@@ -91,8 +89,7 @@ public class PIDController {
      * @param y double - y position
      */
     public void moveToPosition(double x, double y) {
-        Bot.pose.calculate();
-        moveToPosition(x, y, Bot.pose.getTheta());
+        moveToPosition(x, y, Bot.optical_odom.getHeading());
     }
 
     /**
@@ -103,8 +100,7 @@ public class PIDController {
      * @param speed double - speed of the PID [0, 1]
      */
     public void moveRelative(double x, double y, double theta, double speed) {
-        Bot.pose.calculate();
-        moveToPosition(Bot.pose.getX() + x, Bot.pose.getY() + y, Bot.pose.getTheta() + theta, speed);
+        moveToPosition(Bot.optical_odom.getX() + x, Bot.optical_odom.getY() + y, Bot.optical_odom.getHeading() + theta, speed);
     }
 
     /**
