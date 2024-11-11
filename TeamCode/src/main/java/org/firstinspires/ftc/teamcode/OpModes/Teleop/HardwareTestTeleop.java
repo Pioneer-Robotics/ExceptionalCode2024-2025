@@ -70,7 +70,7 @@ public class HardwareTestTeleop extends LinearOpMode {
             if (gamepad1.dpad_up) {
                 Bot.specimenArm.moveToPos1(0.5);
             } else if (gamepad1.dpad_down) {
-                    Bot.specimenArm.moveToPos2(1.0);
+                Bot.specimenArm.moveToPos2(1.0);
             } else if (gamepad1.dpad_left) {
                 Bot.specimenArm.moveToPos3(0.5);
             }

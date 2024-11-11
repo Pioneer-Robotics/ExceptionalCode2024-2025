@@ -6,7 +6,6 @@ import org.firstinspires.ftc.teamcode.Config;
 public class PurePursuit {
     private final PID xPID, yPID, turnPID;
     private double[][] path; // The path to follow
-    private double lookAhead = 10;
 
     public PurePursuit(double kP, double kI, double kD) {
         xPID = new PID(kP, kI, kD);
@@ -133,7 +132,7 @@ public class PurePursuit {
 
     public void update() {
         // Get target point
-        double[] targetPoint = getTargetPoint(lookAhead);
+        double[] targetPoint = getTargetPoint(Config.lookAhead);
         // Get current position and calculate the movement
         double[] pos = Bot.pose.getRawOTOS();
         double moveX = xPID.calculate(pos[0], targetPoint[0], 0.25);
@@ -143,7 +142,7 @@ public class PurePursuit {
         Bot.mecanumBase.move_vector(moveX, moveY, moveTheta);
     }
 
-    public void setLookAhead(double lookAhead) {
-        this.lookAhead = lookAhead;
+    public void stop() {
+        Bot.mecanumBase.stop();
     }
 }

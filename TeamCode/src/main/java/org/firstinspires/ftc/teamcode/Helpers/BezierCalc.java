@@ -4,10 +4,7 @@ package org.firstinspires.ftc.teamcode.Helpers;
 
 public class BezierCalc {
 
-    public static double[][] nDegBez(double[] px, double[] py, int samples) throws Exception {
-        if (px.length != py.length) {
-            throw new Exception("X coords do not match Y coords");
-        }
+    public static double[][] nDegBez(double[] px, double[] py, int samples) {
         double[][] points = new double[samples][2];
         int degree = px.length - 1;
 
