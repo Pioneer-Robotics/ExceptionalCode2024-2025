@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Helpers.BezierCalc;
 
-@Autonomous(name="State Machine Auto", group="Autos")
-public class SMAuto extends LinearOpMode {
+@Autonomous(name="Specimen Auto", group="Autos")
+public class SpecimenAuto extends LinearOpMode {
     enum State {
         INIT,
         SPECIMEN_HANG_1,
@@ -89,9 +89,9 @@ public class SMAuto extends LinearOpMode {
                     }
                 }
             telemetry.addData("State", state);
-            telemetry.addData("X", Bot.pose.getRawOTOS()[0]);
-            telemetry.addData("Y", Bot.pose.getRawOTOS()[1]);
-            telemetry.addData("Theta", Bot.pose.getRawOTOS()[2]);
+            telemetry.addData("X", Bot.optical_odom.getX());
+            telemetry.addData("Y", Bot.optical_odom.getY());
+            telemetry.addData("Theta", Bot.optical_odom.getHeading());
             telemetry.update();
         }
     }

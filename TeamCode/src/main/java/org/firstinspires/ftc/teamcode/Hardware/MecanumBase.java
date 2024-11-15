@@ -53,9 +53,16 @@ public class MecanumBase {
         double powerRB = (y + x - turn) / denominator;
         double powerLB = (y - x + turn) / denominator;
 
-        RF.setVelocity(powerRF * Config.maxDriveTicksPerSecond);
-        LF.setVelocity(powerLF * Config.maxDriveTicksPerSecond);
-        RB.setVelocity(powerRB * Config.maxDriveTicksPerSecond);
-        LB.setVelocity(powerLB * Config.maxDriveTicksPerSecond);
+        RF.setVelocity(powerRF * Config.maxDriveTicksPerSecond * speed);
+        LF.setVelocity(powerLF * Config.maxDriveTicksPerSecond * speed);
+        RB.setVelocity(powerRB * Config.maxDriveTicksPerSecond * speed);
+        LB.setVelocity(powerLB * Config.maxDriveTicksPerSecond * speed);
+    }
+
+    public void stop() {
+        RF.setVelocity(0);
+        LF.setVelocity(0);
+        RB.setVelocity(0);
+        LB.setVelocity(0);
     }
 }

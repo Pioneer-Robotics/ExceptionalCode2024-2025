@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -12,6 +11,7 @@ import org.firstinspires.ftc.teamcode.Hardware.SpecimenArm;
 import org.firstinspires.ftc.teamcode.Hardware.VoltageHandler;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Odometry;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PIDDrive;
+import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PurePursuit;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.SparkfunOTOS;
 
 /**
@@ -21,13 +21,15 @@ import org.firstinspires.ftc.teamcode.SelfDrivingAuto.SparkfunOTOS;
  */
 public class Bot {
     public static LinearOpMode opMode;
-    public static PIDController pidController;
     public static BotIMU imu;
     public static LEDController led;
+    public static SpecimenArm specimenArm;
+    public static PIDDrive pidDrive;
     public static MecanumBase mecanumBase;
     public static SparkfunOTOS optical_odom;
     public static Odometry deadwheel_odom;
     public static VoltageHandler voltageHandler;
+    public static PurePursuit purePursuit;
 
     /**
      * Constructor for Bot.
@@ -41,6 +43,7 @@ public class Bot {
         Bot.deadwheel_odom = new Odometry();
         Bot.mecanumBase = new MecanumBase();
         Bot.pidDrive = new PIDDrive();
+        Bot.purePursuit = new PurePursuit(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2]);
 
         // Motors
         specimenArm = new SpecimenArm();

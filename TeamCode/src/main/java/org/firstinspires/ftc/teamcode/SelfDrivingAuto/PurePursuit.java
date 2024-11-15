@@ -30,7 +30,7 @@ public class PurePursuit {
      */
     public double[] getTargetPoint(double lookAhead) {
         // Get the current position
-        double[] pos = Bot.pose.getRawOTOS();
+        double[] pos = Bot.optical_odom.getPose();
         // Loop through the path to find the target point
         double[] lastIntersection = null; // Follow the intersection point closest to the end of the path
         for (int i = 0; i < path.length - 1; i++) {
@@ -115,7 +115,7 @@ public class PurePursuit {
     }
 
     public boolean reachedTarget(double tolerance) {
-        double[] pos = Bot.pose.getRawOTOS();
+        double[] pos = Bot.optical_odom.getPose();
         double[] targetPoint = path[path.length - 1]; // Last point in the path
         double dx = Math.abs(targetPoint[0] - pos[0]);
         double dy = Math.abs(targetPoint[1] - pos[1]);
@@ -127,7 +127,7 @@ public class PurePursuit {
     }
 
     public double getDistance() {
-        double[] pos = Bot.pose.getRawOdometer();
+        double[] pos = Bot.optical_odom.getPose();
         double[] targetPoint = path[path.length - 1]; // Last point in the path
         double dx = Math.abs(targetPoint[0] - pos[0]);
         double dy = Math.abs(targetPoint[1] - pos[1]);
@@ -138,15 +138,13 @@ public class PurePursuit {
         // Get target point
         double[] targetPoint = getTargetPoint(Config.lookAhead);
         // Get current position and calculate the movement
-        double[] pos = Bot.pose.getRawOTOS();
+        double[] pos = Bot.optical_odom.getPose();
         double moveX = xPID.calculate(pos[0], targetPoint[0]);
         double moveY = yPID.calculate(pos[1], targetPoint[1]);
-        double moveTheta = turnPID.calculate(Bot.pose.getRawOdometer()[2], 0);
-        Bot.opMode.telemetry.addData("PID X", moveX);
-        Bot.opMode.telemetry.addData("PID Y", moveY);
-        Bot.opMode.telemetry.addData("PID Theta", moveTheta);
+        // TODO: Use optical odometer for theta
+        double moveTheta = turnPID.calculate(Bot.deadwheel_odom.getTheta(), 0);
         // Move the robot
-        Bot.mecanumBase.move_vector(moveX, moveY, moveTheta, speed);
+        Bot.mecanumBase.move(moveX, moveY, moveTheta, speed);
     }
 
     public void update() { update(0.25); }
