@@ -29,13 +29,13 @@ public class SMAuto extends LinearOpMode {
 
             switch (state) {
                 case INIT:
-                    Bot.purePursuit.setTargetPath(new double[][]{{0, 0}, {-25.0, 64}});
+                    Bot.purePursuit.setTargetPath(new double[][]{{0, 0}, {-25.0, 63.5}});
                     Bot.specimenArm.movePrepHang(0.5);
                     state = State.SPECIMEN_HANG_1;
                     break;
 
                 case SPECIMEN_HANG_1:
-                    Bot.purePursuit.update(0.4);
+                    Bot.purePursuit.update();
                     if (Bot.purePursuit.reachedTarget()) {
                         Bot.purePursuit.stop();
                         Bot.specimenArm.moveHangDown(1.0);
@@ -58,11 +58,11 @@ public class SMAuto extends LinearOpMode {
                     break;
 
                 case OBSERVATION_ZONE:
-                    Bot.purePursuit.update(0.7);
+                    Bot.purePursuit.update(0.5);
                     if (timer.seconds() > 1) {
                         Bot.specimenArm.moveToCollect(0.4);
                     }
-                    if (Bot.purePursuit.reachedTarget()) {
+                    if (Bot.purePursuit.reachedTarget(2.5)) {
                         double[] pointsX = {85,46,105,110};
                         double[] pointsY = {25,130,190,25};
                         double[][] path = BezierCalc.nDegBez(pointsX, pointsY, 50);
@@ -72,9 +72,9 @@ public class SMAuto extends LinearOpMode {
                     break;
 
                 case OBSERVATION_ZONE_2:
-                    Bot.purePursuit.update(0.6);
-                    if (Bot.purePursuit.reachedTarget()) {
-                        double[] pointsX = {110,100,95};
+                    Bot.purePursuit.update(0.5);
+                    if (Bot.purePursuit.reachedTarget(2.5)) {
+                        double[] pointsX = {110,100,70};
                         double[] pointsY = {25,50,15};
                         double[][] path = BezierCalc.nDegBez(pointsX, pointsY, 50);
                         Bot.purePursuit.setTargetPath(path);
@@ -82,7 +82,7 @@ public class SMAuto extends LinearOpMode {
                     break;
 
                 case COLLECT_SPECIMEN:
-                    Bot.purePursuit.update(0.25);
+                    Bot.purePursuit.update(0.1);
                     if (Bot.purePursuit.reachedTarget()) {
                         Bot.purePursuit.stop();
                         Bot.specimenArm.closeClaw();

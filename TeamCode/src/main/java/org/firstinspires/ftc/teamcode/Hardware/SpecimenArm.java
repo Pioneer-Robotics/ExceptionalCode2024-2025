@@ -21,12 +21,9 @@ public class SpecimenArm {
         defaultSpeed = 0.5;
 
         // Servos
-        double wristOpen = 0.0;
-        double wristClose = 1.0;
-        wrist = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, "wristServo"), wristOpen, wristClose);
-        double clawOpen = 0.35;
-        double clawClose = 1.0;
-        claw = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, "clawServo"), clawOpen, clawClose);
+        wrist = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, "wristServo"), Config.wristOpen, Config.wristClose);
+        claw = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, "clawServo"), Config.clawOpen, Config.clawClose);
+
         wrist.closeServo();
         claw.closeServo();
     }
@@ -54,7 +51,7 @@ public class SpecimenArm {
     }
 
     public void moveHangDown(double speed) {
-        moveToPos(550, speed);
+        moveToPos(575, speed);
         wrist.closeServo();
     }
 

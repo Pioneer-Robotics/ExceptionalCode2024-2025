@@ -114,12 +114,16 @@ public class PurePursuit {
         return null;
     }
 
-    public boolean reachedTarget() {
+    public boolean reachedTarget(double tolerance) {
         double[] pos = Bot.pose.getRawOTOS();
         double[] targetPoint = path[path.length - 1]; // Last point in the path
         double dx = Math.abs(targetPoint[0] - pos[0]);
         double dy = Math.abs(targetPoint[1] - pos[1]);
-        return Math.sqrt(dx*dx + dy*dy) < Config.driveTolerance;
+        return Math.sqrt(dx*dx + dy*dy) < tolerance;
+    }
+
+    public boolean reachedTarget() {
+        return reachedTarget(Config.driveTolerance);
     }
 
     public double getDistance() {
@@ -135,11 +139,14 @@ public class PurePursuit {
         double[] targetPoint = getTargetPoint(Config.lookAhead);
         // Get current position and calculate the movement
         double[] pos = Bot.pose.getRawOTOS();
-        double moveX = xPID.calculate(pos[0], targetPoint[0], speed);
-        double moveY = yPID.calculate(pos[1], targetPoint[1], speed);
+        double moveX = xPID.calculate(pos[0], targetPoint[0]);
+        double moveY = yPID.calculate(pos[1], targetPoint[1]);
         double moveTheta = turnPID.calculate(Bot.pose.getRawOdometer()[2], 0);
+        Bot.opMode.telemetry.addData("PID X", moveX);
+        Bot.opMode.telemetry.addData("PID Y", moveY);
+        Bot.opMode.telemetry.addData("PID Theta", moveTheta);
         // Move the robot
-        Bot.mecanumBase.move_vector(moveX, moveY, moveTheta);
+        Bot.mecanumBase.move_vector(moveX, moveY, moveTheta, speed);
     }
 
     public void update() { update(0.25); }

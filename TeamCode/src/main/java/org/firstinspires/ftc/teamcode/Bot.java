@@ -4,17 +4,13 @@ package org.firstinspires.ftc.teamcode;
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
-import org.firstinspires.ftc.teamcode.Hardware.Collector;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
-import org.firstinspires.ftc.teamcode.Hardware.ServoClass;
+import org.firstinspires.ftc.teamcode.Hardware.MecanumBaseOld;
 import org.firstinspires.ftc.teamcode.Hardware.SpecimenArm;
 import org.firstinspires.ftc.teamcode.Hardware.VoltageHandler;
-import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PIDController;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Pose;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PurePursuit;
 
@@ -25,7 +21,6 @@ import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PurePursuit;
  */
 public class Bot {
     public static LinearOpMode opMode;
-    public static PIDController pidController;
     public static BotIMU imu;
     public static LEDController led;
     public static MecanumBase mecanumBase;
