@@ -46,10 +46,10 @@ public class Bot {
         Bot.purePursuit = new PurePursuit(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2]);
 
         // Motors
-        specimenArm = new SpecimenArm();
+        Bot.specimenArm = new SpecimenArm();
 
         // Servos
-
+        
 
         // Other
         Bot.voltageHandler = new VoltageHandler();

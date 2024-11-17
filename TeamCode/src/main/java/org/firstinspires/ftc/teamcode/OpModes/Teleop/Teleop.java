@@ -46,10 +46,10 @@ public class Teleop extends LinearOpMode {
             incSpeedToggle.toggle(gamepad1.right_bumper);
             decSpeedToggle.toggle(gamepad1.left_bumper);
             if (incSpeedToggle.justChanged()) {
-                maxSpeed += 1.0;
+                maxSpeed += 0.1;
             }
             if (decSpeedToggle.justChanged()) {
-                maxSpeed -= 1.0;
+                maxSpeed -= 0.1;
             }
 
             // Specimen Arm

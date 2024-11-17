@@ -4,6 +4,8 @@ package org.firstinspires.ftc.teamcode;
 /**
  * This class is used to store all of the constants and hardware map names for the robot
  */
+// Annotation to allow quick changes to config from FTC Dashboard
+@com.acmerobotics.dashboard.config.Config
 public class Config {
     // ---- Constants ----
     // Odometer constants
@@ -18,21 +20,21 @@ public class Config {
     public static final double maxSlideTicksPerSecond = 2700;
 
     // PID constants
-    public static final double[] drivePID = {0, 0, 0}; // kP, kI, kD
-
-    public static final double[] turnPID = {0, 0, 0}; // kP, kI, kD
+    public static double[] drivePID = {0.075, 0.0001, 0}; // kP, kI, kD
+    public static double[] turnPID = {5, 0, 0}; // kP, kI, kD
+    public static double driveSpeed = 0.25;
 
     // Tolerances
     // How close the robot needs to be to the target position to stop (in cm)
-    public static final double driveTolerance = 0.75;
+    public static double driveTolerance = 0.5;
     // How close the robot needs to be to the target angle to stop (in radians)
-    public static final double turnTolerance = 0.05;
+    public static double turnTolerance = 0.05;
     public static final double specimenArmTolerance = 5; // Motor ticks
 
-    public static final double lookAhead = 5;
+    public static double lookAhead = 15;
 
     // Used to gradually accelerate
-    // PID speed starts at 0.1 and increments by acceleration each loop up to 1
+    // Multiplier starts at 0.1 and increments by acceleration each loop up to 1
     public static final double acceleration = 0.03;
 
     // ---- Hardware Map ----
@@ -63,12 +65,12 @@ public class Config {
     public static final double wristClose = 1.0;
 
     public static final double clawOpen = 0.25;
-    public static final double clawClose = 1.0;
+    public static final double clawClose = 0.95;
 
     // ---- Motor Positions ----
     // Specimen Arm
     public static final double defaultSpecimenArmSpeed = 0.5;
     public static final int specimenArmPostHang = 575;
     public static final int specimenArmPrepHang = 850;
-    public static final int specimenArmCollect = 1850;
+    public static final int specimenArmCollect = 1650;
 }

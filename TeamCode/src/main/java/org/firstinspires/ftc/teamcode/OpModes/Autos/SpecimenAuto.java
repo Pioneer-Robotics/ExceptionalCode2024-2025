@@ -47,8 +47,8 @@ public class SpecimenAuto extends LinearOpMode {
                 case SPECIMEN_HANG_2:
                     if (timer.seconds() > 0.5) {
                         Bot.specimenArm.openClaw();
-                        double[] pointsX = {-28,115,50,85,85};
-                        double[] pointsY = {64,20,150,170,25};
+                        double[] pointsX = {-28,115,16,100,85};
+                        double[] pointsY = {64,20,140,158,25};
                         double[][] path = BezierCalc.nDegBez(pointsX, pointsY, 50);
                         Bot.purePursuit.setTargetPath(path);
                         timer.reset();
@@ -58,11 +58,11 @@ public class SpecimenAuto extends LinearOpMode {
                     break;
 
                 case OBSERVATION_ZONE:
-                    Bot.purePursuit.update(0.5);
+                    Bot.purePursuit.update(0.25);
                     if (timer.seconds() > 1) {
                         Bot.specimenArm.moveToCollect(0.4);
                     }
-                    if (Bot.purePursuit.reachedTarget(2.5)) {
+                    if (Bot.purePursuit.reachedTarget(2)) {
                         double[] pointsX = {85,46,105,110};
                         double[] pointsY = {25,130,190,25};
                         double[][] path = BezierCalc.nDegBez(pointsX, pointsY, 50);
@@ -73,11 +73,12 @@ public class SpecimenAuto extends LinearOpMode {
 
                 case OBSERVATION_ZONE_2:
                     Bot.purePursuit.update(0.5);
-                    if (Bot.purePursuit.reachedTarget(2.5)) {
+                    if (Bot.purePursuit.reachedTarget(2)) {
                         double[] pointsX = {110,100,70};
                         double[] pointsY = {25,50,15};
                         double[][] path = BezierCalc.nDegBez(pointsX, pointsY, 50);
                         Bot.purePursuit.setTargetPath(path);
+                        state = State.COLLECT_SPECIMEN;
                     }
                     break;
 
@@ -87,6 +88,7 @@ public class SpecimenAuto extends LinearOpMode {
                         Bot.purePursuit.stop();
                         Bot.specimenArm.closeClaw();
                     }
+                    break;
                 }
             telemetry.addData("State", state);
             telemetry.addData("X", Bot.optical_odom.getX());

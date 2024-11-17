@@ -127,6 +127,7 @@ public class PurePursuit {
     }
 
     public double getDistance() {
+        // Get distance to target point
         double[] pos = Bot.optical_odom.getPose();
         double[] targetPoint = path[path.length - 1]; // Last point in the path
         double dx = Math.abs(targetPoint[0] - pos[0]);
