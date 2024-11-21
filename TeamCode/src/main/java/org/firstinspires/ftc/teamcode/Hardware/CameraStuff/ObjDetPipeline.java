@@ -23,12 +23,14 @@ public class ObjDetPipeline extends OpenCvPipeline{
 
         Imgproc.cvtColor(blurredImg, hsvImage, Imgproc.COLOR_BGR2HSV);
 
-        Scalar minValues = new Scalar(42,74.7,68.2);
-        Scalar maxValues = new Scalar(58,49.2,99.6);
+//        Scalar minValues = new Scalar(42,74.7,68.2);
+//        Scalar maxValues = new Scalar(58,49.2,99.6);
+        Scalar minValues = new Scalar(0,0,0);
+        Scalar maxValues = new Scalar(179,255,255);
 
         Core.inRange(hsvImage, minValues, maxValues, mask);
 
-        return(input);
+        return(hsvImage);
 
 //        Imgproc.getStructuringElement()
     }
