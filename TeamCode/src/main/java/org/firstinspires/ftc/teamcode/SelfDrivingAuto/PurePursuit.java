@@ -142,10 +142,12 @@ public class PurePursuit {
         double[] pos = Bot.optical_odom.getPose();
         double moveX = xPID.calculate(pos[0], targetPoint[0]);
         double moveY = yPID.calculate(pos[1], targetPoint[1]);
-        // TODO: Use optical odometer for theta
-        double moveTheta = turnPID.calculate(Bot.deadwheel_odom.getTheta(), 0);
+        double moveTheta = turnPID.calculate(Bot.imu.getDegrees(), 0);
+        Bot.opMode.telemetry.addData("Rotation PID", moveTheta);
+        Bot.opMode.telemetry.addData("X PID", moveX);
+        Bot.opMode.telemetry.addData("Y PID", moveY);
         // Move the robot
-        Bot.mecanumBase.move(moveX, moveY, moveTheta, speed);
+//        Bot.mecanumBase.move(moveX, moveY, moveTheta, speed);
     }
 
     public void update() { update(0.25); }

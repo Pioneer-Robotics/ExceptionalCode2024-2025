@@ -45,17 +45,22 @@ public class SpecimenArm {
     // Preset movements
     public void movePrepHang(double speed) {
         moveToPos(Config.specimenArmPrepHang, speed);
-        wrist.closeServo();
     }
 
-    public void moveHangDown(double speed) {
+    public void movePostHang(double speed) {
         moveToPos(Config.specimenArmPostHang, speed);
-        wrist.closeServo();
     }
 
     public void moveToCollect(double speed) {
         moveToPos(Config.specimenArmCollect, speed);
-        wrist.openServo();
+    }
+
+    public void movePrepHangUp(double speed) {
+        moveToPos(Config.specimenArmPrepHangUp, speed);
+    }
+
+    public void movePostHangUp(double speed) {
+        moveToPos(Config.specimenArmPostHangUp, speed);
     }
 
     // Servo control

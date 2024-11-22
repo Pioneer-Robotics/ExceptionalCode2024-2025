@@ -29,8 +29,8 @@ public class SpecimenAuto extends LinearOpMode {
 
             switch (state) {
                 case INIT:
-                    Bot.purePursuit.setTargetPath(new double[][]{{0, 0}, {-25.0, 63.5}});
-                    Bot.specimenArm.movePrepHang(0.5);
+                    Bot.purePursuit.setTargetPath(new double[][]{{0, 0}, {-25.0, 62}});
+                    Bot.specimenArm.movePrepHangUp(0.5);
                     state = State.SPECIMEN_HANG_1;
                     break;
 
@@ -38,17 +38,18 @@ public class SpecimenAuto extends LinearOpMode {
                     Bot.purePursuit.update();
                     if (Bot.purePursuit.reachedTarget()) {
                         Bot.purePursuit.stop();
-                        Bot.specimenArm.moveHangDown(1.0);
+                        Bot.specimenArm.movePostHangUp(1.0);
                         timer.reset();
                         state = State.SPECIMEN_HANG_2;
                     }
                     break;
 
                 case SPECIMEN_HANG_2:
-                    if (timer.seconds() > 0.5) {
+                    if (timer.seconds() > 0.75) {
                         Bot.specimenArm.openClaw();
-                        double[] pointsX = {-28,115,16,100,85};
-                        double[] pointsY = {64,20,140,158,25};
+                        Bot.specimenArm.moveToCollect(0.4);
+                        double[] pointsX = {-28,16,76,39,102,85};
+                        double[] pointsY = {64,8,12,141,149,25};
                         double[][] path = BezierCalc.nDegBez(pointsX, pointsY, 50);
                         Bot.purePursuit.setTargetPath(path);
                         timer.reset();
@@ -59,9 +60,6 @@ public class SpecimenAuto extends LinearOpMode {
 
                 case OBSERVATION_ZONE:
                     Bot.purePursuit.update(0.25);
-                    if (timer.seconds() > 1) {
-                        Bot.specimenArm.moveToCollect(0.4);
-                    }
                     if (Bot.purePursuit.reachedTarget(2)) {
                         double[] pointsX = {85,46,105,110};
                         double[] pointsY = {25,130,190,25};

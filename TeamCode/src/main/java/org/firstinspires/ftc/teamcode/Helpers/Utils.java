@@ -81,4 +81,15 @@ public class Utils {
     public static long choose(int n, int k) {
         return((factorial(n)) / (factorial(k) * factorial(n-k)));
     }
+
+    public static double[][] pathToXY(double[][] path) {
+        // convert path from [[x1, y1], [x2, y2], ...] to [x1, x2, ...] and [y1, y2, ...]
+        double[] x = new double[path.length];
+        double[] y = new double[path.length];
+        for (int i = 0; i < path.length; i++) {
+            x[i] = path[i][0];
+            y[i] = path[i][1];
+        }
+        return new double[][]{x, y};
+    }
 }

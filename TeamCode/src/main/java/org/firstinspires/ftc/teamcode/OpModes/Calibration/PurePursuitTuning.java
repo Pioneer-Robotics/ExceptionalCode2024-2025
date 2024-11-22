@@ -1,20 +1,21 @@
 package org.firstinspires.ftc.teamcode.OpModes.Calibration;
 
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.Helpers.BezierCalc;
 import org.firstinspires.ftc.teamcode.Helpers.Utils;
 
-@Autonomous(name="PID Tuning", group="Calibration")
-public class PIDTuning extends LinearOpMode {
+@Autonomous(name="Pure Pursuit Tuning", group="Calibration")
+public class PurePursuitTuning extends LinearOpMode {
     // Uses FTC Dashboard to display robot position and target point
     enum State {
-        DRIVE_FORWARD,
-        DRIVE_BACKWARD
+        DRIVE_FORWARD, // follow a path forward
+        DRIVE_BACKWARD // follow a path backward
     }
     State state = State.DRIVE_FORWARD;
     public void runOpMode() {
@@ -29,14 +30,18 @@ public class PIDTuning extends LinearOpMode {
             double[][] path = new double[][] {};
             switch (state) {
                 case DRIVE_FORWARD:
-                    path = new double[][]{{0, 0}, {0, 100}};
+                    double[] px = {0, 0, 100, 100};
+                    double[] py = {0, 100, 0, 100};
+                    path = BezierCalc.nDegBez(px, py, 25);
                     Bot.purePursuit.setTargetPath(path);
                     if (Bot.purePursuit.reachedTarget()) {
                         state = State.DRIVE_BACKWARD;
                     }
                     break;
                 case DRIVE_BACKWARD:
-                    path = new double[][]{{0, 100}, {0, 0}};
+                    double[] px2 = {100, 100, 0, 0};
+                    double[] py2 = {100, 0, 100, 0};
+                    path = BezierCalc.nDegBez(px2, py2, 25);
                     Bot.purePursuit.setTargetPath(path);
                     if (Bot.purePursuit.reachedTarget()) {
                         state = State.DRIVE_FORWARD;
@@ -52,6 +57,7 @@ public class PIDTuning extends LinearOpMode {
             double inchesPerCentimeter = 0.394;
             packet.fieldOverlay().
                     setScale(inchesPerCentimeter, inchesPerCentimeter).
+                    setStroke("#FFFFFF").
                     setStrokeWidth(3).
                     strokePolyline(Utils.pathToXY(path)[1], Utils.pathToXY(path)[0]).
                     setStroke("#0000FF").

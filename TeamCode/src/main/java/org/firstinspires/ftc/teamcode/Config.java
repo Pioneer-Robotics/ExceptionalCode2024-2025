@@ -20,13 +20,13 @@ public class Config {
     public static final double maxSlideTicksPerSecond = 2700;
 
     // PID constants
-    public static double[] drivePID = {0.075, 0.0001, 0}; // kP, kI, kD
+    public static double[] drivePID = {0.08, 0.00015, 0}; // kP, kI, kD
     public static double[] turnPID = {5, 0, 0}; // kP, kI, kD
-    public static double driveSpeed = 0.25;
+    public static double driveSpeed = 0.3;
 
     // Tolerances
     // How close the robot needs to be to the target position to stop (in cm)
-    public static double driveTolerance = 0.5;
+    public static double driveTolerance = 0.75;
     // How close the robot needs to be to the target angle to stop (in radians)
     public static double turnTolerance = 0.05;
     public static final double specimenArmTolerance = 5; // Motor ticks
@@ -70,7 +70,9 @@ public class Config {
     // ---- Motor Positions ----
     // Specimen Arm
     public static final double defaultSpecimenArmSpeed = 0.5;
-    public static final int specimenArmPostHang = 575;
+    public static final int specimenArmPostHang = 1050;
     public static final int specimenArmPrepHang = 850;
-    public static final int specimenArmCollect = 1650;
+    public static final int specimenArmCollect = 1850;
+    public static final int specimenArmPrepHangUp = 975;
+    public static final int specimenArmPostHangUp = 675;
 }
