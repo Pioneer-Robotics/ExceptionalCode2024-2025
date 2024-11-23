@@ -43,5 +43,4 @@ public class LightPattern {
 
         ledController.lightsOn(Patterns[patternNumber]);
     }
-
 }

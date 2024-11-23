@@ -1,20 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 
-
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
-import org.firstinspires.ftc.teamcode.Hardware.Collector;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
-import org.firstinspires.ftc.teamcode.Hardware.LinearSlide;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
-import org.firstinspires.ftc.teamcode.Hardware.ServoClass;
+import org.firstinspires.ftc.teamcode.Hardware.SpecimenArm;
 import org.firstinspires.ftc.teamcode.Hardware.VoltageHandler;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Odometry;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PIDDrive;
+import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PurePursuit;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.SparkfunOTOS;
 
 /**
@@ -24,16 +21,15 @@ import org.firstinspires.ftc.teamcode.SelfDrivingAuto.SparkfunOTOS;
  */
 public class Bot {
     public static LinearOpMode opMode;
-    public static PIDDrive pidDrive;
     public static BotIMU imu;
-    public static LinearSlide slide;
     public static LEDController led;
+    public static SpecimenArm specimenArm;
+    public static PIDDrive pidDrive;
     public static MecanumBase mecanumBase;
     public static SparkfunOTOS optical_odom;
     public static Odometry deadwheel_odom;
     public static VoltageHandler voltageHandler;
-    public static Collector collector;
-    public static ServoClass pixelDropLeft, pixelDropRight, gripper, wrist;
+    public static PurePursuit purePursuit;
 
     /**
      * Constructor for Bot.
@@ -47,16 +43,13 @@ public class Bot {
         Bot.deadwheel_odom = new Odometry();
         Bot.mecanumBase = new MecanumBase();
         Bot.pidDrive = new PIDDrive();
+        Bot.purePursuit = new PurePursuit(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2]);
 
         // Motors
-        Bot.slide = new LinearSlide();
-        Bot.collector = new Collector();
+        Bot.specimenArm = new SpecimenArm();
 
         // Servos
-        Bot.pixelDropLeft = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.leftDropServo), Config.leftOpenPos, Config.leftClosedPos, Config.leftClosedPos);
-        Bot.pixelDropRight = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.rightDropServo), Config.rightOpenPos, Config.rightClosedPos, Config.rightClosedPos);
-        Bot.gripper = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.gripperServo), Config.gripperOpen, Config.gripperClosed, Config.gripperOpen);
-        Bot.wrist = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.wristServo), Config.wristVertical, Config.wristHorizontal, Config.wristHorizontal);
+        
 
         // Other
         Bot.voltageHandler = new VoltageHandler();

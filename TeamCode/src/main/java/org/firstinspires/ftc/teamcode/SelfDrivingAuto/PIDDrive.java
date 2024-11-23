@@ -12,9 +12,7 @@ import org.firstinspires.ftc.teamcode.Helpers.Utils;
  * Simple point to point using PID
  */
 public class PIDDrive {
-    public PIDDrive() {
-        Bot.mecanumBase.setNorthMode(true);
-    }
+    public PIDDrive() {}
 
     /**
      * Move to a position using PID
@@ -38,7 +36,7 @@ public class PIDDrive {
         PID turnPID = new PID(Config.turnPID[0], Config.turnPID[1], Config.turnPID[2], theta - currentTheta);
 
         // Used to gradually accelerate
-        double speedMultiplier = 0.1;
+        double accelerationMultiplier = 0.1;
 
         // Loop until the robot reaches the target position or the op mode is stopped
         while (Math.abs(x - currentX) > Config.driveTolerance || Math.abs(y - currentY) > Config.driveTolerance || Math.abs(theta - currentTheta) > Config.turnTolerance && !Bot.opMode.isStopRequested()) {
@@ -48,13 +46,13 @@ public class PIDDrive {
             currentTheta = Bot.optical_odom.getHeading();
 
             // Calculate PID outputs
-            double xOutput = xPID.calculate(currentX, x, speed);
-            double yOutput = yPID.calculate(currentY, y, speed);
-            double turnOutput = turnPID.calculate(currentTheta, theta, speed, true);
+            double xOutput = xPID.calculate(currentX, x);
+            double yOutput = yPID.calculate(currentY, y);
+            double turnOutput = turnPID.calculate(currentTheta, theta, true);
 
             // Move the robot based on the PID outputs
-            Bot.mecanumBase.move_vector(xOutput * speedMultiplier, yOutput * speedMultiplier, turnOutput * speedMultiplier);
-            speedMultiplier = Utils.increment(speedMultiplier, Config.acceleration, 1);
+            Bot.mecanumBase.move(xOutput, yOutput, turnOutput, speed * accelerationMultiplier);
+            accelerationMultiplier = Utils.increment(accelerationMultiplier, Config.acceleration, 1);
 
             // Telemetry
             Bot.opMode.telemetry.addData("X", currentX);
@@ -121,4 +119,6 @@ public class PIDDrive {
     public void moveRelative(double x, double y) {
         moveRelative(x, y, 0, 0.6);
     }
+
+    public void setOrigin() {}
 }
