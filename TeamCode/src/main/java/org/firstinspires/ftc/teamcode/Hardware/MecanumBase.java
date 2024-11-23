@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 
 public class MecanumBase {
     private final DcMotorEx LF, LB, RF, RB;
+    private boolean northMode = false;
     public MecanumBase() {
         // Set up motors
         RF = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.motorRF);
@@ -53,6 +55,9 @@ public class MecanumBase {
         double powerRB = (y + x - turn) / denominator;
         double powerLB = (y - x + turn) / denominator;
 
+        if (northMode) {
+        }
+
         RF.setVelocity(powerRF * Config.maxDriveTicksPerSecond * speed);
         LF.setVelocity(powerLF * Config.maxDriveTicksPerSecond * speed);
         RB.setVelocity(powerRB * Config.maxDriveTicksPerSecond * speed);
@@ -64,5 +69,9 @@ public class MecanumBase {
         LF.setVelocity(0);
         RB.setVelocity(0);
         LB.setVelocity(0);
+    }
+
+    public void setNorthMode(boolean northMode) {
+        this.northMode = northMode;
     }
 }

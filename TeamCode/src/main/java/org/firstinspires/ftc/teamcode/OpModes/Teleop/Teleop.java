@@ -37,7 +37,7 @@ public class Teleop extends LinearOpMode {
             // Toggle for field centric
             northModeToggle.toggle(gamepad1.a); // Toggle north mode
             // TODO: implement field centric to mecanumBase
-//            Bot.mecanumBase.setNorthMode(northModeToggle.get()); // Update north mode
+            Bot.mecanumBase.setNorthMode(northModeToggle.get()); // Update north mode
 
             if (gamepad1.x) {
                 Bot.imu.resetYaw();
@@ -62,23 +62,21 @@ public class Teleop extends LinearOpMode {
 //                Bot.specimenArm.move(0);
 //            }
 
+            // ---- GamePad 2 ----
             // Preset arm positions
-            if (gamepad1.dpad_up) {
+            if (gamepad2.dpad_up) {
+                Bot.specimenArm.movePostHang(1.0);
+            } else if (gamepad2.dpad_down) {
                 Bot.specimenArm.movePrepHang(0.5);
-            } else if (gamepad1.dpad_down) {
-                Bot.specimenArm.moveHangDown(1.0);
-            } else if (gamepad1.dpad_left) {
+            } else if (gamepad2.dpad_left) {
                 Bot.specimenArm.moveToCollect(0.5);
             }
 
             // Claw toggle
-            clawToggle.toggle(gamepad1.dpad_right);
+            clawToggle.toggle(gamepad2.b);
             if (clawToggle.justChanged()) {
                 Bot.specimenArm.setClawPosBool(clawToggle.get());
             }
-
-            // ---- GamePad 2 ----
-            // None
 
             // Get data for telemetry
 
