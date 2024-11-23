@@ -21,8 +21,9 @@ public class Config {
 
     // PID constants
     public static double[] drivePID = {0.08, 0.00015, 0}; // kP, kI, kD
-    public static double[] turnPID = {100, 0, 0}; // kP, kI, kD
+    public static double[] turnPID = {2, 0.00075, 0}; // kP, kI, kD
     public static double driveSpeed = 0.3;
+    public static double minSpeed = 0.05;
 
     // Tolerances
     // How close the robot needs to be to the target position to stop (in cm)
@@ -73,6 +74,6 @@ public class Config {
     public static final int specimenArmPostHang = 1100;
     public static final int specimenArmPrepHang = 825;
     public static final int specimenArmCollect = 1850;
-    public static final int specimenArmPrepHangUp = 1000;
-    public static final int specimenArmPostHangUp = 675;
+    public static final int specimenArmPrepHangUp = 950;
+    public static final int specimenArmPostHangUp = 550;
 }

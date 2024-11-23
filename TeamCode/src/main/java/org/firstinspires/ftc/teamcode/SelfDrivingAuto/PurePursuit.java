@@ -10,13 +10,13 @@ public class PurePursuit {
     public PurePursuit(double kP, double kI, double kD) {
         xPID = new PID(kP, kI, kD);
         yPID = new PID(kP, kI, kD);
-        turnPID = new PID(kP, kI, kD);
+        turnPID = new PID(Config.turnPID[0], Config.turnPID[1], Config.turnPID[2]);
     }
 
     public PurePursuit(double kP, double kI, double kD, double initialError) {
         xPID = new PID(kP, kI, kD, initialError);
         yPID = new PID(kP, kI, kD, initialError);
-        turnPID = new PID(kP, kI, kD, initialError);
+        turnPID = new PID(Config.turnPID[0], Config.turnPID[1], Config.turnPID[2], initialError);
     }
 
     public void setTargetPath(double[][] path) {
@@ -142,8 +142,12 @@ public class PurePursuit {
         double[] pos = Bot.optical_odom.getPose();
         double moveX = xPID.calculate(pos[0], targetPoint[0]);
         double moveY = yPID.calculate(pos[1], targetPoint[1]);
-        double moveTheta = turnPID.calculate(Bot.deadwheel_odom.getTheta(), 0);
+        double moveTheta = turnPID.calculate(-Bot.imu.getRadians(), 0);
+        Bot.opMode.telemetry.addData("PID Theta", moveTheta);
+        Bot.opMode.telemetry.addData("PID X", moveX);
+        Bot.opMode.telemetry.addData("PID Y", moveY);
         // Move the robot
+        Bot.mecanumBase.setNorthMode(true);
         Bot.mecanumBase.move(moveX, moveY, moveTheta, speed);
     }
 

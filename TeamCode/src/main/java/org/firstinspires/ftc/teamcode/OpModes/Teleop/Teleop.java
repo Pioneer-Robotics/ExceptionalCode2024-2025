@@ -36,7 +36,6 @@ public class Teleop extends LinearOpMode {
 
             // Toggle for field centric
             northModeToggle.toggle(gamepad1.a); // Toggle north mode
-            // TODO: implement field centric to mecanumBase
             Bot.mecanumBase.setNorthMode(northModeToggle.get()); // Update north mode
 
             if (gamepad1.x) {

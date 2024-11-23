@@ -49,14 +49,19 @@ public class MecanumBase {
      * @param speed Master multiplier
      */
     public void move(double x, double y, double turn, double speed) {
+        if (northMode) {
+            // Rotate x and y
+            double theta = -Bot.imu.getRadians();
+            double tempX = x * Math.cos(theta) - y * Math.sin(theta);
+            double tempY = x * Math.sin(theta) + y * Math.cos(theta);
+            x = tempX;
+            y = tempY;
+        }
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(turn), 1);
         double powerRF = (y - x - turn) / denominator;
         double powerLF = (y + x + turn) / denominator;
         double powerRB = (y + x - turn) / denominator;
         double powerLB = (y - x + turn) / denominator;
-
-        if (northMode) {
-        }
 
         RF.setVelocity(powerRF * Config.maxDriveTicksPerSecond * speed);
         LF.setVelocity(powerLF * Config.maxDriveTicksPerSecond * speed);
