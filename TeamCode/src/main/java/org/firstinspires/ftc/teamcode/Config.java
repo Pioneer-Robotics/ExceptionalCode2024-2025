@@ -71,9 +71,9 @@ public class Config {
     // ---- Motor Positions ----
     // Specimen Arm
     public static final double defaultSpecimenArmSpeed = 0.5;
-    public static final int specimenArmPostHang = 1100;
-    public static final int specimenArmPrepHang = 825;
-    public static final int specimenArmCollect = 1850;
-    public static final int specimenArmPrepHangUp = 950;
-    public static final int specimenArmPostHangUp = 550;
+    public static final int specimenArmPostHang = 1200;
+    public static final int specimenArmPrepHang = 800;
+    public static final int specimenArmCollect = 1800;
+    public static final int specimenArmPrepHangUp = 1000;
+    public static final int specimenArmPostHangUp = 600;
 }

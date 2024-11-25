@@ -54,6 +54,8 @@ public class SparkfunOTOS {
 
     public double[] getVelocity() { return new double[] {otos.getVelocity().x, otos.getVelocity().y, otos.getVelocity().h}; }
 
+    public double getAbsoluteVelocity() {return Math.sqrt(Math.pow(otos.getVelocity().x, 2) + Math.pow(otos.getVelocity().y, 2));}
+
     public void setPose(double x, double y, double h) {
         SparkFunOTOS.Pose2D pose = new SparkFunOTOS.Pose2D(x, y, h);
         otos.setPosition(pose);

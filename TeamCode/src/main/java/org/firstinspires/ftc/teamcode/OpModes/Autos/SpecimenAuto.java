@@ -28,21 +28,23 @@ public class SpecimenAuto extends LinearOpMode {
         Bot.init(this);
         ElapsedTime timer = new ElapsedTime();
 
+        double offset = 0;
         boolean stop = false;
+        boolean collect = false;
 
         waitForStart();
         while (opModeIsActive()) {
 
             switch (state) {
                 case INIT:
-                    Bot.purePursuit.setTargetPath(new double[][]{Bot.optical_odom.getPose(), {12, 64}});
+                    Bot.purePursuit.setTargetPath(new double[][]{Bot.optical_odom.getPose(), {-7, 77}});
                     Bot.specimenArm.movePrepHangUp(0.5);
                     state = State.SPECIMEN_HANG_1;
                     break;
 
                 case SPECIMEN_HANG_1:
                     Bot.purePursuit.update();
-                    if (Bot.purePursuit.reachedTarget()) {
+                    if (Bot.purePursuit.reachedTarget() || (Bot.purePursuit.reachedTarget(5) && Bot.optical_odom.getAbsoluteVelocity() < 2)) {
                         Bot.purePursuit.stop();
                         Bot.specimenArm.movePostHangUp(1.0);
                         timer.reset();
@@ -51,17 +53,23 @@ public class SpecimenAuto extends LinearOpMode {
                     break;
 
                 case SPECIMEN_HANG_2:
-                    if (timer.seconds() > 0.3) {
+                    if (timer.seconds() > 0.5) {
                         Bot.specimenArm.openClaw();
                         if (stop) {
-                            double[][] path = {{Bot.optical_odom.getX(), Bot.optical_odom.getY()}, {110, 5}};
+                            double[][] path = {{Bot.optical_odom.getX(), Bot.optical_odom.getY()}, {110, 0}};
                             Bot.purePursuit.setTargetPath(path);
                             state = State.PARK;
                             break;
+                        } else if (collect) {
+                            double[] pointsX = {115,105,90};
+                            double[] pointsY = {45,-5.75,-5.75};
+                            double[][] path = BezierCalc.nDegBez(pointsX, pointsY, 25);
+                            Bot.purePursuit.setTargetPath(path);
+                            state = State.COLLECT_SPECIMEN_1;
+                            break;
                         }
-                        Bot.specimenArm.moveToCollect(0.5);
-                        double[] pointsX = {12,25,110,60,100,85};
-                        double[] pointsY = {64,-14,0,305,140,22};
+                        double[] pointsX = {-15,25,110,60,100,85};
+                        double[] pointsY = {77,-14,0,305,140,22};
                         double[][] path = BezierCalc.nDegBez(pointsX, pointsY, 50);
                         Bot.purePursuit.setTargetPath(path);
                         timer.reset();
@@ -84,16 +92,17 @@ public class SpecimenAuto extends LinearOpMode {
                 case OBSERVATION_ZONE_2:
                     Bot.purePursuit.update(0.5);
                     if (Bot.purePursuit.reachedTarget(4)) {
-                        double[] pointsX = {120,75,25,75};
-                        double[] pointsY = {25,55,25,3};
-                        double[][] path = BezierCalc.nDegBez(pointsX, pointsY, 50);
+                        double[] pointsX = {120,115,105,90};
+                        double[] pointsY = {25,45,-5.75,-5.75};
+                        double[][] path = BezierCalc.nDegBez(pointsX, pointsY, 25);
                         Bot.purePursuit.setTargetPath(path);
                         state = State.COLLECT_SPECIMEN_1;
                     }
                     break;
 
                 case COLLECT_SPECIMEN_1:
-                    Bot.purePursuit.update(0.35);
+                    Bot.purePursuit.update(0.4);
+                    Bot.specimenArm.moveToCollect(0.5);
                     if (Bot.purePursuit.reachedTarget()) {
                         Bot.purePursuit.stop();
                         Bot.specimenArm.closeClaw();
@@ -103,20 +112,28 @@ public class SpecimenAuto extends LinearOpMode {
                     break;
 
                 case COLLECT_SPECIMEN_2:
-                    if (timer.seconds() > 0.3) {
-                        Bot.purePursuit.setTargetPath(new double[][]{Bot.optical_odom.getPose(), {0, 64}});
+                    if (timer.seconds() > 1) {
+                        offset -= 6;
+                        double[] pointsX = {Bot.optical_odom.getX(), 0, -7+offset};
+                        double[] pointsY = {Bot.optical_odom.getY(), 0, 70};
+                        double[][] path = BezierCalc.nDegBez(pointsX, pointsY, 25);
+                        Bot.purePursuit.setTargetPath(path);
                         Bot.specimenArm.movePrepHang(0.5);
                         state = State.SPECIMEN_HANG_DOWN;
                     }
                     break;
 
                 case SPECIMEN_HANG_DOWN:
-                    Bot.purePursuit.update();
-                    if (Bot.purePursuit.reachedTarget()) {
+                    Bot.purePursuit.update(0.35);
+                    if (Bot.purePursuit.reachedTarget() || (Bot.purePursuit.reachedTarget(10) && Bot.optical_odom.getAbsoluteVelocity() < 2)) {
                         Bot.purePursuit.stop();
                         Bot.specimenArm.movePostHang(1.0);
                         timer.reset();
-                        stop = true;
+                        if (collect) {
+                            stop = true;
+                        } else {
+                            collect = true;
+                        }
                         state = State.SPECIMEN_HANG_2;
                     }
                     break;
@@ -132,6 +149,7 @@ public class SpecimenAuto extends LinearOpMode {
             telemetry.addData("X", Bot.optical_odom.getX());
             telemetry.addData("Y", Bot.optical_odom.getY());
             telemetry.addData("Theta", Bot.optical_odom.getHeading());
+            telemetry.addData("Absolute Velocity", Bot.optical_odom.getAbsoluteVelocity());
             telemetry.update();
         }
     }

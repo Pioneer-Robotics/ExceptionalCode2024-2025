@@ -64,9 +64,9 @@ public class Teleop extends LinearOpMode {
             // ---- GamePad 2 ----
             // Preset arm positions
             if (gamepad2.dpad_up) {
-                Bot.specimenArm.movePostHang(1.0);
+                Bot.specimenArm.movePostHangUp(1.0);
             } else if (gamepad2.dpad_down) {
-                Bot.specimenArm.movePrepHang(0.5);
+                Bot.specimenArm.movePrepHangUp(0.5);
             } else if (gamepad2.dpad_left) {
                 Bot.specimenArm.moveToCollect(0.5);
             }
@@ -91,6 +91,9 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("Speed", maxSpeed);
             telemetry.addData("Arm Pos", Bot.specimenArm.getPositionTicks());
             telemetry.addData("Voltage", voltage);
+            telemetry.addData("X Pos", Bot.optical_odom.getX());
+            telemetry.addData("Y Pos", Bot.optical_odom.getY());
+            telemetry.addData("Theta", Bot.imu.getRadians());
             telemetry.update();
         }
     }
