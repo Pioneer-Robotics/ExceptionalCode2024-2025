@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class colorTestTeleop extends LinearOpMode {
     RevColorSensorV3 colorSensor;
     int bitShiftBlue, bitShiftRed, bitShiftGreen, bitShiftAlpha;
-    double distance;
+    double distance, colDivARed, colDivAGreen, colDivABlue,red, green, blue, alpha, max;
     float[] hsvValues = {0F,0F,0F};
     NormalizedRGBA normColors;
     float normBlue, normRed, normGreen;
@@ -35,9 +35,18 @@ public class colorTestTeleop extends LinearOpMode {
             //            normColors.toColor()
             distance = colorSensor.getDistance(DistanceUnit.MM);
 
+            red = colorSensor.red();
+            green = colorSensor.green();
+            blue = colorSensor.blue();
+            alpha = colorSensor.alpha();
+
+            colDivARed = red/alpha;
+            colDivAGreen = green/alpha;
+            colDivABlue = blue/alpha;
+
             bitShiftRed = (colorSensor.red()>>8);
-            bitShiftGreen = (colorSensor.green()>>16);
-            bitShiftBlue = (colorSensor.blue()>>24);
+            bitShiftGreen = (colorSensor.green()>>8);
+            bitShiftBlue = (colorSensor.blue()>>8);
             bitShiftAlpha = (colorSensor.alpha());
 
             colorSensor.getNormalizedColors();
@@ -53,11 +62,29 @@ public class colorTestTeleop extends LinearOpMode {
 
 //            telemetry.addData("HSV", hsvValues);
 //            telemetry.addData("Norm Colors", normColors);
+            telemetry.addData("colDivA Red", colDivARed);
+            telemetry.addData("colDivA Green", colDivAGreen);
+            telemetry.addData("colDivA Blue", colDivABlue);
+
+            telemetry.addData("colDivA Red *255", colDivARed*255);
+            telemetry.addData("colDivA Green *255", colDivAGreen*255);
+            telemetry.addData("colDivA Blue *255", colDivABlue*255);
+
+            max = Math.max(colDivARed, colDivAGreen);
+
+            max = Math.max(max, colDivABlue);
+
+            if(max>255){
+
+            }
+
+            telemetry.addData("Shift Red", bitShiftRed);
+            telemetry.addData("Shift Green", bitShiftGreen);
+            telemetry.addData("Shift Blue", bitShiftBlue);
 
             telemetry.addData("Percent Red", 100.0 * (normColors.red / normColors.alpha));
             telemetry.addData("Percent Green", 100.0 * (normColors.green / normColors.alpha));
             telemetry.addData("Percent Blue", 100.0 * (normColors.blue / normColors.alpha));
-
 
             telemetry.addData("Norm blue (mult 100)", normColors.blue * 100.0);
             telemetry.addData("Norm red (mult 100)", normColors.red * 100.0);
