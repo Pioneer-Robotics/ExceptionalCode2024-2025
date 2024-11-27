@@ -5,7 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Bot;
+import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
+import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PID;
 
 
 @TeleOp(name="Specimen Arm Teleop")
@@ -19,6 +21,10 @@ public class Teleop extends LinearOpMode {
         Toggle decSpeedToggle = new Toggle(false);
         Toggle clawToggle = new Toggle(false);
 
+        // PID
+        PID turnPID = new PID(Config.turnPID[0], Config.turnPID[1], Config.turnPID[2]);
+        double turnTarget = 0;
+
         // Initialize max speed
         double maxSpeed = 0.5;
 
@@ -29,10 +35,10 @@ public class Teleop extends LinearOpMode {
             // Inputs for driving
             double px = gamepad1.left_stick_x;
             double py = -gamepad1.left_stick_y;
-            double turn = gamepad1.right_stick_x;
+            turnTarget += gamepad1.right_stick_x/15;
 
             // Move
-            Bot.mecanumBase.move(px, py, turn, maxSpeed);
+            Bot.mecanumBase.move(px, py, turnPID.calculate(-Bot.imu.getRadians(), turnTarget), maxSpeed);
 
             // Toggle for field centric
             northModeToggle.toggle(gamepad1.a); // Toggle north mode
@@ -64,9 +70,9 @@ public class Teleop extends LinearOpMode {
             // ---- GamePad 2 ----
             // Preset arm positions
             if (gamepad2.dpad_up) {
-                Bot.specimenArm.movePostHangUp(1.0);
+                Bot.specimenArm.movePostHang(1.0);
             } else if (gamepad2.dpad_down) {
-                Bot.specimenArm.movePrepHangUp(0.5);
+                Bot.specimenArm.movePrepHang(0.5);
             } else if (gamepad2.dpad_left) {
                 Bot.specimenArm.moveToCollect(0.5);
             }
@@ -89,6 +95,7 @@ public class Teleop extends LinearOpMode {
 
             // Telemetry and update
             telemetry.addData("Speed", maxSpeed);
+            telemetry.addData("Heading Target", turnTarget);
             telemetry.addData("Arm Pos", Bot.specimenArm.getPositionTicks());
             telemetry.addData("Voltage", voltage);
             telemetry.addData("X Pos", Bot.optical_odom.getX());

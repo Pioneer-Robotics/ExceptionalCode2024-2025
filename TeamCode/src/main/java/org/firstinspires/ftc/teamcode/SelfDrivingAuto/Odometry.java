@@ -119,7 +119,7 @@ public class Odometry{
      * Calls calculate() to update the values
      * @return double[] {x, y, theta}
      */
-    public double[] returnPose(){
+    public double[] getPose(){
         calculate();
         return (new double[]{x, y, theta});
     }

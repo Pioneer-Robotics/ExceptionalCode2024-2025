@@ -32,7 +32,7 @@ public class Config {
     public static double turnTolerance = 0.05;
     public static final double specimenArmTolerance = 5; // Motor ticks
 
-    public static double lookAhead = 15;
+    public static double lookAhead = 12;
 
     // Used to gradually accelerate
     // Multiplier starts at 0.1 and increments by acceleration each loop up to 1
@@ -71,9 +71,9 @@ public class Config {
     // ---- Motor Positions ----
     // Specimen Arm
     public static final double defaultSpecimenArmSpeed = 0.5;
-    public static final int specimenArmPostHang = 1200;
+    public static final int specimenArmPostHang = 1250;
     public static final int specimenArmPrepHang = 800;
-    public static final int specimenArmCollect = 1800;
+    public static final int specimenArmCollect = 1840;
     public static final int specimenArmPrepHangUp = 1000;
     public static final int specimenArmPostHangUp = 600;
 }
