@@ -17,7 +17,6 @@ public class OdometryTuning extends LinearOpMode {
         while (opModeIsActive()) {
             Bot.purePursuit.setTargetPath(new double[][] {{0,0}, {0,180}});
             while(!Bot.purePursuit.reachedTarget()) {
-                Bot.purePursuit.update();
                 TelemetryPacket packet = new TelemetryPacket(false);
                 packet.put("X", Bot.optical_odom.getX());
                 packet.put("Y", Bot.optical_odom.getY());
@@ -28,7 +27,6 @@ public class OdometryTuning extends LinearOpMode {
             Utils.sleep(5);
             Bot.purePursuit.setTargetPath(new double[][] {{0,180}, {180,180}});
             while(!Bot.purePursuit.reachedTarget()) {
-                Bot.purePursuit.update();
                 TelemetryPacket packet = new TelemetryPacket(false);
                 packet.put("X", Bot.optical_odom.getX());
                 packet.put("Y", Bot.optical_odom.getY());
