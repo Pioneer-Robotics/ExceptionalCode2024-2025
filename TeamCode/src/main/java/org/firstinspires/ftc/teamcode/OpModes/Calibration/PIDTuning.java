@@ -43,7 +43,6 @@ public class PIDTuning extends LinearOpMode {
                     }
                     break;
             }
-            Bot.purePursuit.update(Config.driveSpeed);
 
             double[] pos = Bot.optical_odom.getPose();
             double[] target = Bot.purePursuit.getTargetPoint(Config.lookAhead);
