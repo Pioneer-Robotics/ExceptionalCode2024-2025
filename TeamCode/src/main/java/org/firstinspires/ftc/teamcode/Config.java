@@ -76,4 +76,9 @@ public class Config {
     public static final int specimenArmCollect = 1840;
     public static final int specimenArmPrepHangUp = 1000;
     public static final int specimenArmPostHangUp = 600;
+
+    // ---- Coordinates of note ----
+    // Coordinates of first specimen hang
+    public static final double specHangX = -10;
+    public static final double specHangY = 80;
 }
