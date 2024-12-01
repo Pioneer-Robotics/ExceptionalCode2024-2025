@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.Hardware.LEDController;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
 import org.firstinspires.ftc.teamcode.Hardware.SpecimenArm;
 import org.firstinspires.ftc.teamcode.Hardware.VoltageHandler;
+import org.firstinspires.ftc.teamcode.Helpers.TrueAngle;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Odometry;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PIDDrive;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PurePursuit;
@@ -30,6 +31,7 @@ public class Bot {
     public static Odometry deadwheel_odom;
     public static VoltageHandler voltageHandler;
     public static PurePursuit purePursuit;
+    public static TrueAngle trueAngle;
 
     /**
      * Constructor for Bot.
@@ -40,7 +42,7 @@ public class Bot {
 
         // Drive base and self driving
         Bot.optical_odom = new SparkfunOTOS();
-        Bot.deadwheel_odom = new Odometry();
+        Bot.deadwheel_odom = new Odometry(Config.specimenStartX, Config.specimenStartY, 0);
         Bot.mecanumBase = new MecanumBase();
         Bot.pidDrive = new PIDDrive();
         Bot.purePursuit = new PurePursuit(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2]);

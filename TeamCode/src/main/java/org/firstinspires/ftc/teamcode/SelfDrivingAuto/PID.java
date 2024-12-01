@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
  */
 public class PID {
     private final double kP, kI, kD;
-    private double integral, prevError;
+    private double integral, prevError, tolerance;
     private boolean haltIntegral; // Stop the integral from accumulating if the system is moving at 100% to prevent windup
 
     /**
@@ -25,6 +25,7 @@ public class PID {
         integral = 0;
         prevError = 0;
         haltIntegral = false;
+        tolerance = 0;
     }
 
     /**
@@ -42,6 +43,25 @@ public class PID {
         integral = 0;
         prevError = initialError;
         haltIntegral = false;
+        tolerance = 0;
+    }
+
+    /**
+     * Constructor for PID controller with initial error
+     * @param kP Proportional constant
+     * @param kI Integral constant
+     * @param kD Derivative constant
+     * @param tolerance Initial error
+     */
+    public PID (double kP, double kI, double kD, double initialError, double tolerance) {
+        this.kP = kP;
+        this.kI = kI;
+        this.kD = kD;
+
+        integral = 0;
+        prevError = initialError;
+        haltIntegral = false;
+        this.tolerance = tolerance;
     }
 
     /**
@@ -94,6 +114,10 @@ public class PID {
             haltIntegral = true;
         } else {
             haltIntegral = false;
+        }
+
+        if (Math.abs(error) < tolerance) {
+            move = 0;
         }
 
         // Return the move

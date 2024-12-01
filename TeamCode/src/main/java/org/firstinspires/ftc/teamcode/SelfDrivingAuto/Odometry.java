@@ -21,7 +21,7 @@ public class Odometry{
     private double x, y, theta;
     private double prevLeftTicks, prevRightTicks, prevCenterTicks;
 
-    public Odometry() {
+    public Odometry(double initX, double initY, double initTheta) {
         // Set up odometers
         odoLeft = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.odoLeft);
         odoRight = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.odoRight);
@@ -31,7 +31,9 @@ public class Odometry{
         odoRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odoCenter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        x = y = theta = 0;
+        x = initX;
+        y = initY;
+        theta = initTheta;
     }
 
     /**

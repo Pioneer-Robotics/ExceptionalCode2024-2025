@@ -71,9 +71,17 @@ public class Config {
     // ---- Motor Positions ----
     // Specimen Arm
     public static final double defaultSpecimenArmSpeed = 0.5;
-    public static final int specimenArmPostHang = 1200;
+    public static final int specimenArmPostHang = 1215; //was 1250
     public static final int specimenArmPrepHang = 800;
-    public static final int specimenArmCollect = 1800;
+    public static final int specimenArmCollect = 1880; //was 1840
     public static final int specimenArmPrepHangUp = 1000;
     public static final int specimenArmPostHangUp = 600;
+
+    // ---- Coordinates of note ----
+    // Coordinates of first specimen hang
+    public static final double specHangX = -10;
+    public static final double specHangY = 80;
+
+    public static final double specimenStartX = 200;
+    public static final double specimenStartY = 20.5;
 }
