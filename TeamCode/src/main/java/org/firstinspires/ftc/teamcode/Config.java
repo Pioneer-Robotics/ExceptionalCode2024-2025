@@ -58,6 +58,7 @@ public class Config {
     public static final String clawServo = "clawServo";
 
     // Other names
+    public static final String touchSensor = "touch";
     public static final String led = "led";
     public static final String imu = "expansionIMU";
 
@@ -77,11 +78,19 @@ public class Config {
     public static final int specimenArmPrepHangUp = 1000;
     public static final int specimenArmPostHangUp = 600;
 
-    // ---- Coordinates of note ----
-    // Coordinates of first specimen hang
-    public static final double specHangX = -10;
-    public static final double specHangY = 80;
+    // ---- Coordinates of note and auto config ----
+    // Specimen hang offset (space between hangs)
+    public static final double hangOffset = 6;
 
+    // Coordinates of first specimen hang
+    public static final double specHangX = 190;
+    public static final double specHangY = 97.5;
+
+    // Coordinates of observation zone park
+    public static final double parkX = 310;
+    public static final double parkY = 20.5;
+
+    // Robot starting position for specimen auto
     public static final double specimenStartX = 200;
     public static final double specimenStartY = 20.5;
 }

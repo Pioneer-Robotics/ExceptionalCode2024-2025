@@ -3,13 +3,13 @@ package org.firstinspires.ftc.teamcode;
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
 import org.firstinspires.ftc.teamcode.Hardware.SpecimenArm;
 import org.firstinspires.ftc.teamcode.Hardware.VoltageHandler;
-import org.firstinspires.ftc.teamcode.Helpers.TrueAngle;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Odometry;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PIDDrive;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PurePursuit;
@@ -31,7 +31,7 @@ public class Bot {
     public static Odometry deadwheel_odom;
     public static VoltageHandler voltageHandler;
     public static PurePursuit purePursuit;
-    public static TrueAngle trueAngle;
+    public static TouchSensor touchSensor;
 
     /**
      * Constructor for Bot.
@@ -54,6 +54,7 @@ public class Bot {
         
 
         // Other
+        Bot.touchSensor = opMode.hardwareMap.get(TouchSensor.class, Config.touchSensor);
         Bot.voltageHandler = new VoltageHandler();
         Bot.imu = new BotIMU();
         Bot.led = new LEDController();

@@ -5,26 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Bot;
-import org.firstinspires.ftc.teamcode.Helpers.BezierCalc;
+import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.Helpers.AutoPaths;
 
 // 1+2 No Wrist Servo
 @Autonomous(name="Specimen Auto", group="Autos")
 public class SpecimenAuto extends LinearOpMode {
-
-    // Possible states for the robot in auto
-    enum State {
-        INIT,
-        SPECIMEN_HANG_1,
-        SPECIMEN_HANG_2,
-        OBSERVATION_ZONE,
-        OBSERVATION_ZONE_2,
-        COLLECT_SPECIMEN_1,
-        COLLECT_SPECIMEN_2,
-        SPECIMEN_HANG_DOWN,
-        PARK,
-    }
-
-    State state = State.INIT;
 
     public void runOpMode() {
         Bot.init(this);
@@ -40,76 +26,82 @@ public class SpecimenAuto extends LinearOpMode {
             switch (state) {
 
                 // Set the initial path to hang preloaded specimen
-                // --> SPECIMEN_HANG_1
+                // --> SPECIMEN_HANG_UP
                 case INIT:
-                    Bot.purePursuit.setTargetPath(new double[][]{Bot.optical_odom.getPose(), {190, 97.5}});
-                    Bot.specimenArm.movePrepHangUp(0.5);
-                    state = State.SPECIMEN_HANG_1;
+                    AutoPaths.hangSpecimen(
+                            Bot.optical_odom.getX(), // Current X
+                            Bot.optical_odom.getY(), // Current Y
+                            offset // Hang offset X
+                    );
+                    state = State.SPECIMEN_HANG_UP;
                     break;
 
                 // Go to submersible, hang specimen
                 // --> SPECIMEN_HANG_2
-                case SPECIMEN_HANG_1:
-                    if (Bot.purePursuit.reachedTarget(0.4) || (Bot.purePursuit.reachedTarget(0.4, 5) && Bot.optical_odom.getAbsoluteVelocity() < 4)) {
+                case SPECIMEN_HANG_UP: // Hang specimen right side up
+                    if (Bot.purePursuit.reachedTarget(0.4) || Bot.touchSensor.isPressed()) {
                         Bot.purePursuit.stop();
-                        Bot.specimenArm.movePostHangUp(1.0);
-                        timer.reset();
+                        Bot.specimenArm.movePostHangUp(1.0); // Hang specimen
+                        timer.reset(); // Reset timer for next state
                         state = State.SPECIMEN_HANG_2;
                     }
                     break;
 
                 // Release specimen at submersible, set next path (3 possibilities)
-                // stop --> PARK; collect --> COLLECT_SPECIMEN_1; else --> OBSERVATION_ZONE
+                // stop --> PARK; collect --> COLLECT_SPECIMEN_1; else --> PUSH_SAMPLE_1
                 case SPECIMEN_HANG_2:
-                    if (timer.seconds() > 0.5) {
+                    if (timer.seconds() > 0.5) { // Wait for arm to go down
                         Bot.specimenArm.openClaw();
                         if (stop) {
                             // Set path to observation zone to park (PARK)
-                            double[][] path = {{Bot.optical_odom.getX(), Bot.optical_odom.getY()}, {310, 20.5}};
-                            Bot.purePursuit.setTargetPath(path);
+                            AutoPaths.park(
+                                    Bot.optical_odom.getX(), // Current X
+                                    Bot.optical_odom.getY() // Current Y
+                            );
                             state = State.PARK;
                             break;
                         } else if (collect) {
                             // Set path to observation zone to grab specimen (COLLECT_SPECIMEN_1)
-                            double[] pointsX = {315,305,290};
-                            double[] pointsY = {65.5,14.75,-14.75};
-                            double[][] path = BezierCalc.nDegBez(pointsX, pointsY, 25);
-                            Bot.purePursuit.setTargetPath(path);
+                            AutoPaths.collectSpecimen(
+                                    Bot.optical_odom.getX(), // Current X
+                                    Bot.optical_odom.getY() // Current Y
+                            );
                             state = State.COLLECT_SPECIMEN_1;
                             break;
+                        } else {
+                            // Set path to push first sample into observation zone (PUSH_SAMPLE_1)
+                            AutoPaths.pushSample1(
+                                    Bot.optical_odom.getX(), // Current X
+                                    Bot.optical_odom.getY() // Current Y
+                            );
+                            timer.reset();
+                            state = State.PUSH_SAMPLE_1;
                         }
-                        // Set path to push first sample into observation zone (OBSERVATION_ZONE)
-                        double[] pointsX = {185,225,310,260,300,285};
-                        double[] pointsY = {97.5,6.5,20.5,325.5,160.5,42.5};
-                        double[][] path = BezierCalc.nDegBez(pointsX, pointsY, 50);
-                        Bot.purePursuit.setTargetPath(path);
-                        timer.reset();
-                        state = State.OBSERVATION_ZONE;
                     }
                     // Move to next position
                     break;
 
                 // Bring first sample into observation zone, set path to bring second sample to
                 // observation zone
-                // --> OBSERVATION_ZONE_2
-                case OBSERVATION_ZONE:
+                // --> PUSH_SAMPLE_2
+                case PUSH_SAMPLE_1:
                     if (Bot.purePursuit.reachedTarget(0.5,4)) {
-                        double[] pointsX = {285,260,320,320};
-                        double[] pointsY = {42.5,150.5,210.5,45.5};
-                        double[][] path = BezierCalc.nDegBez(pointsX, pointsY, 50);
-                        Bot.purePursuit.setTargetPath(path);
-                        state = State.OBSERVATION_ZONE_2;
+                        AutoPaths.pushSample2(
+                                Bot.optical_odom.getX(), // Current X
+                                Bot.optical_odom.getY() // Current Y
+                        );
+                        state = State.PUSH_SAMPLE_2;
                     }
                     break;
 
                 // Bring second sample into observation zone, set path to collect specimen on fence
                 // --> COLLECT_SPECIMEN_1
-                case OBSERVATION_ZONE_2:
+                case PUSH_SAMPLE_2:
                     if (Bot.purePursuit.reachedTarget(0.5,4)) {
-                        double[] pointsX = {320,315,247.6,290};
-                        double[] pointsY = {45.5,65.5,25.5,14.75};
-                        double[][] path = BezierCalc.nDegBez(pointsX, pointsY, 25);
-                        Bot.purePursuit.setTargetPath(path);
+                        AutoPaths.collectSpecimen(
+                                Bot.optical_odom.getX(), // Current X
+                                Bot.optical_odom.getY() // Current Y
+                        );
                         state = State.COLLECT_SPECIMEN_1;
                     }
                     break;
@@ -120,7 +112,7 @@ public class SpecimenAuto extends LinearOpMode {
                     if (Bot.purePursuit.reachedTarget(0.5)) {
                         Bot.purePursuit.stop();
                         Bot.specimenArm.closeClaw();
-                        timer.reset();
+                        timer.reset(); // Reset timer for next state
                         state = State.COLLECT_SPECIMEN_2;
                     }
                     break;
@@ -129,13 +121,13 @@ public class SpecimenAuto extends LinearOpMode {
                 // from the original
                 // --> SPECIMEN_HANG_DOWN
                 case COLLECT_SPECIMEN_2:
-                    if (timer.seconds() > 1) {
-                        offset -= 6;
-                        double[] pointsX = {Bot.optical_odom.getX(), 200, -207+offset};
-                        double[] pointsY = {Bot.optical_odom.getY(), 20.5, 90.5};
-                        double[][] path = BezierCalc.nDegBez(pointsX, pointsY, 25);
-                        Bot.purePursuit.setTargetPath(path);
-                        Bot.specimenArm.movePrepHang(0.5);
+                    if (timer.seconds() > 1) { // Wait to grab the specimen
+                        offset -= Config.hangOffset; // Adjust the hang offset
+                        AutoPaths.hangSpecimen(
+                                Bot.optical_odom.getX(), // Current X
+                                Bot.optical_odom.getY(), // Current Y
+                                offset // Hang offset X
+                        );
                         state = State.SPECIMEN_HANG_DOWN;
                     }
                     break;
@@ -143,21 +135,23 @@ public class SpecimenAuto extends LinearOpMode {
                 // Go to submersible and hang specimen
                 // First time: Set collect to true. Second time: Set stop to true.
                 // --> SPECIMEN_HANG_2 (Creates a loop)
-                case SPECIMEN_HANG_DOWN:
-                    if (Bot.purePursuit.reachedTarget(0.4) || (Bot.purePursuit.reachedTarget(0.4,10) && Bot.optical_odom.getAbsoluteVelocity() < 4)) {
+                case SPECIMEN_HANG_DOWN: // Hang specimen upside down
+                    if (Bot.purePursuit.reachedTarget(0.4) || Bot.touchSensor.isPressed()) {
                         Bot.purePursuit.stop();
-                        Bot.specimenArm.movePostHang(1.0);
+                        Bot.specimenArm.movePostHang(1.0); // Move arm down
                         timer.reset();
                         if (collect) {
-                            stop = true;
+                            stop = true; // for 1+2
                         } else {
                             collect = true;
                         }
+                        // Waits for arm to go down
+                        // Decides what to do based on stop and collect booleans
                         state = State.SPECIMEN_HANG_2;
                     }
                     break;
 
-                // Go to observation zone to park
+                // Wait to reach observation zone to park
                 // End of auto
                 case PARK:
                     if (Bot.purePursuit.reachedTarget(1,5)) {
@@ -173,5 +167,20 @@ public class SpecimenAuto extends LinearOpMode {
             telemetry.addData("Absolute Velocity", Bot.optical_odom.getAbsoluteVelocity());
             telemetry.update();
         }
+    }
+
+    State state = State.INIT;
+
+    // Possible states for the robot in auto
+    enum State {
+        INIT,
+        SPECIMEN_HANG_UP,
+        SPECIMEN_HANG_2,
+        PUSH_SAMPLE_1,
+        PUSH_SAMPLE_2,
+        COLLECT_SPECIMEN_1,
+        COLLECT_SPECIMEN_2,
+        SPECIMEN_HANG_DOWN,
+        PARK,
     }
 }

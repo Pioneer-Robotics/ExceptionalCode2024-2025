@@ -97,6 +97,7 @@ public class Teleop extends LinearOpMode {
             }
 
             // Telemetry and update
+            telemetry.addData("Touch", Bot.touchSensor.isPressed());
             telemetry.addData("Speed", maxSpeed);
             telemetry.addData("Arm Pos", Bot.specimenArm.getPositionTicks());
             telemetry.addData("Voltage", voltage);

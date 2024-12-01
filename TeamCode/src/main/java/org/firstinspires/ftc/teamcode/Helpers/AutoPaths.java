@@ -4,16 +4,44 @@ import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 
 public class AutoPaths {
-
-    double initHangX = Config.specHangX;
-    double initHangY = Config.specHangY;
-    // After grabbing specimen from fence, go to submersible
-
-    public void hangSpecimenLinear(double currentX, double currentY, double offsetX, double offsetY) {
-        double[] pointsX = {currentX, 0, -initHangX + offsetX};
-        double[] pointsY = {currentY, 0, initHangY + offsetY};
+    public static void hangSpecimen(double currentX, double currentY, double offsetX) {
+        // Go to the submersible to hang a specimen
+        double[] pointsX = {currentX, 0, Config.specHangX + offsetX};
+        double[] pointsY = {currentY, 0, Config.specHangY};
         double[][] path = BezierCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
         Bot.specimenArm.movePrepHang(0.5);
+    }
+
+    public static void park(double currentX, double currentY) {
+        // Park in the observation zone
+        double[][] path = {{currentX, currentY}, {Config.parkX, Config.parkY}};
+        Bot.purePursuit.setTargetPath(path);
+    }
+
+    public static void collectSpecimen(double currentX, double currentY) {
+        // Collect a specimen from the wall
+        double[] pointsX = {currentX, 315, 247.6, 290};
+        double[] pointsY = {currentY, 65.5, 25.5, 14.75};
+        double[][] path = BezierCalc.nDegBez(pointsX, pointsY, 25);
+        Bot.purePursuit.setTargetPath(path);
+    }
+
+    public static void pushSample1(double currentX, double currentY) {
+        // Push the first (farthest left) sample into the observation zone
+        // Should start from the submersible
+        double[] pointsX = {currentX, 225, 310, 260, 300, 285};
+        double[] pointsY = {currentY, 6.5, 20.5, 325.5, 160.5, 42.5};
+        double[][] path = BezierCalc.nDegBez(pointsX, pointsY, 25);
+        Bot.purePursuit.setTargetPath(path);
+    }
+
+    public static void pushSample2(double currentX, double currentY) {
+        // Push the second (middle) sample into the observation zone
+        // Should start at the observation zone area
+        double[] pointsX = {currentX, 260, 320, 320};
+        double[] pointsY = {currentY, 150.5, 210.5, 45.5};
+        double[][] path = BezierCalc.nDegBez(pointsX, pointsY, 25);
+        Bot.purePursuit.setTargetPath(path);
     }
 }
