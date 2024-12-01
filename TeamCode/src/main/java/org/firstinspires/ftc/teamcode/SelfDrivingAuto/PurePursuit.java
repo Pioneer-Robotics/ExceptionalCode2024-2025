@@ -114,8 +114,7 @@ public class PurePursuit {
         return null;
     }
 
-    public boolean reachedTarget(double speed, double tolerance) {
-        this.update(speed);
+    public boolean reachedTarget(double tolerance) {
         double[] pos = Bot.optical_odom.getPose();
         double[] targetPoint = path[path.length - 1]; // Last point in the path
         double dx = Math.abs(targetPoint[0] - pos[0]);
@@ -123,12 +122,8 @@ public class PurePursuit {
         return Math.sqrt(dx*dx + dy*dy) < tolerance;
     }
 
-    public boolean reachedTarget(double speed) {
-        return reachedTarget(Config.driveTolerance, speed);
-    }
-
     public boolean reachedTarget() {
-        return reachedTarget(Config.driveTolerance, Config.driveSpeed);
+        return reachedTarget(Config.driveTolerance);
     }
 
     public double getDistance() {

@@ -11,10 +11,10 @@ public class SparkfunOTOS {
     SparkFunOTOS otos;
 
     public SparkfunOTOS() {
-        this(new double[]{0, 0, 0});
+        this(0,0,0);
     }
 
-    public SparkfunOTOS(double[] startPos) {
+    public SparkfunOTOS(double startPosX, double startPosY, double startPosTheta) {
         otos = Bot.opMode.hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
         otos.setLinearUnit(DistanceUnit.CM);
         otos.setAngularUnit(AngleUnit.RADIANS);
@@ -31,7 +31,7 @@ public class SparkfunOTOS {
         otos.resetTracking();
         
         // Set the initial position to 0, 0, 0
-        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(startPos[0], startPos[1], startPos[2]);
+        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(startPosX, startPosY, startPosTheta);
         otos.setPosition(currentPosition);
     }
 
@@ -64,6 +64,8 @@ public class SparkfunOTOS {
     public void reset() {
         otos.resetTracking();
     }
+
+    public void setY(double y) { otos.setPosition(new SparkFunOTOS.Pose2D(getX(), y, 0)); }
 
     public void calibrate() {
         otos.calibrateImu();

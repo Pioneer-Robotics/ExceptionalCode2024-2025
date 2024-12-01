@@ -74,17 +74,20 @@ public class Config {
     public static final double defaultSpecimenArmSpeed = 0.5;
     public static final int specimenArmPostHang = 1215; //was 1250
     public static final int specimenArmPrepHang = 800;
-    public static final int specimenArmCollect = 1880; //was 1840
+    public static final int specimenArmCollect = 1860;
     public static final int specimenArmPrepHangUp = 1000;
     public static final int specimenArmPostHangUp = 600;
 
     // ---- Coordinates of note and auto config ----
+    // Y position of robot when flush with the submersible (cm)
+    public static final double submersibleY = 101;
+
     // Specimen hang offset (space between hangs)
-    public static final double hangOffset = 6;
+    public static final double hangOffset = 10;
 
     // Coordinates of first specimen hang
-    public static final double specHangX = 190;
-    public static final double specHangY = 97.5;
+    public static final double specHangX = 170;
+    public static final double specHangY = 100;
 
     // Coordinates of observation zone park
     public static final double parkX = 310;

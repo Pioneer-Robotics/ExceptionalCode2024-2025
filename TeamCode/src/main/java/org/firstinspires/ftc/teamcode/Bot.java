@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 
 import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
@@ -31,7 +31,8 @@ public class Bot {
     public static Odometry deadwheel_odom;
     public static VoltageHandler voltageHandler;
     public static PurePursuit purePursuit;
-    public static TouchSensor touchSensor;
+    public static AnalogInput frontTouchSensor;
+    public static AnalogInput backTouchSensor;
 
     /**
      * Constructor for Bot.
@@ -41,7 +42,7 @@ public class Bot {
         Bot.opMode = opMode;
 
         // Drive base and self driving
-        Bot.optical_odom = new SparkfunOTOS();
+        Bot.optical_odom = new SparkfunOTOS(Config.specimenStartX, Config.specimenStartY, 0);
         Bot.deadwheel_odom = new Odometry(Config.specimenStartX, Config.specimenStartY, 0);
         Bot.mecanumBase = new MecanumBase();
         Bot.pidDrive = new PIDDrive();
@@ -54,7 +55,7 @@ public class Bot {
         
 
         // Other
-        Bot.touchSensor = opMode.hardwareMap.get(TouchSensor.class, Config.touchSensor);
+        Bot.frontTouchSensor = opMode.hardwareMap.get(AnalogInput.class, Config.touchSensor);
         Bot.voltageHandler = new VoltageHandler();
         Bot.imu = new BotIMU();
         Bot.led = new LEDController();

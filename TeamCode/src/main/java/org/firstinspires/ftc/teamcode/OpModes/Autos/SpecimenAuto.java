@@ -33,14 +33,17 @@ public class SpecimenAuto extends LinearOpMode {
                             Bot.optical_odom.getY(), // Current Y
                             offset // Hang offset X
                     );
+                    Bot.specimenArm.movePrepHangUp(0.5);
                     state = State.SPECIMEN_HANG_UP;
                     break;
 
                 // Go to submersible, hang specimen
                 // --> SPECIMEN_HANG_2
                 case SPECIMEN_HANG_UP: // Hang specimen right side up
-                    if (Bot.purePursuit.reachedTarget(0.4) || Bot.touchSensor.isPressed()) {
+                    Bot.purePursuit.update();
+                    if (Bot.purePursuit.reachedTarget() || Bot.frontTouchSensor.getVoltage()<.4) {
                         Bot.purePursuit.stop();
+                        Bot.optical_odom.setY(Config.submersibleY);
                         Bot.specimenArm.movePostHangUp(1.0); // Hang specimen
                         timer.reset(); // Reset timer for next state
                         state = State.SPECIMEN_HANG_2;
@@ -66,6 +69,7 @@ public class SpecimenAuto extends LinearOpMode {
                                     Bot.optical_odom.getX(), // Current X
                                     Bot.optical_odom.getY() // Current Y
                             );
+                            Bot.specimenArm.moveToCollect(0.5);
                             state = State.COLLECT_SPECIMEN_1;
                             break;
                         } else {
@@ -85,7 +89,8 @@ public class SpecimenAuto extends LinearOpMode {
                 // observation zone
                 // --> PUSH_SAMPLE_2
                 case PUSH_SAMPLE_1:
-                    if (Bot.purePursuit.reachedTarget(0.5,4)) {
+                    Bot.purePursuit.update(0.5);
+                    if (Bot.purePursuit.reachedTarget(4)) {
                         AutoPaths.pushSample2(
                                 Bot.optical_odom.getX(), // Current X
                                 Bot.optical_odom.getY() // Current Y
@@ -97,11 +102,13 @@ public class SpecimenAuto extends LinearOpMode {
                 // Bring second sample into observation zone, set path to collect specimen on fence
                 // --> COLLECT_SPECIMEN_1
                 case PUSH_SAMPLE_2:
-                    if (Bot.purePursuit.reachedTarget(0.5,4)) {
+                    Bot.purePursuit.update(0.5);
+                    if (Bot.purePursuit.reachedTarget(4)) {
                         AutoPaths.collectSpecimen(
                                 Bot.optical_odom.getX(), // Current X
                                 Bot.optical_odom.getY() // Current Y
                         );
+                        Bot.specimenArm.moveToCollect(0.5);
                         state = State.COLLECT_SPECIMEN_1;
                     }
                     break;
@@ -109,7 +116,8 @@ public class SpecimenAuto extends LinearOpMode {
                 // Go to and collect specimen on fence
                 // --> COLLECT_SPECIMEN_2
                 case COLLECT_SPECIMEN_1:
-                    if (Bot.purePursuit.reachedTarget(0.5)) {
+                    Bot.purePursuit.update(0.3);
+                    if (Bot.purePursuit.reachedTarget()) {
                         Bot.purePursuit.stop();
                         Bot.specimenArm.closeClaw();
                         timer.reset(); // Reset timer for next state
@@ -121,13 +129,14 @@ public class SpecimenAuto extends LinearOpMode {
                 // from the original
                 // --> SPECIMEN_HANG_DOWN
                 case COLLECT_SPECIMEN_2:
-                    if (timer.seconds() > 1) { // Wait to grab the specimen
-                        offset -= Config.hangOffset; // Adjust the hang offset
+                    if (timer.seconds() > 0.75) { // Wait to grab the specimen
+                        offset += Config.hangOffset; // Adjust the hang offset
                         AutoPaths.hangSpecimen(
                                 Bot.optical_odom.getX(), // Current X
                                 Bot.optical_odom.getY(), // Current Y
                                 offset // Hang offset X
                         );
+                        Bot.specimenArm.movePrepHang(0.5);
                         state = State.SPECIMEN_HANG_DOWN;
                     }
                     break;
@@ -136,8 +145,10 @@ public class SpecimenAuto extends LinearOpMode {
                 // First time: Set collect to true. Second time: Set stop to true.
                 // --> SPECIMEN_HANG_2 (Creates a loop)
                 case SPECIMEN_HANG_DOWN: // Hang specimen upside down
-                    if (Bot.purePursuit.reachedTarget(0.4) || Bot.touchSensor.isPressed()) {
+                    Bot.purePursuit.update(0.4);
+                    if (Bot.purePursuit.reachedTarget() || Bot.frontTouchSensor.getVoltage()<.4) {
                         Bot.purePursuit.stop();
+                        Bot.optical_odom.setY(Config.submersibleY);
                         Bot.specimenArm.movePostHang(1.0); // Move arm down
                         timer.reset();
                         if (collect) {
@@ -154,13 +165,15 @@ public class SpecimenAuto extends LinearOpMode {
                 // Wait to reach observation zone to park
                 // End of auto
                 case PARK:
-                    if (Bot.purePursuit.reachedTarget(1,5)) {
+                    Bot.purePursuit.update(1);
+                    if (Bot.purePursuit.reachedTarget(5)) {
                         terminateOpModeNow();
                     }
                     break;
                 }
 
             telemetry.addData("State", state);
+            telemetry.addData("Touch", Bot.frontTouchSensor.getVoltage());
             telemetry.addData("X", Bot.optical_odom.getX());
             telemetry.addData("Y", Bot.optical_odom.getY());
             telemetry.addData("Theta", Bot.optical_odom.getHeading());
