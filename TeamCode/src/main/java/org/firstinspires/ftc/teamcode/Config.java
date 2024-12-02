@@ -28,6 +28,12 @@ public class Config {
     // PID speed starts at 0.1 and increments by acceleration each loop up to 1
     public static final double acceleration = 0.025;
 
+    // Color sensor
+    public static final int[] colorRed = {190, 110, 65}; // Red sample color (rgb)
+    public static final int[] colorBlue = {50, 100, 215}; // Blue sample color (rgb)
+    public static final int[] colorYellow = {410, 460, 110}; // Yellow sample color (rgb)
+    public static final int alphaTolerance = 100; // If alpha is above this value, a sample is detected
+
     // ---- Hardware Map ----
     // Odometers
     public static final String odoLeft = "OdoLeft";
@@ -52,6 +58,7 @@ public class Config {
     public static final String intakeMotor = "collector";
 
     // Other names
+    public static final String colorSensor = "colorSensor";
     public static final String led = "led";
     public static final String imu = "expansionIMU";
 

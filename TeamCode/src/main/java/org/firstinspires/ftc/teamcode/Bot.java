@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import android.graphics.Color;
+
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -8,6 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
 import org.firstinspires.ftc.teamcode.Hardware.Collector;
+import org.firstinspires.ftc.teamcode.Hardware.ColorSensor;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
 import org.firstinspires.ftc.teamcode.Hardware.LinearSlide;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
@@ -38,6 +41,7 @@ public class Bot {
     public static ServoClass pixelDropLeft, pixelDropRight, gripper, wrist;
     public static Utils utils;
     public static Konami konami;
+    public static ColorSensor colorSensor;
 
     /**
      * Constructor for Bot.
@@ -62,6 +66,7 @@ public class Bot {
         Bot.wrist = new ServoClass(opMode.hardwareMap.get(Servo.class, Config.wristServo), Config.wristVertical, Config.wristHorizontal, Config.wristHorizontal);
 
         // Other
+        Bot.colorSensor = new ColorSensor();
         Bot.voltageHandler = new VoltageHandler();
         Bot.imu = new BotIMU();
         Bot.led = new LEDController();
