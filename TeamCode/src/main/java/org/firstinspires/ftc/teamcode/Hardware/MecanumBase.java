@@ -2,18 +2,14 @@ package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 
-
-/**
- * MecanumBase is used to initialize and control the drive base of the robot
- */
 public class MecanumBase {
     private final DcMotorEx LF, LB, RF, RB;
-    private boolean northMode;
-
+    private boolean northMode = false;
     public MecanumBase() {
         // Set up motors
         RF = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.motorRF);
@@ -46,72 +42,33 @@ public class MecanumBase {
     }
 
     /**
-     * Main drive method; other methods call this one
-     * Set the motor powers to move the robot in a direction.
-     * Used in TeleOp and with the PID controller.
-     * @param angle The angle to move at in radians
-     * @param turn The amount to turn in the range [-1, 1]
-     * @param speed The speed to move at in the range [-1, 1]
+     *
+     * @param x x vector [-1,1]
+     * @param y y vector [-1,1]
+     * @param turn turn vector [-1,1]
+     * @param speed Master multiplier
      */
-    public void move(double angle, double turn, double speed) {
-        double currentAngle = Bot.imu.getRadians();
+    public void move(double x, double y, double turn, double speed) {
+        if (northMode) {
+            // Rotate x and y
+            double theta = -Bot.imu.getRadians();
+            double tempX = x * Math.cos(theta) - y * Math.sin(theta);
+            double tempY = x * Math.sin(theta) + y * Math.cos(theta);
+            x = tempX;
+            y = tempY;
+        }
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(turn), 1);
+        double powerRF = (y - x - turn) / denominator;
+        double powerLF = (y + x + turn) / denominator;
+        double powerRB = (y + x - turn) / denominator;
+        double powerLB = (y - x + turn) / denominator;
 
-        if(northMode) {angle -= currentAngle;}
-
-        double power1 = (Math.sin(angle - (Math.PI / 4)) * speed);
-        double power2 = (Math.sin(angle + (Math.PI / 4)) * speed);
-
-        // Set velocity by converting power in range [0, 1] to ticks per second
-        RF.setVelocity((power1 + turn) * Config.maxDriveTicksPerSecond);
-        LF.setVelocity((power2 - turn) * Config.maxDriveTicksPerSecond);
-        RB.setVelocity((power2 + turn) * Config.maxDriveTicksPerSecond);
-        LB.setVelocity((power1 - turn) * Config.maxDriveTicksPerSecond);
-
-
-        Bot.opMode.telemetry.addData("Angle", currentAngle);
-//        opMode.telemetry.addData("RF", RF.getPower());
-//        opMode.telemetry.addData("LF", LF.getPower());
-//        opMode.telemetry.addData("RB", RB.getPower());
-//        opMode.telemetry.addData("LB", LB.getPower());
-        Bot.opMode.telemetry.addData("NorthMode", northMode);
+        RF.setVelocity(powerRF * Config.maxDriveTicksPerSecond * speed);
+        LF.setVelocity(powerLF * Config.maxDriveTicksPerSecond * speed);
+        RB.setVelocity(powerRB * Config.maxDriveTicksPerSecond * speed);
+        LB.setVelocity(powerLB * Config.maxDriveTicksPerSecond * speed);
     }
 
-    /**
-     * Set the motor powers to move the robot in a direction at full speed.
-     * Used in TeleOp and with the PID controller.
-     * @param angle The angle to move at in radians
-     * @param turn The amount to turn in the range [-1, 1]
-     */
-    public void move(double angle, double turn) {
-        move(angle, turn, 1);
-    }
-
-    /**
-     * Set the motor powers to move the robot based on the x and y components of a vector.
-     * Used in TeleOp and with the PID controller.
-     * @param x The x component of the vector to move in the range [-1, 1]
-     * @param y The y component of the vector to move in the range [-1, 1]
-     */
-    public void move_vector(double x, double y) {
-        move_vector(x, y, 0);
-    }
-
-    /**
-     * Set the motor powers to move the robot based on the x and y components of a vector.
-     * Used in TeleOp and with the PID controller.
-     * @param x The x component of the vector to move in the range [-1, 1]
-     * @param y The y component of the vector to move in the range [-1, 1]
-     * @param turn The amount to turn in the range [-1, 1]
-     */
-    public void move_vector(double x, double y, double turn) {
-        double angle = Math.atan2(y, x);
-        double speed = Math.hypot(x, y);
-        move(angle, -turn, speed);
-    }
-
-    /**
-     * Sets all motor powers to 0.
-     */
     public void stop() {
         RF.setVelocity(0);
         LF.setVelocity(0);
@@ -119,18 +76,7 @@ public class MecanumBase {
         LB.setVelocity(0);
     }
 
-    /**
-     * Set north mode.
-     * @param newMode Boolean value to set north mode
-     */
-    public void setNorthMode(boolean newMode) {
-        northMode = newMode;
-        // if(newMode) {bot.imu.resetYaw();}
+    public void setNorthMode(boolean northMode) {
+        this.northMode = northMode;
     }
-
-    /**
-     * Get north mode.
-     * @return Boolean value of north mode
-     */
-    public boolean getNorthMode() { return northMode; }
 }

@@ -46,35 +46,23 @@ public class PID {
 
     /**
      * Calculate the move value based on the current and target values
-     * @param current Current value
-     * @param target Target value
-     * @return Move value in range -1 to 1
-     */
-    public double calculate (double current, double target) {
-        return calculate(current, target, 1);
-    }
-
-    /**
-     * Calculate the move value based on the current and target values
      *
      * @param current Current value
      * @param target  Target value
-     * @param speed   Scalar for the move value
      * @return Move value in range -1 to 1
      */
-    public double calculate(double current, double target, double speed) {
-        return calculate(current, target, speed, false);
+    public double calculate(double current, double target) {
+        return calculate(current, target, false);
     }
 
     /**
      * Calculate the move value based on the current and target values
      * @param current Current value
      * @param target Target value
-     * @param speed Scalar for the move value
      * @param normalizeError Used for dealing with wrapping angles such as -pi to pi
      * @return Move value in range -1 to 1
      */
-    public double calculate(double current, double target, double speed, boolean normalizeError) {
+    public double calculate(double current, double target, boolean normalizeError) {
         // Calculate error
         double error = target - current;
 
@@ -108,8 +96,8 @@ public class PID {
             haltIntegral = false;
         }
 
-        // Return the move scaled by the speed
-        return move * speed;
+        // Return the move
+        return move;
     }
 
     /**

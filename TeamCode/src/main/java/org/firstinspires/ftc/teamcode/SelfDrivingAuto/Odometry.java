@@ -1,5 +1,5 @@
 /**
-This class is used to calculate the robots current position on the field with 3 values, an X coordinate, Y coordinate, and Theta(Robot Angle).
+ This class is used to calculate the robots current position on the field with 3 values, an X coordinate, Y coordinate, and Theta(Robot Angle).
  */
 
 package org.firstinspires.ftc.teamcode.SelfDrivingAuto;
@@ -16,12 +16,12 @@ import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
  * It uses the odometer encoders to calculate the robots position.
  * The robot's position is stored as an X coordinate, Y coordinate, and Theta (Robot Yaw).
  */
-public class Pose{
+public class Odometry{
     DcMotorEx odoLeft, odoRight, odoCenter;
     private double x, y, theta;
     private double prevLeftTicks, prevRightTicks, prevCenterTicks;
 
-    public Pose() {
+    public Odometry() {
         // Set up odometers
         odoLeft = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.odoLeft);
         odoRight = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.odoRight);
@@ -35,11 +35,11 @@ public class Pose{
     }
 
     /**
-     * Constructor for Pose with starting position
+     * Constructor with starting position
      *
      * @param startPos double[] - starting position of the robot {x, y, theta}
      */
-    public Pose(double[] startPos) {
+    public Odometry(double[] startPos) {
         // Set up odometers
         odoLeft = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.odoLeft);
         odoRight = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.odoRight);
@@ -114,10 +114,6 @@ public class Pose{
         return (theta);
     }
 
-    public void DANCE(){
-        // TODO: DANCE!
-    }
-
     /**
      * Returns the current x, y, and theta values of the robot
      * Calls calculate() to update the values
@@ -127,5 +123,4 @@ public class Pose{
         calculate();
         return (new double[]{x, y, theta});
     }
-
 }

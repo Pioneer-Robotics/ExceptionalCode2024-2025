@@ -1,17 +1,14 @@
 package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Bot;
-import org.firstinspires.ftc.teamcode.Config;
-import org.firstinspires.ftc.teamcode.Helpers.Commands;
-import org.firstinspires.ftc.teamcode.Helpers.Konami;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
-import org.firstinspires.ftc.teamcode.Helpers.Utils;
 
 
-@TeleOp(name="Teleop", group="Teleop")
+@TeleOp(name="Specimen Arm Teleop")
 public class Teleop extends LinearOpMode {
     public void runOpMode() {
         Bot.init(this);
@@ -20,120 +17,80 @@ public class Teleop extends LinearOpMode {
         Toggle northModeToggle = new Toggle(true);
         Toggle incSpeedToggle = new Toggle(false);
         Toggle decSpeedToggle = new Toggle(false);
-        Toggle collectorToggle = new Toggle(false);
+        Toggle clawToggle = new Toggle(false);
 
         // Initialize max speed
         double maxSpeed = 0.5;
 
-        //Other
-        boolean calmDown = false;
-
         waitForStart();
-
-        if(!Config.competition) {
-            try {
-                Konami konami = new Konami(gamepad2);
-                konami.konamiEasy();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
 
         while(opModeIsActive()) {
             // ---- GamePad 1 ----
             // Inputs for driving
             double px = gamepad1.left_stick_x;
             double py = -gamepad1.left_stick_y;
-            double stickAngle = Math.atan2(py, px);
-            double speed = Math.sqrt((px * px + py * py));
+            double turn = gamepad1.right_stick_x;
 
             // Move
-            Bot.mecanumBase.move(stickAngle, -gamepad1.right_stick_x * maxSpeed, speed * maxSpeed);
+            Bot.mecanumBase.move(px, py, turn, maxSpeed);
 
             // Toggle for field centric
             northModeToggle.toggle(gamepad1.a); // Toggle north mode
             Bot.mecanumBase.setNorthMode(northModeToggle.get()); // Update north mode
 
-            // Speed toggles
-            incSpeedToggle.toggle(gamepad1.right_bumper);
-            decSpeedToggle.toggle(gamepad1.left_bumper);
-            if (incSpeedToggle.justChanged()) {
-                maxSpeed = Utils.increment(maxSpeed, 0.1, 1);
-            }
-            if (decSpeedToggle.justChanged()) {
-                maxSpeed = Utils.decrement(maxSpeed, 0.1, 0.2);
-            }
-
-            // Pixel drop
-            Bot.pixelDropLeft.selectBoolPos(Utils.floatToBool(gamepad1.left_trigger));
-            Bot.pixelDropRight.selectBoolPos(Utils.floatToBool(gamepad1.right_trigger));
-
-            // Collector
-            collectorToggle.toggle(gamepad1.dpad_down);
-            Bot.collector.setRunning(collectorToggle.get() && !gamepad1.dpad_up);
-
-            if (gamepad1.dpad_left) {
-                Bot.collector.up();
-            }
-            if (gamepad1.dpad_right) {
-                Bot.collector.down();
-            }
-            if (gamepad1.dpad_up) {
-                Bot.collector.reverse();
-            }
-
-            //Other
-            if (gamepad1.left_stick_button || gamepad1.right_stick_button){
-                calmDown = true;
-            }
-
             if (gamepad1.x) {
                 Bot.imu.resetYaw();
             }
 
+            incSpeedToggle.toggle(gamepad1.right_bumper);
+            decSpeedToggle.toggle(gamepad1.left_bumper);
+            if (incSpeedToggle.justChanged()) {
+                maxSpeed += 0.1;
+            }
+            if (decSpeedToggle.justChanged()) {
+                maxSpeed -= 0.1;
+            }
+
+            // Specimen Arm
+            // Manual movement
+//            if (gamepad1.left_trigger > 0.1) {
+//                Bot.specimenArm.move(-gamepad1.left_trigger);
+//            } else if (gamepad1.right_trigger > 0.1) {
+//                Bot.specimenArm.move(gamepad1.right_trigger);
+//            } else {
+//                Bot.specimenArm.move(0);
+//            }
+
             // ---- GamePad 2 ----
-            // Slide motor
-            if (gamepad2.dpad_right) {
-                Commands.armMid();
-            } else if (gamepad2.dpad_up) {
-                Commands.armUp();
+            // Preset arm positions
+            if (gamepad2.dpad_up) {
+                Bot.specimenArm.movePostHang(1.0);
             } else if (gamepad2.dpad_down) {
-                Commands.armDown();
+                Bot.specimenArm.movePrepHang(0.5);
+            } else if (gamepad2.dpad_left) {
+                Bot.specimenArm.moveToCollect(0.5);
             }
 
-            // Slide servos
-            if (gamepad2.b && Bot.slide.getPosition() > 0.2) {
-                Bot.wrist.openServo();
-            }
-            if (gamepad2.a) {
-                Bot.wrist.closeServo();
-            }
-
-            if (gamepad2.right_bumper && Bot.slide.getPosition() > 0.2) {
-                Bot.gripper.openServo();
-            }
-            if (gamepad2.left_bumper) {
-                Bot.gripper.closeServo();
+            // Claw toggle
+            clawToggle.toggle(gamepad2.b);
+            if (clawToggle.justChanged()) {
+                Bot.specimenArm.setClawPosBool(clawToggle.get());
             }
 
             // Get data for telemetry
-            double[] pos = Bot.pose.returnPose();
 
             double voltage = Bot.voltageHandler.getVoltage();
             if (voltage < 10) {
+                Bot.led.lightsOn(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
                 telemetry.addData("WARNING: Voltage Low", voltage);
+            } else {
+                Bot.led.lightsOn(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             }
 
             // Telemetry and update
             telemetry.addData("Speed", maxSpeed);
-            telemetry.addData("X", pos[0]);
-            telemetry.addData("Y", pos[1]);
-            telemetry.addData("Theta", pos[2]);
-            telemetry.addData("Collector Toggle", collectorToggle.get());
+            telemetry.addData("Arm Pos", Bot.specimenArm.getPositionTicks());
             telemetry.addData("Voltage", voltage);
-            if (calmDown) {
-                telemetry.addLine(Config.calmDownMessages[Utils.randNum(Config.calmDownMessages.length)]);
-            }
             telemetry.update();
         }
     }
