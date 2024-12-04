@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Bot;
-import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.ConfigNew;
 import org.firstinspires.ftc.teamcode.Helpers.AutoPaths;
 
 // 1+2 No Wrist Servo
@@ -43,7 +43,7 @@ public class SpecimenAuto extends LinearOpMode {
                     Bot.purePursuit.update();
                     if (Bot.purePursuit.reachedTarget() || Bot.frontTouchSensor.getVoltage()<.4) {
                         Bot.purePursuit.stop();
-                        Bot.optical_odom.setY(Config.submersibleY);
+                        Bot.optical_odom.setY(ConfigNew.submersibleY);
                         Bot.specimenArm.movePostHangUp(1.0); // Hang specimen
                         timer.reset(); // Reset timer for next state
                         state = State.SPECIMEN_HANG_2;
@@ -130,7 +130,7 @@ public class SpecimenAuto extends LinearOpMode {
                 // --> SPECIMEN_HANG_DOWN
                 case COLLECT_SPECIMEN_2:
                     if (timer.seconds() > 0.75) { // Wait to grab the specimen
-                        offset += Config.hangOffset; // Adjust the hang offset
+                        offset += ConfigNew.hangOffset; // Adjust the hang offset
                         AutoPaths.hangSpecimen(
                                 Bot.optical_odom.getX(), // Current X
                                 Bot.optical_odom.getY(), // Current Y
@@ -148,7 +148,7 @@ public class SpecimenAuto extends LinearOpMode {
                     Bot.purePursuit.update(0.4);
                     if (Bot.purePursuit.reachedTarget() || Bot.frontTouchSensor.getVoltage()<.4) {
                         Bot.purePursuit.stop();
-                        Bot.optical_odom.setY(Config.submersibleY);
+                        Bot.optical_odom.setY(ConfigNew.submersibleY);
                         Bot.specimenArm.movePostHang(1.0); // Move arm down
                         timer.reset();
                         if (collect) {

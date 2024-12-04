@@ -6,8 +6,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 
 import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
+import org.firstinspires.ftc.teamcode.Hardware.Intake;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
+import org.firstinspires.ftc.teamcode.Hardware.SlideArm;
 import org.firstinspires.ftc.teamcode.Hardware.SpecimenArm;
 import org.firstinspires.ftc.teamcode.Hardware.VoltageHandler;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Odometry;
@@ -33,6 +35,8 @@ public class Bot {
     public static PurePursuit purePursuit;
     public static AnalogInput frontTouchSensor;
     public static AnalogInput backTouchSensor;
+    public static Intake intake;
+    public static SlideArm slideArm;
 
     /**
      * Constructor for Bot.
@@ -42,22 +46,24 @@ public class Bot {
         Bot.opMode = opMode;
 
         // Drive base and self driving
-        Bot.optical_odom = new SparkfunOTOS(Config.specimenStartX, Config.specimenStartY, 0);
-        Bot.deadwheel_odom = new Odometry(Config.specimenStartX, Config.specimenStartY, 0);
+        Bot.optical_odom = new SparkfunOTOS(ConfigNew.specimenStartX, ConfigNew.specimenStartY, 0);
+        Bot.deadwheel_odom = new Odometry(ConfigNew.specimenStartX, ConfigNew.specimenStartY, 0);
         Bot.mecanumBase = new MecanumBase();
         Bot.pidDrive = new PIDDrive();
-        Bot.purePursuit = new PurePursuit(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2]);
+        Bot.purePursuit = new PurePursuit(ConfigNew.drivePID[0], ConfigNew.drivePID[1], ConfigNew.drivePID[2]);
 
         // Motors
         Bot.specimenArm = new SpecimenArm();
+        Bot.slideArm = new SlideArm();
 
         // Servos
+        Bot.intake = new Intake();
         
 
         // Other
-        Bot.frontTouchSensor = opMode.hardwareMap.get(AnalogInput.class, Config.touchSensor);
+        Bot.frontTouchSensor = opMode.hardwareMap.get(AnalogInput.class, ConfigNew.touchSensor);
         Bot.voltageHandler = new VoltageHandler();
         Bot.imu = new BotIMU();
-        Bot.led = new LEDController();
+//        Bot.led = new LEDController();
     }
 }

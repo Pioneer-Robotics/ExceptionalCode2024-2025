@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Bot;
-import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.ConfigNew;
 import org.firstinspires.ftc.teamcode.Helpers.Utils;
 
 @Autonomous(name="PID Tuning", group="Calibration")
@@ -43,10 +43,10 @@ public class PIDTuning extends LinearOpMode {
                     }
                     break;
             }
-            Bot.purePursuit.update(Config.driveSpeed);
+            Bot.purePursuit.update(ConfigNew.driveSpeed);
 
             double[] pos = Bot.optical_odom.getPose();
-            double[] target = Bot.purePursuit.getTargetPoint(Config.lookAhead);
+            double[] target = Bot.purePursuit.getTargetPoint(ConfigNew.lookAhead);
 
             // Draw robot position, target point, and path
             double inchesPerCentimeter = 0.394;

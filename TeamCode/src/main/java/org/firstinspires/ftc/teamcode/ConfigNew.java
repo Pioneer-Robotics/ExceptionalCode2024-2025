@@ -6,7 +6,7 @@ package org.firstinspires.ftc.teamcode;
  */
 // Annotation to allow quick changes to config from FTC Dashboard
 @com.acmerobotics.dashboard.config.Config
-public class Config {
+public class ConfigNew {
     // ---- Constants ----
     // Odometer constants
     public static final double wheelDiameter = 4.8;
@@ -38,10 +38,12 @@ public class Config {
     // Multiplier starts at 0.1 and increments by acceleration each loop up to 1
     public static final double acceleration = 0.03;
 
-    // ---- Hardware Map ----
+    /*---------------------------------------
+     -              Hardware Map            -
+     ----------------------------------------*/
     // Odometers
-    public static final String odoLeft = "OdoLeft";
-    public static final String odoCenter = "hang";
+    public static final String odoLeft = "LB";
+    public static final String odoCenter = "LF";
 //    public static final String odoRight = "collector";
 
     // Drive motor names
@@ -52,22 +54,50 @@ public class Config {
 
     // Motor names
     public static final String specimenArmMotor = "specimenMotor";
+    public static final String slideMotor = "slideMotor";
 
     // Servo names
-    public static final String wristServo = "wristServo";
+//    public static final String wristServo = "wristServo";
     public static final String clawServo = "clawServo";
+    public static final String misumiDriveL = "misumiDriveL";
+    public static final String misumiDriveR = "misumiDriveR";
+    public static final String misumiWristL = "misumiWristL";
+    public static final String misumiWristR = "misumiWristR";
+    public static final String intakeWheelL = "intakeWheelL";
+    public static final String intakeWheelR = "intakeWheelR";
+    public static final String ocgBox = "ocgBox";
 
     // Other names
     public static final String touchSensor = "touch";
     public static final String led = "led";
     public static final String imu = "expansionIMU";
+    public static final String opticalOdo = "sensor_otos";
 
-    // ---- Servo Positions ----
-    public static final double wristOpen = 0.0;
-    public static final double wristClose = 1.0;
+    /*---------------------------------------
+     -            Servo Positions           -
+     ----------------------------------------*/
+//    public static final double wristOpen = 0.0;
+//    public static final double wristClose = 1.0;
 
     public static final double clawOpen = 0.25;
     public static final double clawClose = 0.95;
+
+    public static final double misumiDriveLOpen = 0;
+    public static final double misumiDriveLClose = 0;
+    public static final double misumiDriveROpen = 0;
+    public static final double misumiDriveRClose = 0;
+
+    public static final double misumiWristLOpen = 0;
+    public static final double misumiWristLClose = 0;
+    public static final double misumiWristROpen = 0;
+    public static final double misumiWristRClose = 0;
+
+    public static final double intakeWheelPower = 0.2;
+
+    public static final double ocgBoxOpen = 0;
+    public static final double ocgBoxClose = 0;
+
+
 
     // ---- Motor Positions ----
     // Specimen Arm
@@ -77,6 +107,14 @@ public class Config {
     public static final int specimenArmCollect = 1860;
     public static final int specimenArmPrepHangUp = 1000;
     public static final int specimenArmPostHangUp = 600;
+
+    // Linear Slide
+    public static final int slideLength = 0;
+    public static final double defaultSlideSpeed = 0.2;
+    public static final int minSlideHeight = 0;
+    public static final int maxSlideHeight = 0;
+    public static final int slideLowBasket = 0;
+    public static final int slideHighBasket = 0;
 
     // ---- Coordinates of note and auto config ----
     // Y position of robot when flush with the submersible (cm)
@@ -97,4 +135,3 @@ public class Config {
     public static final double specimenStartX = 200;
     public static final double specimenStartY = 20.5;
 }
-

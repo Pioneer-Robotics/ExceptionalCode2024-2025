@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Bot;
-import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.ConfigNew;
 
 /**
  * Class used to make accessing IMU easier.
@@ -16,7 +16,7 @@ public class BotIMU {
     private final IMU imu;
 
     public BotIMU() {
-        this.imu = Bot.opMode.hardwareMap.get(IMU.class, Config.imu);
+        this.imu = Bot.opMode.hardwareMap.get(IMU.class, ConfigNew.imu);
         this.imu.initialize(new com.qualcomm.robotcore.hardware.IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD)));

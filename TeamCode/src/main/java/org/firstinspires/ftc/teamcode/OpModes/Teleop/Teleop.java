@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Bot;
-import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.ConfigNew;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 import org.firstinspires.ftc.teamcode.Helpers.TrueAngle;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PID;
@@ -22,7 +22,7 @@ public class Teleop extends LinearOpMode {
         Toggle decSpeedToggle = new Toggle(false);
         Toggle clawToggle = new Toggle(false);
 
-        PID turnPid = new PID(Config.turnPID[0], Config.turnPID[1], Config.turnPID[2], 0, 0.1);
+        PID turnPid = new PID(ConfigNew.turnPID[0], ConfigNew.turnPID[1], ConfigNew.turnPID[2], 0, 0.1);
         TrueAngle trueAngle = new TrueAngle(0);
         double turnTarget = 0;
 

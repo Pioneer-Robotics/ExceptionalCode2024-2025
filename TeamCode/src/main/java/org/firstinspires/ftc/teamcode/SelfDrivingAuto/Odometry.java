@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.Bot;
-import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.ConfigNew;
 import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
 
 /**
@@ -23,9 +23,9 @@ public class Odometry{
 
     public Odometry(double initX, double initY, double initTheta) {
         // Set up odometers
-        odoLeft = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.odoLeft);
-        odoRight = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.odoRight);
-        odoCenter = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.odoCenter);
+        odoLeft = Bot.opMode.hardwareMap.get(DcMotorEx.class, ConfigNew.odoLeft);
+//        odoRight = Bot.opMode.hardwareMap.get(DcMotorEx.class, ConfigNew.odoRight);
+        odoCenter = Bot.opMode.hardwareMap.get(DcMotorEx.class, ConfigNew.odoCenter);
 
         odoLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odoRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -43,9 +43,9 @@ public class Odometry{
      */
     public Odometry(double[] startPos) {
         // Set up odometers
-        odoLeft = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.odoLeft);
-        odoRight = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.odoRight);
-        odoCenter = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.odoCenter);
+        odoLeft = Bot.opMode.hardwareMap.get(DcMotorEx.class, ConfigNew.odoLeft);
+//        odoRight = Bot.opMode.hardwareMap.get(DcMotorEx.class, ConfigNew.odoRight);
+        odoCenter = Bot.opMode.hardwareMap.get(DcMotorEx.class, ConfigNew.odoCenter);
 
         odoLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odoRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -62,19 +62,21 @@ public class Odometry{
     public void calculate(){
         // Odo readings
         double curLeftTicks = -odoLeft.getCurrentPosition();
-        double curRightTicks = -odoRight.getCurrentPosition();
+//        double curRightTicks = -odoRight.getCurrentPosition();
         double curCenterTicks = -odoCenter.getCurrentPosition();
 
         // Calculate the change in odometers
-        double dLeftCM = (curLeftTicks - prevLeftTicks) * Config.ticsToCM;
-        double dRightCM = (curRightTicks - prevRightTicks) * Config.ticsToCM;
-        double dCenterCM = (curCenterTicks - prevCenterTicks) * Config.ticsToCM;
+        double dLeftCM = (curLeftTicks - prevLeftTicks) * ConfigNew.ticsToCM;
+//        double dRightCM = (curRightTicks - prevRightTicks) * ConfigNew.ticsToCM;
+        double dCenterCM = (curCenterTicks - prevCenterTicks) * ConfigNew.ticsToCM;
 
         // Calculate the change in angle
-        double dTheta = (dLeftCM - dRightCM) / Config.trackWidth;
+//        double dTheta = (dLeftCM - dRightCM) / ConfigNew.trackWidth;
+        double dTheta = (dLeftCM) / ConfigNew.trackWidth;
 
-        double centerDisplacement = (dLeftCM + dRightCM) / 2;
-        double horizontalDisplacement = dCenterCM - (Config.forwardOffset * dTheta);
+//        double centerDisplacement = (dLeftCM + dRightCM) / 2;
+        double centerDisplacement = (dLeftCM) / 2;
+        double horizontalDisplacement = dCenterCM - (ConfigNew.forwardOffset * dTheta);
 
         // Calculate the change in x and y
         double a, b;
@@ -99,7 +101,7 @@ public class Odometry{
 
         // Set the previous values to the current values
         prevLeftTicks = curLeftTicks;
-        prevRightTicks = curRightTicks;
+//        prevRightTicks = curRightTicks;
         prevCenterTicks = curCenterTicks;
     }
 

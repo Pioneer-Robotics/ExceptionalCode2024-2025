@@ -5,6 +5,7 @@ import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Bot;
+import org.firstinspires.ftc.teamcode.ConfigNew;
 
 
 public class SparkfunOTOS {
@@ -15,7 +16,7 @@ public class SparkfunOTOS {
     }
 
     public SparkfunOTOS(double startPosX, double startPosY, double startPosTheta) {
-        otos = Bot.opMode.hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
+        otos = Bot.opMode.hardwareMap.get(SparkFunOTOS.class, ConfigNew.opticalOdo);
         otos.setLinearUnit(DistanceUnit.CM);
         otos.setAngularUnit(AngleUnit.RADIANS);
 

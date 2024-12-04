@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.SelfDrivingAuto;
 
 
 import org.firstinspires.ftc.teamcode.Bot;
-import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.ConfigNew;
 import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
 import org.firstinspires.ftc.teamcode.Helpers.Utils;
 
@@ -31,15 +31,15 @@ public class PIDDrive {
         double currentTheta = Bot.optical_odom.getHeading();
 
         // Initialize PID controllers with initial errors
-        PID xPID = new PID(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2], x - currentX);
-        PID yPID = new PID(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2], y - currentY);
-        PID turnPID = new PID(Config.turnPID[0], Config.turnPID[1], Config.turnPID[2], theta - currentTheta);
+        PID xPID = new PID(ConfigNew.drivePID[0], ConfigNew.drivePID[1], ConfigNew.drivePID[2], x - currentX);
+        PID yPID = new PID(ConfigNew.drivePID[0], ConfigNew.drivePID[1], ConfigNew.drivePID[2], y - currentY);
+        PID turnPID = new PID(ConfigNew.turnPID[0], ConfigNew.turnPID[1], ConfigNew.turnPID[2], theta - currentTheta);
 
         // Used to gradually accelerate
         double accelerationMultiplier = 0.1;
 
         // Loop until the robot reaches the target position or the op mode is stopped
-        while (Math.abs(x - currentX) > Config.driveTolerance || Math.abs(y - currentY) > Config.driveTolerance || Math.abs(theta - currentTheta) > Config.turnTolerance && !Bot.opMode.isStopRequested()) {
+        while (Math.abs(x - currentX) > ConfigNew.driveTolerance || Math.abs(y - currentY) > ConfigNew.driveTolerance || Math.abs(theta - currentTheta) > ConfigNew.turnTolerance && !Bot.opMode.isStopRequested()) {
             // Update current position
             currentX = Bot.optical_odom.getX();
             currentY = Bot.optical_odom.getY();
@@ -52,7 +52,7 @@ public class PIDDrive {
 
             // Move the robot based on the PID outputs
             Bot.mecanumBase.move(xOutput, yOutput, turnOutput, speed * accelerationMultiplier);
-            accelerationMultiplier = Utils.increment(accelerationMultiplier, Config.acceleration, 1);
+            accelerationMultiplier = Utils.increment(accelerationMultiplier, ConfigNew.acceleration, 1);
 
             // Telemetry
             Bot.opMode.telemetry.addData("X", currentX);
