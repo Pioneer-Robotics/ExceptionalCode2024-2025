@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.SelfDrivingAuto;
 
 import org.firstinspires.ftc.teamcode.Bot;
-import org.firstinspires.ftc.teamcode.ConfigNew;
+import org.firstinspires.ftc.teamcode.Config;
 
 public class PurePursuit {
     private final PID xPID, yPID, turnPID;
@@ -10,13 +10,13 @@ public class PurePursuit {
     public PurePursuit(double kP, double kI, double kD) {
         xPID = new PID(kP, kI, kD);
         yPID = new PID(kP, kI, kD);
-        turnPID = new PID(ConfigNew.turnPID[0], ConfigNew.turnPID[1], ConfigNew.turnPID[2]);
+        turnPID = new PID(Config.turnPID[0], Config.turnPID[1], Config.turnPID[2]);
     }
 
     public PurePursuit(double kP, double kI, double kD, double initialError) {
         xPID = new PID(kP, kI, kD, initialError);
         yPID = new PID(kP, kI, kD, initialError);
-        turnPID = new PID(ConfigNew.turnPID[0], ConfigNew.turnPID[1], ConfigNew.turnPID[2], initialError);
+        turnPID = new PID(Config.turnPID[0], Config.turnPID[1], Config.turnPID[2], initialError);
     }
 
     public void setTargetPath(double[][] path) {
@@ -123,7 +123,7 @@ public class PurePursuit {
     }
 
     public boolean reachedTarget() {
-        return reachedTarget(ConfigNew.driveTolerance);
+        return reachedTarget(Config.driveTolerance);
     }
 
     public double getDistance() {
@@ -137,7 +137,7 @@ public class PurePursuit {
 
     public void update(double speed) {
         // Get target point
-        double[] targetPoint = getTargetPoint(ConfigNew.lookAhead);
+        double[] targetPoint = getTargetPoint(Config.lookAhead);
         // Get current position and calculate the movement
         double[] pos = Bot.optical_odom.getPose();
         double moveX = xPID.calculate(pos[0], targetPoint[0]);

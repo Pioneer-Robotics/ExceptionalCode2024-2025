@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Bot;
-import org.firstinspires.ftc.teamcode.ConfigNew;
+import org.firstinspires.ftc.teamcode.Config;
 
 /**
  * Class for intake mechanism: Misumi slide and intake wheels
@@ -16,14 +16,14 @@ public class Intake {
     CRServo intakeWheelL, intakeWheelR;
 
     public Intake() {
-        misumiDriveL = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, ConfigNew.misumiDriveL), ConfigNew.misumiDriveLOpen, ConfigNew.misumiDriveLClose);
-        misumiDriveR = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, ConfigNew.misumiDriveR), ConfigNew.misumiDriveROpen, ConfigNew.misumiDriveRClose);
+        misumiDriveL = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiDriveL), Config.misumiDriveLOpen, Config.misumiDriveLClose);
+        misumiDriveR = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiDriveR), Config.misumiDriveROpen, Config.misumiDriveRClose);
 
-        misumiWristL = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, ConfigNew.misumiWristL), ConfigNew.misumiWristLOpen, ConfigNew.misumiWristLClose);
-        misumiWristR = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, ConfigNew.misumiWristR), ConfigNew.misumiWristROpen, ConfigNew.misumiWristRClose);
+        misumiWristL = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiWristL), Config.misumiWristLOpen, Config.misumiWristLClose);
+        misumiWristR = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiWristR), Config.misumiWristROpen, Config.misumiWristRClose);
 
-        intakeWheelL = Bot.opMode.hardwareMap.get(CRServo.class, ConfigNew.intakeWheelL);
-        intakeWheelR = Bot.opMode.hardwareMap.get(CRServo.class, ConfigNew.intakeWheelR);
+        intakeWheelL = Bot.opMode.hardwareMap.get(CRServo.class, Config.intakeWheelL);
+        intakeWheelR = Bot.opMode.hardwareMap.get(CRServo.class, Config.intakeWheelR);
         intakeWheelL.setDirection(DcMotorSimple.Direction.FORWARD);
         intakeWheelR.setDirection(DcMotorSimple.Direction.FORWARD);
 
@@ -58,6 +58,11 @@ public class Intake {
         intakeWheelR.setDirection(direction);
     }
 
+    public void setWheelDirection(boolean boolDirection) {
+        DcMotorSimple.Direction direction = boolDirection ? DcMotorSimple.Direction.FORWARD : DcMotorSimple.Direction.REVERSE;
+        setWheelDirection(direction);
+    }
+
     public void toggleWheelDirection() {
         DcMotorSimple.Direction direction = intakeWheelL.getDirection();
 
@@ -75,7 +80,7 @@ public class Intake {
     }
 
     public void spinWheels() {
-        spinWheels(ConfigNew.intakeWheelPower);
+        spinWheels(Config.intakeWheelPower);
     }
 
     public void stopWheels() {

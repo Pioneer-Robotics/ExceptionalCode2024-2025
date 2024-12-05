@@ -1,17 +1,17 @@
 package org.firstinspires.ftc.teamcode.Helpers;
 
 import org.firstinspires.ftc.teamcode.Bot;
-import org.firstinspires.ftc.teamcode.ConfigNew;
+import org.firstinspires.ftc.teamcode.Config;
 
 public class AutoPaths {
     public static void hangSpecimen(double currentX, double currentY, double offsetX) {
         // Go to the submersible to hang a specimen
-        Bot.purePursuit.setTargetPath(new double[][] {{currentX, currentY}, {200, 30}, {ConfigNew.specHangX + offsetX, ConfigNew.specHangY}});
+        Bot.purePursuit.setTargetPath(new double[][] {{currentX, currentY}, {200, 30}, {Config.specHangX + offsetX, Config.specHangY}});
     }
 
     public static void park(double currentX, double currentY) {
         // Park in the observation zone
-        double[][] path = {{currentX, currentY}, {ConfigNew.parkX, ConfigNew.parkY}};
+        double[][] path = {{currentX, currentY}, {Config.parkX, Config.parkY}};
         Bot.purePursuit.setTargetPath(path);
     }
 

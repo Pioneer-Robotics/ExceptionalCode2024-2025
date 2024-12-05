@@ -5,14 +5,14 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Bot;
-import org.firstinspires.ftc.teamcode.ConfigNew;
+import org.firstinspires.ftc.teamcode.Config;
 
 public class SpecimenArm {
     private final DcMotorEx motor;
     ServoClass wrist, claw;
 
     public SpecimenArm() {
-        motor = Bot.opMode.hardwareMap.get(DcMotorEx.class, ConfigNew.specimenArmMotor);
+        motor = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.specimenArmMotor);
         motor.setTargetPositionTolerance(5);
         motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -20,7 +20,7 @@ public class SpecimenArm {
 
         // Servos
 //        wrist = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.wristServo), Config.wristOpen, Config.wristClose);
-        claw = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, ConfigNew.clawServo), ConfigNew.clawOpen, ConfigNew.clawClose);
+        claw = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.clawServo), Config.clawOpen, Config.clawClose);
 
 //        wrist.closeServo();
         claw.closeServo();
@@ -35,32 +35,32 @@ public class SpecimenArm {
     public void moveToPos(int positionTicks, double speed) {
         motor.setTargetPosition(positionTicks);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor.setVelocity(ConfigNew.maxSlideTicksPerSecond * speed);
+        motor.setVelocity(Config.maxSlideTicksPerSecond * speed);
     }
 
     public void moveToPos(int positionTicks) {
-        moveToPos(positionTicks, ConfigNew.defaultSpecimenArmSpeed);
+        moveToPos(positionTicks, Config.defaultSpecimenArmSpeed);
     }
 
     // Preset movements
     public void movePrepHang(double speed) {
-        moveToPos(ConfigNew.specimenArmPrepHang, speed);
+        moveToPos(Config.specimenArmPrepHang, speed);
     }
 
     public void movePostHang(double speed) {
-        moveToPos(ConfigNew.specimenArmPostHang, speed);
+        moveToPos(Config.specimenArmPostHang, speed);
     }
 
     public void moveToCollect(double speed) {
-        moveToPos(ConfigNew.specimenArmCollect, speed);
+        moveToPos(Config.specimenArmCollect, speed);
     }
 
     public void movePrepHangUp(double speed) {
-        moveToPos(ConfigNew.specimenArmPrepHangUp, speed);
+        moveToPos(Config.specimenArmPrepHangUp, speed);
     }
 
     public void movePostHangUp(double speed) {
-        moveToPos(ConfigNew.specimenArmPostHangUp, speed);
+        moveToPos(Config.specimenArmPostHangUp, speed);
     }
 
     // Servo control
@@ -76,5 +76,5 @@ public class SpecimenArm {
     public int getPositionTicks() {
         return motor.getCurrentPosition();
     }
-    public boolean reachedPosition() { return Math.abs(motor.getTargetPosition() - motor.getCurrentPosition()) < ConfigNew.specimenArmTolerance; }
+    public boolean reachedPosition() { return Math.abs(motor.getTargetPosition() - motor.getCurrentPosition()) < Config.specimenArmTolerance; }
 }

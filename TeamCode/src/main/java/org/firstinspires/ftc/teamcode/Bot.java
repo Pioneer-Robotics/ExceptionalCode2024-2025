@@ -46,11 +46,11 @@ public class Bot {
         Bot.opMode = opMode;
 
         // Drive base and self driving
-        Bot.optical_odom = new SparkfunOTOS(ConfigNew.specimenStartX, ConfigNew.specimenStartY, 0);
+        Bot.optical_odom = new SparkfunOTOS(Config.specimenStartX, Config.specimenStartY, 0);
 //        Bot.deadwheel_odom = new Odometry(ConfigNew.specimenStartX, ConfigNew.specimenStartY, 0);
         Bot.mecanumBase = new MecanumBase();
         Bot.pidDrive = new PIDDrive();
-        Bot.purePursuit = new PurePursuit(ConfigNew.drivePID[0], ConfigNew.drivePID[1], ConfigNew.drivePID[2]);
+        Bot.purePursuit = new PurePursuit(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2]);
 
         // Motors
         Bot.specimenArm = new SpecimenArm();
@@ -61,7 +61,7 @@ public class Bot {
         
 
         // Other
-        Bot.frontTouchSensor = opMode.hardwareMap.get(AnalogInput.class, ConfigNew.touchSensor);
+        Bot.frontTouchSensor = opMode.hardwareMap.get(AnalogInput.class, Config.touchSensor);
         Bot.voltageHandler = new VoltageHandler();
         Bot.imu = new BotIMU();
 //        Bot.led = new LEDController();

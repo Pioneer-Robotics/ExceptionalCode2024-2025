@@ -4,17 +4,17 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.Bot;
-import org.firstinspires.ftc.teamcode.ConfigNew;
+import org.firstinspires.ftc.teamcode.Config;
 
 public class MecanumBase {
     private final DcMotorEx LF, LB, RF, RB;
     private boolean northMode = false;
     public MecanumBase() {
         // Set up motors
-        RF = Bot.opMode.hardwareMap.get(DcMotorEx.class, ConfigNew.motorRF);
-        LF = Bot.opMode.hardwareMap.get(DcMotorEx.class, ConfigNew.motorLF);
-        RB = Bot.opMode.hardwareMap.get(DcMotorEx.class, ConfigNew.motorRB);
-        LB = Bot.opMode.hardwareMap.get(DcMotorEx.class, ConfigNew.motorLB);
+        RF = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.motorRF);
+        LF = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.motorLF);
+        RB = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.motorRB);
+        LB = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.motorLB);
 
         LF.setDirection(DcMotor.Direction.REVERSE);
         LB.setDirection(DcMotor.Direction.REVERSE);
@@ -62,10 +62,10 @@ public class MecanumBase {
         double powerRB = (y + x - turn) / denominator;
         double powerLB = (y - x + turn) / denominator;
 
-        RF.setVelocity(powerRF * ConfigNew.maxDriveTicksPerSecond * speed);
-        LF.setVelocity(powerLF * ConfigNew.maxDriveTicksPerSecond * speed);
-        RB.setVelocity(powerRB * ConfigNew.maxDriveTicksPerSecond * speed);
-        LB.setVelocity(powerLB * ConfigNew.maxDriveTicksPerSecond * speed);
+        RF.setVelocity(powerRF * Config.maxDriveTicksPerSecond * speed);
+        LF.setVelocity(powerLF * Config.maxDriveTicksPerSecond * speed);
+        RB.setVelocity(powerRB * Config.maxDriveTicksPerSecond * speed);
+        LB.setVelocity(powerLB * Config.maxDriveTicksPerSecond * speed);
     }
 
     public void stop() {

@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
@@ -10,9 +8,7 @@ import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 import org.firstinspires.ftc.teamcode.Helpers.TrueAngle;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PID;
 
-
-@TeleOp(name="Specimen Arm Teleop")
-public class Teleop extends LinearOpMode {
+public class TheseusTeleop extends LinearOpMode {
     public void runOpMode() {
         Bot.init(this);
 
@@ -31,26 +27,21 @@ public class Teleop extends LinearOpMode {
 
         waitForStart();
 
-        while(opModeIsActive()) {
-            // ---- GamePad 1 ----
-            // Inputs for driving
+        while (opModeIsActive()) {
+
+            /*-------------------
+             -     Gamepad 1    -
+             --------------------*/
+
+            // Driving
             double px = gamepad1.left_stick_x;
             double py = -gamepad1.left_stick_y;
             turnTarget += gamepad1.right_stick_x/15;
             double trueTheta = trueAngle.updateAngle(-Bot.imu.getRadians());
 
-            // Move
             Bot.mecanumBase.move(px, py, turnPid.calculate(trueTheta, turnTarget), maxSpeed);
 
-
-            // Toggle for field centric
-            northModeToggle.toggle(gamepad1.a); // Toggle north mode
-            Bot.mecanumBase.setNorthMode(northModeToggle.get()); // Update north mode
-
-            if (gamepad1.x) {
-                Bot.imu.resetYaw();
-            }
-
+            // Speed toggle
             incSpeedToggle.toggle(gamepad1.right_bumper);
             decSpeedToggle.toggle(gamepad1.left_bumper);
             if (incSpeedToggle.justChanged()) {
@@ -60,18 +51,33 @@ public class Teleop extends LinearOpMode {
                 maxSpeed -= 0.1;
             }
 
-            // Specimen Arm
-            // Manual movement
-//            if (gamepad1.left_trigger > 0.1) {
-//                Bot.specimenArm.move(-gamepad1.left_trigger);
-//            } else if (gamepad1.right_trigger > 0.1) {
-//                Bot.specimenArm.move(gamepad1.right_trigger);
-//            } else {
-//                Bot.specimenArm.move(0);
-//            }
+            // Intake
 
-            // ---- GamePad 2 ----
-            // Preset arm positions
+            if (gamepad1.dpad_up) {
+                Bot.intake.openMisumiDrive();
+            } if (gamepad1.dpad_down) {
+                Bot.intake.closeMisumiDrive();
+            }
+
+            if (gamepad1.b) {
+                Bot.intake.openWrist();
+            } if (gamepad1.x) {
+                Bot.intake.closeWrist();
+            }
+
+            // false = out, true = in
+            if (gamepad1.y) {
+                Bot.intake.setWheelDirection(false);
+            } if (gamepad1.a) {
+                Bot.intake.setWheelDirection(true);
+            }
+
+
+            /*-------------------
+             -     Gamepad 2    -
+             --------------------*/
+
+            // Preset specimen arm positions
             if (gamepad2.dpad_up) {
                 Bot.specimenArm.movePostHang(1.0);
             } else if (gamepad2.dpad_down) {
@@ -86,27 +92,8 @@ public class Teleop extends LinearOpMode {
                 Bot.specimenArm.setClawPosBool(clawToggle.get());
             }
 
-            // Get data for telemetry
 
-            double voltage = Bot.voltageHandler.getVoltage();
-            if (voltage < 10) {
-                Bot.led.lightsOn(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
-                telemetry.addData("WARNING: Voltage Low", voltage);
-            } else {
-                Bot.led.lightsOn(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-            }
 
-            // Telemetry and update
-            telemetry.addData("Touch", Bot.frontTouchSensor.getVoltage());
-            telemetry.addData("Speed", maxSpeed);
-            telemetry.addData("Arm Pos", Bot.specimenArm.getPositionTicks());
-            telemetry.addData("Voltage", voltage);
-            telemetry.addData("X Pos", Bot.optical_odom.getX());
-            telemetry.addData("Y Pos", Bot.optical_odom.getY());
-            telemetry.addData("Theta", Bot.imu.getRadians());
-            telemetry.addData("True Angle", trueTheta);
-            telemetry.addData("turnTarget", turnTarget);
-            telemetry.update();
         }
     }
 }
