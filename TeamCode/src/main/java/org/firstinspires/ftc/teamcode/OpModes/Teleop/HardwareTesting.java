@@ -12,9 +12,18 @@ public class HardwareTesting extends LinearOpMode {
         Bot.init(this);
 
         waitForStart();
+
         while (opModeIsActive()) {
 
+            if (gamepad1.a) {
+                Bot.intake.openMisumiDrive();
+            }
+            if (gamepad1.b) {
+                Bot.intake.closeMisumiDrive();
+            }
 
+            telemetry.addData("Servo Left Pos", Bot.intake.getMisumiDriveL());
+            telemetry.addData("Servo Right Pos", Bot.intake.getMisumiDriveR());
             telemetry.addData("Slide height", Bot.slideArm.getArmPosition());
         }
     }

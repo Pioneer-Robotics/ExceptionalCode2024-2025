@@ -26,6 +26,8 @@ public class Intake {
         intakeWheelR = Bot.opMode.hardwareMap.get(CRServo.class, ConfigNew.intakeWheelR);
         intakeWheelL.setDirection(DcMotorSimple.Direction.FORWARD);
         intakeWheelR.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        closeMisumiDrive();
     }
 
 
@@ -80,5 +82,8 @@ public class Intake {
         spinWheels(0);
     }
 
-
+    public double getMisumiDriveL() {return misumiDriveL.getPos();}
+    public double getMisumiDriveR() {return misumiDriveR.getPos();}
+    public double getMisumiWristL() {return misumiWristL.getPos();}
+    public double getMisumiWristR() {return misumiWristR.getPos();}
 }

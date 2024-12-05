@@ -82,9 +82,9 @@ public class ConfigNew {
     public static final double clawOpen = 0.25;
     public static final double clawClose = 0.95;
 
-    public static final double misumiDriveLOpen = 0;
-    public static final double misumiDriveLClose = 0;
-    public static final double misumiDriveROpen = 0;
+    public static final double misumiDriveLOpen = 0.525;
+    public static final double misumiDriveLClose = 1;
+    public static final double misumiDriveROpen = 0.475;
     public static final double misumiDriveRClose = 0;
 
     public static final double misumiWristLOpen = 0;
@@ -109,10 +109,10 @@ public class ConfigNew {
     public static final int specimenArmPostHangUp = 600;
 
     // Linear Slide
-    public static final int slideLength = 0;
+    public static final int slideLength = 4365;
     public static final double defaultSlideSpeed = 0.2;
-    public static final int minSlideHeight = 0;
-    public static final int maxSlideHeight = 0;
+    public static final int minSlideHeight = 15;
+    public static final int maxSlideHeight = 4350;
     public static final int slideLowBasket = 0;
     public static final int slideHighBasket = 0;
 

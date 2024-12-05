@@ -21,20 +21,20 @@ public class Odometry{
     private double x, y, theta;
     private double prevLeftTicks, prevRightTicks, prevCenterTicks;
 
-    public Odometry(double initX, double initY, double initTheta) {
-        // Set up odometers
-        odoLeft = Bot.opMode.hardwareMap.get(DcMotorEx.class, ConfigNew.odoLeft);
+//    public Odometry(double initX, double initY, double initTheta) {
+//        // Set up odometers
+//        odoLeft = Bot.opMode.hardwareMap.get(DcMotorEx.class, ConfigNew.odoLeft);
 //        odoRight = Bot.opMode.hardwareMap.get(DcMotorEx.class, ConfigNew.odoRight);
-        odoCenter = Bot.opMode.hardwareMap.get(DcMotorEx.class, ConfigNew.odoCenter);
-
-        odoLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        odoRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        odoCenter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        x = initX;
-        y = initY;
-        theta = initTheta;
-    }
+//        odoCenter = Bot.opMode.hardwareMap.get(DcMotorEx.class, ConfigNew.odoCenter);
+//
+//        odoLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        odoRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        odoCenter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//        x = initX;
+//        y = initY;
+//        theta = initTheta;
+//    }
 
     /**
      * Constructor with starting position

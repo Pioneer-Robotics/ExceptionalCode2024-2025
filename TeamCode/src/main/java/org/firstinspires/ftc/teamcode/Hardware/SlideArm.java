@@ -16,8 +16,7 @@ public class SlideArm {
         slideMotor.setTargetPositionTolerance(5);
         slideMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         slideMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-//        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         ocgBox = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, ConfigNew.ocgBox), ConfigNew.ocgBoxOpen, ConfigNew.ocgBoxClose);
     }

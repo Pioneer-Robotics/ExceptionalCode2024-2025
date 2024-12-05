@@ -47,7 +47,7 @@ public class Bot {
 
         // Drive base and self driving
         Bot.optical_odom = new SparkfunOTOS(ConfigNew.specimenStartX, ConfigNew.specimenStartY, 0);
-        Bot.deadwheel_odom = new Odometry(ConfigNew.specimenStartX, ConfigNew.specimenStartY, 0);
+//        Bot.deadwheel_odom = new Odometry(ConfigNew.specimenStartX, ConfigNew.specimenStartY, 0);
         Bot.mecanumBase = new MecanumBase();
         Bot.pidDrive = new PIDDrive();
         Bot.purePursuit = new PurePursuit(ConfigNew.drivePID[0], ConfigNew.drivePID[1], ConfigNew.drivePID[2]);
