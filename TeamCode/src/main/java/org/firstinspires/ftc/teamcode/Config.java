@@ -9,9 +9,7 @@ package org.firstinspires.ftc.teamcode;
 public class Config {
     // ---- Constants ----
     // Odometer constants
-    public static final double wheelDiameter = 4.8;
-    public static final double ticsPerRev = 2000;
-    public static final double ticsToCM = (wheelDiameter * Math.PI) / ticsPerRev;
+    public static final double ticsToCM = 0.008;
     public static final double trackWidth = 26.5; // In CM
     public static final double forwardOffset = Math.sqrt((15.5 * 15.5) - 0.4); // In CM
 

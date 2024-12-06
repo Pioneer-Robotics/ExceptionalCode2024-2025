@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
-import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
 
 /**
  * This class is used to calculate the robots current position on the field.
@@ -33,9 +32,13 @@ public class TwoWheelOdometry {
         y = initY;
     }
 
-    /**
-     * This method updates the current position of the robot on the field by using delta values from the odometers
-     */
+    public TwoWheelOdometry() {
+        this(0,0);
+    }
+
+        /**
+         * This method updates the current position of the robot on the field by using delta values from the odometers
+         */
     public void calculate(){
         // TODO: Make calculation work with turning
 

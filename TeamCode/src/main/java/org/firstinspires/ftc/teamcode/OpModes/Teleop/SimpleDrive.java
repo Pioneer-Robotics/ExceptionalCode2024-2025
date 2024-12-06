@@ -1,14 +1,10 @@
 package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Bot;
-import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
-import org.firstinspires.ftc.teamcode.Helpers.TrueAngle;
-import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PID;
 
 
 @TeleOp(name="Simple Drive")
@@ -53,18 +49,9 @@ public class SimpleDrive extends LinearOpMode {
                 maxSpeed -= 0.1;
             }
 
-            // Get data for telemetry
-            double voltage = Bot.voltageHandler.getVoltage();
-            if (voltage < 10) {
-                Bot.led.lightsOn(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
-                telemetry.addData("WARNING: Voltage Low", voltage);
-            } else {
-                Bot.led.lightsOn(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-            }
-
             // Telemetry and update
+            Bot.deadwheel_odom.calculate();
             telemetry.addData("Speed", maxSpeed);
-            telemetry.addData("Voltage", voltage);
             telemetry.addData("X Pos Odom", Bot.optical_odom.getX());
             telemetry.addData("Y Pos Odom", Bot.optical_odom.getY());
             telemetry.addData("X Pos Deadwheel", Bot.deadwheel_odom.getX());
