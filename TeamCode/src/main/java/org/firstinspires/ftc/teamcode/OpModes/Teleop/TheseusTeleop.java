@@ -17,6 +17,7 @@ public class TheseusTeleop extends LinearOpMode {
         Toggle incSpeedToggle = new Toggle(false);
         Toggle decSpeedToggle = new Toggle(false);
         Toggle clawToggle = new Toggle(false);
+        Toggle ocgBoxToggle = new Toggle(false);
 
         PID turnPid = new PID(Config.turnPID[0], Config.turnPID[1], Config.turnPID[2], 0, 0.1);
         TrueAngle trueAngle = new TrueAngle(0);
@@ -34,11 +35,15 @@ public class TheseusTeleop extends LinearOpMode {
              --------------------*/
 
             // Driving
+            //TODO: ADD NORTH MODE
             double px = gamepad1.left_stick_x;
             double py = -gamepad1.left_stick_y;
             turnTarget += gamepad1.right_stick_x/15;
             double trueTheta = trueAngle.updateAngle(-Bot.imu.getRadians());
 
+            northModeToggle.toggle(gamepad1.right_trigger > 0.9 && gamepad1.left_trigger > 0.9);
+
+            Bot.mecanumBase.setNorthMode(northModeToggle.get());
             Bot.mecanumBase.move(px, py, turnPid.calculate(trueTheta, turnTarget), maxSpeed);
 
             // Speed toggle
@@ -65,11 +70,12 @@ public class TheseusTeleop extends LinearOpMode {
                 Bot.intake.closeWrist();
             }
 
-            // false = out, true = in
             if (gamepad1.y) {
-                Bot.intake.setWheelDirection(false);
-            } if (gamepad1.a) {
-                Bot.intake.setWheelDirection(true);
+                Bot.intake.spinWheels(1);
+            } else if (gamepad1.a) {
+                Bot.intake.spinWheels(-1);
+            } else {
+                Bot.intake.stopWheels();
             }
 
 
@@ -84,6 +90,24 @@ public class TheseusTeleop extends LinearOpMode {
                 Bot.specimenArm.movePrepHang(0.5);
             } else if (gamepad2.dpad_left) {
                 Bot.specimenArm.moveToCollect(0.5);
+            }
+            // OCG Arm/Box
+
+            // Slide arm positions
+            if (gamepad2.y) {
+                Bot.slideArm.moveUp(0.2);
+            } else if (gamepad2.a) {
+                Bot.slideArm.moveDown(0.2);
+            } else if (gamepad2.x) {
+                Bot.slideArm.moveMid(0.2);
+            } else {
+                Bot.slideArm.moveDown(0.2);
+            }
+
+            // Box state
+            ocgBoxToggle.toggle(gamepad2.dpad_right);
+            if (ocgBoxToggle.justChanged()) {
+                Bot.slideArm.setOCGbox(ocgBoxToggle.get());
             }
 
             // Claw toggle

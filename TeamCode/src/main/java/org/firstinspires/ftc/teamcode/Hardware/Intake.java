@@ -53,29 +53,9 @@ public class Intake {
     }
 
     // Intake Wheels
-    public void setWheelDirection(DcMotorSimple.Direction direction) {
-        intakeWheelL.setDirection(direction);
-        intakeWheelR.setDirection(direction);
-    }
-
-    public void setWheelDirection(boolean boolDirection) {
-        DcMotorSimple.Direction direction = boolDirection ? DcMotorSimple.Direction.FORWARD : DcMotorSimple.Direction.REVERSE;
-        setWheelDirection(direction);
-    }
-
-    public void toggleWheelDirection() {
-        DcMotorSimple.Direction direction = intakeWheelL.getDirection();
-
-        if (direction == DcMotorSimple.Direction.FORWARD) {
-            setWheelDirection(DcMotorSimple.Direction.REVERSE);
-        }
-        else if (direction == DcMotorSimple.Direction.REVERSE) {
-            setWheelDirection(DcMotorSimple.Direction.FORWARD);
-        }
-    }
 
     public void spinWheels(double power) {
-        intakeWheelL.setPower(power);
+        intakeWheelL.setPower(-power);
         intakeWheelR.setPower(power);
     }
 

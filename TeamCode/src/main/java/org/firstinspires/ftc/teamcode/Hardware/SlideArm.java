@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
 public class SlideArm {
     private final DcMotorEx slideMotor;
@@ -61,6 +62,12 @@ public class SlideArm {
     public int getArmPosition() {
         return(slideMotor.getCurrentPosition());
     }
+
+    public void setOCGbox(boolean state){
+        if (state) {ocgDrop();}
+        else if (!state) {ocgUp();}
+    }
+
 
 
 }
