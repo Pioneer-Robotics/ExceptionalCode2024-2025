@@ -24,6 +24,7 @@ public class SpecimenArm {
 
 //        wrist.closeServo();
         claw.closeServo();
+        moveToPos(5, 0.25);
     }
     public void move(double speed) {
         motor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);

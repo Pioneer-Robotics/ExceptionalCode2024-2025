@@ -14,6 +14,7 @@ public class Intake {
 
     ServoClass misumiDriveL, misumiDriveR, misumiWristL, misumiWristR;
     CRServo intakeWheelL, intakeWheelR;
+    boolean isExtended = false;
 
     public Intake() {
         misumiDriveL = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiDriveL), Config.misumiDriveLOpen, Config.misumiDriveLClose);
@@ -36,11 +37,13 @@ public class Intake {
     public void openMisumiDrive() {
         misumiDriveL.openServo();
         misumiDriveR.openServo();
+        isExtended = true;
     }
 
     public void closeMisumiDrive() {
         misumiDriveL.closeServo();
         misumiDriveR.closeServo();
+        isExtended = false;
     }
 
     public void openWrist() {
@@ -73,8 +76,5 @@ public class Intake {
         spinWheels(0);
     }
 
-    public double getMisumiDriveL() {return misumiDriveL.getPos();}
-    public double getMisumiDriveR() {return misumiDriveR.getPos();}
-    public double getMisumiWristL() {return misumiWristL.getPos();}
-    public double getMisumiWristR() {return misumiWristR.getPos();}
+    public boolean isExtended() { return isExtended; }
 }

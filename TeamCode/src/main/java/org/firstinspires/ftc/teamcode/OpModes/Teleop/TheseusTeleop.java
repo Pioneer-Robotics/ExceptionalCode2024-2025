@@ -21,9 +21,9 @@ public class TheseusTeleop extends LinearOpMode {
         Toggle clawToggle = new Toggle(false);
         Toggle ocgBoxToggle = new Toggle(false);
 
-        PID turnPid = new PID(Config.turnPID[0], Config.turnPID[1], Config.turnPID[2], 0, 0.1);
-        TrueAngle trueAngle = new TrueAngle(0);
-        double turnTarget = 0;
+//        PID turnPid = new PID(Config.turnPID[0], Config.turnPID[1], Config.turnPID[2], 0, 0.1);
+//        TrueAngle trueAngle = new TrueAngle(0);
+//        double turnTarget = 0;
 
         // Initialize max speed
         double maxSpeed = 0.5;
@@ -40,13 +40,13 @@ public class TheseusTeleop extends LinearOpMode {
             //TODO: ADD NORTH MODE
             double px = gamepad1.left_stick_x;
             double py = -gamepad1.left_stick_y;
-            turnTarget += gamepad1.right_stick_x/15;
-            double trueTheta = trueAngle.updateAngle(-Bot.imu.getRadians());
+//            turnTarget += gamepad1.right_stick_x/15;
+//            double trueTheta = trueAngle.updateAngle(-Bot.imu.getRadians());
 
             northModeToggle.toggle(gamepad1.right_trigger > 0.9 && gamepad1.left_trigger > 0.9);
 
             Bot.mecanumBase.setNorthMode(northModeToggle.get());
-            Bot.mecanumBase.move(px, py, turnPid.calculate(trueTheta, turnTarget), maxSpeed);
+            Bot.mecanumBase.move(px, py, gamepad1.right_stick_x, maxSpeed);
 
             // Speed toggle
             incSpeedToggle.toggle(gamepad1.right_bumper);
@@ -59,7 +59,6 @@ public class TheseusTeleop extends LinearOpMode {
             }
 
             // Intake
-
             if (gamepad1.dpad_up) {
                 Bot.intake.openMisumiDrive();
                 Bot.intake.openWrist();
@@ -74,14 +73,16 @@ public class TheseusTeleop extends LinearOpMode {
                 Bot.intake.closeWrist();
             }
 
-            if (gamepad1.y) {
-                Bot.intake.spinWheels(1);
-            } else if (gamepad1.a) {
+//            if (gamepad1.y) {
+//                Bot.intake.spinWheels(1);
+//            }
+            if (gamepad1.a) {
                 Bot.intake.spinWheels(-1);
+            } else if (Bot.intake.isExtended()) {
+                Bot.intake.spinWheels(1);
             } else {
                 Bot.intake.stopWheels();
             }
-
 
             /*-------------------
              -     Gamepad 2    -
