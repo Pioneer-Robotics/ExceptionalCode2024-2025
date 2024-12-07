@@ -20,6 +20,7 @@ public class SlideArm {
         slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         ocgBox = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.ocgBox), Config.ocgBoxOpen, Config.ocgBoxClose);
+        ocgBox.closeServo();
     }
 
     /**
@@ -35,20 +36,26 @@ public class SlideArm {
         slideMotor.setVelocity(Config.maxSlideTicksPerSecond * speed);
     }
 
-    public void moveToPosition(double position) {
+    public void moveToPositionTicks(int positionTicks, double speed) {
+        slideMotor.setTargetPosition(positionTicks);
+        slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slideMotor.setVelocity(Config.maxSlideTicksPerSecond * speed);
+    }
+
+        public void moveToPosition(double position) {
         moveToPosition(position, Config.defaultSlideSpeed);
     }
 
     public void moveDown(double speed) {
-        moveToPosition(Config.slideDown, speed);
+        moveToPosition(0.05);
     }
 
     public void moveMid(double speed) {
-        moveToPosition(Config.slideLowBasket, speed);
+        moveToPosition(0.5, speed);
     }
 
     public void moveUp(double speed) {
-        moveToPosition(Config.slideHighBasket, speed);
+        moveToPosition(0.95, speed);
     }
 
     public void ocgDrop() {
@@ -63,11 +70,9 @@ public class SlideArm {
         return(slideMotor.getCurrentPosition());
     }
 
-    public void setOCGbox(boolean state){
-        if (state) {ocgDrop();}
-        else if (!state) {ocgUp();}
+    public void setOCGBox(boolean state){
+        if (state) { ocgDrop(); }
+        else  { ocgUp(); }
     }
-
-
 
 }

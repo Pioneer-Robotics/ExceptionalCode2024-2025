@@ -28,6 +28,7 @@ public class Intake {
         intakeWheelR.setDirection(DcMotorSimple.Direction.FORWARD);
 
         closeMisumiDrive();
+        midWrist();
     }
 
 
@@ -45,6 +46,11 @@ public class Intake {
     public void openWrist() {
         misumiWristL.openServo();
         misumiWristR.openServo();
+    }
+
+    public void midWrist() {
+        misumiWristL.anyPos(Config.misumiWristLMid);
+        misumiWristR.anyPos(Config.misumiWristRMid);
     }
 
     public void closeWrist() {

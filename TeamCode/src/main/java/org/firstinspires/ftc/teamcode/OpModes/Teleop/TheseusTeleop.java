@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
@@ -8,6 +9,7 @@ import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 import org.firstinspires.ftc.teamcode.Helpers.TrueAngle;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PID;
 
+@TeleOp(name="Theseus Teleop")
 public class TheseusTeleop extends LinearOpMode {
     public void runOpMode() {
         Bot.init(this);
@@ -60,8 +62,10 @@ public class TheseusTeleop extends LinearOpMode {
 
             if (gamepad1.dpad_up) {
                 Bot.intake.openMisumiDrive();
+                Bot.intake.openWrist();
             } if (gamepad1.dpad_down) {
                 Bot.intake.closeMisumiDrive();
+                Bot.intake.midWrist();
             }
 
             if (gamepad1.b) {
@@ -95,19 +99,21 @@ public class TheseusTeleop extends LinearOpMode {
 
             // Slide arm positions
             if (gamepad2.y) {
-                Bot.slideArm.moveUp(0.2);
+                Bot.slideArm.moveToPositionTicks(Config.slideHighBasket, 0.8);
             } else if (gamepad2.a) {
-                Bot.slideArm.moveDown(0.2);
+                Bot.slideArm.moveToPositionTicks(Config.slideDown, 0.8);
             } else if (gamepad2.x) {
-                Bot.slideArm.moveMid(0.2);
-            } else {
-                Bot.slideArm.moveDown(0.2);
+                Bot.slideArm.moveToPositionTicks(Config.slideLowBasket, 0.8);
             }
 
             // Box state
-            ocgBoxToggle.toggle(gamepad2.dpad_right);
-            if (ocgBoxToggle.justChanged()) {
-                Bot.slideArm.setOCGbox(ocgBoxToggle.get());
+//            ocgBoxToggle.toggle(gamepad2.dpad_right);
+//            if (ocgBoxToggle.justChanged()) {
+//                Bot.slideArm.setOCGBox(ocgBoxToggle.get());
+//            }
+
+            if (gamepad2.dpad_right) {
+                Bot.slideArm.ocgUp();
             }
 
             // Claw toggle

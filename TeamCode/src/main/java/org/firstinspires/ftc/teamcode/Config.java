@@ -85,17 +85,17 @@ public class Config {
     public static final double misumiDriveROpen = 0.475;
     public static final double misumiDriveRClose = 0;
 
-    public static final double misumiWristLOpen = 0;
-    public static final double misumiWristLClose = 0;
-    public static final double misumiWristROpen = 0;
-    public static final double misumiWristRClose = 0;
+    public static final double misumiWristLOpen = 0.425;
+    public static final double misumiWristLMid = 0.35;
+    public static final double misumiWristLClose = 0.15;
+    public static final double misumiWristROpen = 0.175;
+    public static final double misumiWristRMid = 0.25;
+    public static final double misumiWristRClose = 0.65;
 
     public static final double intakeWheelPower = 0.2;
 
     public static final double ocgBoxOpen = 0;
     public static final double ocgBoxClose = 0;
-
-
 
     // ---- Motor Positions ----
     // Specimen Arm
@@ -113,7 +113,7 @@ public class Config {
     public static final int maxSlideHeight = 4350;
     public static final int slideDown = 15;
     public static final int slideLowBasket = 2500;
-    public static final int slideHighBasket = 4350;
+    public static final int slideHighBasket = 4300;
 
     // ---- Coordinates of note and auto config ----
     // Y position of robot when flush with the submersible (cm)
