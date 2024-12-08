@@ -79,4 +79,13 @@ public class MecanumBase {
     public void setNorthMode(boolean northMode) {
         this.northMode = northMode;
     }
+
+    public double[] getEncoders() {
+        return new double[] {
+                RF.getCurrentPosition(),
+                LF. getCurrentPosition(),
+                RB.getCurrentPosition(),
+                LB.getCurrentPosition()
+        };
+    }
 }

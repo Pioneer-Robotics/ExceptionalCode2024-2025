@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Config;
 
 public class SpecimenArm {
     private final DcMotorEx motor;
-    ServoClass wrist, claw;
+    ServoClass claw;
 
     public SpecimenArm() {
         motor = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.specimenArmMotor);
@@ -19,10 +19,8 @@ public class SpecimenArm {
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Servos
-        wrist = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.wristServo), Config.wristOpen, Config.wristClose);
         claw = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.clawServo), Config.clawOpen, Config.clawClose);
 
-        wrist.closeServo();
         claw.closeServo();
     }
     public void move(double speed) {
@@ -66,10 +64,7 @@ public class SpecimenArm {
     // Servo control
     public void openClaw() { claw.openServo(); }
     public void closeClaw() { claw.closeServo(); }
-    public void openWrist() { wrist.openServo(); }
-    public void closeWrist() { wrist.closeServo(); }
 
-    public void setWristPosBool(boolean pos) { wrist.selectBoolPos(pos); }
     public void setClawPosBool(boolean pos) { claw.selectBoolPos(pos); }
 
     // Getters

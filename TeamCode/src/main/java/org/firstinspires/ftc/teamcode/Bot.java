@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Odometry;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PIDDrive;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PurePursuit;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.SparkfunOTOS;
+import org.firstinspires.ftc.teamcode.SelfDrivingAuto.TwoWheelOdometry;
 
 /**
  * This class is used to create all of the hardware objects and store them in the bot object
@@ -25,7 +26,8 @@ public class Bot {
     public static PIDDrive pidDrive;
     public static MecanumBase mecanumBase;
     public static SparkfunOTOS optical_odom;
-    public static Odometry deadwheel_odom;
+//    public static Odometry deadwheel_odom;
+    public static TwoWheelOdometry deadwheel_odom;
     public static VoltageHandler voltageHandler;
     public static ColorSensor colorSensor;
     public static PurePursuit purePursuit;
@@ -39,7 +41,8 @@ public class Bot {
 
         // Drive base and self driving
         Bot.optical_odom = new SparkfunOTOS();
-        Bot.deadwheel_odom = new Odometry();
+//        Bot.deadwheel_odom = new Odometry();
+        Bot.deadwheel_odom = new TwoWheelOdometry();
         Bot.mecanumBase = new MecanumBase();
         Bot.pidDrive = new PIDDrive();
         Bot.purePursuit = new PurePursuit(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2]);

@@ -88,6 +88,15 @@ public class Teleop extends LinearOpMode {
             }
 
             // Telemetry and update
+            double[] pos = Bot.deadwheel_odom.returnPose();
+            double[] encoders = Bot.mecanumBase.getEncoders();
+            telemetry.addData("RF Encoder", encoders[0]);
+            telemetry.addData("LF Encoder", encoders[1]);
+            telemetry.addData("RB Encoder", encoders[2]);
+            telemetry.addData("LB Encoder", encoders[3]);
+            telemetry.addData("Pos X", pos[0]);
+            telemetry.addData("Pos Y", pos[1]);
+            telemetry.addData("Pos Theta", Bot.imu.getRadians());
             telemetry.addData("Speed", maxSpeed);
             telemetry.addData("Arm Pos", Bot.specimenArm.getPositionTicks());
             telemetry.addData("Voltage", voltage);

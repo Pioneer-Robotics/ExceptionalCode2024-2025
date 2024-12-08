@@ -46,9 +46,9 @@ public class Config {
 
     // ---- Hardware Map ----
     // Odometers
-    public static final String odoLeft = "OdoLeft";
-    public static final String odoCenter = "hang";
-    public static final String odoRight = "collector";
+    public static final String odoLeft = "odoLeft";
+    public static final String odoCenter = "odoCenter";
+    public static final String odoRight = "odoRight";
 
     // Drive motor names
     public static final String motorLF = "LF";
@@ -69,9 +69,6 @@ public class Config {
     public static final String imu = "expansionIMU";
 
     // ---- Servo Positions ----
-    public static final double wristOpen = 0.0;
-    public static final double wristClose = 1.0;
-
     public static final double clawOpen = 0.25;
     public static final double clawClose = 0.95;
 
