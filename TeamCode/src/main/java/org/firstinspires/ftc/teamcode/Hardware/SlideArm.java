@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
-import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
 public class SlideArm {
     private final DcMotorEx slideMotor;
@@ -19,7 +18,7 @@ public class SlideArm {
         slideMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        ocgBox = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.ocgBox), Config.ocgBoxOpen, Config.ocgBoxClose);
+        ocgBox = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.ocgBox), Config.ocgBoxHold, Config.ocgBoxDrop);
         ocgBox.closeServo();
     }
 
@@ -71,8 +70,7 @@ public class SlideArm {
     }
 
     public void setOCGBox(boolean state){
-        if (state) { ocgDrop(); }
-        else  { ocgUp(); }
+        ocgBox.selectBoolPos(state);
     }
 
 }

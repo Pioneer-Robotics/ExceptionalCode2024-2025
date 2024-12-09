@@ -60,8 +60,8 @@ public class TheseusTeleop extends LinearOpMode {
 
             // Intake
             if (gamepad1.dpad_up) {
-                Bot.intake.openMisumiDrive();
                 Bot.intake.openWrist();
+                Bot.intake.openMisumiDrive();
             } if (gamepad1.dpad_down) {
                 Bot.intake.closeMisumiDrive();
                 Bot.intake.midWrist();
@@ -108,14 +108,14 @@ public class TheseusTeleop extends LinearOpMode {
             }
 
             // Box state
-//            ocgBoxToggle.toggle(gamepad2.dpad_right);
-//            if (ocgBoxToggle.justChanged()) {
-//                Bot.slideArm.setOCGBox(ocgBoxToggle.get());
-//            }
-
-            if (gamepad2.dpad_right) {
-                Bot.slideArm.ocgUp();
+            ocgBoxToggle.toggle(gamepad2.dpad_right);
+            if (ocgBoxToggle.justChanged()) {
+                Bot.slideArm.setOCGBox(ocgBoxToggle.get());
             }
+
+//            if (gamepad2.dpad_right) {
+//                Bot.slideArm.ocgUp();
+//            }
 
             // Claw toggle
             clawToggle.toggle(gamepad2.b);
@@ -123,8 +123,8 @@ public class TheseusTeleop extends LinearOpMode {
                 Bot.specimenArm.setClawPosBool(clawToggle.get());
             }
 
-
-
+            telemetry.addData("OCG Toggle", ocgBoxToggle.get());
+            telemetry.update();
         }
     }
 }

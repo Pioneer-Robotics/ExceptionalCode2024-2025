@@ -29,8 +29,8 @@ public class SpecimenAuto extends LinearOpMode {
                 // --> SPECIMEN_HANG_UP
                 case INIT:
                     AutoPaths.hangSpecimen(
-                            Bot.optical_odom.getX(), // Current X
-                            Bot.optical_odom.getY(), // Current Y
+                            Bot.deadwheel_odom.getX(), // Current X
+                            Bot.deadwheel_odom.getY(), // Current Y
                             offset // Hang offset X
                     );
                     Bot.specimenArm.movePrepHangUp(0.5);
@@ -43,7 +43,7 @@ public class SpecimenAuto extends LinearOpMode {
                     Bot.purePursuit.update();
                     if (Bot.purePursuit.reachedTarget() || Bot.frontTouchSensor.getVoltage()<.4) {
                         Bot.purePursuit.stop();
-                        Bot.optical_odom.setY(Config.submersibleY);
+//                        Bot.deadwheel_odom.setY(Config.submersibleY);
                         Bot.specimenArm.movePostHangUp(1.0); // Hang specimen
                         timer.reset(); // Reset timer for next state
                         state = State.SPECIMEN_HANG_2;
@@ -58,16 +58,16 @@ public class SpecimenAuto extends LinearOpMode {
                         if (stop) {
                             // Set path to observation zone to park (PARK)
                             AutoPaths.park(
-                                    Bot.optical_odom.getX(), // Current X
-                                    Bot.optical_odom.getY() // Current Y
+                                    Bot.deadwheel_odom.getX(), // Current X
+                                    Bot.deadwheel_odom.getY() // Current Y
                             );
                             state = State.PARK;
                             break;
                         } else if (collect) {
                             // Set path to observation zone to grab specimen (COLLECT_SPECIMEN_1)
                             AutoPaths.collectSpecimen(
-                                    Bot.optical_odom.getX(), // Current X
-                                    Bot.optical_odom.getY() // Current Y
+                                    Bot.deadwheel_odom.getX(), // Current X
+                                    Bot.deadwheel_odom.getY() // Current Y
                             );
                             Bot.specimenArm.moveToCollect(0.5);
                             state = State.COLLECT_SPECIMEN_1;
@@ -75,8 +75,8 @@ public class SpecimenAuto extends LinearOpMode {
                         } else {
                             // Set path to push first sample into observation zone (PUSH_SAMPLE_1)
                             AutoPaths.pushSample1(
-                                    Bot.optical_odom.getX(), // Current X
-                                    Bot.optical_odom.getY() // Current Y
+                                    Bot.deadwheel_odom.getX(), // Current X
+                                    Bot.deadwheel_odom.getY() // Current Y
                             );
                             timer.reset();
                             state = State.PUSH_SAMPLE_1;
@@ -92,8 +92,8 @@ public class SpecimenAuto extends LinearOpMode {
                     Bot.purePursuit.update(0.5);
                     if (Bot.purePursuit.reachedTarget(4)) {
                         AutoPaths.pushSample2(
-                                Bot.optical_odom.getX(), // Current X
-                                Bot.optical_odom.getY() // Current Y
+                                Bot.deadwheel_odom.getX(), // Current X
+                                Bot.deadwheel_odom.getY() // Current Y
                         );
                         state = State.PUSH_SAMPLE_2;
                     }
@@ -105,8 +105,8 @@ public class SpecimenAuto extends LinearOpMode {
                     Bot.purePursuit.update(0.5);
                     if (Bot.purePursuit.reachedTarget(4)) {
                         AutoPaths.collectSpecimen(
-                                Bot.optical_odom.getX(), // Current X
-                                Bot.optical_odom.getY() // Current Y
+                                Bot.deadwheel_odom.getX(), // Current X
+                                Bot.deadwheel_odom.getY() // Current Y
                         );
                         Bot.specimenArm.moveToCollect(0.5);
                         state = State.COLLECT_SPECIMEN_1;
@@ -132,8 +132,8 @@ public class SpecimenAuto extends LinearOpMode {
                     if (timer.seconds() > 0.75) { // Wait to grab the specimen
                         offset += Config.hangOffset; // Adjust the hang offset
                         AutoPaths.hangSpecimen(
-                                Bot.optical_odom.getX(), // Current X
-                                Bot.optical_odom.getY(), // Current Y
+                                Bot.deadwheel_odom.getX(), // Current X
+                                Bot.deadwheel_odom.getY(), // Current Y
                                 offset // Hang offset X
                         );
                         Bot.specimenArm.movePrepHang(0.5);
@@ -148,7 +148,7 @@ public class SpecimenAuto extends LinearOpMode {
                     Bot.purePursuit.update(0.4);
                     if (Bot.purePursuit.reachedTarget() || Bot.frontTouchSensor.getVoltage()<.4) {
                         Bot.purePursuit.stop();
-                        Bot.optical_odom.setY(Config.submersibleY);
+//                        Bot.deadwheel_odom.setY(Config.submersibleY);
                         Bot.specimenArm.movePostHang(1.0); // Move arm down
                         timer.reset();
                         if (collect) {
@@ -172,12 +172,13 @@ public class SpecimenAuto extends LinearOpMode {
                     break;
                 }
 
+            Bot.deadwheel_odom.calculate();
             telemetry.addData("State", state);
             telemetry.addData("Touch", Bot.frontTouchSensor.getVoltage());
-            telemetry.addData("X", Bot.optical_odom.getX());
-            telemetry.addData("Y", Bot.optical_odom.getY());
-            telemetry.addData("Theta", Bot.optical_odom.getHeading());
-            telemetry.addData("Absolute Velocity", Bot.optical_odom.getAbsoluteVelocity());
+            telemetry.addData("X", Bot.deadwheel_odom.getX());
+            telemetry.addData("Y", Bot.deadwheel_odom.getY());
+            telemetry.addData("Theta", Bot.imu.getRadians());
+//            telemetry.addData("Absolute Velocity", Bot.deadwheel_odom.getAbsoluteVelocity());
             telemetry.update();
         }
     }

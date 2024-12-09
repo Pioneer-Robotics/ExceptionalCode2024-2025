@@ -30,7 +30,7 @@ public class PurePursuit {
      */
     public double[] getTargetPoint(double lookAhead) {
         // Get the current position
-        double[] pos = Bot.optical_odom.getPose();
+        double[] pos = Bot.deadwheel_odom.returnPose(); //Used to be optical
         // Loop through the path to find the target point
         double[] lastIntersection = null; // Follow the intersection point closest to the end of the path
         for (int i = 0; i < path.length - 1; i++) {
@@ -115,7 +115,7 @@ public class PurePursuit {
     }
 
     public boolean reachedTarget(double tolerance) {
-        double[] pos = Bot.optical_odom.getPose();
+        double[] pos = Bot.deadwheel_odom.returnPose(); //Used to be otos
         double[] targetPoint = path[path.length - 1]; // Last point in the path
         double dx = Math.abs(targetPoint[0] - pos[0]);
         double dy = Math.abs(targetPoint[1] - pos[1]);
@@ -128,7 +128,7 @@ public class PurePursuit {
 
     public double getDistance() {
         // Get distance to target point
-        double[] pos = Bot.optical_odom.getPose();
+        double[] pos = Bot.deadwheel_odom.returnPose(); //Used to be optical
         double[] targetPoint = path[path.length - 1]; // Last point in the path
         double dx = Math.abs(targetPoint[0] - pos[0]);
         double dy = Math.abs(targetPoint[1] - pos[1]);
@@ -138,8 +138,9 @@ public class PurePursuit {
     public void update(double speed) {
         // Get target point
         double[] targetPoint = getTargetPoint(Config.lookAhead);
+        Bot.deadwheel_odom.calculate();
         // Get current position and calculate the movement
-        double[] pos = Bot.optical_odom.getPose();
+        double[] pos = Bot.deadwheel_odom.returnPose();
         double moveX = xPID.calculate(pos[0], targetPoint[0]);
         double moveY = yPID.calculate(pos[1], targetPoint[1]);
         double moveTheta = turnPID.calculate(-Bot.imu.getRadians(), 0);

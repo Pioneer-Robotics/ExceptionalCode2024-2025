@@ -53,7 +53,7 @@ public class TwoWheelOdometry {
     }
 
     public double getY() {
-        return (y);
+        return (-y);
     }
 
     public double getX() {
@@ -71,6 +71,6 @@ public class TwoWheelOdometry {
      */
     public double[] returnPose(){
         calculate();
-        return (new double[]{x, y, Bot.imu.getRadians()});
+        return (new double[]{x, y, Bot.imu.getRadians()}); //Does imu need to be negative
     }
 }

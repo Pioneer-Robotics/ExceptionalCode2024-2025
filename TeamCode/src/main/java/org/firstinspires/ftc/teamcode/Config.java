@@ -85,17 +85,17 @@ public class Config {
     public static final double misumiDriveROpen = 0.475;
     public static final double misumiDriveRClose = 0;
 
-    public static final double misumiWristLOpen = 0.45;
+    public static final double misumiWristLOpen = 0.46;//was o.45
     public static final double misumiWristLMid = 0.365;
     public static final double misumiWristLClose = 0.1;
-    public static final double misumiWristROpen = 0.15;
+    public static final double misumiWristROpen = 0.14; //was 0.15
     public static final double misumiWristRMid = 0.225;
     public static final double misumiWristRClose = 0.45;
 
     public static final double intakeWheelPower = 1;
 
-    public static final double ocgBoxOpen = 0;
-    public static final double ocgBoxClose = 0;
+    public static final double ocgBoxHold = 1;
+    public static final double ocgBoxDrop = 0;
 
     // ---- Motor Positions ----
     // Specimen Arm
@@ -129,8 +129,12 @@ public class Config {
     // Coordinates of observation zone park
     public static final double parkX = 310;
     public static final double parkY = 20.5;
+    public static final double basketParkX = 30;
+    public static final double basketParkY = 20.5;
 
     // Robot starting position for specimen auto
     public static final double specimenStartX = 200;
     public static final double specimenStartY = 20.5;
+    public static final double basketStartX = 160; // TODO: Actually measure this
+    public static final double basketStartY = 20.5;
 }
