@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 import androidx.annotation.NonNull;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.AnalogInput;
+
 import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
 import org.firstinspires.ftc.teamcode.Hardware.ColorSensor;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
 import org.firstinspires.ftc.teamcode.Hardware.SpecimenArm;
 import org.firstinspires.ftc.teamcode.Hardware.VoltageHandler;
-import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Odometry;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PIDDrive;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PurePursuit;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.SparkfunOTOS;
@@ -26,11 +27,11 @@ public class Bot {
     public static PIDDrive pidDrive;
     public static MecanumBase mecanumBase;
     public static SparkfunOTOS optical_odom;
-//    public static Odometry deadwheel_odom;
     public static TwoWheelOdometry deadwheel_odom;
     public static VoltageHandler voltageHandler;
     public static ColorSensor colorSensor;
     public static PurePursuit purePursuit;
+    public static AnalogInput frontTouchSensor;
 
     /**
      * Constructor for Bot.
@@ -54,6 +55,7 @@ public class Bot {
         
 
         // Other
+        Bot.frontTouchSensor = opMode.hardwareMap.get(AnalogInput.class, Config.touchSensor);
         Bot.colorSensor = new ColorSensor();
         Bot.voltageHandler = new VoltageHandler();
         Bot.imu = new BotIMU();

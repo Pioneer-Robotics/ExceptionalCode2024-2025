@@ -60,7 +60,7 @@ public class TwoWheelOdometry {
         double curCenterTicks = -odoCenter.getCurrentPosition();
 
         // Get current rotation from IMU
-        theta = Bot.imu.getRadians();
+        theta = -Bot.imu.getRadians();
 
         // Calculate the change in odometer readings
         double dRightCM = (curRightTicks - prevRightTicks) * Config.ticsToCM;
@@ -73,10 +73,12 @@ public class TwoWheelOdometry {
         double dY = Math.sin(theta) * dCenterCM - Math.cos(theta) * dRightCM;
 
         // TODO: Account for arc when the robot turns in place
+        double arc_x = dTheta * Config.offsetOdoCenter * Config.ticsToCM;
+        double arc_y = dTheta * Config.offsetOdoLeft * Config.ticsToCM;
 
         // Update the current X and Y values
-        x += dX;
-        y += dY;
+        x += dX - arc_x;
+        y += dY - arc_y;
 
         // Set the previous odometer readings for the next cycle
         prevRightTicks = curRightTicks;
@@ -102,4 +104,7 @@ public class TwoWheelOdometry {
         calculate();
         return (new double[]{x, y});
     }
+
+    public int getRawOdoLeft() { return odoLeft.getCurrentPosition(); }
+    public int getRawOdoCenter() { return odoCenter.getCurrentPosition(); }
 }

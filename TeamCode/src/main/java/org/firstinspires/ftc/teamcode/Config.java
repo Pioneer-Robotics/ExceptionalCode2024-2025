@@ -19,6 +19,10 @@ public class Config {
     public static final double maxDriveTicksPerSecond = 2700; // ~300 RPM
     public static final double maxSlideTicksPerSecond = 2700;
 
+    // Two wheel odometers
+    public static final double offsetOdoLeft = 500;
+    public static final double offsetOdoCenter = 2500;
+
     // PID constants
     public static double[] drivePID = {0.08, 0.00015, 0}; // kP, kI, kD
     public static double[] turnPID = {2, 0.00075, 0}; // kP, kI, kD
@@ -64,6 +68,7 @@ public class Config {
     public static final String clawServo = "clawServo";
 
     // Other names
+    public static final String touchSensor = "touch";
     public static final String colorSensor = "colorSensor";
     public static final String led = "led";
     public static final String imu = "expansionIMU";
@@ -75,9 +80,28 @@ public class Config {
     // ---- Motor Positions ----
     // Specimen Arm
     public static final double defaultSpecimenArmSpeed = 0.5;
-    public static final int specimenArmPostHang = 1100;
-    public static final int specimenArmPrepHang = 825;
-    public static final int specimenArmCollect = 1850;
-    public static final int specimenArmPrepHangUp = 950;
-    public static final int specimenArmPostHangUp = 550;
+    public static final int specimenArmPostHang = 1215; //was 1250
+    public static final int specimenArmPrepHang = 800;
+    public static final int specimenArmCollect = 1860;
+    public static final int specimenArmPrepHangUp = 1000;
+    public static final int specimenArmPostHangUp = 600;
+
+    // ---- Coordinates of note and auto config ----
+    // Y position of robot when flush with the submersible (cm)
+    public static final double submersibleY = 101;
+
+    // Specimen hang offset (space between hangs)
+    public static final double hangOffset = 10;
+
+    // Coordinates of first specimen hang
+    public static final double specHangX = 170;
+    public static final double specHangY = 100;
+
+    // Coordinates of observation zone park
+    public static final double parkX = 310;
+    public static final double parkY = 20.5;
+
+    // Robot starting position for specimen auto
+    public static final double specimenStartX = 200;
+    public static final double specimenStartY = 20.5;
 }

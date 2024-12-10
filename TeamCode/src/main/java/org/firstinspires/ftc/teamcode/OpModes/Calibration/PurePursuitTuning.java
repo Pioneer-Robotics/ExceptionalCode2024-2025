@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
-import org.firstinspires.ftc.teamcode.Helpers.BezierCalc;
+import org.firstinspires.ftc.teamcode.Helpers.SplineCalc;
 import org.firstinspires.ftc.teamcode.Helpers.Utils;
 
 @Autonomous(name="Pure Pursuit Tuning", group="Calibration")
@@ -32,7 +32,7 @@ public class PurePursuitTuning extends LinearOpMode {
                 case DRIVE_FORWARD:
                     double[] px = {0, 0, 100, 100};
                     double[] py = {0, 100, 0, 100};
-                    path = BezierCalc.nDegBez(px, py, 25);
+                    path = SplineCalc.nDegBez(px, py, 25);
                     Bot.purePursuit.setTargetPath(path);
                     if (Bot.purePursuit.reachedTarget()) {
                         state = State.DRIVE_BACKWARD;
@@ -41,7 +41,7 @@ public class PurePursuitTuning extends LinearOpMode {
                 case DRIVE_BACKWARD:
                     double[] px2 = {100, 100, 0, 0};
                     double[] py2 = {100, 0, 100, 0};
-                    path = BezierCalc.nDegBez(px2, py2, 25);
+                    path = SplineCalc  .nDegBez(px2, py2, 25);
                     Bot.purePursuit.setTargetPath(path);
                     if (Bot.purePursuit.reachedTarget()) {
                         state = State.DRIVE_FORWARD;
