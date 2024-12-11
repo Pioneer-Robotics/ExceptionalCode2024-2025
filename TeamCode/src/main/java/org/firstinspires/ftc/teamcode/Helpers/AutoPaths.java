@@ -18,7 +18,7 @@ public class AutoPaths {
     public static void collectSpecimen(double currentX, double currentY) {
         // Collect a specimen from the wall
         double[] pointsX = {currentX, 315, 247.6, 282.5};
-        double[] pointsY = {currentY, 65.5, 25.5, 21};
+        double[] pointsY = {currentY, 65.5, 25.5, 22};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
     }

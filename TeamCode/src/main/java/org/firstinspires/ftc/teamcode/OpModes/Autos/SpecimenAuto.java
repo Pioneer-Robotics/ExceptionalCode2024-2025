@@ -54,7 +54,7 @@ public class SpecimenAuto extends LinearOpMode {
                 // Go to submersible, hang specimen
                 // --> SPECIMEN_HANG_2
                 case SPECIMEN_HANG_UP: // Hang specimen right side up
-                    Bot.purePursuit.update();
+                    Bot.purePursuit.update(0.5);
                     if (Bot.purePursuit.reachedTarget() || Bot.frontTouchSensor.getVoltage()<.4) {
                         Bot.purePursuit.stop();
                         Bot.specimenArm.movePostHangUp(1.0); // Hang specimen
@@ -184,6 +184,7 @@ public class SpecimenAuto extends LinearOpMode {
                     break;
             }
 
+            Bot.deadwheel_odom.calculate();
             telemetry.addData("State", state);
             telemetry.addData("Touch", Bot.frontTouchSensor.getVoltage());
             telemetry.addData("X", Bot.deadwheel_odom.getX());

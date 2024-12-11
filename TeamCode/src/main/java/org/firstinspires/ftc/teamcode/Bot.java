@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 
 import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
 import org.firstinspires.ftc.teamcode.Hardware.ColorSensor;
+import org.firstinspires.ftc.teamcode.Hardware.Intake;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
 import org.firstinspires.ftc.teamcode.Hardware.SpecimenArm;
@@ -32,6 +33,7 @@ public class Bot {
     public static ColorSensor colorSensor;
     public static PurePursuit purePursuit;
     public static AnalogInput frontTouchSensor;
+    public static Intake intake;
 
     /**
      * Constructor for Bot.
@@ -43,7 +45,7 @@ public class Bot {
         // Drive base and self driving
         Bot.optical_odom = new SparkfunOTOS();
 //        Bot.deadwheel_odom = new Odometry();
-        Bot.deadwheel_odom = new TwoWheelOdometry();
+        Bot.deadwheel_odom = new TwoWheelOdometry(Config.specimenStartX, Config.specimenStartY);
         Bot.mecanumBase = new MecanumBase();
         Bot.pidDrive = new PIDDrive();
         Bot.purePursuit = new PurePursuit(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2]);
@@ -52,7 +54,7 @@ public class Bot {
         Bot.specimenArm = new SpecimenArm();
 
         // Servos
-        
+        Bot.intake = new Intake();
 
         // Other
         Bot.frontTouchSensor = opMode.hardwareMap.get(AnalogInput.class, Config.touchSensor);

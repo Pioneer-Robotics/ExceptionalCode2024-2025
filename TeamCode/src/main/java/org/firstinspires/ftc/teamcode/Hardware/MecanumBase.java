@@ -19,10 +19,14 @@ public class MecanumBase {
 
         LF.setDirection(DcMotor.Direction.REVERSE);
         LB.setDirection(DcMotor.Direction.REVERSE);
-        RF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        LF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        RB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        LB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        RF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        LF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        RB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        LB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        RF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         RF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

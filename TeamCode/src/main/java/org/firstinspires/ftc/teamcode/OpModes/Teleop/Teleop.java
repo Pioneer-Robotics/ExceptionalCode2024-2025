@@ -18,6 +18,8 @@ public class Teleop extends LinearOpMode {
         Toggle incSpeedToggle = new Toggle(false);
         Toggle decSpeedToggle = new Toggle(false);
         Toggle clawToggle = new Toggle(false);
+        Toggle intakeClawToggle = new Toggle(false);
+        Toggle intakeWristToggle = new Toggle(false);
 
         // Initialize max speed
         double maxSpeed = 0.5;
@@ -51,15 +53,31 @@ public class Teleop extends LinearOpMode {
                 maxSpeed -= 0.1;
             }
 
-            // Specimen Arm
-            // Manual movement
-//            if (gamepad1.left_trigger > 0.1) {
-//                Bot.specimenArm.move(-gamepad1.left_trigger);
-//            } else if (gamepad1.right_trigger > 0.1) {
-//                Bot.specimenArm.move(gamepad1.right_trigger);
-//            } else {
-//                Bot.specimenArm.move(0);
+//            if (gamepad1.dpad_up) {
+//                Bot.intake.openMisumiDrive();
+//            } else if (gamepad1.dpad_down) {
+//                Bot.intake.closeMisumiDrive();
 //            }
+
+            if (gamepad1.dpad_down) {
+                Bot.intake.openWrist();
+            } else if (gamepad1.dpad_up) {
+                Bot.intake.closeWrist();
+            }
+
+            intakeClawToggle.toggle(gamepad1.b);
+            if (intakeClawToggle.justChanged() && intakeClawToggle.get()) {
+                Bot.intake.openClaw();
+            } else if (intakeClawToggle.justChanged() && !intakeClawToggle.get()) {
+                Bot.intake.closeClaw();
+            }
+
+            intakeWristToggle.toggle(gamepad1.y);
+            if (intakeWristToggle.justChanged() && intakeWristToggle.get()) {
+                Bot.intake.openIntakeWrist();
+            } else if (intakeWristToggle.justChanged() && !intakeWristToggle.get()) {
+                Bot.intake.closeIntakeWrist();
+            }
 
             // ---- GamePad 2 ----
             // Preset arm positions
@@ -90,10 +108,8 @@ public class Teleop extends LinearOpMode {
             // Telemetry and update
             double[] pos = Bot.deadwheel_odom.returnPose();
             double[] encoders = Bot.mecanumBase.getEncoders();
-            telemetry.addData("RF Encoder", encoders[0]);
-            telemetry.addData("LF Encoder", encoders[1]);
-            telemetry.addData("RB Encoder", encoders[2]);
-            telemetry.addData("LB Encoder", encoders[3]);
+            telemetry.addData("Left Odometer", Bot.deadwheel_odom.getRawOdoLeft());
+            telemetry.addData("Center Odometer", Bot.deadwheel_odom.getRawOdoCenter());
             telemetry.addData("Pos X", pos[0]);
             telemetry.addData("Pos Y", pos[1]);
             telemetry.addData("Pos Theta", Bot.imu.getRadians());

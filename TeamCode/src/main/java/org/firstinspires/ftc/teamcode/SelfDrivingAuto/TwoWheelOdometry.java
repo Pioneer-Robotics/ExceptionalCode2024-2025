@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.Helpers.TrueAngle;
 
 /**
  * This class is used to calculate the robots current position on the field.
@@ -18,7 +19,8 @@ import org.firstinspires.ftc.teamcode.Config;
 public class TwoWheelOdometry {
     DcMotorEx odoLeft, odoCenter;
     private double x, y, theta;
-    private double prevRightTicks, prevCenterTicks, prevTheta;
+    private double prevLeftTicks, prevCenterTicks, prevTheta;
+    private TrueAngle trueAngle;
 
     public TwoWheelOdometry() {
         // Set up odometers
@@ -27,6 +29,8 @@ public class TwoWheelOdometry {
 
         odoLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odoCenter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        trueAngle = new TrueAngle(0);
 
         x = y = theta = 0;
     }
@@ -45,6 +49,8 @@ public class TwoWheelOdometry {
         odoLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odoCenter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        trueAngle = new TrueAngle(0);
+
         x = startX;
         y = startY;
     }
@@ -53,35 +59,38 @@ public class TwoWheelOdometry {
      * This method updates the current position of the robot on the field by using delta values from the odometers
      */
     public void calculate(){
+        // Get current rotation from IMU
+        // TODO: Theta jumps when around 3 pi
+        theta = trueAngle.updateAngle(-Bot.imu.getRadians());
+        double dTheta = theta - prevTheta;
+
+        Bot.opMode.telemetry.addData("True Angle", theta);
+
         // Odo readings
         // Center odometer calculates the horizontal displacement
-        // Right odometer calculates the vertical displacement
-        double curRightTicks = -odoLeft.getCurrentPosition();
-        double curCenterTicks = -odoCenter.getCurrentPosition();
+        // Left odometer calculates the vertical displacement
+        double curLeftTicks = odoLeft.getCurrentPosition();
+        double curCenterTicks = odoCenter.getCurrentPosition();
 
-        // Get current rotation from IMU
-        theta = -Bot.imu.getRadians();
+        // Account for arc when robot turns
+        double arc_x = dTheta * Config.offsetOdoCenter;
+        double arc_y = dTheta * Config.offsetOdoLeft;
 
         // Calculate the change in odometer readings
-        double dRightCM = (curRightTicks - prevRightTicks) * Config.ticsToCM;
-        double dCenterCM = (curCenterTicks - prevCenterTicks) * Config.ticsToCM;
-        double dTheta = theta - prevTheta;
+        double dLeftCM = ((curLeftTicks - prevLeftTicks) - arc_y) * Config.ticsToCM;
+        double dCenterCM = ((curCenterTicks - prevCenterTicks) - arc_x) * Config.ticsToCM;
 
         // Calculate the change in X and Y based on the robot's current orientation (theta)
         // Uses rotation matrix to account for when the robot is not facing forward
-        double dX = Math.cos(theta) * dCenterCM + Math.sin(theta) * dRightCM;
-        double dY = Math.sin(theta) * dCenterCM - Math.cos(theta) * dRightCM;
-
-        // TODO: Account for arc when the robot turns in place
-        double arc_x = dTheta * Config.offsetOdoCenter * Config.ticsToCM;
-        double arc_y = dTheta * Config.offsetOdoLeft * Config.ticsToCM;
+        double dX = Math.cos(theta) * dCenterCM + Math.sin(theta) * dLeftCM;
+        double dY = Math.sin(theta) * dCenterCM - Math.cos(theta) * dLeftCM;
 
         // Update the current X and Y values
-        x += dX - arc_x;
-        y += dY - arc_y;
+        x += dX;
+        y -= dY; // Y is flipped
 
         // Set the previous odometer readings for the next cycle
-        prevRightTicks = curRightTicks;
+        prevLeftTicks = curLeftTicks;
         prevCenterTicks = curCenterTicks;
         prevTheta = theta;
     }

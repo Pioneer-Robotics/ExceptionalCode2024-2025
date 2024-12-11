@@ -20,11 +20,11 @@ public class Config {
     public static final double maxSlideTicksPerSecond = 2700;
 
     // Two wheel odometers
-    public static final double offsetOdoLeft = 500;
-    public static final double offsetOdoCenter = 2500;
+    public static final double offsetOdoLeft = 1800;
+    public static final double offsetOdoCenter = 635;
 
     // PID constants
-    public static double[] drivePID = {0.08, 0.00015, 0}; // kP, kI, kD
+    public static double[] drivePID = {0.08, 0.0001, 0}; // kP, kI, kD
     public static double[] turnPID = {2, 0.00075, 0}; // kP, kI, kD
     public static double driveSpeed = 0.3;
     public static double minSpeed = 0.05;
@@ -66,6 +66,12 @@ public class Config {
     // Servo names
     public static final String wristServo = "wristServo";
     public static final String clawServo = "clawServo";
+    public static final String misumiDriveL = "misumiDriveL";
+    public static final String misumiDriveR = "misumiDriveR";
+    public static final String misumiWristR = "misumiWristR";
+    public static final String misumiWristL = "misumiWristL";
+    public static final String intakeClaw = "intakeClaw";
+    public static final String intakeWrist = "intakeWrist";
 
     // Other names
     public static final String touchSensor = "touch";
@@ -74,17 +80,36 @@ public class Config {
     public static final String imu = "expansionIMU";
 
     // ---- Servo Positions ----
-    public static final double clawOpen = 0.25;
+    // Specimen Arm Claw
+    public static final double clawOpen = 0.35;
     public static final double clawClose = 0.95;
+    // Intake Claw
+    public static final double intakeClawOpen = 0;
+    public static final double intakeClawClose = 0;
+    // Misumi Drive
+    public static final double misumiDriveLOpen = 0;
+    public static final double misumiDriveLClose = 0;
+    public static final double misumiDriveROpen = 0;
+    public static final double misumiDriveRClose = 0;
+    // Misumi Wrist
+    public static final double misumiWristLOpen = 0.5;
+    public static final double misumiWristLMid = 0;
+    public static final double misumiWristLClose = 0;
+    public static final double misumiWristROpen = 0.5;
+    public static final double misumiWristRMid = 0;
+    public static final double misumiWristRClose = 0;
+    // Intake Wrist
+    public static final double intakeWristClose = 0;
+    public static final double intakeWristOpen = 0;
 
     // ---- Motor Positions ----
     // Specimen Arm
     public static final double defaultSpecimenArmSpeed = 0.5;
-    public static final int specimenArmPostHang = 1215; //was 1250
-    public static final int specimenArmPrepHang = 800;
-    public static final int specimenArmCollect = 1860;
-    public static final int specimenArmPrepHangUp = 1000;
-    public static final int specimenArmPostHangUp = 600;
+    public static final int specimenArmPostHang = 1400;
+    public static final int specimenArmPrepHang = 900;
+    public static final int specimenArmCollect = 1925;
+    public static final int specimenArmPrepHangUp = 1050;
+    public static final int specimenArmPostHangUp = 650;
 
     // ---- Coordinates of note and auto config ----
     // Y position of robot when flush with the submersible (cm)
