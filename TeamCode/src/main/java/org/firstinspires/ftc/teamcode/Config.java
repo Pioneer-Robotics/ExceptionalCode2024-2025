@@ -62,6 +62,7 @@ public class Config {
 
     // Motor names
     public static final String specimenArmMotor = "specimenMotor";
+    public static final String slideMotor = "slideMotor";
 
     // Servo names
     public static final String wristServo = "wristServo";
@@ -72,6 +73,7 @@ public class Config {
     public static final String misumiWristL = "misumiWristL";
     public static final String intakeClaw = "intakeClaw";
     public static final String intakeWrist = "intakeWrist";
+    public static final String ocgBox = "ocgBox";
 
     // Other names
     public static final String touchSensor = "touch";
@@ -101,6 +103,9 @@ public class Config {
     // Intake Wrist
     public static final double intakeWristClose = 0;
     public static final double intakeWristOpen = 0;
+    // OCG Box
+    public static final double ocgBoxHold = 1;
+    public static final double ocgBoxDrop = 0;
 
     // ---- Motor Positions ----
     // Specimen Arm
@@ -110,13 +115,21 @@ public class Config {
     public static final int specimenArmCollect = 1925;
     public static final int specimenArmPrepHangUp = 1050;
     public static final int specimenArmPostHangUp = 650;
+    // Linear Slide
+    public static final int slideLength = 4365;
+    public static final double defaultSlideSpeed = 0.25;
+    public static final int minSlideHeight = 15;
+    public static final int maxSlideHeight = 4350;
+    public static final int slideDown = 15;
+    public static final int slideLowBasket = 2500;
+    public static final int slideHighBasket = 4300;
 
     // ---- Coordinates of note and auto config ----
     // Y position of robot when flush with the submersible (cm)
     public static final double submersibleY = 101;
 
     // Specimen hang offset (space between hangs)
-    public static final double hangOffset = 10;
+    public static final double hangOffset = 8;
 
     // Coordinates of first specimen hang
     public static final double specHangX = 170;

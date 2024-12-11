@@ -8,8 +8,8 @@ import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
 
-@TeleOp(name="Teleop")
-public class Teleop extends LinearOpMode {
+@TeleOp(name="Test Teleop")
+public class TestTeleop extends LinearOpMode {
     public void runOpMode() {
         Bot.init(this);
 
@@ -19,7 +19,7 @@ public class Teleop extends LinearOpMode {
         Toggle decSpeedToggle = new Toggle(false);
         Toggle clawToggle = new Toggle(false);
         Toggle intakeClawToggle = new Toggle(false);
-        Toggle ocgBoxToggle = new Toggle(false);
+        Toggle intakeWristToggle = new Toggle(false);
 
         // Initialize max speed
         double maxSpeed = 0.5;
@@ -53,13 +53,17 @@ public class Teleop extends LinearOpMode {
                 maxSpeed -= 0.1;
             }
 
-           if (gamepad1.dpad_up) {
-               Bot.intake.openMisumiDrive();
-               Bot.intake.openIntakeWrist();
-           } else if (gamepad1.dpad_down) {
-               Bot.intake.closeIntakeWrist();
-               Bot.intake.closeMisumiDrive();
-           }
+//            if (gamepad1.dpad_up) {
+//                Bot.intake.openMisumiDrive();
+//            } else if (gamepad1.dpad_down) {
+//                Bot.intake.closeMisumiDrive();
+//            }
+
+            if (gamepad1.dpad_down) {
+                Bot.intake.openWrist();
+            } else if (gamepad1.dpad_up) {
+                Bot.intake.closeWrist();
+            }
 
             intakeClawToggle.toggle(gamepad1.b);
             if (intakeClawToggle.justChanged() && intakeClawToggle.get()) {
@@ -70,13 +74,13 @@ public class Teleop extends LinearOpMode {
 
             intakeWristToggle.toggle(gamepad1.y);
             if (intakeWristToggle.justChanged() && intakeWristToggle.get()) {
-                Bot.intake.openWrist();
+                Bot.intake.openIntakeWrist();
             } else if (intakeWristToggle.justChanged() && !intakeWristToggle.get()) {
-                Bot.intake.closeWrist();
+                Bot.intake.closeIntakeWrist();
             }
 
             // ---- GamePad 2 ----
-            // Preset specimen arm positions
+            // Preset arm positions
             if (gamepad2.dpad_up) {
                 Bot.specimenArm.movePostHang(1.0);
             } else if (gamepad2.dpad_down) {
@@ -85,28 +89,14 @@ public class Teleop extends LinearOpMode {
                 Bot.specimenArm.moveToCollect(0.5);
             }
 
-            // Specimen Claw toggle
+            // Claw toggle
             clawToggle.toggle(gamepad2.b);
             if (clawToggle.justChanged()) {
                 Bot.specimenArm.setClawPosBool(clawToggle.get());
             }
 
-            // Slide Arm
-            if (gamepad2.y) {
-                Bot.slideArm.moveToPositionTicks(Config.slideHighBasket, 0.8);
-            } else if (gamepad2.a) {
-                Bot.slideArm.moveToPositionTicks(Config.slideDown, 0.8);
-            } else if (gamepad2.x) {
-                Bot.slideArm.moveToPositionTicks(Config.slideLowBasket, 0.8);
-            }
-
-            // Box state
-            ocgBoxToggle.toggle(gamepad2.dpad_right);
-            if (ocgBoxToggle.justChanged()) {
-                Bot.slideArm.setOCGBox(ocgBoxToggle.get());
-            }
-
             // Get data for telemetry
+
             double voltage = Bot.voltageHandler.getVoltage();
             if (voltage < 10) {
                 Bot.led.lightsOn(RevBlinkinLedDriver.BlinkinPattern.YELLOW);

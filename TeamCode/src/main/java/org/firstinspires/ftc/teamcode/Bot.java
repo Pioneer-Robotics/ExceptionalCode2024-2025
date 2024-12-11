@@ -34,6 +34,7 @@ public class Bot {
     public static PurePursuit purePursuit;
     public static AnalogInput frontTouchSensor;
     public static Intake intake;
+    public static SlideArm slideArm;
 
     /**
      * Constructor for Bot.
@@ -52,6 +53,7 @@ public class Bot {
 
         // Motors
         Bot.specimenArm = new SpecimenArm();
+        Bot.slideArm = new SlideArm();
 
         // Servos
         Bot.intake = new Intake();
