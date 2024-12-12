@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Bot;
+import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
 
@@ -19,7 +20,9 @@ public class Teleop extends LinearOpMode {
         Toggle decSpeedToggle = new Toggle(false);
         Toggle clawToggle = new Toggle(false);
         Toggle intakeClawToggle = new Toggle(false);
+        Toggle intakeWristToggle = new Toggle(false);
         Toggle ocgBoxToggle = new Toggle(false);
+        Toggle ocgBoxToggleRight = new Toggle(false);
 
         // Initialize max speed
         double maxSpeed = 0.5;
@@ -101,9 +104,14 @@ public class Teleop extends LinearOpMode {
             }
 
             // Box state
-            ocgBoxToggle.toggle(gamepad2.dpad_right);
+            ocgBoxToggle.toggle(gamepad2.left_bumper);
             if (ocgBoxToggle.justChanged()) {
                 Bot.slideArm.setOCGBox(ocgBoxToggle.get());
+            }
+
+            ocgBoxToggleRight.toggle(gamepad2.right_bumper);
+            if (ocgBoxToggleRight.justChanged()) {
+                Bot.slideArm.setOCGBoxRight(ocgBoxToggleRight.get());
             }
 
             // Get data for telemetry

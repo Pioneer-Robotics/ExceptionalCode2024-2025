@@ -19,7 +19,7 @@ public class SlideArm {
         slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         ocgBox = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.ocgBox), Config.ocgBoxHold, Config.ocgBoxDrop);
-        ocgBox.closeServo();
+        ocgHold();
     }
 
     /**
@@ -57,20 +57,31 @@ public class SlideArm {
         moveToPosition(0.95, speed);
     }
 
-    public void ocgDrop() {
-        ocgBox.closeServo();
+    public void ocgDrop() { ocgBox.anyPos(Config.ocgBoxDrop); }
+
+    public void ocgHold() {
+        ocgBox.anyPos(Config.ocgBoxHold);
     }
 
-    public void ocgUp() {
-        ocgBox.openServo();
-    }
+    public void ocgDropRight() { ocgBox.anyPos(Config.ocgBoxDropRight); }
 
     public int getArmPosition() {
         return(slideMotor.getCurrentPosition());
     }
 
     public void setOCGBox(boolean state){
-        ocgBox.selectBoolPos(state);
+        if (state) {
+            ocgDrop();
+        } else {
+            ocgHold();
+        }
     }
 
+    public void setOCGBoxRight(boolean state) {
+        if (state) {
+            ocgDropRight();
+        } else {
+            ocgHold();
+        }
+    }
 }

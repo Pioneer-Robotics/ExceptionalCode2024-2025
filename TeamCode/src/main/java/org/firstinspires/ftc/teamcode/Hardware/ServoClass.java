@@ -122,4 +122,8 @@ public class ServoClass {
      */
     public void setPos4(double pos) {
         pos4 = pos;}
+
+    public double getPos() {
+        return servo.getPosition();
+    }
 }

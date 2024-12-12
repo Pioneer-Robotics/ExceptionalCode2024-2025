@@ -86,26 +86,27 @@ public class Config {
     public static final double clawOpen = 0.35;
     public static final double clawClose = 0.95;
     // Intake Claw
-    public static final double intakeClawOpen = 0;
+    public static final double intakeClawOpen = 0.4;
     public static final double intakeClawClose = 0;
     // Misumi Drive
     public static final double misumiDriveLOpen = 0;
-    public static final double misumiDriveLClose = 0;
-    public static final double misumiDriveROpen = 0;
-    public static final double misumiDriveRClose = 0;
+    public static final double misumiDriveLClose = 0.3;
+    public static final double misumiDriveROpen = 0; // TODO
+    public static final double misumiDriveRClose = 0; // TODO
     // Misumi Wrist
-    public static final double misumiWristLOpen = 0.5;
-    public static final double misumiWristLMid = 0;
-    public static final double misumiWristLClose = 0;
-    public static final double misumiWristROpen = 0.5;
-    public static final double misumiWristRMid = 0;
-    public static final double misumiWristRClose = 0;
+    public static final double misumiWristLOpen = 0; // TODO
+    public static final double misumiWristLMid = 0; // TODO
+    public static final double misumiWristLClose = 0; // TODO
+    public static final double misumiWristROpen = 0; // TODO
+    public static final double misumiWristRMid = 0; // TODO
+    public static final double misumiWristRClose = 0; // TODO
     // Intake Wrist
     public static final double intakeWristClose = 0;
-    public static final double intakeWristOpen = 0;
+    public static final double intakeWristOpen = 1;
     // OCG Box
-    public static final double ocgBoxHold = 1;
-    public static final double ocgBoxDrop = 0;
+    public static final double ocgBoxDropRight = 0.1;
+    public static final double ocgBoxHold = 0.35;
+    public static final double ocgBoxDrop = 0.8;
 
     // ---- Motor Positions ----
     // Specimen Arm

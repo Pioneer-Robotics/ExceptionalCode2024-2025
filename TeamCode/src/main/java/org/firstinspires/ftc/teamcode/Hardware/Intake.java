@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.Config;
  */
 public class Intake {
 
-    ServoClass misumiDriveL, misumiDriveR, misumiWristL, misumiWristR, intakeClaw, intakeWrist;
+    public ServoClass misumiDriveL, misumiDriveR, misumiWristL, misumiWristR, intakeClaw, intakeWrist;
     boolean isExtended;
 
     public Intake() {

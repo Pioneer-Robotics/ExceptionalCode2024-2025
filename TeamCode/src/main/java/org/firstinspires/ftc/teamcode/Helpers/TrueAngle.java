@@ -20,7 +20,7 @@ public class TrueAngle {
             deltaAngle += 2 * Math.PI;
         }
         currentAngle += deltaAngle;
-        prevAngle = currentAngle;
+        prevAngle = inputAngle;
         return currentAngle;
     }
 }
