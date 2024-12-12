@@ -73,9 +73,9 @@ public class Teleop extends LinearOpMode {
 
             intakeWristToggle.toggle(gamepad1.y);
             if (intakeWristToggle.justChanged() && intakeWristToggle.get()) {
-                Bot.intake.openWrist();
+                Bot.intake.openMisumiWrist();
             } else if (intakeWristToggle.justChanged() && !intakeWristToggle.get()) {
-                Bot.intake.closeWrist();
+                Bot.intake.closeMisumiWrist();
             }
 
             // ---- GamePad 2 ----

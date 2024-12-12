@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Bot;
@@ -26,7 +24,7 @@ public class Intake {
         intakeWrist = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeWrist), Config.intakeWristOpen, Config.intakeWristClose);
 
         closeMisumiDrive();
-        midWrist();
+        midMisumiWrist();
         closeClaw();
         isExtended = false;
     }
@@ -44,17 +42,23 @@ public class Intake {
         isExtended = false;
     }
 
-    public void openWrist() {
+    /***
+     * Wrist up
+     */
+    public void openMisumiWrist() {
         misumiWristL.openServo();
         misumiWristR.openServo();
     }
 
-    public void midWrist() {
+    public void midMisumiWrist() {
         misumiWristL.anyPos(Config.misumiWristLMid);
         misumiWristR.anyPos(Config.misumiWristRMid);
     }
 
-    public void closeWrist() {
+    /***
+     * Wrist down
+     */
+    public void closeMisumiWrist() {
         misumiWristL.closeServo();
         misumiWristR.closeServo();
     }
@@ -67,10 +71,16 @@ public class Intake {
         intakeClaw.closeServo();
     }
 
+    /***
+     * Turns claw towards OCG box
+     */
     public void openIntakeWrist() {
         intakeWrist.openServo();
     }
 
+    /***
+     * Turns claw down towards sample/ground
+     */
     public void closeIntakeWrist() {
         intakeWrist.closeServo();
     }

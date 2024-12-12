@@ -20,7 +20,8 @@ public class TestTeleop extends LinearOpMode {
         Toggle clawToggle = new Toggle(false);
         Toggle intakeClawToggle = new Toggle(false);
         Toggle intakeWristToggle = new Toggle(false);
-
+        Toggle misumiWristToggle = new Toggle(true);
+        Toggle ocgBoxToggle = new Toggle(false);
         // Initialize max speed
         double maxSpeed = 0.5;
 
@@ -37,12 +38,12 @@ public class TestTeleop extends LinearOpMode {
             Bot.mecanumBase.move(px, py, turn, maxSpeed);
 
             // Toggle for field centric
-            northModeToggle.toggle(gamepad1.a); // Toggle north mode
-            Bot.mecanumBase.setNorthMode(northModeToggle.get()); // Update north mode
+//            northModeToggle.toggle(gamepad1.a); // Toggle north mode
+//            Bot.mecanumBase.setNorthMode(northModeToggle.get()); // Update north mode
 
-            if (gamepad1.x) {
-                Bot.imu.resetYaw();
-            }
+//            if (gamepad1.x) {
+//                Bot.imu.resetYaw();
+//            }
 
             incSpeedToggle.toggle(gamepad1.right_bumper);
             decSpeedToggle.toggle(gamepad1.left_bumper);
@@ -53,18 +54,29 @@ public class TestTeleop extends LinearOpMode {
                 maxSpeed -= 0.1;
             }
 
-//            if (gamepad1.dpad_up) {
-//                Bot.intake.openMisumiDrive();
-//            } else if (gamepad1.dpad_down) {
-//                Bot.intake.closeMisumiDrive();
-//            }
-
-            if (gamepad1.dpad_down) {
-                Bot.intake.openWrist();
-            } else if (gamepad1.dpad_up) {
-                Bot.intake.closeWrist();
+            //----------------------------------------
+            //Works
+            if (gamepad1.dpad_up) {
+                Bot.intake.openMisumiDrive();
+            } else if (gamepad1.dpad_down) {
+                Bot.intake.closeMisumiDrive();
+            }
+            //Works
+            //Left is up, right is down
+            if (gamepad1.dpad_left) {
+                Bot.intake.openMisumiWrist();
+            } else if (gamepad1.dpad_right) {
+                Bot.intake.closeMisumiWrist();
+            } else if (gamepad1.x){
+                Bot.intake.midMisumiWrist();
             }
 
+            if (gamepad1.left_bumper){
+                Bot.intake.openMisumiWrist();
+                Bot.intake.openIntakeWrist();
+            }
+
+            //Works
             intakeClawToggle.toggle(gamepad1.b);
             if (intakeClawToggle.justChanged() && intakeClawToggle.get()) {
                 Bot.intake.openClaw();
@@ -72,12 +84,18 @@ public class TestTeleop extends LinearOpMode {
                 Bot.intake.closeClaw();
             }
 
+            //Works
             intakeWristToggle.toggle(gamepad1.y);
             if (intakeWristToggle.justChanged() && intakeWristToggle.get()) {
+                //Facing down towards sample
                 Bot.intake.openIntakeWrist();
             } else if (intakeWristToggle.justChanged() && !intakeWristToggle.get()) {
+                //Facing OCG Box
                 Bot.intake.closeIntakeWrist();
             }
+
+
+
 
             // ---- GamePad 2 ----
             // Preset arm positions
@@ -94,6 +112,12 @@ public class TestTeleop extends LinearOpMode {
             if (clawToggle.justChanged()) {
                 Bot.specimenArm.setClawPosBool(clawToggle.get());
             }
+
+            ocgBoxToggle.toggle(gamepad2.dpad_right);
+            if (ocgBoxToggle.justChanged()) {
+                Bot.slideArm.setOCGBox(ocgBoxToggle.get());
+            }
+
 
             // Get data for telemetry
 
