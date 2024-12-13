@@ -129,7 +129,7 @@ public class SpecimenAuto extends LinearOpMode {
                 // Go to and collect specimen on fence
                 // --> COLLECT_SPECIMEN_2
                 case COLLECT_SPECIMEN_1:
-                    Bot.purePursuit.update(0.3);
+                    Bot.purePursuit.update(0.3, true);
                     if (Bot.purePursuit.reachedTarget()) {
                         Bot.purePursuit.stop();
                         Bot.specimenArm.closeClaw();

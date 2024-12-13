@@ -18,7 +18,7 @@ public class AutoPaths {
     public static void collectSpecimen(double currentX, double currentY) {
         // Collect a specimen from the wall
         double[] pointsX = {currentX, 315, 247.6, 282.5};
-        double[] pointsY = {currentY, 65.5, 25.5, 22};
+        double[] pointsY = {currentY, 65.5, 25.5, 20};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
     }
@@ -26,8 +26,8 @@ public class AutoPaths {
     public static void pushSample1(double currentX, double currentY) {
         // Push the first (farthest left) sample into the observation zone
         // Should start from the submersible
-        double[] pointsX = {currentX, 225, 310, 260, 300, 285};
-        double[] pointsY = {currentY, 6.5, 20.5, 325.5, 160.5, 42.5};
+        double[] pointsX = {currentX, 230, 315, 262.5, 300, 285};
+        double[] pointsY = {currentY, 6.5, 19.5, 325.5, 160.5, 42.5};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
     }

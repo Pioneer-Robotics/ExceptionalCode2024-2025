@@ -20,6 +20,7 @@ public class SlideArm {
 
         ocgBox = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.ocgBox), Config.ocgBoxHold, Config.ocgBoxDrop);
         ocgHold();
+        moveDown(0.25);
     }
 
     /**

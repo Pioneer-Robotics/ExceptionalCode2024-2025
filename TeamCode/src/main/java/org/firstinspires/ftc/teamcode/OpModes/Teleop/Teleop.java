@@ -59,9 +59,13 @@ public class Teleop extends LinearOpMode {
            if (gamepad1.dpad_up) {
                Bot.intake.openMisumiDrive();
                Bot.intake.openIntakeWrist();
+               Bot.intake.closeMisumiWrist();
+               intakeWristToggle.set(true);
            } else if (gamepad1.dpad_down) {
                Bot.intake.closeIntakeWrist();
                Bot.intake.closeMisumiDrive();
+               Bot.intake.midMisumiWrist();
+               intakeWristToggle.set(false);
            }
 
             intakeClawToggle.toggle(gamepad1.b);
@@ -97,10 +101,12 @@ public class Teleop extends LinearOpMode {
             // Slide Arm
             if (gamepad2.y) {
                 Bot.slideArm.moveToPositionTicks(Config.slideHighBasket, 0.8);
+                Bot.intake.midMisumiDrive();
             } else if (gamepad2.a) {
                 Bot.slideArm.moveToPositionTicks(Config.slideDown, 0.8);
             } else if (gamepad2.x) {
                 Bot.slideArm.moveToPositionTicks(Config.slideLowBasket, 0.8);
+                Bot.intake.midMisumiDrive();
             }
 
             // Box state

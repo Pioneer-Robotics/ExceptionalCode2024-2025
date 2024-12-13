@@ -135,11 +135,18 @@ public class PurePursuit {
         return Math.sqrt(dx*dx + dy*dy);
     }
 
-    public void update(double speed) {
+    public void update(double speed, boolean slowDown) {
         // Get target point
         double[] targetPoint = getTargetPoint(Config.lookAhead);
         // Get current position and calculate the movement
         double[] pos = Bot.deadwheel_odom.returnPose();
+        if (slowDown) {
+            double distanceX = path[path.length-1][0];
+            double distanceY = path[path.length-1][1];
+            double distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
+            // 0.15 is minimum speed and 10 is distance away to start slowing down
+            speed *= Math.min((0.5 + distance * 10),1);
+        }
         double moveX = xPID.calculate(pos[0], targetPoint[0]);
         double moveY = yPID.calculate(pos[1], targetPoint[1]);
         double moveTheta = turnPID.calculate(-Bot.imu.getRadians(), 0);
@@ -151,7 +158,9 @@ public class PurePursuit {
         Bot.mecanumBase.move(moveX, moveY, moveTheta, speed);
     }
 
-    public void update() { update(0.25); }
+    public void update(double speed) { update(speed, false); }
+
+    public void update() { update(0.25, false); }
 
     public void stop() {
         Bot.mecanumBase.stop();

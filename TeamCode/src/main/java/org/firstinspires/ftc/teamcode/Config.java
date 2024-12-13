@@ -31,7 +31,7 @@ public class Config {
 
     // Tolerances
     // How close the robot needs to be to the target position to stop (in cm)
-    public static double driveTolerance = 0.75;
+    public static double driveTolerance = 1.25;
     // How close the robot needs to be to the target angle to stop (in radians)
     public static double turnTolerance = 0.05;
     public static final double specimenArmTolerance = 5; // Motor ticks
@@ -87,26 +87,27 @@ public class Config {
     public static final double clawClose = 0.95;
     // Intake Claw
     public static final double intakeClawOpen = 0.4;
-//    public static final double intakeClawOpen = 1;
-    public static final double intakeClawClose = 0;
+    public static final double intakeClawClose = 0.1;
     // Misumi Drive
-    public static final double misumiDriveLOpen = 0;
-    public static final double misumiDriveLClose = 0.3;
-    public static final double misumiDriveROpen = 0; // TODO
-    public static final double misumiDriveRClose = 0; // TODO
+    public static final double misumiDriveLOpen = 0.5;
+    public static final double misumiDriveLMid = 0.65;
+    public static final double misumiDriveLClose = 0.75;
+    public static final double misumiDriveROpen = 0.45;
+    public static final double misumiDriveRMid = 0.3;
+    public static final double misumiDriveRClose = 0.2;
     // Misumi Wrist
-    public static final double misumiWristLOpen = 0.25; // TODO //CHANING
-    public static final double misumiWristLMid = 0.62; // TODO
-    public static final double misumiWristLClose = 0.7; // TODO
-    public static final double misumiWristROpen = 0.85; // TODO
-    public static final double misumiWristRMid = 0.38; // TODO
-    public static final double misumiWristRClose = 0.3; // TODO
+    public static final double misumiWristLOpen = 0.275; // Up to OCG box
+    public static final double misumiWristLMid = 0.55;
+    public static final double misumiWristLClose = 0.7;
+    public static final double misumiWristROpen = 0.825;
+    public static final double misumiWristRMid = 0.45;
+    public static final double misumiWristRClose = 0.3;
     // Intake Wrist
     public static final double intakeWristClose = 0;
     public static final double intakeWristOpen = 1;
     // OCG Box
     public static final double ocgBoxDropRight = 0.1;
-    public static final double ocgBoxHold = 0.4; //was 0.35
+    public static final double ocgBoxHold = 0.375;
     public static final double ocgBoxDrop = 0.8;
 
     // ---- Motor Positions ----
@@ -114,7 +115,7 @@ public class Config {
     public static final double defaultSpecimenArmSpeed = 0.5;
     public static final int specimenArmPostHang = 1400;
     public static final int specimenArmPrepHang = 900;
-    public static final int specimenArmCollect = 1925;
+    public static final int specimenArmCollect = 1930;
     public static final int specimenArmPrepHangUp = 1050;
     public static final int specimenArmPostHangUp = 650;
     // Linear Slide
@@ -131,10 +132,10 @@ public class Config {
     public static final double submersibleY = 101;
 
     // Specimen hang offset (space between hangs)
-    public static final double hangOffset = 8;
+    public static final double hangOffset = 6;
 
     // Coordinates of first specimen hang
-    public static final double specHangX = 170;
+    public static final double specHangX = 175;
     public static final double specHangY = 100;
 
     // Coordinates of observation zone park
@@ -142,6 +143,6 @@ public class Config {
     public static final double parkY = 20.5;
 
     // Robot starting position for specimen auto
-    public static final double specimenStartX = 200;
+    public static final double specimenStartX = 197.5;
     public static final double specimenStartY = 20.5;
 }
