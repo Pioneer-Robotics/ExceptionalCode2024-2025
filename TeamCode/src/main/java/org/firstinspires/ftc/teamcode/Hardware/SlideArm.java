@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 
@@ -20,7 +21,7 @@ public class SlideArm {
 
         ocgBox = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.ocgBox), Config.ocgBoxHold, Config.ocgBoxDrop);
         ocgHold();
-        moveDown(0.25);
+//        moveDown(0.25);
     }
 
     /**
@@ -84,5 +85,17 @@ public class SlideArm {
         } else {
             ocgHold();
         }
+    }
+
+    public void motorOff() {
+        slideMotor.setMotorDisable();
+    }
+
+    public void motorOn() {
+        slideMotor.setMotorEnable();
+    }
+
+    public double getMotorCurrent() {
+        return slideMotor.getCurrent(CurrentUnit.MILLIAMPS);
     }
 }

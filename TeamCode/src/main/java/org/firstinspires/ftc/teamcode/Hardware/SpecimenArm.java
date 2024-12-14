@@ -61,6 +61,8 @@ public class SpecimenArm {
         moveToPos(Config.specimenArmPostHangUp, speed);
     }
 
+    public void moveToIdle() { moveToPos(-5); }
+
     // Servo control
     public void openClaw() { claw.openServo(); }
     public void closeClaw() { claw.closeServo(); }

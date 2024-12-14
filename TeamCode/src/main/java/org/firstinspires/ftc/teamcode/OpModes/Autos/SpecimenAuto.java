@@ -74,6 +74,7 @@ public class SpecimenAuto extends LinearOpMode {
                                     Bot.deadwheel_odom.getX(), // Current X
                                     Bot.deadwheel_odom.getY() // Current Y
                             );
+                            Bot.specimenArm.moveToIdle();
                             state = State.PARK;
                             break;
                         } else if (collect) {

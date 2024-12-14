@@ -26,8 +26,8 @@ public class AutoPaths {
     public static void pushSample1(double currentX, double currentY) {
         // Push the first (farthest left) sample into the observation zone
         // Should start from the submersible
-        double[] pointsX = {currentX, 230, 315, 262.5, 300, 285};
-        double[] pointsY = {currentY, 6.5, 19.5, 325.5, 160.5, 42.5};
+        double[] pointsX = {currentX, 230, 313, 262.5, 303, 285};
+        double[] pointsY = {currentY, 7.5, 24, 330, 160.5, 42.5};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
     }

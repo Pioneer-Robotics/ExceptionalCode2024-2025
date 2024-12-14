@@ -30,7 +30,10 @@ public class Teleop extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()) {
-            // ---- GamePad 1 ----
+            /* ------------------
+               -    GamePad 1   -
+               ------------------ */
+
             // Inputs for driving
             double px = gamepad1.left_stick_x;
             double py = -gamepad1.left_stick_y;
@@ -57,14 +60,14 @@ public class Teleop extends LinearOpMode {
             }
 
            if (gamepad1.dpad_up) {
+               Bot.intake.midMisumiWrist();
                Bot.intake.openMisumiDrive();
                Bot.intake.openIntakeWrist();
-               Bot.intake.closeMisumiWrist();
                intakeWristToggle.set(true);
            } else if (gamepad1.dpad_down) {
+               Bot.intake.midMisumiWrist();
                Bot.intake.closeIntakeWrist();
                Bot.intake.closeMisumiDrive();
-               Bot.intake.midMisumiWrist();
                intakeWristToggle.set(false);
            }
 
@@ -77,12 +80,23 @@ public class Teleop extends LinearOpMode {
 
             intakeWristToggle.toggle(gamepad1.y);
             if (intakeWristToggle.justChanged() && intakeWristToggle.get()) {
-                Bot.intake.openMisumiWrist();
+                if (Bot.intake.isExtended()){
+                    Bot.intake.midMisumiWrist();
+                } else {
+                    Bot.intake.openMisumiWrist();
+                }
             } else if (intakeWristToggle.justChanged() && !intakeWristToggle.get()) {
-                Bot.intake.closeMisumiWrist();
+                if (Bot.intake.isExtended()) {
+                    Bot.intake.closeMisumiWrist();
+                } else {
+                    Bot.intake.midMisumiWrist();
+                }
             }
 
-            // ---- GamePad 2 ----
+            /* ------------------
+               -    GamePad 2   -
+               ------------------ */
+
             // Preset specimen arm positions
             if (gamepad2.dpad_up) {
                 Bot.specimenArm.movePostHang(1.0);
@@ -100,12 +114,15 @@ public class Teleop extends LinearOpMode {
 
             // Slide Arm
             if (gamepad2.y) {
+                Bot.intake.midMisumiWrist();
+                Bot.intake.closeClaw();
                 Bot.slideArm.moveToPositionTicks(Config.slideHighBasket, 0.8);
                 Bot.intake.midMisumiDrive();
             } else if (gamepad2.a) {
                 Bot.slideArm.moveToPositionTicks(Config.slideDown, 0.8);
             } else if (gamepad2.x) {
                 Bot.slideArm.moveToPositionTicks(Config.slideLowBasket, 0.8);
+                Bot.intake.closeClaw();
                 Bot.intake.midMisumiDrive();
             }
 

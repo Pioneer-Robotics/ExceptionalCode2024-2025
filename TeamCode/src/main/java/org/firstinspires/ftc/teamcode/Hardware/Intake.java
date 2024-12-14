@@ -24,7 +24,8 @@ public class Intake {
         intakeWrist = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeWrist), Config.intakeWristOpen, Config.intakeWristClose);
 
         closeMisumiDrive();
-        openMisumiWrist();
+        misumiWristR.anyPos(Config.misumiWristRInit);
+        misumiWristL.anyPos(Config.misumiWristLInit);
         openIntakeWrist();
         closeClaw();
         isExtended = false;
@@ -50,7 +51,7 @@ public class Intake {
     }
 
     /***
-     * Wrist up
+     * Wrist out
      */
     public void openMisumiWrist() {
         misumiWristL.openServo();
@@ -63,7 +64,7 @@ public class Intake {
     }
 
     /***
-     * Wrist down
+     * Wrist in
      */
     public void closeMisumiWrist() {
         misumiWristL.closeServo();
