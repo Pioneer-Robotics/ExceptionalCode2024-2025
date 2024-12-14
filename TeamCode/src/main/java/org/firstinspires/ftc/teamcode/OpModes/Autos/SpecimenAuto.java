@@ -33,6 +33,7 @@ public class SpecimenAuto extends LinearOpMode {
         boolean stop = false;
         boolean collect = false;
         State state = State.INIT;
+        Bot.intake.openMisumiWrist();
 
         waitForStart();
         while (opModeIsActive()) {

@@ -89,18 +89,18 @@ public class Config {
     public static final double intakeClawOpen = 0.4;
     public static final double intakeClawClose = 0;
     // Misumi Drive
-    public static final double misumiDriveLOpen = 0.325;
-    public static final double misumiDriveLMid = 0.55;
-    public static final double misumiDriveLClose = 0.625;
+    public static final double misumiDriveLOpen = 0.6;
+    public static final double misumiDriveLMid = 0.4;
+    public static final double misumiDriveLClose = 0.375;
     public static final double misumiDriveROpen = 0.625;
-    public static final double misumiDriveRMid = 0.475;
-    public static final double misumiDriveRClose = 0.425;
+    public static final double misumiDriveRMid = 0.4;
+    public static final double misumiDriveRClose = 0.35;
     // Misumi Wrist
-    public static final double misumiWristLOpen = 0.275; // Up to OCG box
+    public static final double misumiWristLOpen = 0.25; // Up to OCG box
     public static final double misumiWristLMid = 0.5; // 0.525 touching bar
     public static final double misumiWristLInit = 0.475;
     public static final double misumiWristLClose = 0.565;
-    public static final double misumiWristROpen = 0.625;
+    public static final double misumiWristROpen = 0.65;
     public static final double misumiWristRMid = 0.35; // 0.325 touching bar
     public static final double misumiWristRInit = 0.6;
     public static final double misumiWristRClose = 0.285;
@@ -115,9 +115,9 @@ public class Config {
     // ---- Motor Positions ----
     // Specimen Arm
     public static final double defaultSpecimenArmSpeed = 0.5;
-    public static final int specimenArmPostHang = 1400;
-    public static final int specimenArmPrepHang = 900;
-    public static final int specimenArmCollect = 1930;
+    public static int specimenArmPostHang = 1375;
+    public static int specimenArmPrepHang = 900;
+    public static int specimenArmCollect = 1930;
     public static final int specimenArmPrepHangUp = 1050;
     public static final int specimenArmPostHangUp = 650;
     // Linear Slide
@@ -134,10 +134,10 @@ public class Config {
     public static final double submersibleY = 101;
 
     // Specimen hang offset (space between hangs)
-    public static final double hangOffset = 6;
+    public static final double hangOffset = -6;
 
     // Coordinates of first specimen hang
-    public static final double specHangX = 175;
+    public static final double specHangX = 190;
     public static final double specHangY = 100;
 
     // Coordinates of observation zone park

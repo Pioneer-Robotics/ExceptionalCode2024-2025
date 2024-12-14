@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Config;
 public class SpecimenArm {
     private final DcMotorEx motor;
     ServoClass claw;
+    int position = 0;
 
     public SpecimenArm() {
         motor = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.specimenArmMotor);
@@ -43,14 +44,21 @@ public class SpecimenArm {
     // Preset movements
     public void movePrepHang(double speed) {
         moveToPos(Config.specimenArmPrepHang, speed);
+        position = 0;
     }
 
     public void movePostHang(double speed) {
         moveToPos(Config.specimenArmPostHang, speed);
+        position = 1;
     }
 
     public void moveToCollect(double speed) {
         moveToPos(Config.specimenArmCollect, speed);
+        position = 2;
+    }
+
+    public int getPosition() {
+        return position;
     }
 
     public void movePrepHangUp(double speed) {
@@ -61,7 +69,7 @@ public class SpecimenArm {
         moveToPos(Config.specimenArmPostHangUp, speed);
     }
 
-    public void moveToIdle() { moveToPos(-5); }
+    public void moveToIdle() { moveToPos(-15); }
 
     // Servo control
     public void openClaw() { claw.openServo(); }

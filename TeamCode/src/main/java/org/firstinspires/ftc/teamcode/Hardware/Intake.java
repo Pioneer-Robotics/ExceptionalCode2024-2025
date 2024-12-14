@@ -26,7 +26,7 @@ public class Intake {
         closeMisumiDrive();
         misumiWristR.anyPos(Config.misumiWristRInit);
         misumiWristL.anyPos(Config.misumiWristLInit);
-        openIntakeWrist();
+        closeIntakeWrist();
         closeClaw();
         isExtended = false;
     }
