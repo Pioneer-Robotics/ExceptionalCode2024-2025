@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
-import org.firstinspires.ftc.teamcode.OpModes.Autos.SpecimenAuto;
 
 
 @TeleOp(name="Teleop")
@@ -116,42 +115,15 @@ public class Teleop extends LinearOpMode {
             // Slide Arm
             if (gamepad2.y) {
                 Bot.intake.midMisumiWrist();
-                Bot.intake.midMisumiDrive();
                 Bot.intake.closeClaw();
-                Bot.intake.closeIntakeWrist();
                 Bot.slideArm.moveToPositionTicks(Config.slideHighBasket, 0.8);
+                Bot.intake.midMisumiDrive();
             } else if (gamepad2.a) {
                 Bot.slideArm.moveToPositionTicks(Config.slideDown, 0.8);
             } else if (gamepad2.x) {
-                Bot.intake.midMisumiWrist();
-                Bot.intake.closeIntakeWrist();
+                Bot.slideArm.moveToPositionTicks(Config.slideLowBasket, 0.8);
                 Bot.intake.closeClaw();
                 Bot.intake.midMisumiDrive();
-                Bot.slideArm.moveToPositionTicks(Config.slideLowBasket, 0.8);
-            }
-
-            if (gamepad2.right_trigger > 0.5) {
-                if (Bot.specimenArm.getPosition() == 2) {
-                    Config.specimenArmCollect += 5;
-                    Bot.specimenArm.moveToCollect(0.4);
-                } else if (Bot.specimenArm.getPosition() == 1) {
-                    Config.specimenArmPostHang += 5;
-                    Bot.specimenArm.movePostHang(0.4);
-                } else if (Bot.specimenArm.getPosition() == 0) {
-                    Config.specimenArmPrepHang += 5;
-                    Bot.specimenArm.movePrepHang(0.4);
-                }
-            } else if (gamepad2.left_trigger > 0.5) {
-                if (Bot.specimenArm.getPosition() == 2) {
-                    Config.specimenArmCollect -= 5;
-                    Bot.specimenArm.moveToCollect(0.4);
-                } else if (Bot.specimenArm.getPosition() == 1) {
-                    Config.specimenArmPostHang -= 5;
-                    Bot.specimenArm.movePostHang(0.4);
-                } else if (Bot.specimenArm.getPosition() == 0) {
-                    Config.specimenArmPrepHang -= 5;
-                    Bot.specimenArm.movePrepHang(0.4);
-                }
             }
 
             // Box state
@@ -177,7 +149,7 @@ public class Teleop extends LinearOpMode {
             // Telemetry and update
             double[] pos = Bot.deadwheel_odom.returnPose();
             double[] encoders = Bot.mecanumBase.getEncoders();
-            telemetry.addData("Arm State", Bot.specimenArm.getPosition());
+            telemetry.addData("Pinpoint Version", Bot.pinpoint.getDeviceVersion());
             telemetry.addData("Left Odometer", Bot.deadwheel_odom.getRawOdoLeft());
             telemetry.addData("Center Odometer", Bot.deadwheel_odom.getRawOdoCenter());
             telemetry.addData("Pos X", pos[0]);

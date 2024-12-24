@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
 import org.firstinspires.ftc.teamcode.Hardware.SlideArm;
 import org.firstinspires.ftc.teamcode.Hardware.SpecimenArm;
 import org.firstinspires.ftc.teamcode.Hardware.VoltageHandler;
+import org.firstinspires.ftc.teamcode.SelfDrivingAuto.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PIDDrive;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PurePursuit;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.SparkfunOTOS;
@@ -36,6 +37,7 @@ public class Bot {
     public static AnalogInput frontTouchSensor;
     public static Intake intake;
     public static SlideArm slideArm;
+    public static GoBildaPinpointDriver pinpoint;
 
     /**
      * Constructor for Bot.
@@ -45,8 +47,8 @@ public class Bot {
         Bot.opMode = opMode;
 
         // Drive base and self driving
+        Bot.pinpoint = opMode.hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
         Bot.optical_odom = new SparkfunOTOS();
-//        Bot.deadwheel_odom = new Odometry();
         Bot.deadwheel_odom = new TwoWheelOdometry(Config.specimenStartX, Config.specimenStartY);
         Bot.mecanumBase = new MecanumBase();
         Bot.pidDrive = new PIDDrive();
