@@ -30,7 +30,7 @@ public class PurePursuit {
      */
     public double[] getTargetPoint(double lookAhead) {
         // Get the current position
-        double[] pos = Bot.deadwheel_odom.returnPose();
+        double[] pos = Bot.pinpoint.getPosition();
         // Loop through the path to find the target point
         double[] lastIntersection = null; // Follow the intersection point closest to the end of the path
         for (int i = 0; i < path.length - 1; i++) {
@@ -115,7 +115,7 @@ public class PurePursuit {
     }
 
     public boolean reachedTarget(double tolerance) {
-        double[] pos = Bot.deadwheel_odom.returnPose();
+        double[] pos = Bot.pinpoint.getPosition();
         double[] targetPoint = path[path.length - 1]; // Last point in the path
         double dx = Math.abs(targetPoint[0] - pos[0]);
         double dy = Math.abs(targetPoint[1] - pos[1]);
@@ -128,7 +128,7 @@ public class PurePursuit {
 
     public double getDistance() {
         // Get distance to target point
-        double[] pos = Bot.deadwheel_odom.returnPose();
+        double[] pos = Bot.pinpoint.getPosition();
         double[] targetPoint = path[path.length - 1]; // Last point in the path
         double dx = Math.abs(targetPoint[0] - pos[0]);
         double dy = Math.abs(targetPoint[1] - pos[1]);
@@ -137,19 +137,18 @@ public class PurePursuit {
 
     public void update(double speed, boolean slowDown) {
         // Get target point
-        double[] targetPoint = getTargetPoint(Config.lookAhead);
+        double[] targetPoint = getTargetPoint(calculateLookAhead(Config.lookAhead));
         // Get current position and calculate the movement
-        double[] pos = Bot.deadwheel_odom.returnPose();
+        double[] pos = Bot.pinpoint.getPosition();
         if (slowDown) {
             double distanceX = path[path.length-1][0];
             double distanceY = path[path.length-1][1];
             double distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
-            // 0.15 is minimum speed and 10 is distance away to start slowing down
-            speed *= Math.min((0.5 + distance * 10),1);
+            speed *= Math.min((0.1 + distance / 30),1);
         }
         double moveX = xPID.calculate(pos[0], targetPoint[0]);
         double moveY = yPID.calculate(pos[1], targetPoint[1]);
-        double moveTheta = turnPID.calculate(-Bot.imu.getRadians(), 0);
+        double moveTheta = turnPID.calculate(Bot.pinpoint.getHeading(), 0);
         Bot.opMode.telemetry.addData("PID Theta", moveTheta);
         Bot.opMode.telemetry.addData("PID X", moveX);
         Bot.opMode.telemetry.addData("PID Y", moveY);
@@ -159,10 +158,34 @@ public class PurePursuit {
     }
 
     public void update(double speed) { update(speed, false); }
-
     public void update() { update(0.25, false); }
-
     public void stop() {
         Bot.mecanumBase.stop();
+    }
+    public double calculateLookAhead(double defaultLookAhead) {
+        return defaultLookAhead;
+    }
+
+    public double[] updateReturnTarget(double speed, boolean slowDown) {
+        // Get target point
+        double[] targetPoint = getTargetPoint(calculateLookAhead(Config.lookAhead));
+        // Get current position and calculate the movement
+        double[] pos = Bot.pinpoint.getPosition();
+        if (slowDown) {
+            double distanceX = path[path.length-1][0];
+            double distanceY = path[path.length-1][1];
+            double distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
+            speed *= Math.min((0.1 + distance / 30),1);
+        }
+        double moveX = xPID.calculate(pos[0], targetPoint[0]);
+        double moveY = yPID.calculate(pos[1], targetPoint[1]);
+        double moveTheta = turnPID.calculate(Bot.pinpoint.getHeading(), 0);
+        Bot.opMode.telemetry.addData("PID Theta", moveTheta);
+        Bot.opMode.telemetry.addData("PID X", moveX);
+        Bot.opMode.telemetry.addData("PID Y", moveY);
+        // Move the robot
+        Bot.mecanumBase.setNorthMode(true);
+        Bot.mecanumBase.move(moveX, moveY, moveTheta, speed);
+        return targetPoint;
     }
 }

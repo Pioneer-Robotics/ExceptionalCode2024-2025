@@ -147,11 +147,11 @@ public class Teleop extends LinearOpMode {
             }
 
             // Telemetry and update
+            Bot.pinpoint.update();
             double[] pos = Bot.deadwheel_odom.returnPose();
-            double[] encoders = Bot.mecanumBase.getEncoders();
-            telemetry.addData("Pinpoint Version", Bot.pinpoint.getDeviceVersion());
-            telemetry.addData("Left Odometer", Bot.deadwheel_odom.getRawOdoLeft());
-            telemetry.addData("Center Odometer", Bot.deadwheel_odom.getRawOdoCenter());
+            telemetry.addData("X", Bot.pinpoint.getX());
+            telemetry.addData("Y", Bot.pinpoint.getY());
+            telemetry.addData("Heading", Bot.pinpoint.getHeading());
             telemetry.addData("Pos X", pos[0]);
             telemetry.addData("Pos Y", pos[1]);
             telemetry.addData("Pos Theta", Bot.imu.getRadians());

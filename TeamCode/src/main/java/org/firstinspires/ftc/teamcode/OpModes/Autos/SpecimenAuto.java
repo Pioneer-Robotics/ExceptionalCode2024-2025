@@ -44,8 +44,8 @@ public class SpecimenAuto extends LinearOpMode {
                 // --> SPECIMEN_HANG_UP
                 case INIT:
                     AutoPaths.hangSpecimen(
-                            Bot.deadwheel_odom.getX(), // Current X
-                            Bot.deadwheel_odom.getY(), // Current Y
+                            Bot.pinpoint.getX(), // Current X
+                            Bot.pinpoint.getY(), // Current Y
                             offset // Hang offset X
                     );
                     Bot.specimenArm.movePrepHangUp(0.5);
@@ -55,8 +55,8 @@ public class SpecimenAuto extends LinearOpMode {
                 // Go to submersible, hang specimen
                 // --> SPECIMEN_HANG_2
                 case SPECIMEN_HANG_UP: // Hang specimen right side up
-                    Bot.purePursuit.update(0.5);
-                    if (Bot.purePursuit.reachedTarget() || Bot.frontTouchSensor.getVoltage()<.4) {
+                    Bot.purePursuit.update(0.3, true);
+                    if (Bot.purePursuit.reachedTarget()) { //  || Bot.frontTouchSensor.getVoltage()<.4
                         Bot.purePursuit.stop();
                         Bot.specimenArm.movePostHangUp(1.0); // Hang specimen
                         timer.reset(); // Reset timer for next state
@@ -72,8 +72,8 @@ public class SpecimenAuto extends LinearOpMode {
                         if (stop) {
                             // Set path to observation zone to park (PARK)
                             AutoPaths.park(
-                                    Bot.deadwheel_odom.getX(), // Current X
-                                    Bot.deadwheel_odom.getY() // Current Y
+                                    Bot.pinpoint.getX(), // Current X
+                                    Bot.pinpoint.getY() // Current Y
                             );
                             Bot.specimenArm.moveToIdle();
                             state = State.PARK;
@@ -81,17 +81,18 @@ public class SpecimenAuto extends LinearOpMode {
                         } else if (collect) {
                             // Set path to observation zone to grab specimen (COLLECT_SPECIMEN_1)
                             AutoPaths.collectSpecimen(
-                                    Bot.deadwheel_odom.getX(), // Current X
-                                    Bot.deadwheel_odom.getY() // Current Y
+                                    Bot.pinpoint.getX(), // Current X
+                                    Bot.pinpoint.getY(), // Current Y
+                                    true // Coming from the submersible
                             );
-                            Bot.specimenArm.moveToCollect(0.5);
+                            Bot.specimenArm.moveToCollect(0.3);
                             state = State.COLLECT_SPECIMEN_1;
                             break;
                         } else {
                             // Set path to push first sample into observation zone (PUSH_SAMPLE_1)
                             AutoPaths.pushSample1(
-                                    Bot.deadwheel_odom.getX(), // Current X
-                                    Bot.deadwheel_odom.getY() // Current Y
+                                    Bot.pinpoint.getX(), // Current X
+                                    Bot.pinpoint.getY() // Current Y
                             );
                             timer.reset();
                             state = State.PUSH_SAMPLE_1;
@@ -107,9 +108,10 @@ public class SpecimenAuto extends LinearOpMode {
                     Bot.purePursuit.update(0.5);
                     if (Bot.purePursuit.reachedTarget(4)) {
                         AutoPaths.pushSample2(
-                                Bot.deadwheel_odom.getX(), // Current X
-                                Bot.deadwheel_odom.getY() // Current Y
+                                Bot.pinpoint.getX(), // Current X
+                                Bot.pinpoint.getY() // Current Y
                         );
+                        Bot.specimenArm.moveToCollect(0.5);
                         state = State.PUSH_SAMPLE_2;
                     }
                     break;
@@ -120,10 +122,10 @@ public class SpecimenAuto extends LinearOpMode {
                     Bot.purePursuit.update(0.5);
                     if (Bot.purePursuit.reachedTarget(4)) {
                         AutoPaths.collectSpecimen(
-                                Bot.deadwheel_odom.getX(), // Current X
-                                Bot.deadwheel_odom.getY() // Current Y
+                                Bot.pinpoint.getX(), // Current X
+                                Bot.pinpoint.getY(), // Current Y
+                                false // Not coming from the submersible
                         );
-                        Bot.specimenArm.moveToCollect(0.5);
                         state = State.COLLECT_SPECIMEN_1;
                     }
                     break;
@@ -144,11 +146,11 @@ public class SpecimenAuto extends LinearOpMode {
                 // from the original
                 // --> SPECIMEN_HANG_DOWN
                 case COLLECT_SPECIMEN_2:
-                    if (timer.seconds() > 0.75) { // Wait to grab the specimen
+                    if (timer.seconds() > 0.5) { // Wait to grab the specimen
                         offset += Config.hangOffset; // Adjust the hang offset
                         AutoPaths.hangSpecimen(
-                                Bot.deadwheel_odom.getX(), // Current X
-                                Bot.deadwheel_odom.getY(), // Current Y
+                                Bot.pinpoint.getX(), // Current X
+                                Bot.pinpoint.getY(), // Current Y
                                 offset // Hang offset X
                         );
                         Bot.specimenArm.movePrepHang(0.5);
@@ -160,8 +162,8 @@ public class SpecimenAuto extends LinearOpMode {
                 // First time: Set collect to true. Second time: Set stop to true.
                 // --> SPECIMEN_HANG_2 (Creates a loop)
                 case SPECIMEN_HANG_DOWN: // Hang specimen upside down
-                    Bot.purePursuit.update(0.4);
-                    if (Bot.purePursuit.reachedTarget() || Bot.frontTouchSensor.getVoltage()<.4) {
+                    Bot.purePursuit.update(0.35, true);
+                    if (Bot.purePursuit.reachedTarget()) { // || Bot.frontTouchSensor.getVoltage()<.4
                         Bot.purePursuit.stop();
                         Bot.specimenArm.movePostHang(1.0); // Move arm down
                         timer.reset();
@@ -179,19 +181,18 @@ public class SpecimenAuto extends LinearOpMode {
                 // Wait to reach observation zone to park
                 // End of auto
                 case PARK:
-                    Bot.purePursuit.update(1);
+                    Bot.purePursuit.update(0.75, true);
                     if (Bot.purePursuit.reachedTarget(5)) {
                         terminateOpModeNow();
                     }
                     break;
             }
 
-            Bot.deadwheel_odom.calculate();
+            Bot.pinpoint.update();
             telemetry.addData("State", state);
-            telemetry.addData("Touch", Bot.frontTouchSensor.getVoltage());
-            telemetry.addData("X", Bot.deadwheel_odom.getX());
-            telemetry.addData("Y", Bot.deadwheel_odom.getY());
-            telemetry.addData("Theta", Bot.imu.getRadians());
+            telemetry.addData("X", Bot.pinpoint.getX());
+            telemetry.addData("Y", Bot.pinpoint.getY());
+            telemetry.addData("Theta", Bot.pinpoint.getHeading());
             telemetry.update();
         }
     }

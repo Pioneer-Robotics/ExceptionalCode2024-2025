@@ -48,10 +48,9 @@ public class PurePursuitTuning extends LinearOpMode {
                     }
                     break;
             }
-            Bot.purePursuit.update(Config.driveSpeed);
 
-            double[] pos = Bot.optical_odom.getPose();
-            double[] target = Bot.purePursuit.getTargetPoint(Config.lookAhead);
+            double[] pos = Bot.pinpoint.getPosition();
+            double[] target = Bot.purePursuit.updateReturnTarget(Config.driveSpeed, false);
 
             // Draw robot position, target point, and path
             double inchesPerCentimeter = 0.394;
@@ -66,6 +65,8 @@ public class PurePursuitTuning extends LinearOpMode {
                     strokeCircle(target[1], target[0], 10);
 
             // Add telemetry data
+            packet.put("speed", Math.sqrt(Math.pow(Bot.pinpoint.getVelocity()[0], 2) + Math.pow(Bot.pinpoint.getVelocity()[1], 2)));
+
             packet.put("robot x", pos[0]);
             packet.put("robot y", pos[1]);
 

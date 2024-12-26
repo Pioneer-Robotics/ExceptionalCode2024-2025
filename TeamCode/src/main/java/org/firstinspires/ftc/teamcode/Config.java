@@ -24,9 +24,9 @@ public class Config {
     public static final double offsetOdoCenter = 635;
 
     // PID constants
-    public static double[] drivePID = {0.08, 0.0001, 0}; // kP, kI, kD
-    public static double[] turnPID = {2, 0.00075, 0}; // kP, kI, kD
-    public static double driveSpeed = 0.3;
+    public static double[] drivePID = {0.05, 0.00005, 0.15}; // kP, kI, kD
+    public static double[] turnPID = {2.5, 0.0005, 0}; // kP, kI, kD
+    public static double driveSpeed = 0.4;
     public static double minSpeed = 0.05;
 
     // Tolerances
@@ -115,9 +115,9 @@ public class Config {
     // ---- Motor Positions ----
     // Specimen Arm
     public static final double defaultSpecimenArmSpeed = 0.5;
-    public static int specimenArmPostHang = 1375;
-    public static int specimenArmPrepHang = 900;
-    public static int specimenArmCollect = 1930;
+    public static int specimenArmPostHang = 1325;
+    public static int specimenArmPrepHang = 800;
+    public static int specimenArmCollect = 1850;
     public static final int specimenArmPrepHangUp = 1050;
     public static final int specimenArmPostHangUp = 650;
     // Linear Slide
@@ -134,15 +134,15 @@ public class Config {
     public static final double submersibleY = 101;
 
     // Specimen hang offset (space between hangs)
-    public static final double hangOffset = -6;
+    public static final double hangOffset = 6;
 
     // Coordinates of first specimen hang
-    public static final double specHangX = 190;
-    public static final double specHangY = 100;
+    public static final double specHangX = 195;
+    public static final double specHangY = 97;
 
     // Coordinates of observation zone park
-    public static final double parkX = 310;
-    public static final double parkY = 20.5;
+    public static final double parkX = 300;
+    public static final double parkY = 40;
 
     // Robot starting position for specimen auto
     public static final double specimenStartX = 197.5;
