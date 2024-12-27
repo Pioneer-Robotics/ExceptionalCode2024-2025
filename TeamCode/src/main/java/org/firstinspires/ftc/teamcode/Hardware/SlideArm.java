@@ -48,15 +48,18 @@ public class SlideArm {
     }
 
     public void moveDown(double speed) {
-        moveToPosition(0.05);
+        if (getArmPosition() < (Config.slideDown + 5.0)) { motorOff(); }
+        moveToPositionTicks(Config.slideDown, speed);
     }
 
     public void moveMid(double speed) {
-        moveToPosition(0.5, speed);
+        if (!slideMotor.isMotorEnabled()) { motorOn(); }
+        moveToPositionTicks(Config.slideLowBasket, speed);
     }
 
     public void moveUp(double speed) {
-        moveToPosition(0.95, speed);
+        if (!slideMotor.isMotorEnabled()) { motorOn(); }
+        moveToPositionTicks(Config.slideHighBasket, speed);
     }
 
     public void ocgDrop() { ocgBox.anyPos(Config.ocgBoxDrop); }
@@ -88,6 +91,7 @@ public class SlideArm {
     }
 
     public void motorOff() {
+        slideMotor.setVelocity(0.0);
         slideMotor.setMotorDisable();
     }
 

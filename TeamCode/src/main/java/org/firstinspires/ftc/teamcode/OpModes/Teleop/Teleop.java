@@ -27,6 +27,9 @@ public class Teleop extends LinearOpMode {
         // Initialize max speed
         double maxSpeed = 0.5;
 
+        // Home specimen arm
+        Bot.specimenArm.homeArm();
+
         waitForStart();
 
         while(opModeIsActive()) {
@@ -106,6 +109,24 @@ public class Teleop extends LinearOpMode {
                 Bot.specimenArm.moveToCollect(0.5);
             }
 
+            // Reset arm
+            if (gamepad2.left_trigger > 0.1 || gamepad2.right_trigger > 0.1) {
+                // Will get cast to an int anyways when incrementing the config
+                int armAdjust = (int) (7.0 * gamepad2.right_trigger - 7.0 * gamepad2.left_trigger);
+                Config.specimenArmPostHang += armAdjust;
+                Config.specimenArmPrepHang += armAdjust;
+                Config.specimenArmCollect += armAdjust;
+
+                if (Bot.specimenArm.getPosition() == 2) {
+                    Bot.specimenArm.moveToCollect(0.4);
+                } else if (Bot.specimenArm.getPosition() == 1) {
+                    Bot.specimenArm.movePostHang(0.4);
+                } else if (Bot.specimenArm.getPosition() == 0) {
+                    Bot.specimenArm.movePrepHang(0.4);
+                }
+
+            }
+
             // Specimen Claw toggle
             clawToggle.toggle(gamepad2.b);
             if (clawToggle.justChanged()) {
@@ -116,12 +137,12 @@ public class Teleop extends LinearOpMode {
             if (gamepad2.y) {
                 Bot.intake.midMisumiWrist();
                 Bot.intake.closeClaw();
-                Bot.slideArm.moveToPositionTicks(Config.slideHighBasket, 0.8);
+                Bot.slideArm.moveUp(0.8);
                 Bot.intake.midMisumiDrive();
             } else if (gamepad2.a) {
-                Bot.slideArm.moveToPositionTicks(Config.slideDown, 0.8);
+                Bot.slideArm.moveDown(0.8);
             } else if (gamepad2.x) {
-                Bot.slideArm.moveToPositionTicks(Config.slideLowBasket, 0.8);
+                Bot.slideArm.moveMid(0.8);
                 Bot.intake.closeClaw();
                 Bot.intake.midMisumiDrive();
             }
@@ -146,17 +167,21 @@ public class Teleop extends LinearOpMode {
                 Bot.led.lightsOn(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             }
 
+            if (gamepad2.touchpad) {
+                Bot.specimenArm.homeArm();
+            }
+
             // Telemetry and update
             Bot.pinpoint.update();
-            double[] pos = Bot.deadwheel_odom.returnPose();
+            telemetry.addData("North Mode", northModeToggle.get());
+            telemetry.addData("Arm Position", Bot.specimenArm.getPosition());
+            telemetry.addData("specimenArmPostHang", Config.specimenArmPostHang);
+            telemetry.addData("specimenArmPrepHang", Config.specimenArmPrepHang);
+            telemetry.addData("specimenArmCollect", Config.specimenArmCollect);
             telemetry.addData("X", Bot.pinpoint.getX());
             telemetry.addData("Y", Bot.pinpoint.getY());
             telemetry.addData("Heading", Bot.pinpoint.getHeading());
-            telemetry.addData("Pos X", pos[0]);
-            telemetry.addData("Pos Y", pos[1]);
-            telemetry.addData("Pos Theta", Bot.imu.getRadians());
             telemetry.addData("Speed", maxSpeed);
-            telemetry.addData("Arm Pos", Bot.specimenArm.getPositionTicks());
             telemetry.addData("Voltage", voltage);
             telemetry.update();
         }

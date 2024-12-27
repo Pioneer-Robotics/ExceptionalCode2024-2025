@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.Hardware;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 
@@ -82,4 +84,10 @@ public class SpecimenArm {
         return motor.getCurrentPosition();
     }
     public boolean reachedPosition() { return Math.abs(motor.getTargetPosition() - motor.getCurrentPosition()) < Config.specimenArmTolerance; }
+
+    public void homeArm() {
+        motor.setPower(-0.15);
+        while (motor.getCurrent(CurrentUnit.MILLIAMPS) < 1000) {}
+        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
 }

@@ -44,12 +44,11 @@ public class Bot {
      * Constructor for Bot.
      * @param opMode LinearOpMode
      */
-    public static void init(@NonNull LinearOpMode opMode) {
+    public static void init(@NonNull LinearOpMode opMode, double startX, double startY) {
         Bot.opMode = opMode;
 
         // Drive base and self driving
-        Bot.pinpoint = new Pinpoint(0, 0);
-//        Bot.pinpoint = new Pinpoint(Config.specimenStartX, Config.specimenStartY);
+        Bot.pinpoint = new Pinpoint(startX, startY);
         Bot.optical_odom = new SparkfunOTOS();
         Bot.deadwheel_odom = new TwoWheelOdometry(Config.specimenStartX, Config.specimenStartY);
         Bot.mecanumBase = new MecanumBase();
@@ -69,5 +68,9 @@ public class Bot {
         Bot.voltageHandler = new VoltageHandler();
         Bot.imu = new BotIMU();
         Bot.led = new LEDController();
+    }
+
+    public static void init(@NonNull LinearOpMode opMode) {
+        Bot.init(opMode, 0, 0);
     }
 }

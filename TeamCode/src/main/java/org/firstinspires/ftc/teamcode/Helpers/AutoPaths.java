@@ -4,9 +4,9 @@ import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 
 public class AutoPaths {
-    public static void hangSpecimen(double currentX, double currentY, double offsetX) {
+    public static void hangSpecimen(double currentX, double currentY, double offsetX, double offsetY) {
         // Go to the submersible to hang a specimen
-        Bot.purePursuit.setTargetPath(new double[][] {{currentX, currentY}, {200, 30}, {Config.specHangX + offsetX, Config.specHangY}});
+        Bot.purePursuit.setTargetPath(new double[][] {{currentX, currentY}, {200, 30}, {Config.specHangX + offsetX, Config.specHangY + offsetY}});
     }
 
     public static void park(double currentX, double currentY) {
@@ -32,8 +32,8 @@ public class AutoPaths {
     public static void pushSample1(double currentX, double currentY) {
         // Push the first (farthest left) sample into the observation zone
         // Should start from the submersible
-        double[] pointsX = {currentX, 230, 310, 270, 305, 285};
-        double[] pointsY = {currentY, 7.5, 30, 335, 160, 42.5};
+        double[] pointsX = {currentX, 230, 305, 275, 305, 285};
+        double[] pointsY = {currentY, 7.5, 35, 320, 145, 42.5};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
     }
@@ -42,7 +42,7 @@ public class AutoPaths {
         // Push the second (middle) sample into the observation zone
         // Should start at the observation zone area
         double[] pointsX = {currentX, 265, 330, 322};
-        double[] pointsY = {currentY, 150.5, 210.5, 45.5};
+        double[] pointsY = {currentY, 135.5, 200, 45.5};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
     }
