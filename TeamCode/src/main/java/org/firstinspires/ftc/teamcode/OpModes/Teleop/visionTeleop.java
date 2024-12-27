@@ -16,6 +16,8 @@ import org.firstinspires.ftc.vision.opencv.ImageRegion;
 import org.opencv.core.RotatedRect;
 import org.firstinspires.ftc.teamcode.Helpers.betterColorRange;
 
+import org.firstinspires.ftc.teamcode.Hardware.Camera.SampleLocator;
+
 import java.util.List;
 
 @TeleOp(name = "Vision Test")
@@ -39,6 +41,7 @@ public class visionTeleop extends LinearOpMode {
         PID xPID = new PID(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2]);
         PID yPID = new PID(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2]);
         PID turnPID = new PID(Config.turnPID[0], Config.turnPID[1], Config.turnPID[2]);
+
 
         Bot.init(this);
 
