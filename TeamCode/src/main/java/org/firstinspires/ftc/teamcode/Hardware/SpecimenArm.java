@@ -86,7 +86,9 @@ public class SpecimenArm {
     public boolean reachedPosition() { return Math.abs(motor.getTargetPosition() - motor.getCurrentPosition()) < Config.specimenArmTolerance; }
 
     public void homeArm() {
+        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor.setPower(-0.15);
+        Bot.mecanumBase.stop();
         while (motor.getCurrent(CurrentUnit.MILLIAMPS) < 1000) {}
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }

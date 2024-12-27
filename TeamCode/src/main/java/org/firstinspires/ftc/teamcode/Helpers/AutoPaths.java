@@ -11,7 +11,9 @@ public class AutoPaths {
 
     public static void park(double currentX, double currentY) {
         // Park in the observation zone
-        double[][] path = {{currentX, currentY}, {Config.parkX, Config.parkY}};
+        double[] pointsX = {currentX, 230, Config.parkX};
+        double[] pointsY = {currentY, 40, Config.parkY};
+        double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
     }
 
@@ -20,10 +22,10 @@ public class AutoPaths {
         double[] pointsX, pointsY;
         if (fromSubmersible) {
             pointsX = new double[] {currentX, 270, 280, 280};
-            pointsY = new double[] {currentY, 35, 100, 20};
+            pointsY = new double[] {currentY, 35, 100, 20.5};
         } else {
             pointsX = new double[] {currentX, 280, 280};
-            pointsY = new double[] {currentY, 100, 20};
+            pointsY = new double[] {currentY, 100, 20.5};
         }
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
@@ -33,7 +35,7 @@ public class AutoPaths {
         // Push the first (farthest left) sample into the observation zone
         // Should start from the submersible
         double[] pointsX = {currentX, 230, 305, 275, 305, 285};
-        double[] pointsY = {currentY, 7.5, 35, 320, 145, 42.5};
+        double[] pointsY = {currentY, 7.5, 35, 320, 145, 46.5};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
     }
@@ -42,7 +44,7 @@ public class AutoPaths {
         // Push the second (middle) sample into the observation zone
         // Should start at the observation zone area
         double[] pointsX = {currentX, 265, 330, 322};
-        double[] pointsY = {currentY, 135.5, 200, 45.5};
+        double[] pointsY = {currentY, 135.5, 200, 46.5};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
     }

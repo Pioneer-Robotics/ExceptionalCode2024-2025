@@ -158,6 +158,10 @@ public class Teleop extends LinearOpMode {
                 Bot.slideArm.setOCGBoxRight(ocgBoxToggleRight.get());
             }
 
+            if (gamepad2.touchpad) {
+                Bot.specimenArm.homeArm();
+            }
+
             // Get data for telemetry
             double voltage = Bot.voltageHandler.getVoltage();
             if (voltage < 10) {
@@ -165,10 +169,6 @@ public class Teleop extends LinearOpMode {
                 telemetry.addData("WARNING: Voltage Low", voltage);
             } else {
                 Bot.led.lightsOn(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-            }
-
-            if (gamepad2.touchpad) {
-                Bot.specimenArm.homeArm();
             }
 
             // Telemetry and update

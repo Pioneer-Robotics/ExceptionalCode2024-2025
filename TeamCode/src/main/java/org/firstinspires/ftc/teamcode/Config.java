@@ -24,8 +24,8 @@ public class Config {
     public static final double offsetOdoCenter = 635;
 
     // PID constants
-    public static double[] drivePID = {0.05, 0.0001, 0.15}; // kP, kI, kD
-    public static double[] turnPID = {2.5, 0.0005, 0.1}; // kP, kI, kD
+    public static double[] drivePID = {0.08, 0.0001, 0.15}; // kP, kI, kD
+    public static double[] turnPID = {2.5, 0.0005, 0.15}; // kP, kI, kD
     public static double driveSpeed = 0.4;
 
     // Tolerances
@@ -114,7 +114,7 @@ public class Config {
     // ---- Motor Positions ----
     // Specimen Arm
     public static final double defaultSpecimenArmSpeed = 0.5;
-    public static int specimenArmPostHang = 1200;
+    public static int specimenArmPostHang = 1250;
     public static int specimenArmPrepHang = 900;
     public static int specimenArmCollect = 1970;
     public static final int specimenArmPrepHangUp = 1050;
