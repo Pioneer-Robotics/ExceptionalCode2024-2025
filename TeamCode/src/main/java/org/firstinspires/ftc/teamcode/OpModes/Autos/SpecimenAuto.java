@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode.OpModes.Autos;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.AutoPaths;
+import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PID;
 
 // 1+2 No Wrist Servo
 @Autonomous(name="Specimen Auto", group="Autos")
@@ -39,6 +41,7 @@ public class SpecimenAuto extends LinearOpMode {
         Bot.specimenArm.homeArm();
 
         waitForStart();
+
         while (opModeIsActive()) {
 
             switch (state) {
@@ -109,13 +112,13 @@ public class SpecimenAuto extends LinearOpMode {
                 // observation zone
                 // --> PUSH_SAMPLE_2
                 case PUSH_SAMPLE_1:
-                    Bot.purePursuit.update(0.75);
+                    Bot.purePursuit.update(0.65);
                     if (Bot.purePursuit.reachedTarget(4)) {
                         AutoPaths.pushSample2(
                                 Bot.pinpoint.getX(), // Current X
                                 Bot.pinpoint.getY() // Current Y
                         );
-                        Bot.specimenArm.moveToCollect(0.5);
+                        Bot.specimenArm.moveToCollect(0.4);
                         state = State.PUSH_SAMPLE_2;
                     }
                     break;
@@ -123,7 +126,7 @@ public class SpecimenAuto extends LinearOpMode {
                 // Bring second sample into observation zone, set path to collect specimen on fence
                 // --> COLLECT_SPECIMEN_1
                 case PUSH_SAMPLE_2:
-                    Bot.purePursuit.update(0.75);
+                    Bot.purePursuit.update(0.65);
                     if (Bot.purePursuit.reachedTarget(4)) {
                         AutoPaths.collectSpecimen(
                                 Bot.pinpoint.getX(), // Current X
@@ -158,7 +161,7 @@ public class SpecimenAuto extends LinearOpMode {
                                 offsetX, // Hang offsetX X
                                 0 // Offset Y
                         );
-                        Bot.specimenArm.movePrepHang(0.5);
+                        Bot.specimenArm.movePrepHang(0.4);
                         state = State.SPECIMEN_HANG_DOWN;
                     }
                     break;

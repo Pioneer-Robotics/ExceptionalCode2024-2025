@@ -92,4 +92,8 @@ public class SpecimenArm {
         while (motor.getCurrent(CurrentUnit.MILLIAMPS) < 1000) {}
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
+
+    public DcMotorEx getMotor() {
+        return motor;
+    }
 }

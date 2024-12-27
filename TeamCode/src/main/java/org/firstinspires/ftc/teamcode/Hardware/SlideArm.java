@@ -102,4 +102,6 @@ public class SlideArm {
     public double getMotorCurrent() {
         return slideMotor.getCurrent(CurrentUnit.MILLIAMPS);
     }
+
+    public DcMotorEx getMotor() { return slideMotor; }
 }

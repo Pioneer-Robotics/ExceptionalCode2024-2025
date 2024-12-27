@@ -146,4 +146,7 @@ public class Config {
     // Robot starting position for specimen auto
     public static final double specimenStartX = 197.5;
     public static final double specimenStartY = 20.5;
+
+    // ---- Misc ----
+    public static final double defaultMaxCurrent = 8000;
 }

@@ -3,9 +3,12 @@ package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.Hardware.CurrentDetection;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
 
@@ -29,6 +32,9 @@ public class Teleop extends LinearOpMode {
 
         // Home specimen arm
         Bot.specimenArm.homeArm();
+
+        ElapsedTime timer = new ElapsedTime();
+        double prevMilliseconds = 0;
 
         waitForStart();
 
@@ -173,8 +179,10 @@ public class Teleop extends LinearOpMode {
 
             // Telemetry and update
             Bot.pinpoint.update();
+            telemetry.addData("dt", timer.milliseconds() - prevMilliseconds);
+            telemetry.addData("Thread Current", Bot.currentDetectionSlide.getCurrent());
             telemetry.addData("North Mode", northModeToggle.get());
-            telemetry.addData("Arm Position", Bot.specimenArm.getPosition());
+            telemetry.addData("Arm Position", Bot.specimenArm.getPositionTicks());
             telemetry.addData("specimenArmPostHang", Config.specimenArmPostHang);
             telemetry.addData("specimenArmPrepHang", Config.specimenArmPrepHang);
             telemetry.addData("specimenArmCollect", Config.specimenArmCollect);
@@ -184,6 +192,8 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("Speed", maxSpeed);
             telemetry.addData("Voltage", voltage);
             telemetry.update();
+            prevMilliseconds = timer.milliseconds();
         }
+        Bot.currentDetectionSlide.stop();
     }
 }

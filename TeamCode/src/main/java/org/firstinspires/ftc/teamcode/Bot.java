@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 
 import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
 import org.firstinspires.ftc.teamcode.Hardware.ColorSensor;
+import org.firstinspires.ftc.teamcode.Hardware.CurrentDetection;
 import org.firstinspires.ftc.teamcode.Hardware.Intake;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
@@ -39,6 +40,9 @@ public class Bot {
     public static Intake intake;
     public static SlideArm slideArm;
     public static Pinpoint pinpoint;
+    public static CurrentDetection currentDetectionSlide;
+    public static CurrentDetection currentDetectionSpec;
+
 
     /**
      * Constructor for Bot.
@@ -68,6 +72,14 @@ public class Bot {
         Bot.voltageHandler = new VoltageHandler();
         Bot.imu = new BotIMU();
         Bot.led = new LEDController();
+
+        // Threads
+        Bot.currentDetectionSlide = new CurrentDetection(Bot.slideArm.getMotor());
+        Thread curDetectSlide = new Thread(Bot.currentDetectionSlide);
+        curDetectSlide.start();
+        Bot.currentDetectionSpec = new CurrentDetection(Bot.specimenArm.getMotor());
+        Thread curDetectSpec = new Thread(Bot.currentDetectionSpec);
+        curDetectSpec.start();
     }
 
     public static void init(@NonNull LinearOpMode opMode) {
