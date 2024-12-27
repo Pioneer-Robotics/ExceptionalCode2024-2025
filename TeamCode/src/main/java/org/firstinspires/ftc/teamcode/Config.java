@@ -89,12 +89,12 @@ public class Config {
     public static final double intakeClawOpen = 0.4;
     public static final double intakeClawClose = 0;
     // Misumi Drive
-    public static final double misumiDriveLOpen = 0.325;
+    public static final double misumiDriveLClose = 0.325;
     public static final double misumiDriveLMid = 0.55;
-    public static final double misumiDriveLClose = 0.625;
-    public static final double misumiDriveROpen = 0.625;
+    public static final double misumiDriveLOpen = 0.625;
+    public static final double misumiDriveRClose = 0.625;
     public static final double misumiDriveRMid = 0.475;
-    public static final double misumiDriveRClose = 0.425;
+    public static final double misumiDriveROpen = 0.425;
     // Misumi Wrist
     public static final double misumiWristLOpen = 0.275; // Up to OCG box
     public static final double misumiWristLMid = 0.5; // 0.525 touching bar

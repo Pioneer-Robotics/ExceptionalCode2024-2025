@@ -49,7 +49,7 @@ public class Bot {
         // Drive base and self driving
         Bot.pinpoint = opMode.hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
         Bot.optical_odom = new SparkfunOTOS();
-        Bot.deadwheel_odom = new TwoWheelOdometry(Config.specimenStartX, Config.specimenStartY);
+        Bot.deadwheel_odom = new TwoWheelOdometry(0,0);
         Bot.mecanumBase = new MecanumBase();
         Bot.pidDrive = new PIDDrive();
         Bot.purePursuit = new PurePursuit(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2]);
