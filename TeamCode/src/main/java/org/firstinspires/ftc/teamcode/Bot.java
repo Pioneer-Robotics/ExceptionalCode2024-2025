@@ -75,11 +75,9 @@ public class Bot {
 
         // Threads
         Bot.currentDetectionSlide = new CurrentDetection(Bot.slideArm.getMotor());
-        Thread curDetectSlide = new Thread(Bot.currentDetectionSlide);
-        curDetectSlide.start();
+        Bot.currentDetectionSlide.start();
         Bot.currentDetectionSpec = new CurrentDetection(Bot.specimenArm.getMotor());
-        Thread curDetectSpec = new Thread(Bot.currentDetectionSpec);
-        curDetectSpec.start();
+        Bot.currentDetectionSpec.start();
     }
 
     public static void init(@NonNull LinearOpMode opMode) {

@@ -188,9 +188,10 @@ public class Teleop extends LinearOpMode {
             // Telemetry and update
             Bot.pinpoint.update();
             telemetry.addData("dt", timer.milliseconds() - prevMilliseconds);
-            telemetry.addData("Thread Current", Bot.currentDetectionSlide.getCurrent());
+            telemetry.addData("Thread Current Slide", Bot.currentDetectionSlide.getCurrent());
+            telemetry.addData("Thread Current Spec", Bot.currentDetectionSpec.getCurrent());
             telemetry.addData("North Mode", northModeToggle.get());
-            telemetry.addData("Arm Position", Bot.specimenArm.getPositionTicks());
+            telemetry.addData("Slide Arm Position", Bot.slideArm.getArmPosition());
             telemetry.addData("specimenArmPostHang", Config.specimenArmPostHang);
             telemetry.addData("specimenArmPrepHang", Config.specimenArmPrepHang);
             telemetry.addData("specimenArmCollect", Config.specimenArmCollect);

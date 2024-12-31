@@ -17,11 +17,11 @@ public class SlideArm {
         slideMotor.setTargetPositionTolerance(5);
         slideMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         slideMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         ocgBox = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.ocgBox), Config.ocgBoxHold, Config.ocgBoxDrop);
         ocgHold();
-//        moveDown(0.25);
+        moveDown(0.25);
     }
 
     /**
@@ -48,7 +48,7 @@ public class SlideArm {
     }
 
     public void moveDown(double speed) {
-        if (getArmPosition() < (Config.slideDown + 5.0)) { motorOff(); }
+        if (getArmPosition() < (Config.slideDown + 50.0)) { motorOff(); }
         moveToPositionTicks(Config.slideDown, speed);
     }
 
