@@ -27,6 +27,8 @@ public class Teleop extends LinearOpMode {
         Toggle ocgBoxToggle = new Toggle(false);
         Toggle ocgBoxToggleRight = new Toggle(false);
 
+        boolean bothTrigPressed;
+
         // Initialize max speed
         double maxSpeed = 0.5;
 
@@ -52,7 +54,13 @@ public class Teleop extends LinearOpMode {
             Bot.mecanumBase.move(px, py, turn, maxSpeed);
 
             // Toggle for field centric
-            northModeToggle.toggle(gamepad1.a); // Toggle north mode
+
+            if (gamepad1.left_trigger>0.8 && gamepad1.right_trigger>0.8){
+                bothTrigPressed = true;
+            } else {
+                bothTrigPressed = false;
+            }
+            northModeToggle.toggle(bothTrigPressed); // Toggle north mode
             Bot.mecanumBase.setNorthMode(northModeToggle.get()); // Update north mode
 
             if (gamepad1.x) {

@@ -95,11 +95,11 @@ public class Config {
     public static final double misumiDriveRMid = 0.4;
     public static final double misumiDriveRClose = 0.35;
     // Misumi Wrist
-    public static final double misumiWristLOpen = 0.25; // Up to OCG box
+    public static final double misumiWristLOpen = 0.225; // Up to OCG box
     public static final double misumiWristLMid = 0.5; // 0.525 touching bar
     public static final double misumiWristLInit = 0.475;
     public static final double misumiWristLClose = 0.565;
-    public static final double misumiWristROpen = 0.65;
+    public static final double misumiWristROpen = 0.675;
     public static final double misumiWristRMid = 0.35; // 0.325 touching bar
     public static final double misumiWristRInit = 0.6;
     public static final double misumiWristRClose = 0.285;
