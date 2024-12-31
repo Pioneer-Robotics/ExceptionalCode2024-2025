@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 
 import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
+import org.firstinspires.ftc.teamcode.Hardware.Camera.LocatorClass;
 import org.firstinspires.ftc.teamcode.Hardware.ColorSensor;
 import org.firstinspires.ftc.teamcode.Hardware.Intake;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
@@ -16,6 +17,7 @@ import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PIDDrive;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PurePursuit;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.SparkfunOTOS;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.TwoWheelOdometry;
+import org.firstinspires.ftc.vision.opencv.ColorRange;
 
 /**
  * This class is used to create all of the hardware objects and store them in the bot object
@@ -38,6 +40,7 @@ public class Bot {
     public static Intake intake;
     public static SlideArm slideArm;
     public static GoBildaPinpointDriver pinpoint;
+    public static LocatorClass blueLocator;
 
     /**
      * Constructor for Bot.
@@ -67,5 +70,6 @@ public class Bot {
         Bot.voltageHandler = new VoltageHandler();
         Bot.imu = new BotIMU();
         Bot.led = new LEDController();
+        Bot.blueLocator = new LocatorClass(ColorRange.BLUE, opMode);
     }
 }
