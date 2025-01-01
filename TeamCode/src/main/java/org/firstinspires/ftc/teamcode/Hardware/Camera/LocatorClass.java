@@ -13,22 +13,23 @@ import org.firstinspires.ftc.vision.opencv.ColorBlobLocatorProcessor;
 import org.firstinspires.ftc.vision.opencv.ColorRange;
 import org.firstinspires.ftc.vision.opencv.ImageRegion;
 
-import org.opencv.core.MatOfPoint;
+import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class LocatorClass {
     List<ColorBlobLocatorProcessor.Blob> blobs;
-    ColorBlobLocatorProcessor.Blob bigBlob;
+    ColorBlobLocatorProcessor.Blob biggestBlob;
     ColorBlobLocatorProcessor colorLocator;
-    Point[] contourPoints;
-    Point testPoint;
+    Point[] boxPoints = new Point[]{new Point(0,0), new Point(0,0), new Point(0,0), new Point(0,0)};
+    double[] blobPos;
     int contPointLen;
     ArrayList<Double> xPoints, yPoints = new ArrayList<Double>();
-    double minX, maxX, minY, maxY, boxX, boxY;
+    ArrayList<ArrayList<Double>> arrayBoxPoints = new ArrayList<ArrayList<Double>>();
+    double minX, maxX, minY, maxY, boxX, boxY, dX, dY, sampleTheta;
     VisionPortal portal;
     public LocatorClass(ColorRange targetColorRange, LinearOpMode opMode){
 
@@ -62,9 +63,17 @@ public class LocatorClass {
 
         ColorBlobLocatorProcessor.Util.filterByArea(50, 20000, blobs);  // filter out very small blobs.
         ColorBlobLocatorProcessor.Util.sortByArea(SortOrder.DESCENDING, blobs); // Largest blob is first (hopefully correct one)
-
         return (blobs);
     }
+
+//    public ColorBlobLocatorProcessor.Blob biggestBlob(){
+//        getBlobsList();
+//        try{
+//            return (blobs.get(0));
+//        } catch (Exception e){
+//            return(n);
+//        }
+//    }
 
 //    public boolean checkIfEmpty(){
 //        blobs = colorLocator.getBlobs();
@@ -74,24 +83,24 @@ public class LocatorClass {
 //        }
 //    }
 
-    public double[] blobPos(){
+    public double[] getBlobPos(){
         getBlobsList();
-        return (new double[]{blobs.get(0).getBoxFit().center.x, blobs.get(0).getBoxFit().center.y});
+        blobPos = new double[]{blobs.get(0).getBoxFit().center.x, blobs.get(0).getBoxFit().center.y};
+        try{
+            return (blobPos);
+        } catch (Exception e){
+            return (new double[]{0,0});
+        }
     }
 
     public double blobPosX(){
         getBlobsList();
-        return (blobs.get(0).getBoxFit().center.x);
+        return (getBlobPos()[0]);
     }
 
     public double blobPosY(){
         getBlobsList();
-        return (blobs.get(0).getBoxFit().center.y);
-    }
-
-    public double getSpecRatio(){
-        getBlobsList();
-        return (blobs.get(0).getDensity());
+        return (getBlobPos()[1]);
     }
 
     public int blobCount(){
@@ -103,32 +112,48 @@ public class LocatorClass {
         }
     }
 
-    public Point[] getPoints(){
+    public Point[] getBoxPoints(){
         getBlobsList();
-        //        Arrays.stream(Arrays.stream(blobs.get(0).getContourPoints()).toArray());
-//        blobs.get(0).getContourPoints();
-//        return (Arrays) Arrays.stream(Arrays.stream(blobs.get(0).getContourPoints()).toArray());
-        try{
-            return (blobs.get(0).getContourPoints());
-        } catch (Exception e){
-            return(new Point[] {new Point(0,0),new Point(0,0)});
+        if (!blobs.isEmpty()) {
+            int i = 0;
+            blobs.get(0).getBoxFit().points(boxPoints);
+//            for (Point p : boxPoints){            //Used for testing, makes reading points easier
+//                boxPoints[i].x = Math.rint(boxPoints[i].x);
+//                boxPoints[i].y = Math.rint(boxPoints[i].y);
+//
+//                i +=1;
+//
+//            }
+            return(boxPoints);
+        } else {
+            return new Point[]{new Point(0,0), new Point(0,0), new Point(0,0), new Point(0,0)};
         }
     }
 
-    public MatOfPoint getContourLine(){
-        getBlobsList();
-        try{
-            return (blobs.get(0).getContour());
-        } catch (Exception e){
-            return (new MatOfPoint());
+    public void sortBoxPoints(){
+        getBoxPoints();
+        for (Point p : boxPoints){
+            int i = 0;
+            xPoints.add(p.x);
+            yPoints.add(p.y);
         }
+//Sort box points by x and y values to get which points are farthest left/right or up/down
+    }
+
+    public ArrayList<Double> getXPoints(){
+        sortBoxPoints();
+        return (xPoints);
+    }
+
+    public ArrayList<Double> getYPoints(){
+        sortBoxPoints();
+        return (yPoints);
     }
 
 //    public double[] getStraightBoxFit(){
-//        blobs = getBlobsList();
+//        getBlobsList();
 //        contourPoints = getPoints();
 //        contPointLen = contourPoints.length;
-//        testPoint = contourPoints[0];
 //
 //        for(Point points : contourPoints){
 //            xPoints.add(points.x);
@@ -147,17 +172,31 @@ public class LocatorClass {
 //        boxX = maxX-minX;
 //        boxY = maxY-minY;
 //
+//
 //        try{
 //            return (new double[]{boxX,boxY});
 //        } catch (Exception e){
-//            return (new double[]{0});
+//            return (new double[]{0,0});
 //        }
 //    }
 
+    public double getSampleTheta(){
+        getBoxPoints();
+        dX = boxPoints[0].x - boxPoints[1].x;
+        dY = boxPoints[0].y - boxPoints[1].y;
+        //Atan2 has args (y,x), flipped for use case
+        sampleTheta = Math.atan2(dX, dY);
+        try{
+            return (sampleTheta);
+        } catch (Exception e) {
+            return (0);
+        }
+    }
+
     public int numContPoints(){
         blobs = getBlobsList();
-        contourPoints = getPoints();
-        contPointLen = contourPoints.length;
+        boxPoints = getBoxPoints();
+        contPointLen = boxPoints.length;
 //        getStraightBoxFit();
         try {
             return(contPointLen);
@@ -166,4 +205,7 @@ public class LocatorClass {
         }
     }
 
+    public VisionPortal getCameraStream() {
+        return portal;
+    }
 }
