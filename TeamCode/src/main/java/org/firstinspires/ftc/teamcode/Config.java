@@ -39,7 +39,7 @@ public class Config {
 
     // Used to gradually accelerate
     // Multiplier starts at 0.1 and increments by acceleration each loop up to 1
-    public static final double acceleration = 0.03;
+    public static final double acceleration = 0.04;
 
     // Color sensor
     public static final int[] colorRed = {190, 110, 65}; // Red sample color (rgb)
@@ -116,7 +116,7 @@ public class Config {
     public static final double defaultSpecimenArmSpeed = 0.5;
     public static int specimenArmPostHang = 1250;
     public static int specimenArmPrepHang = 900;
-    public static int specimenArmCollect = 1970;
+    public static int specimenArmCollect = 1960;
     public static final int specimenArmPrepHangUp = 1050;
     public static final int specimenArmPostHangUp = 750;
     // Linear Slide
@@ -149,4 +149,7 @@ public class Config {
 
     // ---- Misc ----
     public static final double defaultMaxCurrent = 8000;
+    public static double minSpeedOnSlowDown = 0.5;
+    public static double slowDownDistance = 65;
+    public static boolean slowDown = true; // For testing only
 }

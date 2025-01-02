@@ -1,7 +1,12 @@
 package org.firstinspires.ftc.teamcode.SelfDrivingAuto;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class PurePursuit {
     private final PID xPID, yPID, turnPID;
@@ -135,33 +140,29 @@ public class PurePursuit {
         return Math.sqrt(dx*dx + dy*dy);
     }
 
-    public void update(double speed, boolean slowDown) {
+    public void update(double speed, double turnTarget, boolean slowDown) {
         // Get target point
         double[] targetPoint = getTargetPoint(calculateLookAhead(Config.lookAhead));
         // Get current position and calculate the movement
         double[] pos = Bot.pinpoint.getPosition();
         if (slowDown) {
-            double distanceX = path[path.length-1][0];
-            double distanceY = path[path.length-1][1];
+            double distanceX = (path[path.length-1][0]) - (Bot.pinpoint.getX());
+            double distanceY = (path[path.length-1][1]) - (Bot.pinpoint.getY());
             double distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
-            speed *= Math.min((0.1 + distance / 30),1);
+            speed *= Math.min((Config.minSpeedOnSlowDown + distance / Config.slowDownDistance),1);
         }
         double moveX = xPID.calculate(pos[0], targetPoint[0]);
         double moveY = yPID.calculate(pos[1], targetPoint[1]);
-        double moveTheta = turnPID.calculate(Bot.pinpoint.getHeading(), 0);
-        Bot.opMode.telemetry.addData("PID Theta", moveTheta);
-        Bot.opMode.telemetry.addData("PID X", moveX);
-        Bot.opMode.telemetry.addData("PID Y", moveY);
+        double moveTheta = turnPID.calculate(Bot.pinpoint.getHeading(), turnTarget);
         // Move the robot
         Bot.mecanumBase.setNorthMode(true);
         Bot.mecanumBase.move(moveX, moveY, moveTheta, speed);
     }
 
+    public void update(double speed, double turnTarget) { update(speed, turnTarget, false); }
+    public void update(double speed, boolean slowDown) { update(speed,0,slowDown); }
     public void update(double speed) { update(speed, false); }
     public void update() { update(0.25, false); }
-    public void stop() {
-        Bot.mecanumBase.stop();
-    }
     public double calculateLookAhead(double defaultLookAhead) {
         return defaultLookAhead;
     }
@@ -172,10 +173,15 @@ public class PurePursuit {
         // Get current position and calculate the movement
         double[] pos = Bot.pinpoint.getPosition();
         if (slowDown) {
-            double distanceX = path[path.length-1][0];
-            double distanceY = path[path.length-1][1];
+            double distanceX = (path[path.length-1][0]) - (Bot.pinpoint.getX());
+            double distanceY = (path[path.length-1][1]) - (Bot.pinpoint.getY());
             double distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
-            speed *= Math.min((0.1 + distance / 30),1);
+            speed *= Math.min((Config.minSpeedOnSlowDown + distance / Config.slowDownDistance),1);
+            Bot.dashboardTelemetry.addData("Distance X", distanceX);
+            Bot.dashboardTelemetry.addData("Distance Y", distanceY);
+            Bot.dashboardTelemetry.addData("Distance", distance);
+            Bot.dashboardTelemetry.addData("Speed Multiplier", Math.min((Config.minSpeedOnSlowDown + distance / Config.slowDownDistance),1));
+            Bot.dashboardTelemetry.update();
         }
         double moveX = xPID.calculate(pos[0], targetPoint[0]);
         double moveY = yPID.calculate(pos[1], targetPoint[1]);
@@ -187,5 +193,9 @@ public class PurePursuit {
         Bot.mecanumBase.setNorthMode(true);
         Bot.mecanumBase.move(moveX, moveY, moveTheta, speed);
         return targetPoint;
+    }
+
+    public void stop() {
+        Bot.mecanumBase.stop();
     }
 }

@@ -188,6 +188,7 @@ public class Teleop extends LinearOpMode {
             // Telemetry and update
             Bot.pinpoint.update();
             telemetry.addData("dt", timer.milliseconds() - prevMilliseconds);
+            telemetry.addData("Refresh Rate (Hz)", 1000 / (timer.milliseconds() - prevMilliseconds));
             telemetry.addData("Thread Current Slide", Bot.currentDetectionSlide.getCurrent());
             telemetry.addData("Thread Current Spec", Bot.currentDetectionSpec.getCurrent());
             telemetry.addData("North Mode", northModeToggle.get());

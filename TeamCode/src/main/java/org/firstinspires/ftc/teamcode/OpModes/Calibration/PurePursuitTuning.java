@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
@@ -18,6 +19,7 @@ public class PurePursuitTuning extends LinearOpMode {
         DRIVE_BACKWARD // follow a path backward
     }
     State state = State.DRIVE_FORWARD;
+
     public void runOpMode() {
         FtcDashboard dashboard = FtcDashboard.getInstance();
 
@@ -34,7 +36,9 @@ public class PurePursuitTuning extends LinearOpMode {
                     double[] py = {0, 100, 0, 100};
                     path = SplineCalc.nDegBez(px, py, 25);
                     Bot.purePursuit.setTargetPath(path);
+//                    Bot.purePursuit.start();
                     if (Bot.purePursuit.reachedTarget()) {
+//                        Bot.purePursuit.stop();
                         state = State.DRIVE_BACKWARD;
                     }
                     break;
@@ -43,14 +47,16 @@ public class PurePursuitTuning extends LinearOpMode {
                     double[] py2 = {100, 0, 100, 0};
                     path = SplineCalc  .nDegBez(px2, py2, 25);
                     Bot.purePursuit.setTargetPath(path);
+//                    Bot.purePursuit.start();
                     if (Bot.purePursuit.reachedTarget()) {
+//                        Bot.purePursuit.stop();
                         state = State.DRIVE_FORWARD;
                     }
                     break;
             }
 
             double[] pos = Bot.pinpoint.getPosition();
-            double[] target = Bot.purePursuit.updateReturnTarget(Config.driveSpeed, false);
+            Bot.purePursuit.update();
 
             // Draw robot position, target point, and path
             double inchesPerCentimeter = 0.394;
@@ -60,9 +66,9 @@ public class PurePursuitTuning extends LinearOpMode {
                     setStrokeWidth(3).
                     strokePolyline(Utils.pathToXY(path)[1], Utils.pathToXY(path)[0]).
                     setStroke("#0000FF").
-                    strokeCircle(pos[1], pos[0], 10).
-                    setStroke("#00FF00").
-                    strokeCircle(target[1], target[0], 10);
+                    strokeCircle(pos[1], pos[0], 10);
+//                    setStroke("#00FF00").
+//                    strokeCircle(target[1], target[0], 10);
 
             // Add telemetry data
             packet.put("speed", Math.sqrt(Math.pow(Bot.pinpoint.getVelocity()[0], 2) + Math.pow(Bot.pinpoint.getVelocity()[1], 2)));
@@ -70,10 +76,10 @@ public class PurePursuitTuning extends LinearOpMode {
             packet.put("robot x", pos[0]);
             packet.put("robot y", pos[1]);
 
-            packet.put("target x", target[0]);
-            packet.put("target y", target[1]);
+//            packet.put("target x", target[0]);
+//            packet.put("target y", target[1]);
 
-            packet.put("error x", Math.sqrt(Math.pow(target[0]-pos[0],2) + Math.pow(target[1]-pos[1],2)));
+//            packet.put("error x", Math.sqrt(Math.pow(target[0]-pos[0],2) + Math.pow(target[1]-pos[1],2)));
 
             dashboard.sendTelemetryPacket(packet);
         }
