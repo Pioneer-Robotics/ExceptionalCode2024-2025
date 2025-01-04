@@ -11,13 +11,13 @@ public class TrueAngle {
         this.prevAngle = initAngle;
     }
 
-    public double updateAngle(double inputAngle) {
+    public double updateAngle(double inputAngle, double angleThres, double angleCorrect) {
         double deltaAngle = inputAngle - prevAngle;
-        if (deltaAngle > Math.PI) {
-            deltaAngle -= 2 * Math.PI;
+        if (deltaAngle > angleThres) {
+            deltaAngle -= angleCorrect; //was 2pi
         }
-        else if (deltaAngle < -Math.PI) {
-            deltaAngle += 2 * Math.PI;
+        else if (deltaAngle < -angleThres) {
+            deltaAngle += angleCorrect;
         }
         currentAngle += deltaAngle;
         prevAngle = inputAngle;

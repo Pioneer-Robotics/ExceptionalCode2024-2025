@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.TrueAngle;
+import org.opencv.core.Mat;
 
 /**
  * This class is used to calculate the robots current position on the field.
@@ -61,7 +62,7 @@ public class TwoWheelOdometry {
     public void calculate(){
         // Get current rotation from IMU
         // TODO: Theta jumps when around 3 pi
-        theta = trueAngle.updateAngle(-Bot.imu.getRadians());
+        theta = trueAngle.updateAngle(-Bot.imu.getRadians(), Math.PI, 2 * Math.PI);
         double dTheta = theta - prevTheta;
 
         Bot.opMode.telemetry.addData("True Angle", theta);

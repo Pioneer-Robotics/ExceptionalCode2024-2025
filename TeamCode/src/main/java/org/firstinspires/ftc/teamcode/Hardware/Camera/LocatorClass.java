@@ -1,38 +1,41 @@
 package org.firstinspires.ftc.teamcode.Hardware.Camera;
 
-import static java.lang.String.format;
-
 import android.util.Size;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.SortOrder;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Helpers.TrueAngle;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.opencv.ColorBlobLocatorProcessor;
 import org.firstinspires.ftc.vision.opencv.ColorRange;
 import org.firstinspires.ftc.vision.opencv.ImageRegion;
 
-import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+
+import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
 
 public class LocatorClass {
     List<ColorBlobLocatorProcessor.Blob> blobs;
-    ColorBlobLocatorProcessor.Blob biggestBlob;
     ColorBlobLocatorProcessor colorLocator;
+    Point maxYPoint, minYPoint;
     Point[] boxPoints = new Point[]{new Point(0,0), new Point(0,0), new Point(0,0), new Point(0,0)};
     double[] blobPos;
-    int contPointLen;
-    ArrayList<Double> xPoints, yPoints = new ArrayList<Double>();
-    ArrayList<ArrayList<Double>> arrayBoxPoints = new ArrayList<ArrayList<Double>>();
-    double minX, maxX, minY, maxY, boxX, boxY, dX, dY, sampleTheta;
+    double minX, maxX, minY, maxY, boxX, boxY, dX, dY, sampleThetaRad, sampleThetaDeg;
+    TrueAngle trueAngle;
     VisionPortal portal;
-    public LocatorClass(ColorRange targetColorRange, LinearOpMode opMode){
+    enum SampleDirection{
+        LEFT,
+        RIGHT
+    }
 
+    SampleDirection sampleDirection;
+
+    public LocatorClass(ColorRange targetColorRange, LinearOpMode opMode){
+        //Creates processor that detects blue color blobs
         colorLocator = new ColorBlobLocatorProcessor.Builder()
                 .setTargetColorRange(targetColorRange)         // use a predefined color match
                 .setContourMode(ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY)    // exclude blobs inside blobs
@@ -40,7 +43,7 @@ public class LocatorClass {
                 .setDrawContours(true)                        // Show contours on the Stream Preview
                 .setBlurSize(5)                               // Smooth the transitions between different colors in image
                 .build();
-
+        //Opens webcam running the color locator
         portal = new VisionPortal.Builder()
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .addProcessor(colorLocator)
@@ -48,41 +51,31 @@ public class LocatorClass {
                 .setCamera(opMode.hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .build();
     }
+    //-------
+    //All Try/Catches are because the initial frame of the camera stream isn't processed, which causes null pointer errors
 
+    /***
+     * @return List of all color blobs detected by camera
+     */
     public List<ColorBlobLocatorProcessor.Blob> getBlobsList(){
-//        if (!blobs.isEmpty()){
-//            blobs = colorLocator.getBlobs();
-//        ColorBlobLocatorProcessor.Util.filterByArea(50, 20000, blobs);  // filter out very small blobs.
-//        ColorBlobLocatorProcessor.Util.sortByArea(SortOrder.DESCENDING, blobs); // Largest blob is first (hopefully correct one)
-//        }
-        blobs = colorLocator.getBlobs();
 
+        blobs = colorLocator.getBlobs();
+        //Check if list is empty, because the initial frame isn't processed, which can cause null pointer errors
         if (blobs.toArray().length == 0) {
             blobs = colorLocator.getBlobs();
         }
-
-        ColorBlobLocatorProcessor.Util.filterByArea(50, 20000, blobs);  // filter out very small blobs.
-        ColorBlobLocatorProcessor.Util.sortByArea(SortOrder.DESCENDING, blobs); // Largest blob is first (hopefully correct one)
+        //Filter out very small blobs
+        ColorBlobLocatorProcessor.Util.filterByArea(50, 20000, blobs);
+        //Sorts blobs
+        ColorBlobLocatorProcessor.Util.sortByArea(SortOrder.DESCENDING, blobs); // Largest blob is first, which is ideally the sample
         return (blobs);
     }
 
-//    public ColorBlobLocatorProcessor.Blob biggestBlob(){
-//        getBlobsList();
-//        try{
-//            return (blobs.get(0));
-//        } catch (Exception e){
-//            return(n);
-//        }
-//    }
-
-//    public boolean checkIfEmpty(){
-//        blobs = colorLocator.getBlobs();
-//
-//        if (blobs.toArray().length == 0) {
-//            blobs = colorLocator.getBlobs();
-//        }
-//    }
-
+    /***
+     *
+     * @return (X,Y,) position of the largest color blob detected
+     */
+    //TODO: add argument for any blob
     public double[] getBlobPos(){
         getBlobsList();
         blobPos = new double[]{blobs.get(0).getBoxFit().center.x, blobs.get(0).getBoxFit().center.y};
@@ -93,16 +86,10 @@ public class LocatorClass {
         }
     }
 
-    public double blobPosX(){
-        getBlobsList();
-        return (getBlobPos()[0]);
-    }
-
-    public double blobPosY(){
-        getBlobsList();
-        return (getBlobPos()[1]);
-    }
-
+    /***
+     *
+     * @return Number of blobs detected
+     */
     public int blobCount(){
         getBlobsList();
         try{
@@ -112,17 +99,19 @@ public class LocatorClass {
         }
     }
 
+    /***
+     *
+     * @return 4 points of the rectangle fit around the largest color blob
+     */
     public Point[] getBoxPoints(){
         getBlobsList();
         if (!blobs.isEmpty()) {
-            int i = 0;
             blobs.get(0).getBoxFit().points(boxPoints);
-//            for (Point p : boxPoints){            //Used for testing, makes reading points easier
+//            int i = 0;
+//            for (Point p : boxPoints){            //Used for testing, rounds coordinates, makes reading points easier
 //                boxPoints[i].x = Math.rint(boxPoints[i].x);
 //                boxPoints[i].y = Math.rint(boxPoints[i].y);
-//
 //                i +=1;
-//
 //            }
             return(boxPoints);
         } else {
@@ -130,82 +119,106 @@ public class LocatorClass {
         }
     }
 
-    public void sortBoxPoints(){
-        getBoxPoints();
-        for (Point p : boxPoints){
-            int i = 0;
-            xPoints.add(p.x);
-            yPoints.add(p.y);
+    /***
+     * Built in calculation from RotatedRect class
+     * Issues: Angle jumps when sample rotated past PI/2, also jumps between 0 and PI/2 reading when sample is at 0 radians
+     * @return Angle of the largest detect blob
+     */
+    public double getBuiltInAngle(){
+        getBlobsList();
+        determineRotDir();
+        try {
+            if (sampleDirection == SampleDirection.RIGHT){
+                return (blobs.get(0).getBoxFit().angle);
+            } else {
+                //Returns incorrect angle when the sample is rotated to the left
+                //Need to subtract 90 degrees from it
+                return (blobs.get(0).getBoxFit().angle - 90);
+            }
+        } catch (Exception e){
+            return (0);
         }
-//Sort box points by x and y values to get which points are farthest left/right or up/down
     }
 
-    public ArrayList<Double> getXPoints(){
-        sortBoxPoints();
-        return (xPoints);
-    }
-
-    public ArrayList<Double> getYPoints(){
-        sortBoxPoints();
-        return (yPoints);
-    }
-
-//    public double[] getStraightBoxFit(){
-//        getBlobsList();
-//        contourPoints = getPoints();
-//        contPointLen = contourPoints.length;
-//
-//        for(Point points : contourPoints){
-//            xPoints.add(points.x);
-//            yPoints.add(points.y);
-//        }
-//
-//        xPoints.sort(Collections.reverseOrder());
-//        yPoints.sort(Collections.reverseOrder());
-//
-//        minX = xPoints.get(0);
-//        maxX = xPoints.get(contPointLen-1);
-//
-//        minY = yPoints.get(0);
-//        maxY = yPoints.get(contPointLen-1);
-//
-//        boxX = maxX-minX;
-//        boxY = maxY-minY;
-//
-//
-//        try{
-//            return (new double[]{boxX,boxY});
-//        } catch (Exception e){
-//            return (new double[]{0,0});
-//        }
-//    }
-
+    /***
+     *Inverse trig based
+     * @return Angle of the largest detect blob
+     */
     public double getSampleTheta(){
         getBoxPoints();
-        dX = boxPoints[0].x - boxPoints[1].x;
-        dY = boxPoints[0].y - boxPoints[1].y;
+        dX = boxPoints[3].x - boxPoints[0].x;
+        dY = boxPoints[3].y - boxPoints[0].y;
         //Atan2 has args (y,x), flipped for use case
-        sampleTheta = Math.atan2(dX, dY);
+        sampleThetaRad = Math.atan2(dY, dX);
+
         try{
-            return (sampleTheta);
+            //Code for trying to account for PI/2 jump when box is rotated 90 degrees, currently broken
+//            sampleThetaRad = trueAngle.updateAngle(sampleThetaRad, Math.PI/3, Math.PI);
+            sampleThetaDeg = AngleUtils.radToDeg(sampleThetaRad);
+            return (sampleThetaDeg);
         } catch (Exception e) {
             return (0);
         }
     }
 
-    public int numContPoints(){
-        blobs = getBlobsList();
-        boxPoints = getBoxPoints();
-        contPointLen = boxPoints.length;
-//        getStraightBoxFit();
-        try {
-            return(contPointLen);
-        } catch (Exception e){
-            return(0);
+    /***
+     *
+     * @param p1
+     * @param p2
+     * @return Euclidean distance between two points
+     */
+    public double pointDistance(Point p1, Point p2){
+        //Uses distance formula sqrt( (dX^2) + (dY^2))
+        return (Math.sqrt((Math.pow((p2.x-p1.x),2))+Math.pow((p2.y-p1.y),2)));
+    }
+
+    public void orderPoints(){
+        getBoxPoints();
+        //Used for determining which points make up the short or long sides of a specimen
+        double d1 = pointDistance(boxPoints[0], boxPoints[1]);
+        double d2 = pointDistance(boxPoints[1], boxPoints[2]);
+
+        if (Math.max(d1,d2) == d1){
+            //Long side is between points 1 and 2
+        } else if (Math.max(d1,d2) == d2){
+            //Long side is between points 2 and 3
+        }
+    }
+
+    /***
+     * Determines whether the sample is rotated to the left or right
+     */
+    public void determineRotDir(){
+        getBoxPoints();
+        //Index for minimum and maximum box points
+        int pointMax = -1;
+        int pointMin = -1;
+
+        int i = 0;
+        //Gets the minimum and maximum Y values
+        minY = Math.min(Math.min(boxPoints[0].y, boxPoints[1].y), Math.min(boxPoints[2].y, boxPoints[3].y));
+        maxY = Math.max(Math.max(boxPoints[0].y,boxPoints[1].y), Math.max(boxPoints[2].y, boxPoints[3].y));
+        //Determines the top and bottom points
+        for (Point p : boxPoints){
+            if(p.y == maxY){
+                pointMax = i;
+            } else if (p.y == minY){
+                pointMin = i;
+            }
+            i += 1;
+        }
+        //Can use X values of the Y min and max points to determine which way its rotated
+        if (boxPoints[pointMax].x > boxPoints[pointMin].x){
+            //Sample is turned right
+            sampleDirection = SampleDirection.RIGHT;
+        } else {
+            //Sample is turned left
+            sampleDirection = SampleDirection.LEFT;
         }
     }
 
     public VisionPortal getCameraStream() {
         return portal;
     }
+
 }

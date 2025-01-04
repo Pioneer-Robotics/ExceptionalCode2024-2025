@@ -51,4 +51,8 @@ public class AngleUtils {
         ans = normalizeRadians(ans);
         return ans;
     }
+
+    public static double radToDeg(double radians){
+        return(radians*(180/Math.PI));
+    }
 }
