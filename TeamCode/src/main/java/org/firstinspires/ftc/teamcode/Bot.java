@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
 import org.firstinspires.ftc.teamcode.Hardware.SlideArm;
 import org.firstinspires.ftc.teamcode.Hardware.SpecimenArm;
 import org.firstinspires.ftc.teamcode.Hardware.VoltageHandler;
+import org.firstinspires.ftc.teamcode.Helpers.CurrentUtils;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PIDDrive;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Pinpoint;
@@ -43,8 +44,7 @@ public class Bot {
     public static Intake intake;
     public static SlideArm slideArm;
     public static Pinpoint pinpoint;
-    public static CurrentDetection currentDetectionSlide;
-    public static CurrentDetection currentDetectionSpec;
+    public static CurrentUtils currentThreads;
     public static FtcDashboard dashboard;
     public static Telemetry dashboardTelemetry;
 
@@ -80,10 +80,7 @@ public class Bot {
         Bot.led = new LEDController();
 
         // Threads
-        Bot.currentDetectionSlide = new CurrentDetection(Bot.slideArm.getMotor());
-        Bot.currentDetectionSlide.start();
-        Bot.currentDetectionSpec = new CurrentDetection(Bot.specimenArm.getMotor());
-        Bot.currentDetectionSpec.start();
+        Bot.currentThreads = new CurrentUtils(opMode);
     }
 
     public static void init(@NonNull LinearOpMode opMode) {

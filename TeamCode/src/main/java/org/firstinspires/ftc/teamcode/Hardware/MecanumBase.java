@@ -92,4 +92,9 @@ public class MecanumBase {
                 LB.getCurrentPosition()
         };
     }
+
+    public DcMotorEx getLF() {return LF;}
+    public DcMotorEx getLB() {return LB;}
+    public DcMotorEx getRF() {return RF;}
+    public DcMotorEx getRB() {return RB;}
 }
