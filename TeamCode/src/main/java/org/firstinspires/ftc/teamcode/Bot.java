@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
 import org.firstinspires.ftc.teamcode.Hardware.ColorSensor;
 import org.firstinspires.ftc.teamcode.Hardware.CurrentDetection;
@@ -42,7 +45,8 @@ public class Bot {
     public static Pinpoint pinpoint;
     public static CurrentDetection currentDetectionSlide;
     public static CurrentDetection currentDetectionSpec;
-
+    public static FtcDashboard dashboard;
+    public static Telemetry dashboardTelemetry;
 
     /**
      * Constructor for Bot.
@@ -50,6 +54,8 @@ public class Bot {
      */
     public static void init(@NonNull LinearOpMode opMode, double startX, double startY) {
         Bot.opMode = opMode;
+        Bot.dashboard = FtcDashboard.getInstance();
+        Bot.dashboardTelemetry = dashboard.getTelemetry();
 
         // Drive base and self driving
         Bot.pinpoint = new Pinpoint(startX, startY);
