@@ -18,14 +18,15 @@ public class Config {
     // Encoder constants
     public static final double maxDriveTicksPerSecond = 2700; // ~300 RPM
     public static final double maxSlideTicksPerSecond = 2700;
+    public static final double maxSpecTicksPerSecond = 2700;
 
     // Two wheel odometers
     public static final double offsetOdoLeft = 1800;
     public static final double offsetOdoCenter = 635;
 
     // PID constants
-    public static double[] drivePID = {0.08, 0.0001, 0.15}; // kP, kI, kD
-    public static double[] turnPID = {2.5, 0.0005, 0.15}; // kP, kI, kD
+    public static double[] drivePID = {0.08, 0.0001, 0.25}; // kP, kI, kD
+    public static double[] turnPID = {3, 0.0001, 0.15}; // kP, kI, kD
     public static double driveSpeed = 0.4;
 
     // Tolerances
@@ -35,7 +36,13 @@ public class Config {
     public static double turnTolerance = 0.05;
     public static final double specimenArmTolerance = 5; // Motor ticks
 
-    public static double lookAhead = 15;
+    public static double lookAhead = 15; // Pure pursuit lookahead
+
+    // Used to move "virtual robot" ahead of actual robot in pure pursuit
+    public static double overshootDistance(double velocity) {
+        // Polynomial fit for overshoot distance
+        return ((0.000714 * velocity * velocity) + (0.145 * velocity) + 0.216) * 1.1;
+    }
 
     // Used to gradually accelerate
     // Multiplier starts at 0.1 and increments by acceleration each loop up to 1
@@ -64,7 +71,6 @@ public class Config {
     public static final String slideMotor = "slideMotor";
 
     // Servo names
-    public static final String wristServo = "wristServo";
     public static final String clawServo = "clawServo";
     public static final String misumiDriveL = "misumiDriveL";
     public static final String misumiDriveR = "misumiDriveR";
@@ -114,13 +120,12 @@ public class Config {
     // ---- Motor Positions ----
     // Specimen Arm
     public static final double defaultSpecimenArmSpeed = 0.5;
-    public static int specimenArmPostHang = 1250;
+    public static int specimenArmPostHang = 1350;
     public static int specimenArmPrepHang = 900;
-    public static int specimenArmCollect = 1960;
+    public static int specimenArmCollect = 1980;
     public static final int specimenArmPrepHangUp = 1050;
     public static final int specimenArmPostHangUp = 750;
     // Linear Slide
-    public static final int slideLength = 4365;
     public static final double defaultSlideSpeed = 0.25;
     public static final int minSlideHeight = 15;
     public static final int maxSlideHeight = 4350;
@@ -129,27 +134,22 @@ public class Config {
     public static final int slideHighBasket = 4300;
 
     // ---- Coordinates of note and auto config ----
-    // Y position of robot when flush with the submersible (cm)
-    public static final double submersibleY = 101;
 
     // Specimen hang offset (space between hangs)
-    public static final double hangOffset = 8;
+    public static final double hangOffset = 6.5;
 
     // Coordinates of first specimen hang
     public static final double specHangX = 195;
-    public static final double specHangY = 95;
+    public static final double specHangY = 96.25;
 
     // Coordinates of observation zone park
     public static final double parkX = 300;
-    public static final double parkY = 40;
+    public static final double parkY = 30;
 
     // Robot starting position for specimen auto
-    public static final double specimenStartX = 197.5;
+    public static final double specimenStartX = 198;
     public static final double specimenStartY = 20.5;
 
     // ---- Misc ----
     public static final double defaultMaxCurrent = 8000;
-    public static double minSpeedOnSlowDown = 0.5;
-    public static double slowDownDistance = 65;
-    public static boolean slowDown = true; // For testing only
 }

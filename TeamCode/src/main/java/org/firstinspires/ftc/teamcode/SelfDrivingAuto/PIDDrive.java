@@ -6,10 +6,9 @@ import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
 import org.firstinspires.ftc.teamcode.Helpers.Utils;
 
-// Not tested
-
 /**
  * Simple point to point using PID
+ * Deprecated in favor of PurePursuit
  */
 public class PIDDrive {
     public PIDDrive() {}

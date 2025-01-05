@@ -3,9 +3,7 @@ package org.firstinspires.ftc.teamcode.Hardware;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 
@@ -27,8 +25,8 @@ public class SpecimenArm {
         claw.closeServo();
     }
     public void move(double speed) {
-        motor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        motor.setPower(speed);
+        motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        motor.setVelocity(speed * Config.maxSpecTicksPerSecond);
         // Set motor limits
         // TODO: Implement motor limits
     }
@@ -55,7 +53,7 @@ public class SpecimenArm {
     }
 
     public void moveToCollect(double speed) {
-        moveToPos(Config.specimenArmCollect, speed);
+        move(speed);
         position = 2;
     }
 
@@ -86,11 +84,7 @@ public class SpecimenArm {
     public boolean reachedPosition() { return Math.abs(motor.getTargetPosition() - motor.getCurrentPosition()) < Config.specimenArmTolerance; }
 
     public void homeArm() {
-        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor.setPower(-0.15);
-        Bot.mecanumBase.stop();
-        while (motor.getCurrent(CurrentUnit.MILLIAMPS) < 1000) {}
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        move(-0.25);
     }
 
     public DcMotorEx getMotor() {

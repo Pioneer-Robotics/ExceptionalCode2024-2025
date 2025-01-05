@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
@@ -19,6 +18,7 @@ public class PurePursuitTuning extends LinearOpMode {
         DRIVE_BACKWARD // follow a path backward
     }
     State state = State.DRIVE_FORWARD;
+    boolean useVirtualRobot = true;
 
     public void runOpMode() {
         FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -36,9 +36,8 @@ public class PurePursuitTuning extends LinearOpMode {
                     double[] py = {0, 100, 0, 100};
                     path = SplineCalc.nDegBez(px, py, 25);
                     Bot.purePursuit.setTargetPath(path);
-//                    Bot.purePursuit.start();
+                    Bot.purePursuit.setTurnPath(new double[][]{{0, 0}, {0.5, Math.PI / 2}, {1, 0}});
                     if (Bot.purePursuit.reachedTarget()) {
-//                        Bot.purePursuit.stop();
                         state = State.DRIVE_BACKWARD;
                     }
                     break;
@@ -47,16 +46,32 @@ public class PurePursuitTuning extends LinearOpMode {
                     double[] py2 = {100, 0, 100, 0};
                     path = SplineCalc  .nDegBez(px2, py2, 25);
                     Bot.purePursuit.setTargetPath(path);
-//                    Bot.purePursuit.start();
+                    Bot.purePursuit.setTurnPath(new double[][]{{0, 0}, {0.5, -Math.PI / 2}, {1, 0}});
                     if (Bot.purePursuit.reachedTarget()) {
-//                        Bot.purePursuit.stop();
                         state = State.DRIVE_FORWARD;
                     }
                     break;
             }
 
             double[] pos = Bot.pinpoint.getPosition();
-            Bot.purePursuit.update();
+            double[] pos_adjusted = Bot.pinpoint.getPosition();
+
+            if (useVirtualRobot) {
+                // Move the virtual robot ahead of the actual robot
+                double[] velocity = Bot.pinpoint.getVelocity();
+                double speed = Math.sqrt(Math.pow(velocity[0], 2) + Math.pow(velocity[1], 2));
+                // Normalize the velocity vector
+                double[] direction = {velocity[0] / speed, velocity[1] / speed};
+                // Calculate the distance to move ahead
+                // Based on current speed of the robot
+                double distance = Config.overshootDistance(speed);
+                // Move the virtual robot
+                pos_adjusted[0] += direction[0] * distance;
+                pos_adjusted[1] += direction[1] * distance;
+            }
+
+            double[] target = Bot.purePursuit.getTargetPoint(Config.lookAhead, useVirtualRobot);
+            Bot.purePursuit.update(Config.driveSpeed, useVirtualRobot);
 
             // Draw robot position, target point, and path
             double inchesPerCentimeter = 0.394;
@@ -66,9 +81,11 @@ public class PurePursuitTuning extends LinearOpMode {
                     setStrokeWidth(3).
                     strokePolyline(Utils.pathToXY(path)[1], Utils.pathToXY(path)[0]).
                     setStroke("#0000FF").
-                    strokeCircle(pos[1], pos[0], 10);
-//                    setStroke("#00FF00").
-//                    strokeCircle(target[1], target[0], 10);
+                    strokeCircle(pos[1], pos[0], 10).
+                    setStroke("#0000FF").
+                    strokeCircle(pos_adjusted[1], pos_adjusted[0], 10).
+                    setStroke("#00FF00").
+                    strokeCircle(target[1], target[0], 10);
 
             // Add telemetry data
             packet.put("speed", Math.sqrt(Math.pow(Bot.pinpoint.getVelocity()[0], 2) + Math.pow(Bot.pinpoint.getVelocity()[1], 2)));
@@ -76,10 +93,10 @@ public class PurePursuitTuning extends LinearOpMode {
             packet.put("robot x", pos[0]);
             packet.put("robot y", pos[1]);
 
-//            packet.put("target x", target[0]);
-//            packet.put("target y", target[1]);
+            packet.put("target x", target[0]);
+            packet.put("target y", target[1]);
 
-//            packet.put("error x", Math.sqrt(Math.pow(target[0]-pos[0],2) + Math.pow(target[1]-pos[1],2)));
+            packet.put("error x", Math.sqrt(Math.pow(target[0] - pos[0], 2) + Math.pow(target[1] - pos[1], 2)));
 
             dashboard.sendTelemetryPacket(packet);
         }

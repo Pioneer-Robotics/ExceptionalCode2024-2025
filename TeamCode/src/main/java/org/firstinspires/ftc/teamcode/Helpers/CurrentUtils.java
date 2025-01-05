@@ -9,14 +9,14 @@ import org.firstinspires.ftc.teamcode.Hardware.CurrentDetection;
 
 public class CurrentUtils {
     LinearOpMode opMode;
-    private CurrentDetection slideCurrent;
-    private CurrentDetection specArmCurrent;
-    private CurrentDetection LFCurrent, RFCurrent, LBCurrent, RBCurrent;
+    private final CurrentDetection slideCurrent;
+    private final CurrentDetection specArmCurrent;
+    private final CurrentDetection LFCurrent, RFCurrent, LBCurrent, RBCurrent;
 
     public CurrentUtils(@NonNull LinearOpMode opMode) {
         this.opMode = opMode;
         this.slideCurrent = new CurrentDetection(Bot.slideArm.getMotor());
-        this.specArmCurrent = new CurrentDetection(Bot.specimenArm.getMotor());
+        this.specArmCurrent = new CurrentDetection(Bot.specimenArm.getMotor(), 2000);
         this.LFCurrent = new CurrentDetection(Bot.mecanumBase.getLF());
         this.RFCurrent = new CurrentDetection(Bot.mecanumBase.getRF());
         this.LBCurrent = new CurrentDetection(Bot.mecanumBase.getLB());

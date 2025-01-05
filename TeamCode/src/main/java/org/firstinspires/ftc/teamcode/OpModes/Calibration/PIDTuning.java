@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes.Calibration;
 
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -46,7 +46,7 @@ public class PIDTuning extends LinearOpMode {
             Bot.purePursuit.update(Config.driveSpeed);
 
             double[] pos = Bot.optical_odom.getPose();
-            double[] target = Bot.purePursuit.getTargetPoint(Config.lookAhead);
+            double[] target = Bot.purePursuit.getTargetPoint(Config.lookAhead, false);
 
             // Draw robot position, target point, and path
             double inchesPerCentimeter = 0.394;

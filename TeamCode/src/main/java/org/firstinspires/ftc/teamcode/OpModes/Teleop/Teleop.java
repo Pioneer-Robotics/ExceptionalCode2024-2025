@@ -5,10 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
-import org.firstinspires.ftc.teamcode.Hardware.CurrentDetection;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
 
@@ -55,11 +53,7 @@ public class Teleop extends LinearOpMode {
 
             // Toggle for field centric
 
-            if (gamepad1.left_trigger>0.8 && gamepad1.right_trigger>0.8){
-                bothTrigPressed = true;
-            } else {
-                bothTrigPressed = false;
-            }
+            bothTrigPressed = gamepad1.left_trigger > 0.8 && gamepad1.right_trigger > 0.8;
             northModeToggle.toggle(bothTrigPressed); // Toggle north mode
             Bot.mecanumBase.setNorthMode(northModeToggle.get()); // Update north mode
 
@@ -132,7 +126,7 @@ public class Teleop extends LinearOpMode {
                 Config.specimenArmCollect += armAdjust;
 
                 if (Bot.specimenArm.getPosition() == 2) {
-                    Bot.specimenArm.moveToCollect(0.4);
+                    Bot.specimenArm.moveToCollect(0.3);
                 } else if (Bot.specimenArm.getPosition() == 1) {
                     Bot.specimenArm.movePostHang(0.4);
                 } else if (Bot.specimenArm.getPosition() == 0) {

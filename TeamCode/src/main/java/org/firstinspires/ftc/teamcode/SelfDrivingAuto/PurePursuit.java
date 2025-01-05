@@ -1,27 +1,27 @@
 package org.firstinspires.ftc.teamcode.SelfDrivingAuto;
 
-import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import org.firstinspires.ftc.teamcode.Helpers.Utils;
 
 public class PurePursuit {
     private final PID xPID, yPID, turnPID;
-    private double[][] path; // The path to follow
+    private double[][] path; // {{x1, y1}, {x2, y2}, ...}
+    private double[][] turnPath; // {{t1, θ1}, {t2, θ2}, ...}
+    private int intersectionIndex;
 
     public PurePursuit(double kP, double kI, double kD) {
         xPID = new PID(kP, kI, kD);
         yPID = new PID(kP, kI, kD);
         turnPID = new PID(Config.turnPID[0], Config.turnPID[1], Config.turnPID[2]);
+        turnPath = new double[][]{{0, 0}, {1, 0}};
     }
 
     public PurePursuit(double kP, double kI, double kD, double initialError) {
         xPID = new PID(kP, kI, kD, initialError);
         yPID = new PID(kP, kI, kD, initialError);
         turnPID = new PID(Config.turnPID[0], Config.turnPID[1], Config.turnPID[2], initialError);
+        turnPath = new double[][]{{0, 0}, {1, 0}};
     }
 
     public void setTargetPath(double[][] path) {
@@ -29,13 +29,41 @@ public class PurePursuit {
     }
 
     /**
+     * @param turnPath double[][] - {{t1, θ1}, {t2, θ2}, ...}<br>
+     *                 Linearly interpolates between each set of points<br><br>
+     *                 <b>Example usage:</b><br>
+     *                 <code>setTurnPath(new double[] {{0, 0}, {0.5, 0}, {1, Math.PI/2}})</code><br>
+     *                 at t=0: 0 radians<br>at t=0.5: 0 radians<br>at t=1: π/2 radians<br>
+     */
+    public void setTurnPath(double[][] turnPath) {
+        this.turnPath = turnPath;
+    }
+
+
+    /**
      * Get the target point on the path based on the current position
      * @param lookAhead double - the distance to look ahead
      * @return double[] - the target point
      */
-    public double[] getTargetPoint(double lookAhead) {
+    public double[] getTargetPoint(double lookAhead, boolean useVirtualRobot) {
         // Get the current position
         double[] pos = Bot.pinpoint.getPosition();
+        intersectionIndex = -1;
+
+        if (useVirtualRobot) {
+            // Move the virtual robot ahead of the actual robot
+            double[] velocity = Bot.pinpoint.getVelocity();
+            double speed = Math.sqrt(Math.pow(velocity[0], 2) + Math.pow(velocity[1], 2));
+            // Normalize the velocity vector
+            double[] direction = {velocity[0] / speed, velocity[1] / speed};
+            // Calculate the distance to move ahead
+            // Based on current speed of the robot
+            double distance = Config.overshootDistance(speed);
+            // Move the virtual robot
+            pos[0] += direction[0] * distance;
+            pos[1] += direction[1] * distance;
+        }
+
         // Loop through the path to find the target point
         double[] lastIntersection = null; // Follow the intersection point closest to the end of the path
         for (int i = 0; i < path.length - 1; i++) {
@@ -47,6 +75,7 @@ public class PurePursuit {
             if (intersection != null) {
                 // If there is an intersection, update the last intersection point
                 lastIntersection = intersection;
+                intersectionIndex = i;
             }
         }
         if (lastIntersection != null) return lastIntersection;
@@ -131,26 +160,29 @@ public class PurePursuit {
         return reachedTarget(Config.driveTolerance);
     }
 
+    public boolean reachedTargetXY(double xTolerance, double yTolerance) {
+        double[] pos = Bot.pinpoint.getPosition();
+        double[] targetPoint = path[path.length - 1]; // Last point in the path
+        double dx = Math.abs(targetPoint[0] - pos[0]);
+        double dy = Math.abs(targetPoint[1] - pos[1]);
+        return (dx < xTolerance) && (dy < yTolerance);
+    }
+
     public double getDistance() {
         // Get distance to target point
         double[] pos = Bot.pinpoint.getPosition();
         double[] targetPoint = path[path.length - 1]; // Last point in the path
         double dx = Math.abs(targetPoint[0] - pos[0]);
         double dy = Math.abs(targetPoint[1] - pos[1]);
-        return Math.sqrt(dx*dx + dy*dy);
+        return Math.sqrt(dx * dx + dy * dy);
     }
 
-    public void update(double speed, double turnTarget, boolean slowDown) {
+    public void update(double speed, boolean useVirtualRobot) {
         // Get target point
-        double[] targetPoint = getTargetPoint(calculateLookAhead(Config.lookAhead));
+        double[] targetPoint = getTargetPoint(calculateLookAhead(Config.lookAhead), useVirtualRobot);
+        double turnTarget = getTurnTarget();
         // Get current position and calculate the movement
         double[] pos = Bot.pinpoint.getPosition();
-        if (slowDown) {
-            double distanceX = (path[path.length-1][0]) - (Bot.pinpoint.getX());
-            double distanceY = (path[path.length-1][1]) - (Bot.pinpoint.getY());
-            double distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
-            speed *= Math.min((Config.minSpeedOnSlowDown + distance / Config.slowDownDistance),1);
-        }
         double moveX = xPID.calculate(pos[0], targetPoint[0]);
         double moveY = yPID.calculate(pos[1], targetPoint[1]);
         double moveTheta = turnPID.calculate(Bot.pinpoint.getHeading(), turnTarget);
@@ -159,40 +191,29 @@ public class PurePursuit {
         Bot.mecanumBase.move(moveX, moveY, moveTheta, speed);
     }
 
-    public void update(double speed, double turnTarget) { update(speed, turnTarget, false); }
-    public void update(double speed, boolean slowDown) { update(speed,0,slowDown); }
-    public void update(double speed) { update(speed, false); }
-    public void update() { update(0.25, false); }
-    public double calculateLookAhead(double defaultLookAhead) {
-        return defaultLookAhead;
+    private double getTurnTarget() {
+        // Distance along the path [0,1]
+        double t = (double) intersectionIndex / (path.length - 1);
+        // Index into the turn path based on t
+        int turnIndex = -1;
+        for (int i = 0; i < turnPath.length - 1; i++) {
+            if (turnPath[i][0] <= t && t <= turnPath[i + 1][0]) {
+                turnIndex = i;
+                break;
+            }
+        }
+        // Used to interpolate between the two points
+        double t2 = (t - turnPath[turnIndex][0]) / (turnPath[turnIndex + 1][0] - turnPath[turnIndex][0]);
+        return Utils.lerp(turnPath[turnIndex][1], turnPath[turnIndex + 1][1], t2);
     }
 
-    public double[] updateReturnTarget(double speed, boolean slowDown) {
-        // Get target point
-        double[] targetPoint = getTargetPoint(calculateLookAhead(Config.lookAhead));
-        // Get current position and calculate the movement
-        double[] pos = Bot.pinpoint.getPosition();
-        if (slowDown) {
-            double distanceX = (path[path.length-1][0]) - (Bot.pinpoint.getX());
-            double distanceY = (path[path.length-1][1]) - (Bot.pinpoint.getY());
-            double distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
-            speed *= Math.min((Config.minSpeedOnSlowDown + distance / Config.slowDownDistance),1);
-            Bot.dashboardTelemetry.addData("Distance X", distanceX);
-            Bot.dashboardTelemetry.addData("Distance Y", distanceY);
-            Bot.dashboardTelemetry.addData("Distance", distance);
-            Bot.dashboardTelemetry.addData("Speed Multiplier", Math.min((Config.minSpeedOnSlowDown + distance / Config.slowDownDistance),1));
-            Bot.dashboardTelemetry.update();
-        }
-        double moveX = xPID.calculate(pos[0], targetPoint[0]);
-        double moveY = yPID.calculate(pos[1], targetPoint[1]);
-        double moveTheta = turnPID.calculate(Bot.pinpoint.getHeading(), 0);
-        Bot.opMode.telemetry.addData("PID Theta", moveTheta);
-        Bot.opMode.telemetry.addData("PID X", moveX);
-        Bot.opMode.telemetry.addData("PID Y", moveY);
-        // Move the robot
-        Bot.mecanumBase.setNorthMode(true);
-        Bot.mecanumBase.move(moveX, moveY, moveTheta, speed);
-        return targetPoint;
+    public void update(double speed) {
+        update(speed, false);
+    }
+    public void update() { update(Config.driveSpeed, false); }
+
+    public double calculateLookAhead(double defaultLookAhead) {
+        return defaultLookAhead;
     }
 
     public void stop() {

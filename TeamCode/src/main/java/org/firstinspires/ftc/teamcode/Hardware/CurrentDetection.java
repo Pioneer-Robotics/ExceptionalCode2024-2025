@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
-import org.firstinspires.ftc.teamcode.Helpers.Utils;
-import org.slf4j.helpers.Util;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -31,6 +30,8 @@ public class CurrentDetection {
         current = motor.getCurrent(CurrentUnit.MILLIAMPS);
         if (current > maxCurrent) {
             Bot.opMode.telemetry.addLine("MOTOR REACHED MAX CURRENT");
+            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motor.setPower(0);
             Bot.opMode.gamepad1.rumble(500);
             Bot.opMode.gamepad2.rumble(500);
         }

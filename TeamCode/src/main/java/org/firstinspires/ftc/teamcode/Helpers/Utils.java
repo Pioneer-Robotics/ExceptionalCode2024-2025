@@ -92,4 +92,9 @@ public class Utils {
         }
         return new double[][]{x, y};
     }
+
+    // Linear interpolation
+    public static double lerp(double p1, double p2, double t) {
+        return p1 + (p2 - p1) * t;
+    }
 }
