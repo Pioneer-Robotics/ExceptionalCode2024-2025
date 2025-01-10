@@ -26,11 +26,11 @@ public class AutoPaths {
         // Collect a specimen from the wall
         double[] pointsX, pointsY;
         if (fromSubmersible) {
-            pointsX = new double[] {currentX, 270, 280, 280};
-            pointsY = new double[]{currentY, 35, 100, 21.75};
+            pointsX = new double[]{currentX, 270, 280, 282.5};
+            pointsY = new double[]{currentY, 35, 100, 21.5};
         } else {
-            pointsX = new double[]{currentX, 265, 280};
-            pointsY = new double[]{currentY, 100, 21.75};
+            pointsX = new double[]{currentX, 250, 282.5};
+            pointsY = new double[]{currentY, 100, 21.5};
         }
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
@@ -43,25 +43,30 @@ public class AutoPaths {
         double[] pointsY = {currentY, 7.5, 50, 280, 145, 60};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
-        Bot.purePursuit.setTurnPath(new double[][]{{0, 0}, {0.2, 0}, {1, Math.PI / 2}});
+        // Turn between t=0.2 and t=0.4
+        double[][] turnPath = SplineCalc.linearPath(new double[]{0, 0.2, 1}, new double[]{0, Math.PI / 2, Math.PI / 2}, 25);
+        Bot.purePursuit.setTurnPath(turnPath);
     }
 
     public static void pushSample2(double currentX, double currentY) {
         // Push the second (middle) sample into the observation zone
         // Should start at the observation zone area
-        double[] pointsX = {currentX, 255, 315, 310};
+        double[] pointsX = {currentX, 255, 317.5, 312.5};
         double[] pointsY = {currentY, 135, 200, 60};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
-        Bot.purePursuit.setTurnPath(new double[][]{{0, Math.PI / 2}, {1, Math.PI / 2}});
+        double[][] turnPath = SplineCalc.linearPath(new double[]{0, 1}, new double[]{Math.PI / 2, Math.PI / 2}, 25);
+        Bot.purePursuit.setTurnPath(turnPath);
     }
 
     public static void pushSample3(double currentX, double currentY) {
         // Push the second (middle) sample into the observation zone
         // Should start at the observation zone area
-        double[] pointsX = {currentX, 275, 330, 330};
+        double[] pointsX = {currentX, 275, 335, 333};
         double[] pointsY = {currentY, 135, 200, 55};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
+        double[][] turnPath = SplineCalc.linearPath(new double[]{0, 1}, new double[]{Math.PI / 2, Math.PI / 2}, 25);
+        Bot.purePursuit.setTurnPath(turnPath);
     }
 }

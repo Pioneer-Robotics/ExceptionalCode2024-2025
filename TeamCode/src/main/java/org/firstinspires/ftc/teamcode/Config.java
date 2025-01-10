@@ -16,7 +16,7 @@ public class Config {
     public static final double forwardOffset = Math.sqrt((15.5 * 15.5) - 0.4); // In CM
 
     // Encoder constants
-    public static final double maxDriveTicksPerSecond = 2700; // ~300 RPM
+    public static final double maxDriveTicksPerSecond = 2300; // ~300 RPM
     public static final double maxSlideTicksPerSecond = 2700;
     public static final double maxSpecTicksPerSecond = 2700;
 
@@ -123,8 +123,8 @@ public class Config {
     public static int specimenArmPostHang = 1350;
     public static int specimenArmPrepHang = 900;
     public static int specimenArmCollect = 1980;
-    public static final int specimenArmPrepHangUp = 1050;
-    public static final int specimenArmPostHangUp = 750;
+    public static final int specimenArmPrepHangUp = 1000;
+    public static final int specimenArmPostHangUp = 650;
     // Linear Slide
     public static final double defaultSlideSpeed = 0.25;
     public static final int minSlideHeight = 15;

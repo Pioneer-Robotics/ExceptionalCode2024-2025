@@ -30,13 +30,15 @@ public class PurePursuitTuning extends LinearOpMode {
         while(opModeIsActive()) {
             TelemetryPacket packet = new TelemetryPacket(false);
             double[][] path = new double[][] {};
+            double[][] turnPath = new double[][]{};
             switch (state) {
                 case DRIVE_FORWARD:
                     double[] px = {0, 0, 100, 100};
                     double[] py = {0, 100, 0, 100};
                     path = SplineCalc.nDegBez(px, py, 25);
                     Bot.purePursuit.setTargetPath(path);
-                    Bot.purePursuit.setTurnPath(new double[][]{{0, 0}, {0.5, Math.PI / 2}, {1, 0}});
+                    turnPath = SplineCalc.linearPath(new double[]{0, 0.25, 0.75, 1}, new double[]{0, Math.PI / 2, 0, 0}, 25);
+                    Bot.purePursuit.setTurnPath(turnPath);
                     if (Bot.purePursuit.reachedTarget()) {
                         state = State.DRIVE_BACKWARD;
                     }
@@ -46,7 +48,8 @@ public class PurePursuitTuning extends LinearOpMode {
                     double[] py2 = {100, 0, 100, 0};
                     path = SplineCalc  .nDegBez(px2, py2, 25);
                     Bot.purePursuit.setTargetPath(path);
-                    Bot.purePursuit.setTurnPath(new double[][]{{0, 0}, {0.5, -Math.PI / 2}, {1, 0}});
+                    turnPath = SplineCalc.linearPath(new double[]{0, 0.25, 0.75, 1}, new double[]{0, -Math.PI / 2, 0, 0}, 25);
+                    Bot.purePursuit.setTurnPath(turnPath);
                     if (Bot.purePursuit.reachedTarget()) {
                         state = State.DRIVE_FORWARD;
                     }
@@ -72,6 +75,8 @@ public class PurePursuitTuning extends LinearOpMode {
 
             double[] target = Bot.purePursuit.getTargetPoint(Config.lookAhead, useVirtualRobot);
             Bot.purePursuit.update(Config.driveSpeed, useVirtualRobot);
+
+            Bot.dashboardTelemetry.update();
 
             // Draw robot position, target point, and path
             double inchesPerCentimeter = 0.394;
