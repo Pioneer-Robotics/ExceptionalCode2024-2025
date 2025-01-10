@@ -39,19 +39,4 @@ public class CurrentDetection {
     public double getCurrent() {
         return current;
     }
-
-    public void stop() {
-        timer.cancel();
-    }
-
-    public void start() {
-        this.timer = new Timer();
-        task = new TimerTask() {
-            @Override
-            public void run() {
-                checkCurrent();
-            }
-        };
-        timer.schedule(task, 0, 500);
-    }
 }

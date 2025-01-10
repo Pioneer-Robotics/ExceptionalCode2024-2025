@@ -7,11 +7,16 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Hardware.CurrentDetection;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class CurrentUtils {
     LinearOpMode opMode;
     private CurrentDetection slideCurrent;
     private CurrentDetection specArmCurrent;
     private CurrentDetection LFCurrent, RFCurrent, LBCurrent, RBCurrent;
+    Timer timer;
+    TimerTask task;
 
     public CurrentUtils(@NonNull LinearOpMode opMode) {
         this.opMode = opMode;
@@ -22,25 +27,16 @@ public class CurrentUtils {
         this.LBCurrent = new CurrentDetection(Bot.mecanumBase.getLB());
         this.RBCurrent = new CurrentDetection(Bot.mecanumBase.getRB());
 
-        startThreads();
+        start();
     }
 
-    public void startThreads() {
-        slideCurrent.start();
-        specArmCurrent.start();
-        LFCurrent.start();
-        RFCurrent.start();
-        LBCurrent.start();
-        RBCurrent.start();
-    }
-
-    public void stopThreads() {
-        slideCurrent.stop();
-        specArmCurrent.stop();
-        LFCurrent.stop();
-        RFCurrent.stop();
-        LBCurrent.stop();
-        RBCurrent.stop();
+    public void checkAll() {
+        slideCurrent.checkCurrent();
+        specArmCurrent.checkCurrent();
+        LFCurrent.checkCurrent();
+        RFCurrent.checkCurrent();
+        LBCurrent.checkCurrent();
+        RBCurrent.checkCurrent();
     }
 
     public double getSlideCurrent() {return slideCurrent.getCurrent();}
@@ -51,13 +47,28 @@ public class CurrentUtils {
     public double getRBCurrent() {return RBCurrent.getCurrent();}
 
     public double getTotalCurrent() {
-        double totalCurrent = getSlideCurrent()
-                            + getSpecArmCurrent()
-                            + getLFCurrent()
-                            + getRFCurrent()
-                            + getLBCurrent()
-                            + getRBCurrent();
-        return totalCurrent;
+        double total = getSlideCurrent()
+                     + getSpecArmCurrent()
+                     + getLFCurrent()
+                     + getRFCurrent()
+                     + getLBCurrent()
+                     + getRBCurrent();
+        return total;
+    }
+
+    public void stop() {
+        timer.cancel();
+    }
+
+    public void start() {
+        this.timer = new Timer();
+        task = new TimerTask() {
+            @Override
+            public void run() {
+                checkAll();
+            }
+        };
+        timer.schedule(task, 0, 50);
     }
 
 

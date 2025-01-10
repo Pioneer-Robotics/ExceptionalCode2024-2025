@@ -205,6 +205,6 @@ public class Teleop extends LinearOpMode {
             telemetry.update();
             prevMilliseconds = timer.milliseconds();
         }
-        Bot.currentThreads.stopThreads();
+        Bot.currentThreads.stop();
     }
 }
