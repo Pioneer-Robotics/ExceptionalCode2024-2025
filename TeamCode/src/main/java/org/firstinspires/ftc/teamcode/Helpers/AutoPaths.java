@@ -27,10 +27,10 @@ public class AutoPaths {
         double[] pointsX, pointsY;
         if (fromSubmersible) {
             pointsX = new double[]{currentX, 270, 280, 282.5};
-            pointsY = new double[]{currentY, 35, 100, 21.5};
+            pointsY = new double[]{currentY, 35, 100, 21.25};
         } else {
             pointsX = new double[]{currentX, 250, 282.5};
-            pointsY = new double[]{currentY, 100, 21.5};
+            pointsY = new double[]{currentY, 100, 21.25};
         }
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);

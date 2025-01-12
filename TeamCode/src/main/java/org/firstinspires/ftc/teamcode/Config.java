@@ -16,7 +16,7 @@ public class Config {
     public static final double forwardOffset = Math.sqrt((15.5 * 15.5) - 0.4); // In CM
 
     // Encoder constants
-    public static final double maxDriveTicksPerSecond = 2300; // ~300 RPM
+    public static final double maxDriveTicksPerSecond = 2500; // ~300 RPM
     public static final double maxSlideTicksPerSecond = 2700;
     public static final double maxSpecTicksPerSecond = 2700;
 
@@ -28,6 +28,13 @@ public class Config {
     public static double[] drivePID = {0.08, 0.0001, 0.25}; // kP, kI, kD
     public static double[] turnPID = {3, 0.0001, 0.15}; // kP, kI, kD
     public static double driveSpeed = 0.4;
+
+    // Feedforward constants
+    public static double fLF = 0.0015;
+    public static double fRF = 0.0015;
+    public static double fLB = 0.0015;
+    public static double fRB = 0.0015;
+
 
     // Tolerances
     // How close the robot needs to be to the target position to stop (in cm)
@@ -41,7 +48,7 @@ public class Config {
     // Used to move "virtual robot" ahead of actual robot in pure pursuit
     public static double overshootDistance(double velocity) {
         // Polynomial fit for overshoot distance
-        return ((0.000714 * velocity * velocity) + (0.145 * velocity) + 0.216) * 1.1;
+        return ((0.000714 * velocity * velocity) + (0.145 * velocity) + 0.216) * 1.075;
     }
 
     // Used to gradually accelerate
@@ -92,14 +99,14 @@ public class Config {
     public static final double clawClose = 0.95;
     // Intake Claw
     public static final double intakeClawOpen = 0.4;
-    public static final double intakeClawClose = 0;
+    public static final double intakeClawClose = 0.05;
     // Misumi Drive
     public static final double misumiDriveLOpen = 0.6;
     public static final double misumiDriveLMid = 0.4;
     public static final double misumiDriveLClose = 0.375;
-    public static final double misumiDriveROpen = 0.625;
-    public static final double misumiDriveRMid = 0.4;
-    public static final double misumiDriveRClose = 0.35;
+    public static double misumiDriveROpen = 0.175;
+    public static double misumiDriveRMid = 0.4;
+    public static double misumiDriveRClose = 0.525;
     // Misumi Wrist
     public static final double misumiWristLOpen = 0.225; // Up to OCG box
     public static final double misumiWristLMid = 0.5; // 0.525 touching bar
@@ -140,7 +147,7 @@ public class Config {
 
     // Coordinates of first specimen hang
     public static final double specHangX = 195;
-    public static final double specHangY = 96.25;
+    public static final double specHangY = 96.5;
 
     // Coordinates of observation zone park
     public static final double parkX = 300;

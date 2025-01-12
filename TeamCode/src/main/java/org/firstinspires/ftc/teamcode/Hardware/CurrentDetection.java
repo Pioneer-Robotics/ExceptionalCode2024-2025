@@ -35,6 +35,20 @@ public class CurrentDetection {
             Bot.opMode.gamepad1.rumble(500);
             Bot.opMode.gamepad2.rumble(500);
         }
+        Bot.opMode.telemetry.addLine("Checked");
+        Bot.opMode.telemetry.update();
+    }
+
+    public void checkSlideCurrent() {
+        current = motor.getCurrent(CurrentUnit.MILLIAMPS);
+        if (current > maxCurrent) {
+            Bot.opMode.telemetry.addLine("MOTOR REACHED MAX CURRENT");
+            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motor.setPower(0);
+            Bot.opMode.gamepad1.rumble(500);
+            Bot.opMode.gamepad2.rumble(500);
+            motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        }
     }
 
     public double getCurrent() {
@@ -45,12 +59,16 @@ public class CurrentDetection {
         timer.cancel();
     }
 
-    public void start() {
+    public void start(boolean isSlideArm) {
         this.timer = new Timer();
         task = new TimerTask() {
             @Override
             public void run() {
-                checkCurrent();
+                if (isSlideArm){
+                    checkSlideCurrent();
+                } else {
+                    checkCurrent();
+                }
             }
         };
         timer.schedule(task, 0, 500);

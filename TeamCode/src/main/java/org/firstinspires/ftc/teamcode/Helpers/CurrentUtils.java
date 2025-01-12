@@ -26,12 +26,12 @@ public class CurrentUtils {
     }
 
     public void startThreads() {
-        slideCurrent.start();
-        specArmCurrent.start();
-        LFCurrent.start();
-        RFCurrent.start();
-        LBCurrent.start();
-        RBCurrent.start();
+        slideCurrent.start(true);
+        specArmCurrent.start(false);
+        LFCurrent.start(false);
+        RFCurrent.start(false);
+        LBCurrent.start(false);
+        RBCurrent.start(false);
     }
 
     public void stopThreads() {

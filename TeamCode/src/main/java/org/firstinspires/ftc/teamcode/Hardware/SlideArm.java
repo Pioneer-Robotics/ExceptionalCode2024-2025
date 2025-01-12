@@ -48,8 +48,8 @@ public class SlideArm {
     }
 
     public void moveDown(double speed) {
-        if (getArmPosition() < (Config.slideDown + 50.0)) { motorOff(); }
         moveToPositionTicks(Config.slideDown, speed);
+        if (getArmPosition() < (Config.slideDown + 50.0)) { motorOff(); }
     }
 
     public void moveMid(double speed) {
@@ -91,7 +91,7 @@ public class SlideArm {
     }
 
     public void motorOff() {
-        slideMotor.setVelocity(0.0);
+        slideMotor.setPower(0.0);
         slideMotor.setMotorDisable();
     }
 

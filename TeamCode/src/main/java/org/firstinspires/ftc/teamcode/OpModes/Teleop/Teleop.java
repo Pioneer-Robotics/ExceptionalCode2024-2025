@@ -149,6 +149,8 @@ public class Teleop extends LinearOpMode {
                 Bot.intake.midMisumiDrive();
             } else if (gamepad2.a) {
                 Bot.slideArm.moveDown(0.8);
+                Bot.intake.midMisumiWrist();
+                Bot.intake.midMisumiDrive();
             } else if (gamepad2.x) {
                 Bot.slideArm.moveMid(0.8);
                 Bot.intake.closeClaw();

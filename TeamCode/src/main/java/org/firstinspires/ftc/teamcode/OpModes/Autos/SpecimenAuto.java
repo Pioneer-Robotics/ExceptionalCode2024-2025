@@ -84,7 +84,7 @@ public class SpecimenAuto extends LinearOpMode {
                             Bot.pinpoint.getX(), // Current X
                             Bot.pinpoint.getY(), // Current Y
                             offsetX, // Hang offsetX X
-                            1.5 // Offset Y
+                            2 // Offset Y
                     );
                     Bot.specimenArm.movePrepHangUp(0.6);
                     state = State.SPECIMEN_HANG_UP;
@@ -184,8 +184,8 @@ public class SpecimenAuto extends LinearOpMode {
                 // Go to and collect specimen on fence
                 // --> COLLECT_SPECIMEN_2
                 case COLLECT_SPECIMEN_1:
-                    Bot.purePursuit.update(0.45, true);
-                    if (Bot.purePursuit.reachedTargetXY(1.5, 0.75)) {
+                    Bot.purePursuit.update(0.5, true);
+                    if (Bot.purePursuit.reachedTargetXY(1.5, 0.5)) {
                         Bot.purePursuit.stop();
                         Bot.specimenArm.closeClaw();
                         timer.reset(); // Reset timer for next state
