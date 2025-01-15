@@ -86,6 +86,8 @@ public class Config {
     public static final String intakeClaw = "intakeClaw";
     public static final String intakeWrist = "intakeWrist";
     public static final String ocgBox = "ocgBox";
+    public static final String diffyServo1 = "diffyServo1";
+    public static final String diffyServo2 = "diffyServo2";
 
     // Other names
     public static final String touchSensor = "touch";
