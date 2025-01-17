@@ -7,7 +7,11 @@ package org.firstinspires.ftc.teamcode;
 // Annotation to allow quick changes to config from FTC Dashboard
 @com.acmerobotics.dashboard.config.Config
 public class Config {
-    // ---- Constants ----
+
+    /* --------------------
+       ---- Constants  ----
+       -------------------- */
+
     // Odometer constants
     public static final double wheelDiameter = 4.8;
     public static final double ticsPerRev = 2000;
@@ -26,7 +30,7 @@ public class Config {
 
     // PID constants
     public static double[] drivePID = {0.08, 0.0001, 0.25}; // kP, kI, kD
-    public static double[] turnPID = {3, 0.0001, 0.15}; // kP, kI, kD
+    public static double[] turnPID = {2.5, 0.00001, 0.1}; // kP, kI, kD
     public static double driveSpeed = 0.4;
 
     // Feedforward constants
@@ -40,7 +44,7 @@ public class Config {
     // How close the robot needs to be to the target position to stop (in cm)
     public static double driveTolerance = 1.5;
     // How close the robot needs to be to the target angle to stop (in radians)
-    public static double turnTolerance = 0.05;
+    public static double turnTolerance = 0.25;
     public static final double specimenArmTolerance = 5; // Motor ticks
 
     public static double lookAhead = 15; // Pure pursuit lookahead
@@ -61,7 +65,9 @@ public class Config {
     public static final int[] colorYellow = {410, 460, 110}; // Yellow sample color (rgb)
     public static final int alphaTolerance = 100; // If alpha is above this value, a sample is detected
 
-    // ---- Hardware Map ----
+    /* --------------------
+       --- Hardware Map ---
+       -------------------- */
     // Odometers
     public static final String odoLeft = "odoLeft";
     public static final String odoCenter = "odoCenter";
@@ -95,7 +101,9 @@ public class Config {
     public static final String led = "led";
     public static final String imu = "expansionIMU";
 
-    // ---- Servo Positions ----
+    /* --------------------
+       - Servo Positions  -
+       -------------------- */
     // Specimen Arm Claw
     public static final double clawOpen = 0.35;
     public static final double clawClose = 0.95;
@@ -126,12 +134,13 @@ public class Config {
     public static final double ocgBoxHold = 0.375;
     public static final double ocgBoxDrop = 0.8;
 
-    // ---- Motor Positions ----
+    /* --------------------
+       - Motor Positions  -
+       -------------------- */
     // Specimen Arm
     public static final double defaultSpecimenArmSpeed = 0.5;
-    public static int specimenArmPostHang = 1350;
-    public static int specimenArmPrepHang = 900;
-    public static int specimenArmCollect = 1980;
+    public static int specimenArmPostHang = -800;
+    public static int specimenArmPrepHang = -1250;
     public static final int specimenArmPrepHangUp = 1000;
     public static final int specimenArmPostHangUp = 650;
     // Linear Slide
@@ -142,7 +151,10 @@ public class Config {
     public static final int slideLowBasket = 2500;
     public static final int slideHighBasket = 4300;
 
-    // ---- Coordinates of note and auto config ----
+    /* -------------------------
+       -  Coordinates of Note  -
+       -    and Auto Config    -
+       ------------------------- */
 
     // Specimen hang offset (space between hangs)
     public static final double hangOffset = 6.5;
@@ -155,9 +167,17 @@ public class Config {
     public static final double parkX = 300;
     public static final double parkY = 30;
 
-    // Robot starting position for specimen auto
+    // Robot starting position for autos
     public static final double specimenStartX = 198;
     public static final double specimenStartY = 20.5;
+    public static final double sampleStartX = 85;
+    public static final double sampleStartY = 20.5;
+
+    // Hermite Points of Interest
+    public static final double[] pickSample1 = {58, 65};
+    public static final double[] pickSample2 = {25, 65};
+    public static final double[] pickSample3 = {25, 65};
+    public static final double[] submersablePickup = {120, 160};
 
     // ---- Misc ----
     public static final double defaultMaxCurrent = 8000;

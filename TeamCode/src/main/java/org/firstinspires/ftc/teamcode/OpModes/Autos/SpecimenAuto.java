@@ -52,9 +52,6 @@ public class SpecimenAuto extends LinearOpMode {
         State state = State.INIT;
         Bot.intake.openMisumiWrist();
 
-        // Home specimen arm
-        Bot.specimenArm.homeArm();
-
         Toggle preloadToggle = new Toggle(true);
         while (!isStarted()) {
             preloadToggle.toggle(gamepad1.a);
@@ -175,8 +172,9 @@ public class SpecimenAuto extends LinearOpMode {
                                 Bot.pinpoint.getY(), // Current Y
                                 false // Not coming from the submersible
                         );
-                        double[][] turnPath = SplineCalc.linearPath(new double[]{0, 0.25, 1}, new double[]{Math.PI / 2, 0, 0}, 25);
+                        double[][] turnPath = SplineCalc.linearPath(new double[]{0, 0.25, 0.75, 1}, new double[]{Math.PI / 2, Math.PI / 2, 0, 0}, 25);
                         Bot.purePursuit.setTurnPath(turnPath);
+                        Bot.purePursuit.setTurnMultiplier(1.25);
                         state = State.COLLECT_SPECIMEN_1;
                     }
                     break;
@@ -184,7 +182,7 @@ public class SpecimenAuto extends LinearOpMode {
                 // Go to and collect specimen on fence
                 // --> COLLECT_SPECIMEN_2
                 case COLLECT_SPECIMEN_1:
-                    Bot.purePursuit.update(0.5, true);
+                    Bot.purePursuit.update(0.55, true);
                     if (Bot.purePursuit.reachedTargetXY(1.5, 0.5)) {
                         Bot.purePursuit.stop();
                         Bot.specimenArm.closeClaw();
@@ -225,7 +223,7 @@ public class SpecimenAuto extends LinearOpMode {
                 // First time: Set collect to true. Second time: Set stop to true.
                 // --> SPECIMEN_HANG_2 (Creates a loop)
                 case SPECIMEN_HANG_DOWN: // Hang specimen upside down
-                    Bot.purePursuit.update(0.65, true);
+                    Bot.purePursuit.update(0.65);
                     if (Bot.purePursuit.reachedTarget()) { // || Bot.frontTouchSensor.getVoltage()<.4
                         Bot.purePursuit.stop();
                         Bot.specimenArm.movePostHang(1.0); // Move arm down
@@ -261,5 +259,6 @@ public class SpecimenAuto extends LinearOpMode {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        Bot.currentThreads.stopThreads();
     }
 }

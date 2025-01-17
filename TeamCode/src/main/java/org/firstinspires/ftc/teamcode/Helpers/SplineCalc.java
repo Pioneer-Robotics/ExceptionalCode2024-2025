@@ -80,6 +80,8 @@ public class SplineCalc {
             points[i][0] = Utils.lerp(p0[index], p0[index + 1], fraction);
             points[i][1] = Utils.lerp(p1[index], p1[index + 1], fraction);
         }
+        points[1] = points[0];
+        points[points.length-2] = points[points.length-1];
         return points;
     }
 }

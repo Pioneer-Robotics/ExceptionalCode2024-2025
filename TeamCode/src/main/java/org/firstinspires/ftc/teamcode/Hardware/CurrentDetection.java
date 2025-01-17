@@ -13,17 +13,24 @@ import java.util.TimerTask;
 public class CurrentDetection {
     private volatile double current;
     private final double maxCurrent;
+    private final boolean isSpecimenArm;
     private final DcMotorEx motor;
     Timer timer;
     TimerTask task;
-    public CurrentDetection(DcMotorEx motor, double maxCurrent) {
+
+    public CurrentDetection(DcMotorEx motor, double maxCurrent, boolean isSpecimenArm) {
         this.motor = motor;
+        this.isSpecimenArm = isSpecimenArm;
         this.current = Float.POSITIVE_INFINITY;
         this.maxCurrent = maxCurrent;
     }
 
+    public CurrentDetection(DcMotorEx motor, double maxCurrent) {
+        this(motor, maxCurrent, false);
+    }
+
     public CurrentDetection(DcMotorEx motor) {
-        this(motor, Config.defaultMaxCurrent);
+        this(motor, Config.defaultMaxCurrent, false);
     }
 
     public void checkCurrent() {
@@ -32,8 +39,16 @@ public class CurrentDetection {
             Bot.opMode.telemetry.addLine("MOTOR REACHED MAX CURRENT");
             motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             motor.setPower(0);
-            Bot.opMode.gamepad1.rumble(500);
-            Bot.opMode.gamepad2.rumble(500);
+            if (isSpecimenArm) {
+                motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                if (current > 8000) {
+                    Bot.opMode.gamepad1.rumble(500);
+                    Bot.opMode.gamepad2.rumble(500);
+                }
+            } else {
+                Bot.opMode.gamepad1.rumble(500);
+                Bot.opMode.gamepad2.rumble(500);
+            }
         }
         Bot.opMode.telemetry.addLine("Checked");
         Bot.opMode.telemetry.update();

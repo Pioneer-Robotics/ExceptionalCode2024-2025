@@ -8,6 +8,7 @@ public class PurePursuit {
     private double[][] path; // {{x1, y1}, {x2, y2}, ...}
     private double[] turnPath; // {θ1, θ2, ...}
     private int intersectionIndex = 0;
+    private double turnMultiplier = 1;
 
     public PurePursuit(double kP, double kI, double kD) {
         xPID = new PID(kP, kI, kD);
@@ -28,6 +29,8 @@ public class PurePursuit {
         for (int i = 0; i < path.length; i++) {
             turnPath[i] = 0;
         }
+        // Reset turn multiplier
+        this.turnMultiplier = 1;
     }
 
     /**
@@ -159,16 +162,22 @@ public class PurePursuit {
         return null;
     }
 
-    public boolean reachedTarget(double tolerance) {
+    public boolean reachedTarget(double tolerance, double turnTolerance) {
         double[] pos = Bot.pinpoint.getPosition();
         double[] targetPoint = path[path.length - 1]; // Last point in the path
+        double turnTarget = turnPath[turnPath.length - 1];
         double dx = Math.abs(targetPoint[0] - pos[0]);
         double dy = Math.abs(targetPoint[1] - pos[1]);
-        return Math.sqrt(dx*dx + dy*dy) < tolerance;
+        double dTheta = Math.abs(turnTarget - Bot.pinpoint.getHeading());
+        return (Math.sqrt(dx*dx + dy*dy) < tolerance) && (dTheta < turnTolerance) ;
+    }
+
+    public boolean reachedTarget(double tolerance) {
+        return reachedTarget(tolerance, Config.turnTolerance);
     }
 
     public boolean reachedTarget() {
-        return reachedTarget(Config.driveTolerance);
+        return reachedTarget(Config.driveTolerance, Config.turnTolerance);
     }
 
     public boolean reachedTargetXY(double xTolerance, double yTolerance) {
@@ -192,14 +201,19 @@ public class PurePursuit {
         // Get target point
         double[] targetPoint = getTargetPoint(calculateLookAhead(Config.lookAhead), useVirtualRobot);
         double turnTarget = turnPath == null ? 0 : turnPath[intersectionIndex];
+        Bot.dashboardTelemetry.addData("Turn target", turnTarget);
         // Get current position and calculate the movement
         double[] pos = Bot.pinpoint.getPosition();
         double moveX = xPID.calculate(pos[0], targetPoint[0]);
         double moveY = yPID.calculate(pos[1], targetPoint[1]);
-        double moveTheta = turnPID.calculate(Bot.pinpoint.getHeading(), turnTarget);
+        double moveTheta = turnPID.calculate(Bot.pinpoint.getHeading(), turnTarget) * turnMultiplier;
         // Move the robot
         Bot.mecanumBase.setNorthMode(true);
         Bot.mecanumBase.move(moveX, moveY, moveTheta, speed);
+    }
+
+    public void setTurnMultiplier(double turnMultiplier) {
+        this.turnMultiplier = turnMultiplier;
     }
 
     public void update(double speed) {

@@ -30,9 +30,6 @@ public class Teleop extends LinearOpMode {
         // Initialize max speed
         double maxSpeed = 0.5;
 
-        // Home specimen arm
-        Bot.specimenArm.homeArm();
-
         ElapsedTime timer = new ElapsedTime();
         double prevMilliseconds = 0;
 
@@ -123,7 +120,6 @@ public class Teleop extends LinearOpMode {
                 int armAdjust = (int) (7.0 * gamepad2.right_trigger - 7.0 * gamepad2.left_trigger);
                 Config.specimenArmPostHang += armAdjust;
                 Config.specimenArmPrepHang += armAdjust;
-                Config.specimenArmCollect += armAdjust;
 
                 if (Bot.specimenArm.getPosition() == 2) {
                     Bot.specimenArm.moveToCollect(0.3);
@@ -168,10 +164,6 @@ public class Teleop extends LinearOpMode {
                 Bot.slideArm.setOCGBoxRight(ocgBoxToggleRight.get());
             }
 
-            if (gamepad2.touchpad) {
-                Bot.specimenArm.homeArm();
-            }
-
             // Get data for telemetry
             double voltage = Bot.voltageHandler.getVoltage();
             if (voltage < 10) {
@@ -192,7 +184,6 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("Slide Arm Position", Bot.slideArm.getArmPosition());
             telemetry.addData("specimenArmPostHang", Config.specimenArmPostHang);
             telemetry.addData("specimenArmPrepHang", Config.specimenArmPrepHang);
-            telemetry.addData("specimenArmCollect", Config.specimenArmCollect);
             telemetry.addData("X", Bot.pinpoint.getX());
             telemetry.addData("Y", Bot.pinpoint.getY());
             telemetry.addData("Heading", Bot.pinpoint.getHeading());
