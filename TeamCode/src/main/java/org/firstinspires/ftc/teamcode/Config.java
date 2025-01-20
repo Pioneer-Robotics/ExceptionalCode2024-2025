@@ -105,8 +105,8 @@ public class Config {
        - Servo Positions  -
        -------------------- */
     // Specimen Arm Claw
-    public static final double clawOpen = 0.35;
-    public static final double clawClose = 0.95;
+    public static final double clawOpen = 0.5;
+    public static final double clawClose = 0.75;
     // Intake Claw
     public static final double intakeClawOpen = 0.4;
     public static final double intakeClawClose = 0.05;
@@ -125,7 +125,7 @@ public class Config {
     public static final double misumiWristROpen = 0.675;
     public static final double misumiWristRMid = 0.35; // 0.325 touching bar
     public static final double misumiWristRInit = 0.6;
-    public static final double misumiWristRClose = 0.285;
+    public static final double misumiWristRClose = 0.375;
     // Intake Wrist
     public static final double intakeWristClose = 0;
     public static final double intakeWristOpen = 1;

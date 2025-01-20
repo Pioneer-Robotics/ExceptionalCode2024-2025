@@ -81,7 +81,7 @@ public class SpecimenAuto extends LinearOpMode {
                             Bot.pinpoint.getX(), // Current X
                             Bot.pinpoint.getY(), // Current Y
                             offsetX, // Hang offsetX X
-                            2 // Offset Y
+                            1.75 // Offset Y
                     );
                     Bot.specimenArm.movePrepHangUp(0.6);
                     state = State.SPECIMEN_HANG_UP;
@@ -141,7 +141,7 @@ public class SpecimenAuto extends LinearOpMode {
                 // observation zone
                 // --> PUSH_SAMPLE_2
                 case PUSH_SAMPLE_1:
-                    Bot.purePursuit.update(1.85);
+                    Bot.purePursuit.update(2);
                     if (Bot.purePursuit.reachedTarget(6)) {
                         AutoPaths.pushSample2(
                                 Bot.pinpoint.getX(), // Current X
@@ -154,7 +154,7 @@ public class SpecimenAuto extends LinearOpMode {
                 // Bring second sample into observation zone, set path to collect specimen on fence
                 // --> COLLECT_SPECIMEN_1
                 case PUSH_SAMPLE_2:
-                    Bot.purePursuit.update(1.85);
+                    Bot.purePursuit.update(2);
                     if (Bot.purePursuit.reachedTarget(6)) {
                         AutoPaths.pushSample3(
                                 Bot.pinpoint.getX(), // Current X
@@ -165,7 +165,7 @@ public class SpecimenAuto extends LinearOpMode {
                     break;
 
                 case PUSH_SAMPLE_3:
-                    Bot.purePursuit.update(1.85);
+                    Bot.purePursuit.update(2);
                     if (Bot.purePursuit.reachedTarget(6)) {
                         AutoPaths.collectSpecimen(
                                 Bot.pinpoint.getX(), // Current X
@@ -182,7 +182,7 @@ public class SpecimenAuto extends LinearOpMode {
                 // Go to and collect specimen on fence
                 // --> COLLECT_SPECIMEN_2
                 case COLLECT_SPECIMEN_1:
-                    Bot.purePursuit.update(0.55, true);
+                    Bot.purePursuit.update(0.6, true);
                     if (Bot.purePursuit.reachedTargetXY(1.5, 0.5)) {
                         Bot.purePursuit.stop();
                         Bot.specimenArm.closeClaw();
@@ -223,7 +223,7 @@ public class SpecimenAuto extends LinearOpMode {
                 // First time: Set collect to true. Second time: Set stop to true.
                 // --> SPECIMEN_HANG_2 (Creates a loop)
                 case SPECIMEN_HANG_DOWN: // Hang specimen upside down
-                    Bot.purePursuit.update(0.65);
+                    Bot.purePursuit.update(0.55);
                     if (Bot.purePursuit.reachedTarget()) { // || Bot.frontTouchSensor.getVoltage()<.4
                         Bot.purePursuit.stop();
                         Bot.specimenArm.movePostHang(1.0); // Move arm down

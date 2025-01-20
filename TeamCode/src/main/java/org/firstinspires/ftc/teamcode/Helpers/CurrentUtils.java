@@ -16,7 +16,7 @@ public class CurrentUtils {
     public CurrentUtils(@NonNull LinearOpMode opMode) {
         this.opMode = opMode;
         this.slideCurrent = new CurrentDetection(Bot.slideArm.getMotor());
-        this.specArmCurrent = new CurrentDetection(Bot.specimenArm.getMotor(), 4000, true);
+        this.specArmCurrent = new CurrentDetection(Bot.specimenArm.getMotor(), 5000, true);
         this.LFCurrent = new CurrentDetection(Bot.mecanumBase.getLF());
         this.RFCurrent = new CurrentDetection(Bot.mecanumBase.getRF());
         this.LBCurrent = new CurrentDetection(Bot.mecanumBase.getLB());

@@ -42,7 +42,9 @@ public class PurePursuit {
         double[] turnPathArray = new double[turnPath.length];
         for (int i = 0; i < turnPath.length; i++) {
             turnPathArray[i] = turnPath[i][1];
+            Bot.dashboardTelemetry.addData("pointy " + i, turnPath[i][1]);
         }
+        Bot.dashboardTelemetry.update();
         this.turnPath = turnPathArray;
     }
 
@@ -200,8 +202,9 @@ public class PurePursuit {
     public void update(double speed, boolean useVirtualRobot) {
         // Get target point
         double[] targetPoint = getTargetPoint(calculateLookAhead(Config.lookAhead), useVirtualRobot);
-        double turnTarget = turnPath == null ? 0 : turnPath[intersectionIndex];
+        double turnTarget = turnPath == null ? -1 : turnPath[intersectionIndex];
         Bot.dashboardTelemetry.addData("Turn target", turnTarget);
+        Bot.dashboardTelemetry.update();
         // Get current position and calculate the movement
         double[] pos = Bot.pinpoint.getPosition();
         double moveX = xPID.calculate(pos[0], targetPoint[0]);

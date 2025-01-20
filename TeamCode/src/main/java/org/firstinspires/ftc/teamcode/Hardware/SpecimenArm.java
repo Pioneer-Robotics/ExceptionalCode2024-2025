@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Config;
 
 public class SpecimenArm {
     private final DcMotorEx motor;
-    ServoClass claw;
+    public ServoClass claw;
     int position = 0;
 
     public SpecimenArm() {

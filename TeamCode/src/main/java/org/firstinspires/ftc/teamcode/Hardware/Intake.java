@@ -24,8 +24,7 @@ public class Intake {
         intakeWrist = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeWrist), Config.intakeWristOpen, Config.intakeWristClose);
 
         misumiDriveR.anyPos(Config.misumiDriveRClose+0.05);
-        misumiWristR.anyPos(Config.misumiWristRInit);
-        misumiWristL.anyPos(Config.misumiWristLInit);
+        misumiWristR.anyPos(Config.misumiDriveROpen);
         closeIntakeWrist();
         closeClaw();
         isExtended = false;
