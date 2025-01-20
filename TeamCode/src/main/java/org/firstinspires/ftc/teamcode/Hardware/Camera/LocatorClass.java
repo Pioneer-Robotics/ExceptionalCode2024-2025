@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
 public class LocatorClass {
     List<ColorBlobLocatorProcessor.Blob> blobs;
     ColorBlobLocatorProcessor colorLocator;
-    Point maxYPoint, minYPoint;
+    Point maxYPoint, minYPoint, maxXPoint, minXPoint;
     Point[] boxPoints = new Point[]{new Point(0,0), new Point(0,0), new Point(0,0), new Point(0,0)};
     double[] blobPos;
     double minX, maxX, minY, maxY, boxX, boxY, dX, dY, sampleThetaRad, sampleThetaDeg;
@@ -29,7 +29,8 @@ public class LocatorClass {
     VisionPortal portal;
     enum SampleDirection{
         LEFT,
-        RIGHT
+        RIGHT,
+        BLANK
     }
 
     SampleDirection sampleDirection;
@@ -68,6 +69,7 @@ public class LocatorClass {
         ColorBlobLocatorProcessor.Util.filterByArea(50, 20000, blobs);
         //Sorts blobs
         ColorBlobLocatorProcessor.Util.sortByArea(SortOrder.DESCENDING, blobs); // Largest blob is first, which is ideally the sample
+        //TODO: NEED TO SORT BY CLoSEST TO CENTER OF SCREEN
         return (blobs);
     }
 
@@ -104,6 +106,7 @@ public class LocatorClass {
      * @return 4 points of the rectangle fit around the largest color blob
      */
     public Point[] getBoxPoints(){
+        //ORIGIN IS TOP LEFT
         getBlobsList();
         if (!blobs.isEmpty()) {
             blobs.get(0).getBoxFit().points(boxPoints);
@@ -145,7 +148,9 @@ public class LocatorClass {
      * @return Angle of the largest detect blob
      */
     public double getSampleTheta(){
+        //ORIGIN IS TOP LEFT
         getBoxPoints();
+        determineRotDir();
         dX = boxPoints[3].x - boxPoints[0].x;
         dY = boxPoints[3].y - boxPoints[0].y;
         //Atan2 has args (y,x), flipped for use case
@@ -155,7 +160,11 @@ public class LocatorClass {
             //Code for trying to account for PI/2 jump when box is rotated 90 degrees, currently broken
 //            sampleThetaRad = trueAngle.updateAngle(sampleThetaRad, Math.PI/3, Math.PI);
             sampleThetaDeg = AngleUtils.radToDeg(sampleThetaRad);
-            return (sampleThetaDeg);
+            if (sampleDirection == SampleDirection.LEFT){
+                return (sampleThetaDeg - 90);
+            } else {
+                return (sampleThetaDeg);
+            }
         } catch (Exception e) {
             return (0);
         }
@@ -188,34 +197,79 @@ public class LocatorClass {
     /***
      * Determines whether the sample is rotated to the left or right
      */
-    public void determineRotDir(){
+    public SampleDirection determineRotDir(){
+        //Currently broken
         getBoxPoints();
         //Index for minimum and maximum box points
-        int pointMax = -1;
-        int pointMin = -1;
+        int pointMaxTempY = -1;
+        int pointMinTempY = -1;
+        int pointMaxTempX = -1;
+        int pointMinTempX = -1;
 
         int i = 0;
         //Gets the minimum and maximum Y values
         minY = Math.min(Math.min(boxPoints[0].y, boxPoints[1].y), Math.min(boxPoints[2].y, boxPoints[3].y));
         maxY = Math.max(Math.max(boxPoints[0].y,boxPoints[1].y), Math.max(boxPoints[2].y, boxPoints[3].y));
+        minX = Math.min(Math.min(boxPoints[0].x, boxPoints[1].x), Math.min(boxPoints[2].x, boxPoints[3].x));
+        maxX = Math.max(Math.max(boxPoints[0].x, boxPoints[1].x), Math.max(boxPoints[2].x, boxPoints[3].x));
+
         //Determines the top and bottom points
+        //Flipped, minimum Y value is actually highest point
         for (Point p : boxPoints){
             if(p.y == maxY){
-                pointMax = i;
+                pointMinTempY = i;
             } else if (p.y == minY){
-                pointMin = i;
+                pointMaxTempY = i;
+            }
+            if (p.x == maxX){
+                pointMaxTempX = i;
+            } else if (p.x == minX){
+                pointMinTempX = i;
             }
             i += 1;
         }
+
+        maxYPoint = boxPoints[pointMaxTempY];
+        minYPoint = boxPoints[pointMinTempY];
+        maxXPoint = boxPoints[pointMaxTempX];
+        minXPoint = boxPoints[pointMinTempX];
+        //TODO: Check whether X difference of min/max Y points or Y difference of min/max X points is greater, use that to determine
         //Can use X values of the Y min and max points to determine which way its rotated
-        if (boxPoints[pointMax].x > boxPoints[pointMin].x){
+        if (maxYPoint.x > minYPoint.x && maxXPoint.y > minXPoint.y){
             //Sample is turned right
             sampleDirection = SampleDirection.RIGHT;
-        } else {
+        } else if (maxYPoint.x < minYPoint.x && maxXPoint.y < minXPoint.y){
             //Sample is turned left
             sampleDirection = SampleDirection.LEFT;
+        } else {
+            sampleDirection = SampleDirection.BLANK;
+        }
+        try {
+            return (sampleDirection);
+        } catch (Exception e){
+            return (SampleDirection.BLANK);
         }
     }
+
+    public Point getMaxYPoint(){
+        determineRotDir();
+        return (maxYPoint);
+    }
+
+    public Point getMinYPoint(){
+        determineRotDir();
+        return (minYPoint);
+    }
+
+//    public int pointMaxVal(){
+//        return (pointMax);
+//    }
+//
+//    public int pointMinVal(){
+//        return (pointMin);
+//    }
+
+
 
     public VisionPortal getCameraStream() {
         return portal;

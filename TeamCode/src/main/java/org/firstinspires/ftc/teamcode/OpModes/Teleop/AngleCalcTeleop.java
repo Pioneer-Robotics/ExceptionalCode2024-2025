@@ -27,12 +27,15 @@ public class AngleCalcTeleop extends LinearOpMode {
             TelemetryPacket packet = new TelemetryPacket(false);
 
             packet.put("Blob Count", blueLocator.blobCount());
+            packet.put("Direction", blueLocator.determineRotDir());
             packet.put("Sample Theta", blueLocator.getSampleTheta());
             packet.put("Built In Theta", blueLocator.getBuiltInAngle());
-            packet.put("Box Pt 1", blueLocator.getBoxPoints()[0]);
-            packet.put("Box Pt 2", blueLocator.getBoxPoints()[1]);
-            packet.put("Box Pt 3", blueLocator.getBoxPoints()[2]);
-            packet.put("Box Pt 4", blueLocator.getBoxPoints()[3]);
+            packet.put("Max Y Point", blueLocator.getMaxYPoint());
+            packet.put("Min Y Point", blueLocator.getMinYPoint());
+            packet.put("Box Pt 0", blueLocator.getBoxPoints()[0]);
+            packet.put("Box Pt 1", blueLocator.getBoxPoints()[1]);
+            packet.put("Box Pt 2", blueLocator.getBoxPoints()[2]);
+            packet.put("Box Pt 3", blueLocator.getBoxPoints()[3]);
 
             dashboard.sendTelemetryPacket(packet);
 
