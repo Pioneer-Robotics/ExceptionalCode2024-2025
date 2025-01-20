@@ -81,7 +81,8 @@ public class Config {
 
     // Motor names
     public static final String specimenArmMotor = "specimenMotor";
-    public static final String slideMotor = "slideMotor";
+    public static final String slideMotor1 = "slideMotor1";
+    public static final String slideMotor2 = "slideMotor2";
 
     // Servo names
     public static final String clawServo = "clawServo";
@@ -94,6 +95,8 @@ public class Config {
     public static final String ocgBox = "ocgBox";
     public static final String diffyServo1 = "diffyServo1";
     public static final String diffyServo2 = "diffyServo2";
+    public static final String pitchServo = "pitchServo";
+    public static final String rollServo = "rollServo";
 
     // Other names
     public static final String touchSensor = "touch";
@@ -105,8 +108,8 @@ public class Config {
        - Servo Positions  -
        -------------------- */
     // Specimen Arm Claw
-    public static final double clawOpen = 0.5;
-    public static final double clawClose = 0.75;
+    public static final double clawOpen = 0.6;
+    public static final double clawClose = 0.825;
     // Intake Claw
     public static final double intakeClawOpen = 0.4;
     public static final double intakeClawClose = 0.05;
@@ -133,6 +136,10 @@ public class Config {
     public static final double ocgBoxDropRight = 0.1;
     public static final double ocgBoxHold = 0.375;
     public static final double ocgBoxDrop = 0.8;
+    public static final double ocgBoxPitchUp = 0;
+    public static final double ocgBoxPitchDown = 0;
+    public static final double ocgBoxRollUp = 0;
+    public static final double ocgBoxRollDown = 0;
 
     /* --------------------
        - Motor Positions  -
@@ -143,6 +150,8 @@ public class Config {
     public static int specimenArmPrepHang = -1250;
     public static final int specimenArmPrepHangUp = 1000;
     public static final int specimenArmPostHangUp = 650;
+    public static final int specimenArmCollect1 = 2010;
+    public static final int specimenArmCollect2 = 0;
     // Linear Slide
     public static final double defaultSlideSpeed = 0.25;
     public static final int minSlideHeight = 15;
@@ -161,7 +170,7 @@ public class Config {
 
     // Coordinates of first specimen hang
     public static final double specHangX = 195;
-    public static final double specHangY = 96.5;
+    public static final double specHangY = 96.25;
 
     // Coordinates of observation zone park
     public static final double parkX = 300;

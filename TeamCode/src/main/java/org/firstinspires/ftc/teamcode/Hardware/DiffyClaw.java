@@ -13,11 +13,13 @@ import org.firstinspires.ftc.teamcode.Config;
  * Servos are assumed to have a range of 0 degrees to 270 degrees
  */
 public class DiffyClaw {
-    ServoClass diffyServo1, diffyServo2;
+    private final ServoClass diffyServo1, diffyServo2;
+    private final ServoClass intakeClaw;
 
     public DiffyClaw() {
         this.diffyServo1 = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.diffyServo1), 0, 1);
         this.diffyServo2 = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.diffyServo2), 0, 1);
+        this.intakeClaw = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeClaw), 0, 0.5);
         goToPosition(0,0);
     }
 
@@ -45,6 +47,10 @@ public class DiffyClaw {
         diffyServo2.anyPos(theta2);
     }
 
+    // Claw servo
+    public void openClaw() { intakeClaw.openServo(); }
+    public void closeClaw() { intakeClaw.closeServo(); }
+
 
     // Getters
     public double getSwing() {
@@ -61,5 +67,6 @@ public class DiffyClaw {
 
     public double getServo1() { return(diffyServo1.getPos()); }
     public double getServo2() { return(diffyServo2.getPos()); }
+    public double getClaw() { return(intakeClaw.getPos()); }
 
 }

@@ -2,49 +2,35 @@ package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 
 public class SlideArm {
-    private final DcMotorEx slideMotor;
-    ServoClass ocgBox;
+    private final DcMotorEx motor1, motor2;
 
     public SlideArm() {
-        slideMotor = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.slideMotor);
-        slideMotor.setTargetPositionTolerance(5);
-        slideMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        slideMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-
-        ocgBox = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.ocgBox), Config.ocgBoxHold, Config.ocgBoxDrop);
-        ocgHold();
-        moveDown(0.25);
+        motor1 = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.slideMotor1);
+        motor2 = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.slideMotor2);
+        motor1.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        motor2.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        motor1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        motor2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
-    /**
-     * Move the linear slide to a specified position at a specified speed
-     * @param position The position to move to, in the range [0, 1] where 0 is fully retracted and 1 is fully extended
-     * @param speed The speed to move the slide at, in the range [0, 1]
-     */
-    public void moveToPosition(double position, double speed) {
-        // Convert to ticks and limits slide to max range
-        int positionTicks = Math.min(Math.max((int) (position * Config.maxSlideHeight), Config.maxSlideHeight), -Config.minSlideHeight);
-        slideMotor.setTargetPosition(positionTicks);
-        slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slideMotor.setVelocity(Config.maxSlideTicksPerSecond * speed);
+    public void moveToPositionTicks(int ticks, double speed) {
+        motor1.setTargetPosition(ticks);
+        motor2.setTargetPosition(-ticks);
+        motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motor1.setVelocity(Config.maxSlideTicksPerSecond * speed);
+        motor2.setVelocity(Config.maxSlideTicksPerSecond * speed);
     }
 
-    public void moveToPositionTicks(int positionTicks, double speed) {
-        slideMotor.setTargetPosition(positionTicks);
-        slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slideMotor.setVelocity(Config.maxSlideTicksPerSecond * speed);
-    }
-
-        public void moveToPosition(double position) {
-        moveToPosition(position, Config.defaultSlideSpeed);
+    public void moveToPositionTicks(int ticks) {
+        moveToPositionTicks(ticks, Config.defaultSlideSpeed);
     }
 
     public void moveDown(double speed) {
@@ -53,55 +39,35 @@ public class SlideArm {
     }
 
     public void moveMid(double speed) {
-        if (!slideMotor.isMotorEnabled()) { motorOn(); }
+        if (!motor1.isMotorEnabled()) { motorOn(); }
         moveToPositionTicks(Config.slideLowBasket, speed);
     }
 
     public void moveUp(double speed) {
-        if (!slideMotor.isMotorEnabled()) { motorOn(); }
+        if (!motor1.isMotorEnabled()) { motorOn(); }
         moveToPositionTicks(Config.slideHighBasket, speed);
     }
 
-    public void ocgDrop() { ocgBox.anyPos(Config.ocgBoxDrop); }
-
-    public void ocgHold() {
-        ocgBox.anyPos(Config.ocgBoxHold);
-    }
-
-    public void ocgDropRight() { ocgBox.anyPos(Config.ocgBoxDropRight); }
-
-    public int getArmPosition() {
-        return(slideMotor.getCurrentPosition());
-    }
-
-    public void setOCGBox(boolean state){
-        if (state) {
-            ocgDrop();
-        } else {
-            ocgHold();
-        }
-    }
-
-    public void setOCGBoxRight(boolean state) {
-        if (state) {
-            ocgDropRight();
-        } else {
-            ocgHold();
-        }
-    }
 
     public void motorOff() {
-        slideMotor.setPower(0.0);
-        slideMotor.setMotorDisable();
+        motor1.setPower(0.0);
+        motor2.setPower(0.0);
+        motor1.setMotorDisable();
+        motor2.setMotorDisable();
     }
-
     public void motorOn() {
-        slideMotor.setMotorEnable();
+        motor1.setMotorEnable();
+        motor2.setMotorEnable();
     }
 
-    public double getMotorCurrent() {
-        return slideMotor.getCurrent(CurrentUnit.MILLIAMPS);
+    // Getters
+    public double getArmPosition() {
+        return(motor1.getCurrentPosition());
     }
-
-    public DcMotorEx getMotor() { return slideMotor; }
+    public DcMotorEx getMotor1() {
+        return(motor1);
+    }
+    public DcMotorEx getMotor2() {
+        return(motor2);
+    }
 }

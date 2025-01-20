@@ -178,10 +178,12 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("Total Current", Bot.currentThreads.getTotalCurrent());
             telemetry.addData("dt", timer.milliseconds() - prevMilliseconds);
             telemetry.addData("Refresh Rate (Hz)", 1000 / (timer.milliseconds() - prevMilliseconds));
-            telemetry.addData("Thread Current Slide", Bot.currentThreads.getSlideCurrent());
+            telemetry.addData("Thread Current Slide 1", Bot.currentThreads.getSlideCurrent1());
+            telemetry.addData("Thread Current Slide 2", Bot.currentThreads.getSlideCurrent2());
             telemetry.addData("Thread Current Spec", Bot.currentThreads.getSpecArmCurrent());
             telemetry.addData("North Mode", northModeToggle.get());
             telemetry.addData("Slide Arm Position", Bot.slideArm.getArmPosition());
+            telemetry.addData("Specimen Arm Position", Bot.specimenArm.getPositionTicks());
             telemetry.addData("specimenArmPostHang", Config.specimenArmPostHang);
             telemetry.addData("specimenArmPrepHang", Config.specimenArmPrepHang);
             telemetry.addData("X", Bot.pinpoint.getX());

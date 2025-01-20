@@ -50,7 +50,6 @@ public class SpecimenAuto extends LinearOpMode {
 
         double offsetX = 0;
         State state = State.INIT;
-        Bot.intake.openMisumiWrist();
 
         Toggle preloadToggle = new Toggle(true);
         while (!isStarted()) {
