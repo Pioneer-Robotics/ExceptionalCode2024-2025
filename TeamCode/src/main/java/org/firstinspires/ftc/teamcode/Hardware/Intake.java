@@ -10,89 +10,62 @@ import org.firstinspires.ftc.teamcode.Config;
  */
 public class Intake {
 
-    public ServoClass misumiDriveL, misumiDriveR, misumiWristL, misumiWristR, intakeClaw, intakeWrist;
+    public ServoClass misumiDriveL, misumiDriveR, misumiWristL, misumiWristR;
     boolean isExtended;
 
     public Intake() {
         misumiDriveL = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiDriveL), Config.misumiDriveLOpen, Config.misumiDriveLClose);
-        misumiDriveR = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiDriveR), Config.misumiDriveROpen, Config.misumiDriveRClose);
+//        misumiDriveR = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiDriveR), Config.misumiDriveROpen, Config.misumiDriveRClose);
 
-        misumiWristL = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiWristL), Config.misumiWristLOpen, Config.misumiWristLClose);
-        misumiWristR = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiWristR), Config.misumiWristROpen, Config.misumiWristRClose);
+        misumiWristL = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiWristL), Config.misumiWristLDown, Config.misumiWristLUp);
+        misumiWristR = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiWristR), Config.misumiWristRDown, Config.misumiWristRUp);
 
-        intakeClaw = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeClaw), Config.intakeClawOpen, Config.intakeClawClose);
-        intakeWrist = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeWrist), Config.intakeWristOpen, Config.intakeWristClose);
-
-        misumiDriveR.anyPos(Config.misumiDriveRClose+0.05);
-        openMisumiWrist();
-        closeIntakeWrist();
-        closeClaw();
+        retractMisumiDrive();
+        misumiWristUp();
         isExtended = false;
     }
 
     // Misumi Servos
-    public void openMisumiDrive() {
+    public void extendMisumiDrive() {
         misumiDriveL.openServo();
-        misumiDriveR.openServo();
+//        misumiDriveR.openServo();
         isExtended = true;
     }
 
-    public void closeMisumiDrive() {
+    public void retractMisumiDrive() {
         misumiDriveL.closeServo();
-        misumiDriveR.closeServo();
+//        misumiDriveR.closeServo();
         isExtended = false;
     }
 
     public void midMisumiDrive() {
         misumiDriveL.anyPos(Config.misumiDriveLMid);
-        misumiDriveR.anyPos(Config.misumiDriveRMid);
+//        misumiDriveR.anyPos(Config.misumiDriveRMid);
         isExtended = false;
     }
 
     /***
      * Wrist out
      */
-    public void openMisumiWrist() {
+    public void misumiWristDown() {
         misumiWristL.openServo();
-        misumiWristR.openServo();
+//        misumiWristR.openServo();
     }
 
     public void midMisumiWrist() {
         misumiWristL.anyPos(Config.misumiWristLMid);
-        misumiWristR.anyPos(Config.misumiWristRMid);
+//        misumiWristR.anyPos(Config.misumiWristRMid);
     }
 
     /***
      * Wrist in
      */
-    public void closeMisumiWrist() {
+    public void misumiWristUp() {
         misumiWristL.closeServo();
-        misumiWristR.closeServo();
+//        misumiWristR.closeServo();
     }
 
-    public void openClaw() {
-        intakeClaw.openServo();
-    }
-
-    public void closeClaw() {
-        intakeClaw.closeServo();
-    }
-
-    /***
-     * Turns claw towards OCG box
-     */
-    public void openIntakeWrist() {
-        intakeWrist.openServo();
-    }
-
-    /***
-     * Turns claw down towards sample/ground
-     */
-    public void closeIntakeWrist() {
-        intakeWrist.closeServo();
-    }
-
-        public boolean isExtended() {
+    public boolean isExtended() {
         return isExtended;
     }
 }

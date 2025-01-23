@@ -6,33 +6,49 @@ import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 
 public class IntakeClaw {
-    private ServoClass clawServo, yawServo, rollServo;
+    private final ServoClass clawServo, yawServo, rollServo;
+    private final double rollServoMid = (Config.intakeRollLeft - Config.intakeRollRight) / 2;
+    private final double rollServo45 = (rollServoMid - Config.intakeRollRight) / 2;
+    private final double rollServoNeg45 = (rollServoMid - Config.intakeRollLeft) / 2;
+
 
     public IntakeClaw() {
-        clawServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.clawServo), 0, 0.5);
-        yawServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.diffyServo1), 0, 0.5);
-        rollServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.diffyServo2), 0, 0.5);
+        clawServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeClawServo), Config.intakeClawOpen, Config.intakeClawClose);
+        yawServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeYawServo), Config.intakeYawUp, Config.intakeYawDown);
+        rollServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeRollServo), Config.intakeRollLeft, Config.intakeRollRight);
         clawServo.closeServo();
         clawUp();
     }
 
-    public void clawDown(double yaw) {
-        yawServo.anyPos(yaw);
-        rollServo.anyPos(0.5);
-    }
     public void clawDown() {
-        clawDown(0.5);
-    }
-    public void clawUp() {
-        yawServo.anyPos(0.5);
-        rollServo.anyPos(0);
+        yawServo.openServo();
+        rollServo.anyPos(rollServoMid);
     }
 
-    public void clawPos90() { clawDown(0.75); }
-    public void clawPos45() { clawDown(0.625); }
-    public void clawPos0() { clawDown(0.5); }
-    public void clawNeg45() { clawDown(0.375); }
-    public void clawNeg90() { clawDown(0.25); }
+    public void clawUp() {
+        yawServo.closeServo();
+        rollServo.anyPos(rollServoMid);
+    }
+
+    public void clawPos90() {
+        rollServo.anyPos(Config.intakeRollRight);
+    }
+
+    public void clawPos45() {
+        rollServo.anyPos(rollServo45);
+    }
+
+    public void clawPos0() {
+        rollServo.anyPos(rollServoMid);
+    }
+
+    public void clawNeg45() {
+        rollServo.anyPos(rollServoNeg45);
+    }
+
+    public void clawNeg90() {
+        rollServo.anyPos(Config.intakeRollLeft);
+    }
 
     public void openClaw() { clawServo.openServo(); }
     public void closeClaw() { clawServo.closeServo(); }

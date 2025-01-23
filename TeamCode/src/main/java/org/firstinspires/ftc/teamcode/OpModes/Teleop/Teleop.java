@@ -69,21 +69,21 @@ public class Teleop extends LinearOpMode {
 
            if (gamepad1.dpad_up) {
                Bot.intake.midMisumiWrist();
-               Bot.intake.openMisumiDrive();
-               Bot.intake.openIntakeWrist();
+               Bot.intake.extendMisumiDrive();
+//               Bot.intake.openIntakeWrist();
                intakeWristToggle.set(true);
            } else if (gamepad1.dpad_down) {
                Bot.intake.midMisumiWrist();
-               Bot.intake.closeIntakeWrist();
-               Bot.intake.closeMisumiDrive();
+//               Bot.intake.closeIntakeWrist();
+               Bot.intake.retractMisumiDrive();
                intakeWristToggle.set(false);
            }
 
             intakeClawToggle.toggle(gamepad1.b);
             if (intakeClawToggle.justChanged() && intakeClawToggle.get()) {
-                Bot.intake.openClaw();
+//                Bot.intake.openClaw();
             } else if (intakeClawToggle.justChanged() && !intakeClawToggle.get()) {
-                Bot.intake.closeClaw();
+//                Bot.intake.closeClaw();
             }
 
             intakeWristToggle.toggle(gamepad1.y);
@@ -91,11 +91,11 @@ public class Teleop extends LinearOpMode {
                 if (Bot.intake.isExtended()){
                     Bot.intake.midMisumiWrist();
                 } else {
-                    Bot.intake.openMisumiWrist();
+                    Bot.intake.misumiWristDown();
                 }
             } else if (intakeWristToggle.justChanged() && !intakeWristToggle.get()) {
                 if (Bot.intake.isExtended()) {
-                    Bot.intake.closeMisumiWrist();
+                    Bot.intake.misumiWristUp();
                 } else {
                     Bot.intake.midMisumiWrist();
                 }
@@ -140,7 +140,7 @@ public class Teleop extends LinearOpMode {
             // Slide Arm
             if (gamepad2.y) {
                 Bot.intake.midMisumiWrist();
-                Bot.intake.closeClaw();
+//                Bot.intake.closeClaw();
                 Bot.slideArm.moveUp(0.8);
                 Bot.intake.midMisumiDrive();
             } else if (gamepad2.a) {
@@ -149,19 +149,19 @@ public class Teleop extends LinearOpMode {
                 Bot.intake.midMisumiDrive();
             } else if (gamepad2.x) {
                 Bot.slideArm.moveMid(0.8);
-                Bot.intake.closeClaw();
+//                Bot.intake.closeClaw();
                 Bot.intake.midMisumiDrive();
             }
 
             // Box state
             ocgBoxToggle.toggle(gamepad2.left_bumper);
             if (ocgBoxToggle.justChanged()) {
-                Bot.slideArm.setOCGBox(ocgBoxToggle.get());
+//                Bot.slideArm.setOCGBox(ocgBoxToggle.get());
             }
 
             ocgBoxToggleRight.toggle(gamepad2.right_bumper);
             if (ocgBoxToggleRight.justChanged()) {
-                Bot.slideArm.setOCGBoxRight(ocgBoxToggleRight.get());
+//                Bot.slideArm.setOCGBoxRight(ocgBoxToggleRight.get());
             }
 
             // Get data for telemetry
