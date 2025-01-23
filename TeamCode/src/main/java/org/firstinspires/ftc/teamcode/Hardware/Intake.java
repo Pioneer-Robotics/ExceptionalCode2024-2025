@@ -20,8 +20,10 @@ public class Intake {
         misumiWristL = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiWristL), Config.misumiWristLDown, Config.misumiWristLUp);
         misumiWristR = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiWristR), Config.misumiWristRDown, Config.misumiWristRUp);
 
-        retractMisumiDrive();
-        misumiWristUp();
+//        retractMisumiDrive();
+//        misumiWristUp();
+        midMisumiDrive();
+        midMisumiWrist();
         isExtended = false;
     }
 

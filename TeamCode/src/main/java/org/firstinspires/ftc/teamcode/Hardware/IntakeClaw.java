@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 
 public class IntakeClaw {
-    private final ServoClass clawServo, yawServo, rollServo;
+    public ServoClass clawServo, yawServo, rollServo;
     private final double rollServoMid = (Config.intakeRollLeft - Config.intakeRollRight) / 2;
     private final double rollServo45 = (rollServoMid - Config.intakeRollRight) / 2;
     private final double rollServoNeg45 = (rollServoMid - Config.intakeRollLeft) / 2;
