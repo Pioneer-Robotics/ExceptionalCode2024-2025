@@ -140,8 +140,8 @@ public class SpecimenAuto extends LinearOpMode {
                 // observation zone
                 // --> PUSH_SAMPLE_2
                 case PUSH_SAMPLE_1:
-                    Bot.purePursuit.update(2);
-                    if (Bot.purePursuit.reachedTarget(6)) {
+                    Bot.purePursuit.update(0.85);
+                    if (Bot.purePursuit.reachedTarget(5)) {
                         AutoPaths.pushSample2(
                                 Bot.pinpoint.getX(), // Current X
                                 Bot.pinpoint.getY() // Current Y
@@ -153,8 +153,8 @@ public class SpecimenAuto extends LinearOpMode {
                 // Bring second sample into observation zone, set path to collect specimen on fence
                 // --> COLLECT_SPECIMEN_1
                 case PUSH_SAMPLE_2:
-                    Bot.purePursuit.update(2);
-                    if (Bot.purePursuit.reachedTarget(6)) {
+                    Bot.purePursuit.update(0.75);
+                    if (Bot.purePursuit.reachedTarget(5)) {
                         AutoPaths.pushSample3(
                                 Bot.pinpoint.getX(), // Current X
                                 Bot.pinpoint.getY() // Current Y
@@ -164,16 +164,16 @@ public class SpecimenAuto extends LinearOpMode {
                     break;
 
                 case PUSH_SAMPLE_3:
-                    Bot.purePursuit.update(2);
-                    if (Bot.purePursuit.reachedTarget(6)) {
+                    Bot.purePursuit.update(0.65);
+                    if (Bot.purePursuit.reachedTarget(5)) {
                         AutoPaths.collectSpecimen(
                                 Bot.pinpoint.getX(), // Current X
                                 Bot.pinpoint.getY(), // Current Y
                                 false // Not coming from the submersible
                         );
-                        double[][] turnPath = SplineCalc.linearPath(new double[]{0, 0.25, 0.75, 1}, new double[]{Math.PI / 2, Math.PI / 2, 0, 0}, 25);
-                        Bot.purePursuit.setTurnPath(turnPath);
-                        Bot.purePursuit.setTurnMultiplier(1.25);
+//                        double[][] turnPath = SplineCalc.linearPath(new double[]{0, 0.25, 0.75, 1}, new double[]{Math.PI / 2, Math.PI / 2, 0, 0}, 25);
+//                        Bot.purePursuit.setTurnPath(turnPath);
+//                        Bot.purePursuit.setTurnMultiplier(1.25);
                         state = State.COLLECT_SPECIMEN_1;
                     }
                     break;
@@ -181,8 +181,8 @@ public class SpecimenAuto extends LinearOpMode {
                 // Go to and collect specimen on fence
                 // --> COLLECT_SPECIMEN_2
                 case COLLECT_SPECIMEN_1:
-                    Bot.purePursuit.update(0.6, true);
-                    if (Bot.purePursuit.reachedTargetXY(1.5, 0.5)) {
+                    Bot.purePursuit.update(0.525, true);
+                    if (Bot.purePursuit.reachedTargetXY(1.5, 0.75)) {
                         Bot.purePursuit.stop();
                         Bot.specimenArm.closeClaw();
                         timer.reset(); // Reset timer for next state
@@ -222,7 +222,7 @@ public class SpecimenAuto extends LinearOpMode {
                 // First time: Set collect to true. Second time: Set stop to true.
                 // --> SPECIMEN_HANG_2 (Creates a loop)
                 case SPECIMEN_HANG_DOWN: // Hang specimen upside down
-                    Bot.purePursuit.update(0.55);
+                    Bot.purePursuit.update(0.575);
                     if (Bot.purePursuit.reachedTarget()) { // || Bot.frontTouchSensor.getVoltage()<.4
                         Bot.purePursuit.stop();
                         Bot.specimenArm.movePostHang(1.0); // Move arm down

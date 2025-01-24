@@ -81,23 +81,23 @@ public class Teleop extends LinearOpMode {
 
             intakeClawToggle.toggle(gamepad1.b);
             if (intakeClawToggle.justChanged() && intakeClawToggle.get()) {
-//                Bot.intake.openClaw();
+                Bot.intakeClaw.openClaw();
             } else if (intakeClawToggle.justChanged() && !intakeClawToggle.get()) {
-//                Bot.intake.closeClaw();
+                Bot.intakeClaw.closeClaw();
             }
 
             intakeWristToggle.toggle(gamepad1.y);
             if (intakeWristToggle.justChanged() && intakeWristToggle.get()) {
                 if (Bot.intake.isExtended()){
-                    Bot.intake.midMisumiWrist();
-                } else {
                     Bot.intake.misumiWristDown();
+                } else {
+                    Bot.intake.midMisumiWrist();
                 }
             } else if (intakeWristToggle.justChanged() && !intakeWristToggle.get()) {
                 if (Bot.intake.isExtended()) {
-                    Bot.intake.misumiWristUp();
-                } else {
                     Bot.intake.midMisumiWrist();
+                } else {
+                    Bot.intake.misumiWristUp();
                 }
             }
 

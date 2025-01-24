@@ -15,9 +15,9 @@ public class ServoPositions extends LinearOpMode {
 
         while(opModeIsActive()) {
 
-            Bot.intakeClaw.rollServo.anyPos(gamepad1.left_trigger);
+            Bot.specimenArm.claw.anyPos(gamepad1.left_trigger);
 
-            telemetry.addData("Servo Pos", Bot.intake.misumiWristR.getPos());
+            telemetry.addData("Servo Pos", Bot.specimenArm.claw.getPos());
             telemetry.update();
         }
     }

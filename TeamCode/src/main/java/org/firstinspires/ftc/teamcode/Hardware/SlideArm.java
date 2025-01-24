@@ -60,6 +60,14 @@ public class SlideArm {
         motor2.setMotorEnable();
     }
 
+    public void move(double power) {
+        if (!motor1.isMotorEnabled() || !motor2.isMotorEnabled()) { motorOn(); }
+        motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor1.setVelocity(power * Config.maxSlideTicksPerSecond);
+        motor2.setVelocity(-power * Config.maxSlideTicksPerSecond);
+    }
+
     // Getters
     public double getArmPosition() {
         return(motor1.getCurrentPosition());

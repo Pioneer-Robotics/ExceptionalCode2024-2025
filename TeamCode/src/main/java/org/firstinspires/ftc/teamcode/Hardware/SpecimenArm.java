@@ -53,7 +53,8 @@ public class SpecimenArm {
     }
 
     public void moveToCollect(double speed) {
-        move(speed);
+//        move(speed);
+        move(-speed);
         position = 2;
     }
 

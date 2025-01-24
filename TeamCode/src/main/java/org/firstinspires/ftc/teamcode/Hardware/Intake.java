@@ -51,12 +51,12 @@ public class Intake {
      */
     public void misumiWristDown() {
         misumiWristL.openServo();
-//        misumiWristR.openServo();
+        misumiWristR.openServo();
     }
 
     public void midMisumiWrist() {
         misumiWristL.anyPos(Config.misumiWristLMid);
-//        misumiWristR.anyPos(Config.misumiWristRMid);
+        misumiWristR.anyPos(Config.misumiWristRMid);
     }
 
     /***
@@ -64,7 +64,7 @@ public class Intake {
      */
     public void misumiWristUp() {
         misumiWristL.closeServo();
-//        misumiWristR.closeServo();
+        misumiWristR.closeServo();
     }
 
     public boolean isExtended() {

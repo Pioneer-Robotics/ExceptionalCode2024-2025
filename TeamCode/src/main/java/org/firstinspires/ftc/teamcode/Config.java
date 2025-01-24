@@ -39,7 +39,6 @@ public class Config {
     public static double fLB = 0.0015;
     public static double fRB = 0.0015;
 
-
     // Tolerances
     // How close the robot needs to be to the target position to stop (in cm)
     public static double driveTolerance = 1.5;
@@ -111,32 +110,32 @@ public class Config {
        - Servo Positions  -
        -------------------- */
     // Specimen Arm Claw
-    public static final double clawOpen = 0.6;
-    public static final double clawClose = 0.825;
+    public static final double clawOpen = 0.25;
+    public static final double clawClose = 0.5;
     // Misumi Drive
     public static final double misumiDriveLOpen = 0.475;
-    public static final double misumiDriveLMid = 0.275;
-    public static final double misumiDriveLClose = 0.225;
+    public static final double misumiDriveLMid = 0.25;
+    public static final double misumiDriveLClose = 0.2;
     //    public static double misumiDriveROpen = 0.175;
 //    public static double misumiDriveRMid = 0.4;
 //    public static double misumiDriveRClose = 0.525;
     // Misumi Wrist
-    public static final double misumiWristLDown = 0.565;
-    public static final double misumiWristLMid = 0.5;
-    public static final double misumiWristLUp = 0.225; // Up to OCG box
-    public static final double misumiWristRDown = 0.675;
-    public static final double misumiWristRMid = 0.35;
-    public static final double misumiWristRUp = 0.375;
+    public static final double misumiWristLDown = 0.825;
+    public static final double misumiWristLMid = 0.75;
+    public static final double misumiWristLUp = 0.45; // Up to OCG box
+    public static final double misumiWristRDown = 0.175;
+    public static final double misumiWristRMid = 0.24;
+    public static final double misumiWristRUp = 0.5;
     // Intake Wrist
     public static final double intakeWristClose = 0;
     public static final double intakeWristOpen = 1;
     // Intake Claw
-    public static final double intakeRollLeft = 0;
-    public static final double intakeRollRight = 0;
-    public static final double intakeYawUp = 0;
-    public static final double intakeYawDown = 0;
-    public static final double intakeClawOpen = 0.4;
-    public static final double intakeClawClose = 0.05;
+    public static final double intakeYawLeft = 0;
+    public static final double intakeYawRight = 0;
+    public static final double intakeRollUp = 0.45;
+    public static final double intakeRollDown = 0.95;
+    public static final double intakeClawOpen = 0.7;
+    public static final double intakeClawClose = 0.525;
     // OCG Box
     public static final double ocgBoxDropRight = 0.1;
     public static final double ocgBoxHold = 0.375;
@@ -150,12 +149,17 @@ public class Config {
        - Motor Positions  -
        -------------------- */
     // Specimen Arm
-    public static final double defaultSpecimenArmSpeed = 0.5;
-    public static int specimenArmPostHang = -800;
-    public static int specimenArmPrepHang = -1250;
-    public static final int specimenArmPrepHangUp = 1000;
-    public static final int specimenArmPostHangUp = 650;
-    public static final int specimenArmCollect1 = 2010;
+    public static final double defaultSpecimenArmSpeed = 0.4;
+//    public static int specimenArmPostHang = -800;
+//    public static int specimenArmPrepHang = -1250;
+    public static int specimenArmPostHang = 800;
+    public static int specimenArmPrepHang = 1250;
+//    public static final int specimenArmPrepHangUp = 1000;
+//    public static final int specimenArmPostHangUp = 650;
+    public static final int specimenArmPrepHangUp = -1000;
+    public static final int specimenArmPostHangUp = -650;
+//    public static final int specimenArmCollect1 = 2010;
+    public static final int specimenArmCollect1 = -2010;
     public static final int specimenArmCollect2 = 0;
     // Linear Slide
     public static final double defaultSlideSpeed = 0.25;
@@ -175,7 +179,7 @@ public class Config {
 
     // Coordinates of first specimen hang
     public static final double specHangX = 195;
-    public static final double specHangY = 96.25;
+    public static final double specHangY = 95.75;
 
     // Coordinates of observation zone park
     public static final double parkX = 300;
@@ -183,7 +187,7 @@ public class Config {
 
     // Robot starting position for autos
     public static final double specimenStartX = 198;
-    public static final double specimenStartY = 20.5;
+    public static final double specimenStartY = 21.5;
     public static final double sampleStartX = 85;
     public static final double sampleStartY = 20.5;
 

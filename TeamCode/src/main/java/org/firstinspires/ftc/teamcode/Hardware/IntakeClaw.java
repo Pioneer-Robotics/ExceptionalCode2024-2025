@@ -6,55 +6,55 @@ import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 
 public class IntakeClaw {
-    public ServoClass clawServo, yawServo, rollServo;
-    private final double rollServoMid = (Config.intakeRollLeft - Config.intakeRollRight) / 2;
-    private final double rollServo45 = (rollServoMid - Config.intakeRollRight) / 2;
-    private final double rollServoNeg45 = (rollServoMid - Config.intakeRollLeft) / 2;
+    public ServoClass clawServo, rollServo, yawServo;
+    private final double yawServoMid = (Config.intakeYawLeft + Config.intakeYawRight) / 2;
+    private final double yawServo45 = (yawServoMid + Config.intakeYawRight) / 2;
+    private final double yawServoNeg45 = (yawServoMid + Config.intakeYawLeft) / 2;
 
 
     public IntakeClaw() {
         clawServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeClawServo), Config.intakeClawOpen, Config.intakeClawClose);
-        yawServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeYawServo), Config.intakeYawUp, Config.intakeYawDown);
-        rollServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeRollServo), Config.intakeRollLeft, Config.intakeRollRight);
+        rollServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeRollServo), Config.intakeYawLeft, Config.intakeYawRight);
+        yawServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeYawServo), Config.intakeRollUp, Config.intakeRollDown);
         clawServo.closeServo();
         clawUp();
     }
 
     public void clawDown() {
-        yawServo.openServo();
-        rollServo.anyPos(rollServoMid);
+        rollServo.closeServo();
+        yawServo.anyPos(yawServoMid);
     }
 
     public void clawUp() {
-        yawServo.closeServo();
-        rollServo.anyPos(rollServoMid);
+        rollServo.openServo();
+        yawServo.anyPos(yawServoMid);
     }
 
     public void clawPos90() {
-        rollServo.anyPos(Config.intakeRollRight);
+        yawServo.anyPos(Config.intakeYawRight);
     }
 
     public void clawPos45() {
-        rollServo.anyPos(rollServo45);
+        yawServo.anyPos(yawServo45);
     }
 
     public void clawPos0() {
-        rollServo.anyPos(rollServoMid);
+        yawServo.anyPos(yawServoMid);
     }
 
     public void clawNeg45() {
-        rollServo.anyPos(rollServoNeg45);
+        yawServo.anyPos(yawServoNeg45);
     }
 
     public void clawNeg90() {
-        rollServo.anyPos(Config.intakeRollLeft);
+        yawServo.anyPos(Config.intakeYawLeft);
     }
 
     public void openClaw() { clawServo.openServo(); }
     public void closeClaw() { clawServo.closeServo(); }
 
     // Getters
-    public double getYaw() { return(yawServo.getPos()); }
-    public double getRoll() { return(rollServo.getPos()); }
+    public double getYaw() { return(rollServo.getPos()); }
+    public double getRoll() { return(yawServo.getPos()); }
     public double getClawPos() { return(clawServo.getPos()); }
 }
