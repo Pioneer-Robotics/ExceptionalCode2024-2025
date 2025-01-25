@@ -54,8 +54,8 @@ public class CurrentDetection {
         Bot.dashboardTelemetry.update();
         current = motor.getCurrent(CurrentUnit.MILLIAMPS);
         // Virtual touch sensor
-        if (current > maxCurrent && ((Math.abs(Config.specimenArmCollect1 - motor.getCurrentPosition()) < 250) ||
-                                     (Math.abs(Config.specimenArmCollect2 - motor.getCurrentPosition()) < 250))) {
+        if (current > maxCurrent && ((Math.abs(Config.specimenArmCollect1 - motor.getCurrentPosition()) < 400) ||
+                                     (Math.abs(Config.specimenArmCollect2 - motor.getCurrentPosition()) < 400))) {
             motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             motor.setPower(0);
             motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

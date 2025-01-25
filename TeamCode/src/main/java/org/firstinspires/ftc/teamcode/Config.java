@@ -94,8 +94,8 @@ public class Config {
     public static final String ocgBox = "ocgBox";
     public static final String diffyServo1 = "diffyServo1";
     public static final String diffyServo2 = "diffyServo2";
-    public static final String pitchServo = "pitchServo";
-    public static final String rollServo = "rollServo";
+    public static final String ocgPitchServo = "pitchServo";
+    public static final String ocgRollServo = "rollServo";
     public static final String intakeYawServo = "intakeYawServo";
     public static final String intakeRollServo = "intakeRollServo";
     public static final String intakeClawServo = "intakeClawServo";
@@ -110,40 +110,41 @@ public class Config {
        - Servo Positions  -
        -------------------- */
     // Specimen Arm Claw
-    public static final double clawOpen = 0.25;
+    public static final double clawOpen = 0.35;
     public static final double clawClose = 0.5;
     // Misumi Drive
     public static final double misumiDriveLOpen = 0.475;
-    public static final double misumiDriveLMid = 0.25;
+    public static final double misumiDriveLMid = 0.3;
     public static final double misumiDriveLClose = 0.2;
     //    public static double misumiDriveROpen = 0.175;
 //    public static double misumiDriveRMid = 0.4;
 //    public static double misumiDriveRClose = 0.525;
     // Misumi Wrist
-    public static final double misumiWristLDown = 0.825;
+    public static final double misumiWristLDown = 0.85;
     public static final double misumiWristLMid = 0.75;
-    public static final double misumiWristLUp = 0.45; // Up to OCG box
-    public static final double misumiWristRDown = 0.175;
+    public static final double misumiWristLUp = 0.5; // Up to OCG box
+    public static final double misumiWristRDown = 0.15;
     public static final double misumiWristRMid = 0.24;
-    public static final double misumiWristRUp = 0.5;
+    public static final double misumiWristRUp = 0.4;
     // Intake Wrist
     public static final double intakeWristClose = 0;
     public static final double intakeWristOpen = 1;
     // Intake Claw
-    public static final double intakeYawLeft = 0;
-    public static final double intakeYawRight = 0;
-    public static final double intakeRollUp = 0.45;
-    public static final double intakeRollDown = 0.95;
-    public static final double intakeClawOpen = 0.7;
+    public static final double intakeYawLeft = 0.05;
+    public static final double intakeYawRight = 0.58;
+    public static final double intakeYawMid = 0.85; //Temporary
+    public static final double intakeRollUp = 0.43;
+    public static final double intakeRollDown = 0.96;
+    public static final double intakeClawOpen = 0.85;
     public static final double intakeClawClose = 0.525;
     // OCG Box
     public static final double ocgBoxDropRight = 0.1;
     public static final double ocgBoxHold = 0.375;
     public static final double ocgBoxDrop = 0.8;
-    public static final double ocgBoxPitchUp = 0;
-    public static final double ocgBoxPitchDown = 0;
-    public static final double ocgBoxRollUp = 0;
-    public static final double ocgBoxRollDown = 0;
+    public static final double ocgBoxPitchUp = 0.705;
+    public static final double ocgBoxPitchDown = 0.275;
+    public static final double ocgBoxRollUp = 0.867;
+    public static final double ocgBoxRollDown = 0.635;
 
     /* --------------------
        - Motor Positions  -

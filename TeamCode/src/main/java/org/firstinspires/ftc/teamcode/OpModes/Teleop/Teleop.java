@@ -22,8 +22,8 @@ public class Teleop extends LinearOpMode {
         Toggle clawToggle = new Toggle(false);
         Toggle intakeClawToggle = new Toggle(false);
         Toggle intakeWristToggle = new Toggle(false);
-        Toggle ocgBoxToggle = new Toggle(false);
-        Toggle ocgBoxToggleRight = new Toggle(false);
+        Toggle ocgBoxToggle = new Toggle(true);
+        Toggle ocgBoxToggleRight = new Toggle(true);
 
         boolean bothTrigPressed;
 
@@ -70,12 +70,14 @@ public class Teleop extends LinearOpMode {
            if (gamepad1.dpad_up) {
                Bot.intake.midMisumiWrist();
                Bot.intake.extendMisumiDrive();
+               Bot.intakeClaw.clawDown();
 //               Bot.intake.openIntakeWrist();
                intakeWristToggle.set(true);
            } else if (gamepad1.dpad_down) {
                Bot.intake.midMisumiWrist();
 //               Bot.intake.closeIntakeWrist();
                Bot.intake.retractMisumiDrive();
+               Bot.intakeClaw.clawUp();
                intakeWristToggle.set(false);
            }
 
@@ -137,31 +139,61 @@ public class Teleop extends LinearOpMode {
                 Bot.specimenArm.setClawPosBool(clawToggle.get());
             }
 
+            //Claw Yaw
+            if (gamepad2.left_stick_x < -0.1 && gamepad2.left_stick_x>-0.5){
+                Bot.intakeClaw.clawNeg45();
+            } else if (gamepad2.left_stick_x<-0.5){
+                Bot.intakeClaw.clawNeg90();
+            } else if (gamepad2.left_stick_x>0.1 && gamepad2.left_stick_x<0.5){
+                Bot.intakeClaw.clawPos45();
+            } else if (gamepad2.left_stick_x>0.5){
+                Bot.intakeClaw.clawPos90();
+            } else {
+                Bot.intakeClaw.clawPos0();
+            }
+
             // Slide Arm
             if (gamepad2.y) {
+                Bot.intakeClaw.clawDown();
+                Bot.intake.midMisumiDrive();
                 Bot.intake.midMisumiWrist();
 //                Bot.intake.closeClaw();
                 Bot.slideArm.moveUp(0.8);
-                Bot.intake.midMisumiDrive();
+
             } else if (gamepad2.a) {
-                Bot.slideArm.moveDown(0.8);
-                Bot.intake.midMisumiWrist();
+                Bot.intakeClaw.clawDown();
                 Bot.intake.midMisumiDrive();
+                Bot.intake.midMisumiWrist();
+                Bot.slideArm.moveDown(0.8);
             } else if (gamepad2.x) {
+                Bot.intakeClaw.clawDown();
+                Bot.intake.midMisumiDrive();
                 Bot.slideArm.moveMid(0.8);
 //                Bot.intake.closeClaw();
-                Bot.intake.midMisumiDrive();
+            }
+
+            // Manual slide arm controls
+            if (gamepad2.right_stick_y > 0.5) {
+                Bot.slideArm.move(-(gamepad2.right_stick_y - 0.5));
+            } else if (gamepad2.right_stick_y < -0.5){
+                Bot.slideArm.move(-(gamepad2.right_stick_y + 0.5));
+            } else if(Math.abs(gamepad2.right_stick_x)>0.5) {
+                Bot.slideArm.motorOff();
             }
 
             // Box state
+            //Pitch
             ocgBoxToggle.toggle(gamepad2.left_bumper);
             if (ocgBoxToggle.justChanged()) {
 //                Bot.slideArm.setOCGBox(ocgBoxToggle.get());
+                Bot.ocgBox.setPitchState(ocgBoxToggle.get());
             }
 
             ocgBoxToggleRight.toggle(gamepad2.right_bumper);
+            //Roll
             if (ocgBoxToggleRight.justChanged()) {
 //                Bot.slideArm.setOCGBoxRight(ocgBoxToggleRight.get());
+                Bot.ocgBox.setRollState(ocgBoxToggleRight.get());
             }
 
             // Get data for telemetry
