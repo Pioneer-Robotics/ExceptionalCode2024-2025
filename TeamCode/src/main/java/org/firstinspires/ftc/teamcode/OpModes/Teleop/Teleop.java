@@ -113,6 +113,9 @@ public class Teleop extends LinearOpMode {
             } else if (gamepad2.dpad_down) {
                 Bot.specimenArm.movePrepHang(0.5);
             } else if (gamepad2.dpad_left) {
+                if (gamepad2.touchpad){
+
+                }
                 Bot.specimenArm.moveToCollect(0.5);
             }
 

@@ -51,7 +51,7 @@ public class SpecimenAuto extends LinearOpMode {
         double offsetX = 0;
         State state = State.INIT;
 
-        Toggle preloadToggle = new Toggle(true);
+        Toggle preloadToggle = new Toggle(false);
         while (!isStarted()) {
             preloadToggle.toggle(gamepad1.a);
             telemetry.addData("Preload", preloadToggle.get());
@@ -181,7 +181,7 @@ public class SpecimenAuto extends LinearOpMode {
                 // Go to and collect specimen on fence
                 // --> COLLECT_SPECIMEN_2
                 case COLLECT_SPECIMEN_1:
-                    Bot.purePursuit.update(0.525, true);
+                    Bot.purePursuit.update(0.5, true);
                     if (Bot.purePursuit.reachedTargetXY(1.5, 0.75)) {
                         Bot.purePursuit.stop();
                         Bot.specimenArm.closeClaw();
@@ -222,7 +222,7 @@ public class SpecimenAuto extends LinearOpMode {
                 // First time: Set collect to true. Second time: Set stop to true.
                 // --> SPECIMEN_HANG_2 (Creates a loop)
                 case SPECIMEN_HANG_DOWN: // Hang specimen upside down
-                    Bot.purePursuit.update(0.575);
+                    Bot.purePursuit.update(0.525, true);
                     if (Bot.purePursuit.reachedTarget()) { // || Bot.frontTouchSensor.getVoltage()<.4
                         Bot.purePursuit.stop();
                         Bot.specimenArm.movePostHang(1.0); // Move arm down

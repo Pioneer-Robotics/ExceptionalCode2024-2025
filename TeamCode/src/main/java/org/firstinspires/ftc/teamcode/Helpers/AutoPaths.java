@@ -51,7 +51,7 @@ public class AutoPaths {
     public static void pushSample2(double currentX, double currentY) {
         // Push the second (middle) sample into the observation zone
         // Should start at the observation zone area
-        double[] pointsX = {currentX, 275, 295, 317.5, 310};
+        double[] pointsX = {currentX, 280, 305, 325, 305};
         double[] pointsY = {currentY, 135, 165, 170, 60};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
@@ -62,8 +62,8 @@ public class AutoPaths {
     public static void pushSample3(double currentX, double currentY) {
         // Push the third (right) sample into the observation zone
         // Should start at the observation zone area
-        double[] pointsX = {currentX, 295, 305, 345, 330};
-        double[] pointsY = {currentY, 135, 165, 170, 55};
+        double[] pointsX = {currentX, 300, 330, 350, 325};
+        double[] pointsY = {currentY, 135, 170, 175, 55};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
 //        double[][] turnPath = SplineCalc.linearPath(new double[]{0, 1}, new double[]{Math.PI / 2, Math.PI / 2}, 25);

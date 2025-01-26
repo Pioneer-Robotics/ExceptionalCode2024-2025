@@ -51,11 +51,12 @@ public class Config {
     // Used to move "virtual robot" ahead of actual robot in pure pursuit
     public static double overshootDistance(double velocity) {
         // Polynomial fit for overshoot distance
-        return ((0.000714 * velocity * velocity) + (0.145 * velocity) + 0.216) * 1.075;
+        return ((0.000714 * velocity * velocity) + (0.145 * velocity) + 0.216); // *1.075
     }
 
     // Used to gradually accelerate
     // Multiplier starts at 0.1 and increments by acceleration each loop up to 1
+    // Only used in PID Drive (deprecated)
     public static final double acceleration = 0.04;
 
     // Color sensor
@@ -110,7 +111,7 @@ public class Config {
        - Servo Positions  -
        -------------------- */
     // Specimen Arm Claw
-    public static final double clawOpen = 0.35;
+    public static final double clawOpen = 0.3;
     public static final double clawClose = 0.5;
     // Misumi Drive
     public static final double misumiDriveLOpen = 0.475;
@@ -135,8 +136,8 @@ public class Config {
     public static final double intakeYawMid = 0.85; //Temporary
     public static final double intakeRollUp = 0.43;
     public static final double intakeRollDown = 0.96;
-    public static final double intakeClawOpen = 0.85;
-    public static final double intakeClawClose = 0.525;
+    public static final double intakeClawOpen = 1;
+    public static final double intakeClawClose = 0.5;
     // OCG Box
     public static final double ocgBoxDropRight = 0.1;
     public static final double ocgBoxHold = 0.375;
@@ -151,17 +152,18 @@ public class Config {
        -------------------- */
     // Specimen Arm
     public static final double defaultSpecimenArmSpeed = 0.4;
-//    public static int specimenArmPostHang = -800;
-//    public static int specimenArmPrepHang = -1250;
-    public static int specimenArmPostHang = 800;
-    public static int specimenArmPrepHang = 1250;
+    public static int specimenArmPostHang = -1250;
+    public static int specimenArmPrepHang = -800;
+//    public static int specimenArmPostHang = 800;
+//    public static int specimenArmPrepHang = 1250;
 //    public static final int specimenArmPrepHangUp = 1000;
 //    public static final int specimenArmPostHangUp = 650;
     public static final int specimenArmPrepHangUp = -1000;
     public static final int specimenArmPostHangUp = -650;
-//    public static final int specimenArmCollect1 = 2010;
-    public static final int specimenArmCollect1 = -2010;
+    public static final int specimenArmCollect1 = 2010;
     public static final int specimenArmCollect2 = 0;
+//    public static final int specimenArmCollect1 = -2010;
+//    public static final int specimenArmCollect2 = -0;
     // Linear Slide
     public static final double defaultSlideSpeed = 0.25;
     public static final int minSlideHeight = 15;
@@ -178,9 +180,9 @@ public class Config {
     // Specimen hang offset (space between hangs)
     public static final double hangOffset = 6.5;
 
-    // Coordinates of first specimen hang
+    // Coordinates of default specimen hang
     public static final double specHangX = 195;
-    public static final double specHangY = 95.75;
+    public static final double specHangY = 94.95;
 
     // Coordinates of observation zone park
     public static final double parkX = 300;
