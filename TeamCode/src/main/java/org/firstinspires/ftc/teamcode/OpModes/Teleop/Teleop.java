@@ -22,16 +22,13 @@ public class Teleop extends LinearOpMode {
         Toggle clawToggle = new Toggle(false);
         Toggle intakeClawToggle = new Toggle(false);
         Toggle intakeWristToggle = new Toggle(false);
-        Toggle ocgBoxToggle = new Toggle(false);
-        Toggle ocgBoxToggleRight = new Toggle(false);
+        Toggle ocgBoxToggle = new Toggle(true);
+        Toggle ocgBoxToggleRight = new Toggle(true);
 
         boolean bothTrigPressed;
 
         // Initialize max speed
         double maxSpeed = 0.5;
-
-        // Home specimen arm
-        Bot.specimenArm.homeArm();
 
         ElapsedTime timer = new ElapsedTime();
         double prevMilliseconds = 0;
@@ -72,35 +69,37 @@ public class Teleop extends LinearOpMode {
 
            if (gamepad1.dpad_up) {
                Bot.intake.midMisumiWrist();
-               Bot.intake.openMisumiDrive();
-               Bot.intake.openIntakeWrist();
+               Bot.intake.extendMisumiDrive();
+               Bot.intakeClaw.clawDown();
+//               Bot.intake.openIntakeWrist();
                intakeWristToggle.set(true);
            } else if (gamepad1.dpad_down) {
                Bot.intake.midMisumiWrist();
-               Bot.intake.closeIntakeWrist();
-               Bot.intake.closeMisumiDrive();
+//               Bot.intake.closeIntakeWrist();
+               Bot.intake.retractMisumiDrive();
+               Bot.intakeClaw.clawUp();
                intakeWristToggle.set(false);
            }
 
             intakeClawToggle.toggle(gamepad1.b);
             if (intakeClawToggle.justChanged() && intakeClawToggle.get()) {
-                Bot.intake.openClaw();
+                Bot.intakeClaw.openClaw();
             } else if (intakeClawToggle.justChanged() && !intakeClawToggle.get()) {
-                Bot.intake.closeClaw();
+                Bot.intakeClaw.closeClaw();
             }
 
             intakeWristToggle.toggle(gamepad1.y);
             if (intakeWristToggle.justChanged() && intakeWristToggle.get()) {
                 if (Bot.intake.isExtended()){
-                    Bot.intake.midMisumiWrist();
+                    Bot.intake.misumiWristDown();
                 } else {
-                    Bot.intake.openMisumiWrist();
+                    Bot.intake.midMisumiWrist();
                 }
             } else if (intakeWristToggle.justChanged() && !intakeWristToggle.get()) {
                 if (Bot.intake.isExtended()) {
-                    Bot.intake.closeMisumiWrist();
-                } else {
                     Bot.intake.midMisumiWrist();
+                } else {
+                    Bot.intake.misumiWristUp();
                 }
             }
 
@@ -114,6 +113,9 @@ public class Teleop extends LinearOpMode {
             } else if (gamepad2.dpad_down) {
                 Bot.specimenArm.movePrepHang(0.5);
             } else if (gamepad2.dpad_left) {
+                if (gamepad2.touchpad){
+
+                }
                 Bot.specimenArm.moveToCollect(0.5);
             }
 
@@ -123,7 +125,6 @@ public class Teleop extends LinearOpMode {
                 int armAdjust = (int) (7.0 * gamepad2.right_trigger - 7.0 * gamepad2.left_trigger);
                 Config.specimenArmPostHang += armAdjust;
                 Config.specimenArmPrepHang += armAdjust;
-                Config.specimenArmCollect += armAdjust;
 
                 if (Bot.specimenArm.getPosition() == 2) {
                     Bot.specimenArm.moveToCollect(0.3);
@@ -141,33 +142,61 @@ public class Teleop extends LinearOpMode {
                 Bot.specimenArm.setClawPosBool(clawToggle.get());
             }
 
+            //Claw Yaw
+            if (gamepad2.left_stick_x < -0.1 && gamepad2.left_stick_x>-0.5){
+                Bot.intakeClaw.clawNeg45();
+            } else if (gamepad2.left_stick_x<-0.5){
+                Bot.intakeClaw.clawNeg90();
+            } else if (gamepad2.left_stick_x>0.1 && gamepad2.left_stick_x<0.5){
+                Bot.intakeClaw.clawPos45();
+            } else if (gamepad2.left_stick_x>0.5){
+                Bot.intakeClaw.clawPos90();
+            } else {
+                Bot.intakeClaw.clawPos0();
+            }
+
             // Slide Arm
             if (gamepad2.y) {
-                Bot.intake.midMisumiWrist();
-                Bot.intake.closeClaw();
-                Bot.slideArm.moveUp(0.8);
+                Bot.intakeClaw.clawDown();
                 Bot.intake.midMisumiDrive();
+                Bot.intake.midMisumiWrist();
+//                Bot.intake.closeClaw();
+                Bot.slideArm.moveUp(0.8);
+
             } else if (gamepad2.a) {
+                Bot.intakeClaw.clawDown();
+                Bot.intake.midMisumiDrive();
+                Bot.intake.midMisumiWrist();
                 Bot.slideArm.moveDown(0.8);
             } else if (gamepad2.x) {
-                Bot.slideArm.moveMid(0.8);
-                Bot.intake.closeClaw();
+                Bot.intakeClaw.clawDown();
                 Bot.intake.midMisumiDrive();
+                Bot.slideArm.moveMid(0.8);
+//                Bot.intake.closeClaw();
+            }
+
+            // Manual slide arm controls
+            if (gamepad2.right_stick_y > 0.5) {
+                Bot.slideArm.move(-(gamepad2.right_stick_y - 0.5));
+            } else if (gamepad2.right_stick_y < -0.5){
+                Bot.slideArm.move(-(gamepad2.right_stick_y + 0.5));
+            } else if(Math.abs(gamepad2.right_stick_x)>0.5) {
+                Bot.slideArm.motorOff();
             }
 
             // Box state
+            //Pitch
             ocgBoxToggle.toggle(gamepad2.left_bumper);
             if (ocgBoxToggle.justChanged()) {
-                Bot.slideArm.setOCGBox(ocgBoxToggle.get());
+//                Bot.slideArm.setOCGBox(ocgBoxToggle.get());
+                Bot.ocgBox.setPitchState(ocgBoxToggle.get());
             }
 
             ocgBoxToggleRight.toggle(gamepad2.right_bumper);
+            //Roll
             if (ocgBoxToggleRight.justChanged()) {
-                Bot.slideArm.setOCGBoxRight(ocgBoxToggleRight.get());
-            }
-
-            if (gamepad2.touchpad) {
-                Bot.specimenArm.homeArm();
+//                Bot.slideArm.setOCGBoxRight(ocgBoxToggleRight.get());
+                Bot.ocgBox.setRollState(ocgBoxToggleRight.get());
             }
 
             // Get data for telemetry
@@ -184,13 +213,14 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("Total Current", Bot.currentThreads.getTotalCurrent());
             telemetry.addData("dt", timer.milliseconds() - prevMilliseconds);
             telemetry.addData("Refresh Rate (Hz)", 1000 / (timer.milliseconds() - prevMilliseconds));
-            telemetry.addData("Thread Current Slide", Bot.currentThreads.getSlideCurrent());
+            telemetry.addData("Thread Current Slide 1", Bot.currentThreads.getSlideCurrent1());
+            telemetry.addData("Thread Current Slide 2", Bot.currentThreads.getSlideCurrent2());
             telemetry.addData("Thread Current Spec", Bot.currentThreads.getSpecArmCurrent());
             telemetry.addData("North Mode", northModeToggle.get());
             telemetry.addData("Slide Arm Position", Bot.slideArm.getArmPosition());
+            telemetry.addData("Specimen Arm Position", Bot.specimenArm.getPositionTicks());
             telemetry.addData("specimenArmPostHang", Config.specimenArmPostHang);
             telemetry.addData("specimenArmPrepHang", Config.specimenArmPrepHang);
-            telemetry.addData("specimenArmCollect", Config.specimenArmCollect);
             telemetry.addData("X", Bot.pinpoint.getX());
             telemetry.addData("Y", Bot.pinpoint.getY());
             telemetry.addData("Heading", Bot.pinpoint.getHeading());

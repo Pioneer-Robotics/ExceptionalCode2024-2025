@@ -57,41 +57,41 @@ public class TestTeleop extends LinearOpMode {
             //----------------------------------------
             //Works
             if (gamepad1.dpad_up) {
-                Bot.intake.openMisumiDrive();
+                Bot.intake.extendMisumiDrive();
             } else if (gamepad1.dpad_down) {
-                Bot.intake.closeMisumiDrive();
+                Bot.intake.retractMisumiDrive();
             }
             //Works
             //Left is up, right is down
             if (gamepad1.dpad_left) {
-                Bot.intake.openMisumiWrist();
+                Bot.intake.misumiWristDown();
             } else if (gamepad1.dpad_right) {
-                Bot.intake.closeMisumiWrist();
+                Bot.intake.misumiWristUp();
             } else if (gamepad1.x){
                 Bot.intake.midMisumiWrist();
             }
 
             if (gamepad1.left_bumper){
-                Bot.intake.openMisumiWrist();
-                Bot.intake.openIntakeWrist();
+                Bot.intake.misumiWristDown();
+//                Bot.intake.openIntakeWrist();
             }
 
             //Works
             intakeClawToggle.toggle(gamepad1.b);
             if (intakeClawToggle.justChanged() && intakeClawToggle.get()) {
-                Bot.intake.openClaw();
+//                Bot.intake.openClaw();
             } else if (intakeClawToggle.justChanged() && !intakeClawToggle.get()) {
-                Bot.intake.closeClaw();
+//                Bot.intake.closeClaw();
             }
 
             //Works
             intakeWristToggle.toggle(gamepad1.y);
             if (intakeWristToggle.justChanged() && intakeWristToggle.get()) {
                 //Facing down towards sample
-                Bot.intake.openIntakeWrist();
+//                Bot.intake.openIntakeWrist();
             } else if (intakeWristToggle.justChanged() && !intakeWristToggle.get()) {
                 //Facing OCG Box
-                Bot.intake.closeIntakeWrist();
+//                Bot.intake.closeIntakeWrist();
             }
 
 
@@ -115,7 +115,7 @@ public class TestTeleop extends LinearOpMode {
 
             ocgBoxToggle.toggle(gamepad2.dpad_right);
             if (ocgBoxToggle.justChanged()) {
-                Bot.slideArm.setOCGBox(ocgBoxToggle.get());
+//                Bot.slideArm.setOCGBox(ocgBoxToggle.get());
             }
 
 

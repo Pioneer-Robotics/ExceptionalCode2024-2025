@@ -9,9 +9,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
 import org.firstinspires.ftc.teamcode.Hardware.ColorSensor;
 import org.firstinspires.ftc.teamcode.Hardware.CurrentDetection;
+import org.firstinspires.ftc.teamcode.Hardware.DiffyClaw;
 import org.firstinspires.ftc.teamcode.Hardware.Intake;
+import org.firstinspires.ftc.teamcode.Hardware.IntakeClaw;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
+import org.firstinspires.ftc.teamcode.Hardware.OCGBox;
 import org.firstinspires.ftc.teamcode.Hardware.SlideArm;
 import org.firstinspires.ftc.teamcode.Hardware.SpecimenArm;
 import org.firstinspires.ftc.teamcode.Hardware.VoltageHandler;
@@ -47,6 +50,8 @@ public class Bot {
     public static CurrentUtils currentThreads;
     public static FtcDashboard dashboard;
     public static Telemetry dashboardTelemetry;
+    public static IntakeClaw intakeClaw;
+    public static OCGBox ocgBox;
 
     /**
      * Constructor for Bot.
@@ -59,8 +64,8 @@ public class Bot {
 
         // Drive base and self driving
         Bot.pinpoint = new Pinpoint(startX, startY);
-        Bot.optical_odom = new SparkfunOTOS();
-        Bot.deadwheel_odom = new TwoWheelOdometry(Config.specimenStartX, Config.specimenStartY);
+//        Bot.optical_odom = new SparkfunOTOS();
+//        Bot.deadwheel_odom = new TwoWheelOdometry(Config.specimenStartX, Config.specimenStartY);
         Bot.mecanumBase = new MecanumBase();
         Bot.pidDrive = new PIDDrive();
         Bot.purePursuit = new PurePursuit(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2]);
@@ -71,6 +76,9 @@ public class Bot {
 
         // Servos
         Bot.intake = new Intake();
+        Bot.intakeClaw = new IntakeClaw();
+        Bot.ocgBox = new OCGBox();
+
 
         // Other
         Bot.frontTouchSensor = opMode.hardwareMap.get(AnalogInput.class, Config.touchSensor);

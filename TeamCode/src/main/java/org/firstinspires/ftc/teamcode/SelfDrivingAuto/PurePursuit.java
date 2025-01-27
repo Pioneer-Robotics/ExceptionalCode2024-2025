@@ -2,43 +2,60 @@ package org.firstinspires.ftc.teamcode.SelfDrivingAuto;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
-import org.firstinspires.ftc.teamcode.Helpers.Utils;
 
 public class PurePursuit {
     private final PID xPID, yPID, turnPID;
     private double[][] path; // {{x1, y1}, {x2, y2}, ...}
-    private double[][] turnPath; // {{t1, θ1}, {t2, θ2}, ...}
-    private int intersectionIndex;
+    private double[] turnPath; // {θ1, θ2, ...}
+    private int intersectionIndex = 0;
+    private double turnMultiplier = 1;
 
     public PurePursuit(double kP, double kI, double kD) {
         xPID = new PID(kP, kI, kD);
         yPID = new PID(kP, kI, kD);
         turnPID = new PID(Config.turnPID[0], Config.turnPID[1], Config.turnPID[2]);
-        turnPath = new double[][]{{0, 0}, {1, 0}};
     }
 
     public PurePursuit(double kP, double kI, double kD, double initialError) {
         xPID = new PID(kP, kI, kD, initialError);
         yPID = new PID(kP, kI, kD, initialError);
         turnPID = new PID(Config.turnPID[0], Config.turnPID[1], Config.turnPID[2], initialError);
-        turnPath = new double[][]{{0, 0}, {1, 0}};
     }
 
     public void setTargetPath(double[][] path) {
         this.path = path;
+        // Reset turn path to all zeros
+        turnPath = new double[path.length];
+        for (int i = 0; i < path.length; i++) {
+            turnPath[i] = 0;
+        }
+        // Reset turn multiplier
+        this.turnMultiplier = 1;
     }
 
     /**
-     * @param turnPath double[][] - {{t1, θ1}, {t2, θ2}, ...}<br>
-     *                 Linearly interpolates between each set of points<br><br>
-     *                 <b>Example usage:</b><br>
-     *                 <code>setTurnPath(new double[] {{0, 0}, {0.5, 0}, {1, Math.PI/2}})</code><br>
-     *                 at t=0: 0 radians<br>at t=0.5: 0 radians<br>at t=1: π/2 radians<br>
+     * Must be the same length as the path
+     * @param turnPath double[][] - {{t1, θ1}, {t2, θ2}, ...}
      */
     public void setTurnPath(double[][] turnPath) {
-        this.turnPath = turnPath;
+        // {{t1, θ1}, {t2, θ2}, ...} to {θ1, θ2, ...}
+        double[] turnPathArray = new double[turnPath.length];
+        for (int i = 0; i < turnPath.length; i++) {
+            turnPathArray[i] = turnPath[i][1];
+            Bot.dashboardTelemetry.addData("pointy " + i, turnPath[i][1]);
+        }
+        Bot.dashboardTelemetry.update();
+        this.turnPath = turnPathArray;
     }
 
+    /**
+     * Must be the same length as path
+     *
+     * @param turnPath double[] - {θ1, θ2, ...}
+     */
+    public void setTurnPath(double[] turnPath) {
+        this.turnPath = turnPath;
+    }
 
     /**
      * Get the target point on the path based on the current position
@@ -48,7 +65,6 @@ public class PurePursuit {
     public double[] getTargetPoint(double lookAhead, boolean useVirtualRobot) {
         // Get the current position
         double[] pos = Bot.pinpoint.getPosition();
-        intersectionIndex = -1;
 
         if (useVirtualRobot) {
             // Move the virtual robot ahead of the actual robot
@@ -148,16 +164,22 @@ public class PurePursuit {
         return null;
     }
 
-    public boolean reachedTarget(double tolerance) {
+    public boolean reachedTarget(double tolerance, double turnTolerance) {
         double[] pos = Bot.pinpoint.getPosition();
         double[] targetPoint = path[path.length - 1]; // Last point in the path
+        double turnTarget = turnPath[turnPath.length - 1];
         double dx = Math.abs(targetPoint[0] - pos[0]);
         double dy = Math.abs(targetPoint[1] - pos[1]);
-        return Math.sqrt(dx*dx + dy*dy) < tolerance;
+        double dTheta = Math.abs(turnTarget - Bot.pinpoint.getHeading());
+        return (Math.sqrt(dx*dx + dy*dy) < tolerance) && (dTheta < turnTolerance) ;
+    }
+
+    public boolean reachedTarget(double tolerance) {
+        return reachedTarget(tolerance, Config.turnTolerance);
     }
 
     public boolean reachedTarget() {
-        return reachedTarget(Config.driveTolerance);
+        return reachedTarget(Config.driveTolerance, Config.turnTolerance);
     }
 
     public boolean reachedTargetXY(double xTolerance, double yTolerance) {
@@ -180,31 +202,21 @@ public class PurePursuit {
     public void update(double speed, boolean useVirtualRobot) {
         // Get target point
         double[] targetPoint = getTargetPoint(calculateLookAhead(Config.lookAhead), useVirtualRobot);
-        double turnTarget = getTurnTarget();
+        double turnTarget = turnPath == null ? -1 : turnPath[intersectionIndex];
+        Bot.dashboardTelemetry.addData("Turn target", turnTarget);
+        Bot.dashboardTelemetry.update();
         // Get current position and calculate the movement
         double[] pos = Bot.pinpoint.getPosition();
         double moveX = xPID.calculate(pos[0], targetPoint[0]);
         double moveY = yPID.calculate(pos[1], targetPoint[1]);
-        double moveTheta = turnPID.calculate(Bot.pinpoint.getHeading(), turnTarget);
+        double moveTheta = turnPID.calculate(Bot.pinpoint.getHeading(), turnTarget) * turnMultiplier;
         // Move the robot
         Bot.mecanumBase.setNorthMode(true);
         Bot.mecanumBase.move(moveX, moveY, moveTheta, speed);
     }
 
-    private double getTurnTarget() {
-        // Distance along the path [0,1]
-        double t = (double) intersectionIndex / (path.length - 1);
-        // Index into the turn path based on t
-        int turnIndex = -1;
-        for (int i = 0; i < turnPath.length - 1; i++) {
-            if (turnPath[i][0] <= t && t <= turnPath[i + 1][0]) {
-                turnIndex = i;
-                break;
-            }
-        }
-        // Used to interpolate between the two points
-        double t2 = (t - turnPath[turnIndex][0]) / (turnPath[turnIndex + 1][0] - turnPath[turnIndex][0]);
-        return Utils.lerp(turnPath[turnIndex][1], turnPath[turnIndex + 1][1], t2);
+    public void setTurnMultiplier(double turnMultiplier) {
+        this.turnMultiplier = turnMultiplier;
     }
 
     public void update(double speed) {

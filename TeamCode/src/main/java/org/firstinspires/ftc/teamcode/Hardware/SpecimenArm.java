@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Config;
 
 public class SpecimenArm {
     private final DcMotorEx motor;
-    ServoClass claw;
+    public ServoClass claw;
     int position = 0;
 
     public SpecimenArm() {
@@ -53,7 +53,8 @@ public class SpecimenArm {
     }
 
     public void moveToCollect(double speed) {
-        move(speed);
+//        move(speed);
+        move(-speed);
         position = 2;
     }
 
@@ -82,10 +83,6 @@ public class SpecimenArm {
         return motor.getCurrentPosition();
     }
     public boolean reachedPosition() { return Math.abs(motor.getTargetPosition() - motor.getCurrentPosition()) < Config.specimenArmTolerance; }
-
-    public void homeArm() {
-        move(-0.25);
-    }
 
     public DcMotorEx getMotor() {
         return motor;
