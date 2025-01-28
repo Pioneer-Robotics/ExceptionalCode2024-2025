@@ -17,7 +17,9 @@ import org.opencv.core.Point;
 import java.util.List;
 
 import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
-
+//TODO: GET X Y THETA POSITION FOR ALL BLOBS ABOVE CERTAIN SIZE
+//TODO: GET X Y THETA POSITION FOR ALL BLOBS ABOVE CERTAIN SIZE
+//TODO: GET X Y THETA POSITION FOR ALL BLOBS ABOVE CERTAIN SIZE
 public class LocatorClass {
     List<ColorBlobLocatorProcessor.Blob> blobs;
     ColorBlobLocatorProcessor colorLocator;
@@ -84,7 +86,7 @@ public class LocatorClass {
         try{
             return (blobPos);
         } catch (Exception e){
-            return (new double[]{0,0});
+            return (new double[]{-1,-1});
         }
     }
 
@@ -118,7 +120,7 @@ public class LocatorClass {
 //            }
             return(boxPoints);
         } else {
-            return new Point[]{new Point(0,0), new Point(0,0), new Point(0,0), new Point(0,0)};
+            return new Point[]{new Point(-1,-1), new Point(-1,-1), new Point(-1,-1), new Point(-1,-1)};
         }
     }
 
@@ -129,12 +131,11 @@ public class LocatorClass {
      */
     public double getBuiltInAngle(){
         getBlobsList();
-        determineRotDir();
+        rotationDirection();
         try {
             if (sampleDirection == SampleDirection.RIGHT){
                 return (blobs.get(0).getBoxFit().angle);
             } else {
-                //Returns incorrect angle when the sample is rotated to the left
                 //Need to subtract 90 degrees from it
                 return (blobs.get(0).getBoxFit().angle - 90);
             }
@@ -150,7 +151,7 @@ public class LocatorClass {
     public double getSampleTheta(){
         //ORIGIN IS TOP LEFT
         getBoxPoints();
-        determineRotDir();
+        rotationDirection();
         dX = boxPoints[3].x - boxPoints[0].x;
         dY = boxPoints[3].y - boxPoints[0].y;
         //Atan2 has args (y,x), flipped for use case
@@ -162,11 +163,13 @@ public class LocatorClass {
             sampleThetaDeg = AngleUtils.radToDeg(sampleThetaRad);
             if (sampleDirection == SampleDirection.LEFT){
                 return (sampleThetaDeg - 90);
-            } else {
+            } else if (sampleDirection == SampleDirection.RIGHT){
                 return (sampleThetaDeg);
+            }  else {
+                return (-1);
             }
         } catch (Exception e) {
-            return (0);
+            return (-1);
         }
     }
 
@@ -181,23 +184,56 @@ public class LocatorClass {
         return (Math.sqrt((Math.pow((p2.x-p1.x),2))+Math.pow((p2.y-p1.y),2)));
     }
 
-    public void orderPoints(){
-        getBoxPoints();
-        //Used for determining which points make up the short or long sides of a specimen
-        double d1 = pointDistance(boxPoints[0], boxPoints[1]);
-        double d2 = pointDistance(boxPoints[1], boxPoints[2]);
+    /***
+     * Calculates slope between two points
+     * @param p1
+     * @param p2
+     * @return Slope between p1 and p2
+     */
+    public double pointSlope(Point p1, Point p2){
+        return ((p2.y-p1.y)/(p2.x-p1.x));
+    }
 
-        if (Math.max(d1,d2) == d1){
-            //Long side is between points 1 and 2
-        } else if (Math.max(d1,d2) == d2){
-            //Long side is between points 2 and 3
+    /***
+     * Determines whether the sample is rotated left or right
+     * @return Left or Right
+     */
+    public SampleDirection rotationDirection(){
+        //Finds the longer side of the sample
+        getBoxPoints();
+        double side1 = pointDistance(boxPoints[0], boxPoints[1]);
+        double side2 = pointDistance(boxPoints[1], boxPoints[2]);
+        double longSlope = 0;
+        //Gets the slope of the long side
+        //Negative slope = Right
+        //Positive slope = Left
+        if (side1 > side2){
+            longSlope = pointSlope(boxPoints[0], boxPoints[1]);
+        } else if (side2 > side1){
+            longSlope = pointSlope(boxPoints[1], boxPoints[2]);
         }
+
+        if (longSlope > 0){
+            sampleDirection = SampleDirection.LEFT;
+        } else if (longSlope < 0){
+            sampleDirection = SampleDirection.RIGHT;
+        } else {
+            sampleDirection = SampleDirection.BLANK;
+        }
+
+        try {
+            return (sampleDirection);
+        } catch (Exception e){
+            return (SampleDirection.BLANK);
+        }
+
     }
 
     /***
      * Determines whether the sample is rotated to the left or right
      */
-    public SampleDirection determineRotDir(){
+    @Deprecated
+    public SampleDirection determineRotDirBad(){
         //Currently broken
         getBoxPoints();
         //Index for minimum and maximum box points
@@ -206,20 +242,23 @@ public class LocatorClass {
         int pointMaxTempX = -1;
         int pointMinTempX = -1;
 
+        double dOuterX = -1;
+        double dOuterY = -1;
+
         int i = 0;
         //Gets the minimum and maximum Y values
-        minY = Math.min(Math.min(boxPoints[0].y, boxPoints[1].y), Math.min(boxPoints[2].y, boxPoints[3].y));
-        maxY = Math.max(Math.max(boxPoints[0].y,boxPoints[1].y), Math.max(boxPoints[2].y, boxPoints[3].y));
+        //Flipped, minimum Y value is actually highest point, (0,0) is top left
+        maxY = Math.min(Math.min(boxPoints[0].y, boxPoints[1].y), Math.min(boxPoints[2].y, boxPoints[3].y));
+        minY = Math.max(Math.max(boxPoints[0].y,boxPoints[1].y), Math.max(boxPoints[2].y, boxPoints[3].y));
         minX = Math.min(Math.min(boxPoints[0].x, boxPoints[1].x), Math.min(boxPoints[2].x, boxPoints[3].x));
         maxX = Math.max(Math.max(boxPoints[0].x, boxPoints[1].x), Math.max(boxPoints[2].x, boxPoints[3].x));
 
         //Determines the top and bottom points
-        //Flipped, minimum Y value is actually highest point
         for (Point p : boxPoints){
             if(p.y == maxY){
-                pointMinTempY = i;
-            } else if (p.y == minY){
                 pointMaxTempY = i;
+            } else if (p.y == minY){
+                pointMinTempY = i;
             }
             if (p.x == maxX){
                 pointMaxTempX = i;
@@ -234,40 +273,48 @@ public class LocatorClass {
         maxXPoint = boxPoints[pointMaxTempX];
         minXPoint = boxPoints[pointMinTempX];
         //TODO: Check whether X difference of min/max Y points or Y difference of min/max X points is greater, use that to determine
-        //Can use X values of the Y min and max points to determine which way its rotated
-        if (maxYPoint.x > minYPoint.x && maxXPoint.y > minXPoint.y){
-            //Sample is turned right
-            sampleDirection = SampleDirection.RIGHT;
-        } else if (maxYPoint.x < minYPoint.x && maxXPoint.y < minXPoint.y){
-            //Sample is turned left
-            sampleDirection = SampleDirection.LEFT;
+
+        dOuterX = Math.abs(maxXPoint.x - minXPoint.x);
+        dOuterY = Math.abs(maxYPoint.y - minYPoint.y);
+
+        if (dOuterX < dOuterY){
+            //Use Xs to determine
+            //Can use X values of the Y min and max points to determine which way its rotated
+            if (maxXPoint.y > minXPoint.y){
+                //Sample is turned right
+                sampleDirection = SampleDirection.RIGHT;
+            } else if (maxXPoint.y < minXPoint.y){
+                //Sample is turned left
+                sampleDirection = SampleDirection.LEFT;
+            } else {
+                sampleDirection = SampleDirection.BLANK;
+            }
+        } else if (dOuterY < dOuterX){
+            //Use Ys to determine
+            //Can use X values of the Y min and max points to determine which way its rotated
+            if (maxYPoint.x > minYPoint.x){
+                //Sample is turned right
+                sampleDirection = SampleDirection.RIGHT;
+            } else if (maxYPoint.x < minYPoint.x){
+                //Sample is turned left
+                sampleDirection = SampleDirection.LEFT;
+            } else {
+                sampleDirection = SampleDirection.BLANK;
+            }
         } else {
             sampleDirection = SampleDirection.BLANK;
         }
+
+
         try {
             return (sampleDirection);
         } catch (Exception e){
             return (SampleDirection.BLANK);
         }
     }
-
-    public Point getMaxYPoint(){
-        determineRotDir();
-        return (maxYPoint);
-    }
-
-    public Point getMinYPoint(){
-        determineRotDir();
-        return (minYPoint);
-    }
-
-//    public int pointMaxVal(){
-//        return (pointMax);
-//    }
-//
-//    public int pointMinVal(){
-//        return (pointMin);
-//    }
+    //TODO: GET X Y THETA POSITION FOR ALL BLOBS ABOVE CERTAIN SIZE
+    //TODO: GET X Y THETA POSITION FOR ALL BLOBS ABOVE CERTAIN SIZE
+    //TODO: GET X Y THETA POSITION FOR ALL BLOBS ABOVE CERTAIN SIZE
 
 
 
