@@ -4,6 +4,10 @@ import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 
 public class AutoPaths {
+
+   /* -----------------
+           Old Auto
+      ----------------- */
     public static void hangSpecimen(double currentX, double currentY, double offsetX, double offsetY) {
         // Go to the submersible to hang a specimen
         Bot.purePursuit.setTargetPath(new double[][] {{currentX, currentY}, {225, 35}, {Config.specHangX + offsetX, Config.specHangY + offsetY}});
@@ -69,4 +73,54 @@ public class AutoPaths {
 //        double[][] turnPath = SplineCalc.linearPath(new double[]{0, 1}, new double[]{Math.PI / 2, Math.PI / 2}, 25);
 //        Bot.purePursuit.setTurnPath(turnPath);
     }
+
+    /* -----------------
+           New Auto
+      ----------------- */
+
+    public static void hangSpecimenRam(double currentX, double currentY, double offsetX, double offsetY) {
+        double[] pointsX = {currentX, 190, Config.specHangX + offsetX};
+        double[] pointsY = {currentY, 10, Config.specHangY + offsetY};
+        double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
+        Bot.purePursuit.setTargetPath(path);
+    }
+
+    public static void hangInitSpecimenRam(double currentX, double currentY, double offsetX, double offsetY) {
+        double[] pointsX = {currentX, Config.specHangX + offsetX};
+        double[] pointsY = {currentY, Config.specHangY + offsetY};
+        double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
+        Bot.purePursuit.setTargetPath(path);
+    }
+
+    public static void goToPickupPos(double currentX, double currentY, double currentRot, double offsetY) {
+        double[] pointsX = {currentX, 75};
+        double[] pointsY = {currentY, 230 + offsetY};
+        double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
+        Bot.purePursuit.setTargetPath(path);
+        double[][] turnPath = SplineCalc.linearPath(new double[] {0,1}, new double[] {currentRot, Math.PI / 3}, 25);
+        Bot.purePursuit.setTurnPath(turnPath);
+    }
+
+    public static void goToCollect(double currentX, double currentY, double currentRot, boolean fromSubmersible) {
+        double[] pointsX, pointsY;
+        if (fromSubmersible) {
+            pointsX = new double[] {currentX, 270, 280, 285};
+            pointsY = new double[] {currentY, 35, 100, 22.25};
+        } else {
+            pointsX = new double[] {currentX, 285};
+            pointsY = new double[] {currentY, 22.25};
+        }
+        double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
+        double[][] turnPath = SplineCalc.linearPath(new double[] {0,1}, new double[] {currentRot, 0}, 25);
+        Bot.purePursuit.setTargetPath(path);
+        Bot.purePursuit.setTurnPath(turnPath);
+    }
+
+    public static void moveSampleRight(double currentX, double currentY, double currentRot) {
+        double[] pointsX = {currentX, currentX};
+        double[] pointsY = {currentY, currentY};
+        double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 10);
+        double[][] turnPath = SplineCalc.linearPath(new double[] {0,1}, new double[] {currentRot, -Math.PI / 3}, 10);
+    }
+
 }

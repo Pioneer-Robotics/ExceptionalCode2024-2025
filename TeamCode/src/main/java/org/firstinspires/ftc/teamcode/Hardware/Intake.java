@@ -66,7 +66,11 @@ public class Intake {
         misumiWristR.closeServo();
     }
 
+    public double getDrivePos() {
+        return misumiDriveL.getPos();
+    }
+
     public boolean isExtended() {
-        return isExtended;
+        return (Math.abs(getDrivePos() - Config.misumiDriveLOpen) < 0.05);
     }
 }
