@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -10,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
-
+@Disabled
 @TeleOp(name="Touchpad Drive")
 public class TouchpadDrive extends LinearOpMode {
     public void runOpMode() {

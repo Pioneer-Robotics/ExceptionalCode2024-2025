@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -8,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PID;
 
-
+@Disabled
 @TeleOp(name="Touchpad Drive PID")
 public class TouchpadDrivePID extends LinearOpMode {
     public void runOpMode() {

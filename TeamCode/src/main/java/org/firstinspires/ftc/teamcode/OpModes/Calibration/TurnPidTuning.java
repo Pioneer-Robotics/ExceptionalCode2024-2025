@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.OpModes.Calibration;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Helpers.SplineCalc;
 
+@Disabled
 @Autonomous(name="TurnPidTuning", group="Calibration")
 public class TurnPidTuning extends LinearOpMode {
     enum State {

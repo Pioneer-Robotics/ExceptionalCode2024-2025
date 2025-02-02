@@ -54,6 +54,7 @@ public class LocatorClass {
                 .addProcessor(colorLocator)
                 .setCameraResolution(new Size(streamWidth, streamHeight))
                 .setCamera(opMode.hardwareMap.get(WebcamName.class, "Webcam 1"))
+
                 .build();
     }
     //-------
@@ -381,7 +382,6 @@ public class LocatorClass {
         }
         return (infoList);
     }
-
 
     public VisionPortal getCameraStream() {
         return portal;

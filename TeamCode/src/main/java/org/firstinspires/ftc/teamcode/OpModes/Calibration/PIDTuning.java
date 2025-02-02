@@ -3,12 +3,13 @@ package org.firstinspires.ftc.teamcode.OpModes.Calibration;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.Utils;
-
+@Disabled
 @Autonomous(name="PID Tuning", group="Calibration")
 public class PIDTuning extends LinearOpMode {
     // Uses FTC Dashboard to display robot position and target point

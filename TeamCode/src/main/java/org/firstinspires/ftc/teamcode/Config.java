@@ -82,7 +82,7 @@ public class Config {
     // Motor names
     public static final String specimenArmMotor = "specimenMotor";
     public static final String slideMotor1 = "slideMotor1";
-    public static final String slideMotor2 = "slideMotor2";
+    public static final String slideMotor2 = "slideMotor2"; //Correct one
 
     // Servo names
     public static final String clawServo = "clawServo";
@@ -133,7 +133,6 @@ public class Config {
     // Intake Claw
     public static final double intakeYawLeft = 0.05;
     public static final double intakeYawRight = 0.58;
-    public static final double intakeYawMid = 0.85; //Temporary
     public static final double intakeRollUp = 0.43;
     public static final double intakeRollDown = 0.96;
     public static final double intakeClawOpen = 1;

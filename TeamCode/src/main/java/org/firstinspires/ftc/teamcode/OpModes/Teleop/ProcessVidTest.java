@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.opencv.core.Size;
 import org.opencv.videoio.VideoWriter;
 import org.opencv.videoio.VideoCapture;
-
+@Disabled
 @TeleOp
 public class ProcessVidTest extends LinearOpMode {
     VideoCapture videoCapture;
