@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.Helpers;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
 public class Polynomial {
     private final double[] coeffs;
 
     public Polynomial(double[] coeffs) {
         this.coeffs = coeffs;
     }
+
+    // ---- Basic Operations ----
 
     public double eval(double x) {
         return eval(x, coeffs);
@@ -20,6 +20,8 @@ public class Polynomial {
         }
         return value;
     }
+
+    // ---- Calculus ----
 
     public double[] derivative() {
         double[] der = new double[coeffs.length - 1];
@@ -47,7 +49,8 @@ public class Polynomial {
         return (eval(x2, antiDer) - eval(x1, antiDer));
     }
 
-    // Getters
+    // ---- Getters ----
+
     public double[] getCoeffs() {
         return coeffs;
     }

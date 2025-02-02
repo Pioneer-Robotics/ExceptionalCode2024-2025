@@ -4,6 +4,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Bot;
+import org.firstinspires.ftc.teamcode.Config;
 
 public class Pinpoint {
     GoBildaPinpointDriver pinpoint;
@@ -14,6 +15,11 @@ public class Pinpoint {
         pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
         pinpoint.recalibrateIMU();
         pinpoint.setPosition(new Pose2D(DistanceUnit.CM, startX, startY, AngleUnit.RADIANS, 0));
+        pinpoint.update();
+        Bot.opMode.telemetry.addData("StartX", startX);
+        Bot.opMode.telemetry.addData("StartY", startY);
+        Bot.opMode.telemetry.update();
+//        pinpoint.setPosition(new Pose2D(DistanceUnit.CM, Config.specimenStartX, Config.specimenStartY, AngleUnit.RADIANS, 0));
     }
 
     public void update() {
@@ -34,10 +40,12 @@ public class Pinpoint {
     }
 
     public double getX() {
+        update();
         return pinpoint.getPosX() / 10;
     }
 
     public double getY() {
+        update();
         return pinpoint.getPosY() / 10;
     }
 

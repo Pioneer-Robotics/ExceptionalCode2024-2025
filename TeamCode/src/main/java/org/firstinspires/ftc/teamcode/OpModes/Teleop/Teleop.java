@@ -113,9 +113,6 @@ public class Teleop extends LinearOpMode {
             } else if (gamepad2.dpad_down) {
                 Bot.specimenArm.movePrepHang(0.5);
             } else if (gamepad2.dpad_left) {
-                if (gamepad2.touchpad){
-
-                }
                 Bot.specimenArm.moveToCollect(0.5);
             }
 
@@ -123,8 +120,8 @@ public class Teleop extends LinearOpMode {
             if (gamepad2.left_trigger > 0.1 || gamepad2.right_trigger > 0.1) {
                 // Will get cast to an int anyways when incrementing the config
                 int armAdjust = (int) (7.0 * gamepad2.right_trigger - 7.0 * gamepad2.left_trigger);
-                Config.specimenArmPostHang += armAdjust;
-                Config.specimenArmPrepHang += armAdjust;
+//                Config.specimenArmPostHang += armAdjust;
+//                Config.specimenArmPrepHang += armAdjust;
 
                 if (Bot.specimenArm.getPosition() == 2) {
                     Bot.specimenArm.moveToCollect(0.3);
@@ -219,8 +216,9 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("North Mode", northModeToggle.get());
             telemetry.addData("Slide Arm Position", Bot.slideArm.getArmPosition());
             telemetry.addData("Specimen Arm Position", Bot.specimenArm.getPositionTicks());
-            telemetry.addData("specimenArmPostHang", Config.specimenArmPostHang);
-            telemetry.addData("specimenArmPrepHang", Config.specimenArmPrepHang);
+//            telemetry.addData("specimenArmPostHang", Config.specimenArmPostHang);
+//            telemetry.addData("specimenArmPrepHang", Config.specimenArmPrepHang);
+            telemetry.addData("Specimen Endstop", Bot.specimenEndStop.getVoltage());
             telemetry.addData("X", Bot.pinpoint.getX());
             telemetry.addData("Y", Bot.pinpoint.getY());
             telemetry.addData("Heading", Bot.pinpoint.getHeading());

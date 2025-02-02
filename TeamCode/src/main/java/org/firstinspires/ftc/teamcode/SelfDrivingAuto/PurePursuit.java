@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.SelfDrivingAuto;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 
+import java.util.Arrays;
+
 public class PurePursuit {
     private final PID xPID, yPID, turnPID;
     private double[][] path; // {{x1, y1}, {x2, y2}, ...}
@@ -199,6 +201,20 @@ public class PurePursuit {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
+    public double getDistanceX() {
+        double[] pos = Bot.pinpoint.getPosition();
+        double[] targetPoint = path[path.length - 1]; // Last point in the path
+        double dx = Math.abs(targetPoint[0] - pos[0]);
+        return Math.sqrt(dx);
+    }
+
+    public double getDistanceY() {
+        double[] pos = Bot.pinpoint.getPosition();
+        double[] targetPoint = path[path.length - 1]; // Last point in the path
+        double dy = Math.abs(targetPoint[1] - pos[1]);
+        return Math.sqrt(dy);
+    }
+
     public void update(double speed, boolean useVirtualRobot) {
         // Get target point
         double[] targetPoint = getTargetPoint(calculateLookAhead(Config.lookAhead), useVirtualRobot);
@@ -210,6 +226,14 @@ public class PurePursuit {
         double moveX = xPID.calculate(pos[0], targetPoint[0]);
         double moveY = yPID.calculate(pos[1], targetPoint[1]);
         double moveTheta = turnPID.calculate(Bot.pinpoint.getHeading(), turnTarget) * turnMultiplier;
+//        Bot.opMode.telemetry.addData("Path", Arrays.deepToString(path));
+//        Bot.opMode.telemetry.addData("PidX out", moveX);
+//        Bot.opMode.telemetry.addData("PidY out", moveY);
+//        Bot.opMode.telemetry.addData("pos x", pos[0]);
+//        Bot.opMode.telemetry.addData("pos y", pos[1]);
+//        Bot.opMode.telemetry.addData("target x", targetPoint[0]);
+//        Bot.opMode.telemetry.addData("target y", targetPoint[1]);
+
         // Move the robot
         Bot.mecanumBase.setNorthMode(true);
         Bot.mecanumBase.move(moveX, moveY, moveTheta, speed);

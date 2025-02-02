@@ -47,34 +47,11 @@ public class CurrentDetection {
     }
 
     public void checkSpecimenCurrent() {
-        Bot.dashboardTelemetry.addData("Specimen Arm Pos", motor.getCurrentPosition());
-        Bot.dashboardTelemetry.addData("Diff to pos1", Math.abs(Config.specimenArmCollect1 - motor.getCurrentPosition()));
-        Bot.dashboardTelemetry.addData("Diff to pos2", Math.abs(Config.specimenArmCollect2 - motor.getCurrentPosition()));
+//        Bot.dashboardTelemetry.addData("Specimen Arm Pos", motor.getCurrentPosition());
+//        Bot.dashboardTelemetry.addData("Diff to pos1", Math.abs(Config.specimenArmCollect1 - motor.getCurrentPosition()));
+//        Bot.dashboardTelemetry.addData("Diff to pos2", Math.abs(Config.specimenArmCollect2 - motor.getCurrentPosition()));
 
-        Bot.dashboardTelemetry.update();
-        current = motor.getCurrent(CurrentUnit.MILLIAMPS);
-        // Virtual touch sensor
-        if (current > maxCurrent && ((Math.abs(Config.specimenArmCollect1 - motor.getCurrentPosition()) < 300) ||
-                                     (Math.abs(Config.specimenArmCollect2 - motor.getCurrentPosition()) < 300))) {
-            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motor.setPower(0);
-            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        }
-        if (current > 8000) {
-            Bot.opMode.telemetry.addLine("MOTOR REACHED MAX CURRENT");
-            Bot.opMode.gamepad1.rumble(500);
-            Bot.opMode.gamepad2.rumble(500);
-            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motor.setPower(0);
-        }
-    }
-
-    public void checkSpecimenCurrentHome(){
-        Bot.dashboardTelemetry.addData("Specimen Arm Pos", motor.getCurrentPosition());
-        Bot.dashboardTelemetry.addData("Diff to pos1", Math.abs(Config.specimenArmCollect1 - motor.getCurrentPosition()));
-        Bot.dashboardTelemetry.addData("Diff to pos2", Math.abs(Config.specimenArmCollect2 - motor.getCurrentPosition()));
-
-        Bot.dashboardTelemetry.update();
+//        Bot.dashboardTelemetry.update();
         current = motor.getCurrent(CurrentUnit.MILLIAMPS);
         // Virtual touch sensor
         if (current > maxCurrent) {
@@ -123,8 +100,8 @@ public class CurrentDetection {
                 } else {
                     checkCurrent();
                 }
-                Bot.opMode.telemetry.addLine("Checked");
-                Bot.opMode.telemetry.update();
+//                Bot.opMode.telemetry.addLine("Checked");
+//                Bot.opMode.telemetry.update();
                 if(Bot.opMode.isStopRequested()) {
                     stop();
                 }

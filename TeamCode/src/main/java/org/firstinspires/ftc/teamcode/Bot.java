@@ -8,8 +8,6 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
 import org.firstinspires.ftc.teamcode.Hardware.ColorSensor;
-import org.firstinspires.ftc.teamcode.Hardware.CurrentDetection;
-import org.firstinspires.ftc.teamcode.Hardware.DiffyClaw;
 import org.firstinspires.ftc.teamcode.Hardware.Intake;
 import org.firstinspires.ftc.teamcode.Hardware.IntakeClaw;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
@@ -19,7 +17,6 @@ import org.firstinspires.ftc.teamcode.Hardware.SlideArm;
 import org.firstinspires.ftc.teamcode.Hardware.SpecimenArm;
 import org.firstinspires.ftc.teamcode.Hardware.VoltageHandler;
 import org.firstinspires.ftc.teamcode.Helpers.CurrentUtils;
-import org.firstinspires.ftc.teamcode.SelfDrivingAuto.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PIDDrive;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Pinpoint;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PurePursuit;
@@ -43,7 +40,7 @@ public class Bot {
     public static VoltageHandler voltageHandler;
     public static ColorSensor colorSensor;
     public static PurePursuit purePursuit;
-    public static AnalogInput frontTouchSensor;
+    public static AnalogInput specimenEndStop;
     public static Intake intake;
     public static SlideArm slideArm;
     public static Pinpoint pinpoint;
@@ -81,7 +78,7 @@ public class Bot {
 
 
         // Other
-        Bot.frontTouchSensor = opMode.hardwareMap.get(AnalogInput.class, Config.touchSensor);
+        Bot.specimenEndStop = opMode.hardwareMap.get(AnalogInput.class, Config.specimenEndStop);
         Bot.colorSensor = new ColorSensor();
         Bot.voltageHandler = new VoltageHandler();
         Bot.imu = new BotIMU();

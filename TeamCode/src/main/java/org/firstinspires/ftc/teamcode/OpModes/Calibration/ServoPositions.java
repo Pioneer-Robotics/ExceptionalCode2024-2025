@@ -10,16 +10,16 @@ import org.firstinspires.ftc.teamcode.Bot;
 public class ServoPositions extends LinearOpMode {
     public void runOpMode() {
         Bot.init(this);
-        Bot.intakeClaw.rollServo.anyPos(0.5);
+        Bot.specimenArm.specimenWrist.anyPos(0.5);
 
         waitForStart();
 
         while(opModeIsActive()) {
 
-            Bot.intakeClaw.yawServo.anyPos(gamepad1.left_trigger);
+            Bot.specimenArm.specimenWrist.anyPos(gamepad1.left_trigger);
 
 
-            telemetry.addData("Servo Pos", Bot.intakeClaw.yawServo.getPos());
+            telemetry.addData("Servo Pos", Bot.specimenArm.specimenWrist.getPos());
             telemetry.update();
         }
     }

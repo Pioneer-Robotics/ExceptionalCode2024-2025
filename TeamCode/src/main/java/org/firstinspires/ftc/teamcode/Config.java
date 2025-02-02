@@ -100,9 +100,10 @@ public class Config {
     public static final String intakeYawServo = "intakeYawServo";
     public static final String intakeRollServo = "intakeRollServo";
     public static final String intakeClawServo = "intakeClawServo";
+    public static final String specimenWristServo = "specimenWrist";
 
     // Other names
-    public static final String touchSensor = "touch";
+    public static final String specimenEndStop = "specimenEndStop";
     public static final String colorSensor = "colorSensor";
     public static final String led = "led";
     public static final String imu = "expansionIMU";
@@ -112,7 +113,9 @@ public class Config {
        -------------------- */
     // Specimen Arm Claw
     public static final double clawOpen = 0.3;
-    public static final double clawClose = 0.5;
+    public static final double clawClose = 0.55;
+    public static final double specWristCollect = 0;
+    public static final double specWristHang = 0.62;
     // Misumi Drive
     public static final double misumiDriveLOpen = 0.475;
     public static final double misumiDriveLMid = 0.3;
@@ -152,18 +155,21 @@ public class Config {
        -------------------- */
     // Specimen Arm
     public static final double defaultSpecimenArmSpeed = 0.4;
-    public static int specimenArmPostHang = -1250;
-    public static int specimenArmPrepHang = -800;
-//    public static int specimenArmPostHang = 800;
-//    public static int specimenArmPrepHang = 1250;
-//    public static final int specimenArmPrepHangUp = 1000;
-//    public static final int specimenArmPostHangUp = 650;
-    public static final int specimenArmPrepHangUp = -1000;
-    public static final int specimenArmPostHangUp = -650;
-    public static final int specimenArmCollect1 = 2010;
-    public static final int specimenArmCollect2 = 0;
-//    public static final int specimenArmCollect1 = -2010;
-//    public static final int specimenArmCollect2 = -0;
+//    public static int specimenArmPostHang = -1250;
+//    public static int specimenArmPrepHang = -800;
+////    public static int specimenArmPostHang = 800;
+////    public static int specimenArmPrepHang = 1250;
+////    public static final int specimenArmPrepHangUp = 1000;
+////    public static final int specimenArmPostHangUp = 650;
+//    public static final int specimenArmPrepHangUp = -1000;
+//    public static final int specimenArmPostHangUp = -650;
+//    public static final int specimenArmCollect1 = 2010;
+//    public static final int specimenArmCollect2 = 0;
+////    public static final int specimenArmCollect1 = -2010;
+////    public static final int specimenArmCollect2 = -0;
+//    public static final double specimenArmHang = 0;
+    public static final double specimenCollect = 0;
+
     // Linear Slide
     public static final double defaultSlideSpeed = 0.25;
     public static final int minSlideHeight = 15;
