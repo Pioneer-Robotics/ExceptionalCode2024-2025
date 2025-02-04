@@ -27,19 +27,25 @@ public class LocatorClass {
     Point[] boxPoints = new Point[]{new Point(0,0), new Point(0,0), new Point(0,0), new Point(0,0)};
     double[] blobPos;
     double minX, maxX, minY, maxY, boxX, boxY, dX, dY, sampleThetaRad, sampleThetaDeg;
-    int streamWidth = 320;
-    int streamHeight = 240;
+    int streamWidth = 640;
+    int streamHeight = 480;
     TrueAngle trueAngle;
     VisionPortal portal;
+    CameraOrientation cameraOrientation;
     enum SampleDirection{
         LEFT,
         RIGHT,
         BLANK
     }
 
+    public enum CameraOrientation {
+        HORIZONTAL,
+        VERTICAL
+    }
+
     SampleDirection sampleDirection;
 
-    public LocatorClass(ColorRange targetColorRange, LinearOpMode opMode){
+    public LocatorClass(ColorRange targetColorRange, LinearOpMode opMode, CameraOrientation orientation){
         //Creates processor that detects blue color blobs
         colorLocator = new ColorBlobLocatorProcessor.Builder()
                 .setTargetColorRange(targetColorRange)         // use a predefined color match
@@ -55,6 +61,7 @@ public class LocatorClass {
                 .setCameraResolution(new Size(streamWidth, streamHeight))
                 .setCamera(opMode.hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .build();
+        cameraOrientation = orientation;
     }
     //-------
     //All Try/Catches are because the initial frame of the camera stream isn't processed
@@ -198,14 +205,34 @@ public class LocatorClass {
         try{
             //Code for trying to account for PI/2 jump when box is rotated 90 degrees, currently broken
 //            sampleThetaRad = trueAngle.updateAngle(sampleThetaRad, Math.PI/3, Math.PI);
-            sampleThetaDeg = AngleUtils.radToDeg(sampleThetaRad);
-            if (sampleDirection == SampleDirection.LEFT){
-                return (sampleThetaDeg - 90);
-            } else if (sampleDirection == SampleDirection.RIGHT){
-                return (sampleThetaDeg);
-            }  else {
-                return (-1);
+            if (cameraOrientation == CameraOrientation.VERTICAL){
+                sampleThetaDeg = AngleUtils.radToDeg(sampleThetaRad);
+                if (sampleDirection == SampleDirection.LEFT){
+                    return (sampleThetaDeg);
+                } else if (sampleDirection == SampleDirection.RIGHT){
+                    return (sampleThetaDeg - 90);
+                }  else {
+                    return (-1);
+                }
+            } else {
+                sampleThetaDeg = AngleUtils.radToDeg(sampleThetaRad);
+                if (sampleDirection == SampleDirection.LEFT){
+                    return (sampleThetaDeg - 90);
+                } else if (sampleDirection == SampleDirection.RIGHT){
+                    return (sampleThetaDeg);
+                }  else {
+                    return (-1);
+                }
             }
+
+//            sampleThetaDeg = AngleUtils.radToDeg(sampleThetaRad);
+//            if (sampleDirection == SampleDirection.LEFT){
+//                return (sampleThetaDeg - 90);
+//            } else if (sampleDirection == SampleDirection.RIGHT){
+//                return (sampleThetaDeg);
+//            }  else {
+//                return (-1);
+//            }
         } catch (Exception e) {
             return (-1);
         }

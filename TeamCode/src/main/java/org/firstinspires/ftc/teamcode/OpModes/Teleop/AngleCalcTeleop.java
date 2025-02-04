@@ -15,7 +15,7 @@ import org.firstinspires.ftc.vision.opencv.ColorRange;
 @TeleOp(name = "Angle Calc Test")
 public class AngleCalcTeleop extends LinearOpMode {
     public void runOpMode() {
-        LocatorClass blueLocator = new LocatorClass(ColorRange.BLUE, this);
+        LocatorClass blueLocator = new LocatorClass(ColorRange.BLUE, this, LocatorClass.CameraOrientation.VERTICAL);
 
         List<ColorBlobLocatorProcessor.Blob> locatedBlobs;
         ColorBlobLocatorProcessor.Blob largestBlob;
@@ -33,7 +33,7 @@ public class AngleCalcTeleop extends LinearOpMode {
             packet.put("Direction", blueLocator.rotationDirection(largestBlob));
             packet.put("Sample Theta", blueLocator.getSampleTheta(largestBlob));
 //            packet.put("Biggest Blob Info", blueLocator.getBlobInfo(largestBlob));
-            packet.put("Density", blueLocator.percentScreen(largestBlob));
+//            packet.put("Density", blueLocator.percentScreen(largestBlob));
 //            packet.put("All Info", blueLocator.getAllBlobsInfo(locatedBlobs));
 //            packet.put("Built In Theta", blueLocator.getBuiltInAngle(largestBlob));
 //            packet.put("Box Pt 0", blueLocator.getBoxPoints(largestBlob)[0]);

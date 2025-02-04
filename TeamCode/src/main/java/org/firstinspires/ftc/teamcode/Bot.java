@@ -70,6 +70,6 @@ public class Bot {
         Bot.voltageHandler = new VoltageHandler();
         Bot.imu = new BotIMU();
         Bot.led = new LEDController();
-        Bot.blueLocator = new LocatorClass(ColorRange.BLUE, opMode);
+        Bot.blueLocator = new LocatorClass(ColorRange.BLUE, opMode, LocatorClass.CameraOrientation.HORIZONTAL);
     }
 }
