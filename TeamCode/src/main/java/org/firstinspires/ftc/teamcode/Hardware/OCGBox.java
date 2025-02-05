@@ -6,13 +6,13 @@ import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 
 public class OCGBox {
-    public final ServoClass pitchServo, rollServo;
+    public final ServoClass pitchServo; //, rollServo;
     //True is in Up/Transfer position
     public boolean rollState, pitchState;
 
     public OCGBox() {
         this.pitchServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.ocgPitchServo), Config.ocgBoxPitchUp, Config.ocgBoxPitchDown);
-        this.rollServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.ocgRollServo), Config.ocgBoxRollUp, Config.ocgBoxRollDown);
+//        this.rollServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.ocgRollServo), Config.ocgBoxRollUp, Config.ocgBoxRollDown);
         rollState = true;
         pitchState = true;
         ocgRollUp();
@@ -20,16 +20,16 @@ public class OCGBox {
     }
 
     public void goToPitch(double pitch) { pitchServo.anyPos(pitch); }
-    public void goToRoll(double roll) { rollServo.anyPos(roll); }
+//    public void goToRoll(double roll) { rollServo.anyPos(roll); }
 
     public void ocgRollUp(){
-        goToRoll(Config.ocgBoxRollUp);
+//        goToRoll(Config.ocgBoxRollUp);
         rollState = true;
     }
 
     public void ocgRollDown(){
         if (pitchState){
-            goToRoll(Config.ocgBoxRollDown);
+//            goToRoll(Config.ocgBoxRollDown);
         }
         rollState = false;
     }
@@ -62,9 +62,11 @@ public class OCGBox {
         }
     }
 
+    public void idle() {
+        pitchServo.anyPos(Config.ocgBoxIdle);
+    }
+
     // Getters
     public double getPitch() { return pitchServo.getPos(); }
-    public double getRoll() { return rollServo.getPos(); }
-
-
+//    public double getRoll() { return rollServo.getPos(); }
 }

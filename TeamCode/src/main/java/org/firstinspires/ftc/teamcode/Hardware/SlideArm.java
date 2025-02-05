@@ -22,7 +22,7 @@ public class SlideArm {
 
     public void moveToPositionTicks(int ticks, double speed) {
         motor1.setTargetPosition(ticks);
-        motor2.setTargetPosition(-ticks);
+        motor2.setTargetPosition(ticks);
         motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor1.setVelocity(Config.maxSlideTicksPerSecond * speed);
@@ -65,7 +65,7 @@ public class SlideArm {
         motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor1.setVelocity(power * Config.maxSlideTicksPerSecond);
-        motor2.setVelocity(-power * Config.maxSlideTicksPerSecond);
+        motor2.setVelocity(power * Config.maxSlideTicksPerSecond);
     }
 
     // Getters

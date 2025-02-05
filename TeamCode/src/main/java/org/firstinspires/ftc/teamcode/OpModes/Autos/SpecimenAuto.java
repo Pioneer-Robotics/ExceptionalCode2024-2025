@@ -73,7 +73,7 @@ public class SpecimenAuto extends LinearOpMode {
             switch (state) {
 
                 // Set the initial path to hang preloaded specimen
-                // --> SPECIMEN_HANG_UP
+                // --> SPECIMEN_HANG_2
                 case INIT:
                     AutoPaths.hangSpecimenUp(
                             Bot.pinpoint.getX(), // Current X
@@ -82,25 +82,26 @@ public class SpecimenAuto extends LinearOpMode {
                             0 // Offset Y
                     );
                     Bot.specimenArm.movePrepHang(0.6);
-                    state = State.SPECIMEN_HANG_UP;
+                    state = State.SPECIMEN_HANG_2;
                     break;
 
                 // Go to submersible, hang specimen
                 // --> SPECIMEN_HANG_2
-                case SPECIMEN_HANG_UP: // Hang specimen right side up
-                    Bot.purePursuit.update(0.45);
-                    if (Bot.purePursuit.reachedTarget()) { //  || Bot.frontTouchSensor.getVoltage()<.4
-                        Bot.purePursuit.stop();
-                        Bot.specimenArm.movePostHangUp(1.0); // Hang specimen
-                        timer.reset(); // Reset timer for next state
-                        state = State.SPECIMEN_HANG_2;
-                    }
-                    break;
+//                case SPECIMEN_HANG_UP: // Hang specimen right side up
+//                    Bot.purePursuit.update(0.45);
+//                    if (Bot.purePursuit.reachedTarget()) { //  || Bot.frontTouchSensor.getVoltage()<.4
+//                        Bot.purePursuit.stop();
+//                        Bot.specimenArm.movePostHangUp(1.0); // Hang specimen
+//                        timer.reset(); // Reset timer for next state
+//                        state = State.SPECIMEN_HANG_2;
+//                    }
+//                    break;
 
                 // Release specimen at submersible, set next path (3 possibilities)
                 // stop --> PARK; collect --> COLLECT_SPECIMEN_1; else --> PUSH_SAMPLE_1
                 case SPECIMEN_HANG_2:
-                    if (timer.seconds() > 0.3) { // Wait for arm to go down
+                    Bot.purePursuit.update(0.45);
+                    if (Bot.purePursuit.reachedTarget()) {
                         Bot.specimenArm.openClaw();
                         if (hang_number == 0) {
                             // Set path to observation zone to park (PARK)
@@ -201,7 +202,7 @@ public class SpecimenAuto extends LinearOpMode {
 
                 // Wait to grab specimen from fence, set path to hang specimen with an offsetX
                 // from the original
-                // --> SPECIMEN_HANG_DOWN
+                // --> SPECIMEN_HANG_2
                 case COLLECT_SPECIMEN_2:
                     if (timer.seconds() > 0.3) { // Wait to grab the specimen
                         yCollect = Bot.pinpoint.getY();
@@ -213,26 +214,26 @@ public class SpecimenAuto extends LinearOpMode {
                                 0 // Offset Y
                         );
                         Bot.specimenArm.movePrepHang(0.5);
-                        state = State.SPECIMEN_HANG_DOWN;
-                    }
-                    break;
-
-                // Go to submersible and hang specimen
-                // First time: Set collect to true. Second time: Set stop to true.
-                // --> SPECIMEN_HANG_2 (Creates a loop)
-                case SPECIMEN_HANG_DOWN: // Hang specimen upside down
-                    Bot.purePursuit.update(0.525, true);
-                    // TODO: get good tolerance
-                    if (Bot.purePursuit.reachedTarget(1.0)) { // || Bot.frontTouchSensor.getVoltage()<.4
-                        Bot.purePursuit.stop();
-                        Bot.specimenArm.movePostHang(1.0); // Move arm down
-                        timer.reset();
                         hang_number--;
-                        // Waits for arm to go down
-                        // Decides what to do based on stop and collect booleans
                         state = State.SPECIMEN_HANG_2;
                     }
                     break;
+
+//                // Go to submersible and hang specimen
+//                // First time: Set collect to true. Second time: Set stop to true.
+//                // --> SPECIMEN_HANG_2 (Creates a loop)
+//                case SPECIMEN_HANG_DOWN: // Hang specimen upside down
+//                    Bot.purePursuit.update(0.525, true);
+//                    if (Bot.purePursuit.reachedTarget(1.0)) { // || Bot.frontTouchSensor.getVoltage()<.4
+//                        Bot.purePursuit.stop();
+//                        Bot.specimenArm.movePostHang(1.0); // Move arm down
+//                        timer.reset();
+//                        hang_number--;
+//                        // Waits for arm to go down
+//                        // Decides what to do based on stop and collect booleans
+//                        state = State.SPECIMEN_HANG_2;
+//                    }
+//                    break;
 
                 // Wait to reach observation zone to park
                 // End of auto

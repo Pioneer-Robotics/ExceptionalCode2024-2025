@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
-import org.firstinspires.ftc.teamcode.Hardware.ColorSensor;
+//import org.firstinspires.ftc.teamcode.Hardware.ColorSensor;
 import org.firstinspires.ftc.teamcode.Hardware.Intake;
 import org.firstinspires.ftc.teamcode.Hardware.IntakeClaw;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
@@ -38,7 +38,7 @@ public class Bot {
     public static SparkfunOTOS optical_odom;
     public static TwoWheelOdometry deadwheel_odom;
     public static VoltageHandler voltageHandler;
-    public static ColorSensor colorSensor;
+//    public static ColorSensor colorSensor;
     public static PurePursuit purePursuit;
     public static AnalogInput specimenEndStop;
     public static Intake intake;
@@ -79,7 +79,7 @@ public class Bot {
 
         // Other
         Bot.specimenEndStop = opMode.hardwareMap.get(AnalogInput.class, Config.specimenEndStop);
-        Bot.colorSensor = new ColorSensor();
+//        Bot.colorSensor = new ColorSensor();
         Bot.voltageHandler = new VoltageHandler();
         Bot.imu = new BotIMU();
         Bot.led = new LEDController();

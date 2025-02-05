@@ -14,13 +14,14 @@ public class Intake {
     boolean isExtended;
 
     public Intake() {
-        misumiDriveL = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiDriveL), Config.misumiDriveLOpen, Config.misumiDriveLClose);
-//        misumiDriveR = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiDriveR), Config.misumiDriveROpen, Config.misumiDriveRClose);
+//        misumiDriveL = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiDriveL), Config.misumiDriveLOpen, Config.misumiDriveLClose);
+        misumiDriveR = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiDriveR), Config.misumiDriveROpen, Config.misumiDriveRClose);
 
         misumiWristL = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiWristL), Config.misumiWristLDown, Config.misumiWristLUp);
         misumiWristR = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiWristR), Config.misumiWristRDown, Config.misumiWristRUp);
 
-        retractMisumiDrive();
+//        retractMisumiDrive();
+        misumiDriveR.anyPos(Config.misumiDriveRInit);
         misumiWristUp();
 //        midMisumiWrist();
         isExtended = false;
@@ -28,20 +29,20 @@ public class Intake {
 
     // Misumi Servos
     public void extendMisumiDrive() {
-        misumiDriveL.openServo();
-//        misumiDriveR.openServo();
+//        misumiDriveL.openServo();
+        misumiDriveR.openServo();
         isExtended = true;
     }
 
     public void retractMisumiDrive() {
-        misumiDriveL.closeServo();
-//        misumiDriveR.closeServo();
+//        misumiDriveL.closeServo();
+        misumiDriveR.closeServo();
         isExtended = false;
     }
 
     public void midMisumiDrive() {
-        misumiDriveL.anyPos(Config.misumiDriveLMid);
-//        misumiDriveR.anyPos(Config.misumiDriveRMid);
+//        misumiDriveL.anyPos(Config.misumiDriveLMid);
+        misumiDriveR.anyPos(Config.misumiDriveRMid);
         isExtended = false;
     }
 
@@ -67,10 +68,10 @@ public class Intake {
     }
 
     public double getDrivePos() {
-        return misumiDriveL.getPos();
+        return misumiDriveR.getPos();
     }
 
     public boolean isExtended() {
-        return (Math.abs(getDrivePos() - Config.misumiDriveLOpen) < 0.05);
+        return (Math.abs(getDrivePos() - Config.misumiDriveROpen) < 0.05);
     }
 }

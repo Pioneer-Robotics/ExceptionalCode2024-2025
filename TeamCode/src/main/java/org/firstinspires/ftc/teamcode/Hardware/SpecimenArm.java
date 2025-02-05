@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Hardware;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
@@ -60,7 +61,8 @@ public class SpecimenArm {
 
     public void moveToCollect(double speed) {
 //        move(speed);
-        move(-speed);
+//        move(-speed);
+        moveToPos(Config.specimenCollect, speed);
         wristCollect();
         position = 2;
     }
@@ -95,18 +97,21 @@ public class SpecimenArm {
 
     public void startEndStopThread() {
         Timer timer = new Timer();
+        ElapsedTime elapsedTime = new ElapsedTime();
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                if (Bot.specimenEndStop.getVoltage() < 0.55 || !Bot.opMode.opModeIsActive()) {
-                    motor.setPower(0);
-                    timer.cancel();
-                }
-                if (Bot.specimenArm.getPositionTicks() > 500) {
+                if (elapsedTime.seconds() > 0.25) {
                     wristHang();
+                }
+                if (Bot.specimenEndStop.getVoltage() < 0.5 || !Bot.opMode.opModeIsActive()) {
+                    motor.setPower(0);
+                    motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    timer.cancel();
                 }
             }
         };
-        timer.schedule(task, 0, 25);
+        elapsedTime.reset();
+        timer.schedule(task, 0, 10);
     }
 }
