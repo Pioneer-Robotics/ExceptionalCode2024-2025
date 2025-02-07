@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -12,6 +14,16 @@ import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
 @TeleOp(name="Teleop")
 public class Teleop extends LinearOpMode {
+
+    public enum TransferState {
+        NONE,
+        OCG_UP,
+        WRIST_UP,
+        DROP,
+        OCG_IDLE,
+        WRIST_DOWN
+    }
+
     public void runOpMode() {
         Bot.init(this);
 
@@ -33,9 +45,14 @@ public class Teleop extends LinearOpMode {
         ElapsedTime timer = new ElapsedTime();
         double prevMilliseconds = 0;
 
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        TransferState transferState = TransferState.NONE;
+
         waitForStart();
 
         while(opModeIsActive()) {
+            TelemetryPacket packet = new TelemetryPacket();
+
             /* ------------------
                -    GamePad 1   -
                ------------------ */
@@ -122,6 +139,42 @@ public class Teleop extends LinearOpMode {
                 Bot.specimenArm.moveToCollect(0.4);
             }
 
+            // Transfer entry point and interrupt
+            if (gamepad2.dpad_right) {
+                transferState = TransferState.OCG_UP;
+            }
+            if (gamepad2.touchpad) {
+                transferState = TransferState.NONE;
+            }
+
+            // Handles a full transfer without spawning a thread or interrupting opMode
+            // Waits for each action to be done before moving on to the next state
+            switch (transferState) {
+                case NONE:
+                    break;
+                case OCG_UP:
+                    Bot.ocgBox.ocgPitchUp();
+                    if (Bot.ocgBox.isPitchUp()) { transferState = TransferState.WRIST_UP; }
+                    break;
+                case WRIST_UP:
+                    Bot.intake.misumiWristUp();
+                    if (Bot.intake.isWristUp()) { transferState = TransferState.DROP; }
+                    break;
+                case DROP:
+                    Bot.intakeClaw.openClaw();
+                    if (Bot.intakeClaw.isClawOpen()) { transferState = TransferState.OCG_IDLE; }
+                    break;
+                case OCG_IDLE:
+                    Bot.ocgBox.idle();
+                    if (Bot.ocgBox.isIdle()) { transferState = TransferState.WRIST_DOWN; }
+                    break;
+                case WRIST_DOWN:
+                    // As there is nothing after, the state is immediately set to NONE
+                    Bot.intake.misumiWristDown();
+                    transferState = TransferState.NONE;
+            }
+
+
             // Reset arm
             if (gamepad2.left_trigger > 0.1 || gamepad2.right_trigger > 0.1) {
                 // Will get cast to an int anyways when incrementing the config
@@ -182,9 +235,9 @@ public class Teleop extends LinearOpMode {
 
             // Manual slide arm controls
             if (gamepad2.right_stick_y > 0.5) {
-                Bot.slideArm.move(-(gamepad2.right_stick_y - 0.5));
+                Bot.slideArm.move(gamepad2.right_stick_y - 0.5);
             } else if (gamepad2.right_stick_y < -0.5){
-                Bot.slideArm.move(-(gamepad2.right_stick_y + 0.5));
+                Bot.slideArm.move(gamepad2.right_stick_y + 0.5);
             } else if(Math.abs(gamepad2.right_stick_x)>0.5) {
                 Bot.slideArm.motorOff();
             }
@@ -222,7 +275,8 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("Thread Current Slide 2", Bot.currentThreads.getSlideCurrent2());
             telemetry.addData("Thread Current Spec", Bot.currentThreads.getSpecArmCurrent());
             telemetry.addData("North Mode", northModeToggle.get());
-            telemetry.addData("Slide Arm Position", Bot.slideArm.getArmPosition());
+            telemetry.addData("Slide Arm 1 Position", Bot.slideArm.getMotor1().getCurrentPosition());
+            telemetry.addData("Slide Arm 2 Position", Bot.slideArm.getMotor2().getCurrentPosition());
             telemetry.addData("Specimen Arm Position", Bot.specimenArm.getPositionTicks());
 //            telemetry.addData("specimenArmPostHang", Config.specimenArmPostHang);
 //            telemetry.addData("specimenArmPrepHang", Config.specimenArmPrepHang);
@@ -233,6 +287,10 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("Speed", maxSpeed);
             telemetry.addData("Voltage", voltage);
             telemetry.update();
+
+            packet.put("Slide 1 Velocity", Bot.slideArm.getMotor1().getVelocity());
+            packet.put("Slide 2 Velocity", Bot.slideArm.getMotor2().getVelocity());
+
             prevMilliseconds = timer.milliseconds();
         }
         Bot.currentThreads.stopThreads();

@@ -74,4 +74,9 @@ public class Intake {
     public boolean isExtended() {
         return (Math.abs(getDrivePos() - Config.misumiDriveROpen) < 0.05);
     }
+
+    public boolean isWristUp() {
+        return ((Math.abs(misumiWristL.getPos() - Config.misumiWristLUp) > 0.1) &&
+                (Math.abs(misumiWristR.getPos() - Config.misumiWristRUp) > 0.1));
+    }
 }

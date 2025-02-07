@@ -68,5 +68,9 @@ public class OCGBox {
 
     // Getters
     public double getPitch() { return pitchServo.getPos(); }
+
+    public boolean isPitchUp() { return (Math.abs(getPitch() - Config.ocgBoxPitchUp) < 0.1); }
+    public boolean isIdle() { return (Math.abs(getPitch() - Config.ocgBoxIdle) < 0.1); }
+
 //    public double getRoll() { return rollServo.getPos(); }
 }

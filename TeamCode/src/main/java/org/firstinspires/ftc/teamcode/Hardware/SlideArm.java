@@ -12,6 +12,9 @@ public class SlideArm {
     public SlideArm() {
         motor1 = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.slideMotor1);
         motor2 = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.slideMotor2);
+
+        //Motor 1 is non OCG box arm
+        //Motor 2 is OCG box arm
         motor1.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         motor2.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         motor1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -65,7 +68,7 @@ public class SlideArm {
         motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor1.setVelocity(power * Config.maxSlideTicksPerSecond);
-        motor2.setVelocity(-power * Config.maxSlideTicksPerSecond);
+        motor2.setVelocity(power * Config.maxSlideTicksPerSecond);
     }
 
     // Getters
