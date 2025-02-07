@@ -112,10 +112,10 @@ public class Config {
        - Servo Positions  -
        -------------------- */
     // Specimen Arm Claw
-    public static final double clawOpen = 0.4;
-    public static final double clawClose = 0.6;
-    public static final double specWristCollect = 0.165;
-    public static final double specWristHang = 0.82;
+    public static final double clawOpen = 0.125;
+    public static final double clawClose = 0.3;
+    public static final double specWristCollect = 0;
+    public static final double specWristHang = 0.65;
     // Misumi Drive
     public static final double misumiDriveLOpen = 0.475;
     public static final double misumiDriveLMid = 0.3;
@@ -160,6 +160,7 @@ public class Config {
     // Specimen Arm
     public static final double defaultSpecimenArmSpeed = 0.4;
     public static final int specimenCollect = -1300;
+    public static int specimenPrepHang = 1550;
 
     // Linear Slide
     public static final double defaultSlideSpeed = 0.25;

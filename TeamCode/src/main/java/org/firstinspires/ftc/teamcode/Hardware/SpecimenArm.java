@@ -49,8 +49,10 @@ public class SpecimenArm {
     // Preset movements
     //Ram hang position
     public void movePrepHang(double speed) {
-        move(speed);
-        startEndStopThread();
+//        move(speed);
+//        startEndStopThread();
+        moveToPos(Config.specimenPrepHang,0.4);
+        wristHang();
         position = 0;
     }
 

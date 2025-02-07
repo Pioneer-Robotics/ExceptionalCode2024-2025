@@ -126,8 +126,8 @@ public class Teleop extends LinearOpMode {
             if (gamepad2.left_trigger > 0.1 || gamepad2.right_trigger > 0.1) {
                 // Will get cast to an int anyways when incrementing the config
                 int armAdjust = (int) (7.0 * gamepad2.right_trigger - 7.0 * gamepad2.left_trigger);
-//                Config.specimenArmPostHang += armAdjust;
-//                Config.specimenArmPrepHang += armAdjust;
+                Config.specimenPrepHang += armAdjust;
+                Config.specimenPrepHang += armAdjust;
 
                 if (Bot.specimenArm.getPosition() == 2) {
                     Bot.specimenArm.moveToCollect(0.5);
