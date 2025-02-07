@@ -29,7 +29,7 @@ public class Config {
     public static final double offsetOdoCenter = 635;
 
     // PID constants
-    public static double[] drivePID = {0.08, 0.0001, 0.25}; // kP, kI, kD
+    public static double[] drivePID = {0.08, 0.0001, 0.175}; // kP, kI, kD
     public static double[] turnPID = {2.5, 0.00001, 0.1}; // kP, kI, kD
     public static double driveSpeed = 0.4;
 
@@ -175,10 +175,10 @@ public class Config {
        ------------------------- */
 
     // Specimen hang offset (space between hangs)
-    public static final double hangOffset = 6.5;
+    public static final double hangOffset = 5;
 
     // Coordinates of default specimen hang
-    public static final double specHangX = 195;
+    public static final double specHangX = 185;
     public static final double specHangY = 96.5;
 
     // Coordinates of observation zone park
