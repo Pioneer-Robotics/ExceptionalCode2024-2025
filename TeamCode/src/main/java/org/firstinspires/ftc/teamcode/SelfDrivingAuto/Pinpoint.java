@@ -10,7 +10,7 @@ public class Pinpoint {
     GoBildaPinpointDriver pinpoint;
     public Pinpoint(double startX, double startY) {
         pinpoint = Bot.opMode.hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
-        pinpoint.setOffsets(43,-134);
+        pinpoint.setOffsets(0,-134);
         pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
         pinpoint.recalibrateIMU();

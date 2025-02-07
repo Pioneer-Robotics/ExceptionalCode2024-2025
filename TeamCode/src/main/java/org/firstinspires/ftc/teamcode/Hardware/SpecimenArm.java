@@ -61,8 +61,8 @@ public class SpecimenArm {
 
     public void moveToCollect(double speed) {
 //        move(speed);
-//        move(-speed);
-        moveToPos(Config.specimenCollect, speed);
+        move(-speed);
+//        moveToPos(Config.specimenCollect, speed);
         wristCollect();
         position = 2;
     }
@@ -101,7 +101,7 @@ public class SpecimenArm {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                if (elapsedTime.seconds() > 0.25) {
+                if (elapsedTime.seconds() > 0.5) {
                     wristHang();
                 }
                 if (Bot.specimenEndStop.getVoltage() < 0.5 || !Bot.opMode.opModeIsActive()) {

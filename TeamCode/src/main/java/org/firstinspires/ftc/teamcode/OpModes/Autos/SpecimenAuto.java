@@ -11,6 +11,8 @@ import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 // 1+2 No Wrist Servo
 @Autonomous(name="Specimen Auto", group="Autos")
@@ -81,7 +83,15 @@ public class SpecimenAuto extends LinearOpMode {
                             offsetX, // Hang offsetX X
                             0 // Offset Y
                     );
-                    Bot.specimenArm.movePrepHang(0.6);
+                    Timer armSchedule = new Timer();
+                    TimerTask armTask = new TimerTask() {
+                        @Override
+                        public void run() {
+                            Bot.specimenArm.movePrepHang(1);
+
+                        }
+                    };
+                    armSchedule.schedule(armTask, 350);
                     state = State.SPECIMEN_HANG_2;
                     break;
 
@@ -100,7 +110,11 @@ public class SpecimenAuto extends LinearOpMode {
                 // Release specimen at submersible, set next path (3 possibilities)
                 // stop --> PARK; collect --> COLLECT_SPECIMEN_1; else --> PUSH_SAMPLE_1
                 case SPECIMEN_HANG_2:
-                    Bot.purePursuit.update(0.45);
+                    if (hang_number == initial_hang_number) {
+                        Bot.purePursuit.update(0.3);
+                    } else {
+                        Bot.purePursuit.update(0.45);
+                    }
                     if (Bot.purePursuit.reachedTarget()) {
                         Bot.specimenArm.openClaw();
                         if (hang_number == 0) {
@@ -109,7 +123,15 @@ public class SpecimenAuto extends LinearOpMode {
                                     Bot.pinpoint.getX(), // Current X
                                     Bot.pinpoint.getY() // Current Y
                             );
-                            Bot.specimenArm.moveToIdle();
+                            armSchedule = new Timer();
+                            armTask = new TimerTask() {
+                                @Override
+                                public void run() {
+                                    Bot.specimenArm.moveToIdle();
+
+                                }
+                            };
+                            armSchedule.schedule(armTask, 500);
                             state = State.PARK;
                             break;
                         } else if (hang_number < initial_hang_number) {
@@ -119,7 +141,15 @@ public class SpecimenAuto extends LinearOpMode {
                                     Bot.pinpoint.getY(), // Current Y
                                     true // Coming from the submersible
                             );
-                            Bot.specimenArm.moveToCollect(0.4);
+                            armSchedule = new Timer();
+                            armTask = new TimerTask() {
+                                @Override
+                                public void run() {
+                                    Bot.specimenArm.moveToCollect(0.4);
+
+                                }
+                            };
+                            armSchedule.schedule(armTask, 500);
                             state = State.COLLECT_SPECIMEN_1;
                             break;
                         } else {
@@ -129,7 +159,15 @@ public class SpecimenAuto extends LinearOpMode {
                                     Bot.pinpoint.getY() // Current Y
                             );
                             timer.reset();
-                            Bot.specimenArm.moveToCollect(0.4);
+                            armSchedule = new Timer();
+                            armTask = new TimerTask() {
+                                @Override
+                                public void run() {
+                                    Bot.specimenArm.moveToCollect(0.4);
+
+                                }
+                            };
+                            armSchedule.schedule(armTask, 500);
                             state = State.PUSH_SAMPLE_1;
                         }
                     }

@@ -31,10 +31,10 @@ public class AutoPaths {
         double[] pointsX, pointsY;
         if (fromSubmersible) {
             pointsX = new double[]{currentX, 270, 280, 285};
-            pointsY = new double[]{currentY, 35, 100, 22.25};
+            pointsY = new double[]{currentY, 35, 100, 23};
         } else {
             pointsX = new double[]{currentX, 250, 285};
-            pointsY = new double[]{currentY, 100, 22.25};
+            pointsY = new double[]{currentY, 100, 23};
         }
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
@@ -55,7 +55,7 @@ public class AutoPaths {
     public static void pushSample2(double currentX, double currentY) {
         // Push the second (middle) sample into the observation zone
         // Should start at the observation zone area
-        double[] pointsX = {currentX, 280, 305, 325, 305};
+        double[] pointsX = {currentX, 280, 305, 315, 305};
         double[] pointsY = {currentY, 135, 165, 170, 60};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
@@ -66,7 +66,7 @@ public class AutoPaths {
     public static void pushSample3(double currentX, double currentY) {
         // Push the third (right) sample into the observation zone
         // Should start at the observation zone area
-        double[] pointsX = {currentX, 300, 330, 350, 325};
+        double[] pointsX = {currentX, 300, 320, 335, 320};
         double[] pointsY = {currentY, 135, 170, 175, 55};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);

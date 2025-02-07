@@ -179,7 +179,7 @@ public class Config {
 
     // Coordinates of default specimen hang
     public static final double specHangX = 195;
-    public static final double specHangY = 94.95;
+    public static final double specHangY = 96.5;
 
     // Coordinates of observation zone park
     public static final double parkX = 300;
