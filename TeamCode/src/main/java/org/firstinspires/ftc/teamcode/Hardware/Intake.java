@@ -76,7 +76,12 @@ public class Intake {
     }
 
     public boolean isWristUp() {
-        return ((Math.abs(misumiWristL.getPos() - Config.misumiWristLUp) > 0.1) &&
-                (Math.abs(misumiWristR.getPos() - Config.misumiWristRUp) > 0.1));
+        return ((Math.abs(misumiWristL.getPos() - Config.misumiWristLUp) < 0.1) &&
+                (Math.abs(misumiWristR.getPos() - Config.misumiWristRUp) < 0.1));
+    }
+
+    public boolean isWristMid() {
+        return ((Math.abs(misumiWristL.getPos() - Config.misumiWristLMid) < 0.1) &&
+                (Math.abs(misumiWristR.getPos() - Config.misumiWristRMid) < 0.1));
     }
 }

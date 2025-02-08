@@ -16,7 +16,7 @@ public class OCGBox {
         rollState = true;
         pitchState = true;
         ocgRollUp();
-        ocgPitchUp();
+        idle();
     }
 
     public void goToPitch(double pitch) { pitchServo.anyPos(pitch); }
@@ -61,7 +61,6 @@ public class OCGBox {
             ocgPitchUp();
         }
     }
-
     public void idle() {
         pitchServo.anyPos(Config.ocgBoxIdle);
     }

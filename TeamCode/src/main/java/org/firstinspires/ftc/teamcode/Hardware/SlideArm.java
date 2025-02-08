@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
@@ -17,6 +18,8 @@ public class SlideArm {
         //Motor 2 is OCG box arm
         motor1.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         motor2.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        motor1.setDirection(DcMotorSimple.Direction.REVERSE);
+        motor2.setDirection(DcMotorSimple.Direction.REVERSE);
         motor1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         motor2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -29,7 +32,7 @@ public class SlideArm {
         motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor1.setVelocity(-Config.maxSlideTicksPerSecond * speed);
-        motor2.setVelocity(Config.maxSlideTicksPerSecond * speed);
+        motor2.setVelocity(-Config.maxSlideTicksPerSecond * speed);
     }
 
     public void moveToPositionTicks(int ticks) {
@@ -39,6 +42,7 @@ public class SlideArm {
     public void moveDown(double speed) {
         moveToPositionTicks(Config.slideDown, speed);
         if (getArmPosition() < (Config.slideDown + 50.0)) { motorOff(); }
+        //TODO: Need to update arm position method
     }
 
     public void moveMid(double speed) {
@@ -67,8 +71,8 @@ public class SlideArm {
         if (!motor1.isMotorEnabled() || !motor2.isMotorEnabled()) { motorOn(); }
         motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor1.setVelocity(power * Config.maxSlideTicksPerSecond);
-        motor2.setVelocity(power * Config.maxSlideTicksPerSecond);
+        motor1.setVelocity(-power * Config.maxSlideTicksPerSecond);
+        motor2.setVelocity(-power * Config.maxSlideTicksPerSecond);
     }
 
     // Getters

@@ -122,7 +122,7 @@ public class Config {
     public static final double misumiDriveLClose = 0.2;
         public static double misumiDriveROpen = 0.64;
     public static double misumiDriveRMid = 0.4;
-    public static double misumiDriveRClose = 0.86;
+    public static double misumiDriveRClose = 0.84;
     public static double misumiDriveRInit = 0.88;
     // Misumi Wrist
     public static final double misumiWristLDown = 0.66;
@@ -152,7 +152,7 @@ public class Config {
     // Used
     public static final double ocgBoxPitchUp = 0.87;
     public static final double ocgBoxPitchDown = 0.23;
-    public static final double ocgBoxIdle = 0.93;
+    public static final double ocgBoxIdle = 0.97;
 
     /* --------------------
        - Motor Positions  -

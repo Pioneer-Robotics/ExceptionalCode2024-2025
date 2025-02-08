@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -24,6 +23,12 @@ public class Teleop extends LinearOpMode {
         WRIST_DOWN
     }
 
+    public enum IntakeState {
+        NONE,
+        MID_WRIST,
+        EXTEND
+    }
+
     public void runOpMode() {
         Bot.init(this);
 
@@ -43,15 +48,16 @@ public class Teleop extends LinearOpMode {
         double maxSpeed = 0.5;
 
         ElapsedTime timer = new ElapsedTime();
+        ElapsedTime transferTimer = new ElapsedTime();
         double prevMilliseconds = 0;
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
         TransferState transferState = TransferState.NONE;
+        IntakeState intakeState = IntakeState.NONE;
 
         waitForStart();
 
         while(opModeIsActive()) {
-            TelemetryPacket packet = new TelemetryPacket();
 
             /* ------------------
                -    GamePad 1   -
@@ -84,9 +90,10 @@ public class Teleop extends LinearOpMode {
             }
 
            if (gamepad1.dpad_up) {
-               Bot.intake.midMisumiWrist();
-               Bot.intake.extendMisumiDrive();
-               Bot.intakeClaw.clawDown();
+               intakeState = IntakeState.MID_WRIST;
+//               Bot.intake.midMisumiWrist();
+//               if (Bot.intake.isWristMid()) { Bot.intake.extendMisumiDrive(); }
+//               Bot.intakeClaw.clawDown();
 //               Bot.intake.openIntakeWrist();
                intakeWristToggle.set(true);
            } else if (gamepad1.dpad_down) {
@@ -95,6 +102,20 @@ public class Teleop extends LinearOpMode {
                Bot.intake.retractMisumiDrive();
                Bot.intakeClaw.clawUp();
                intakeWristToggle.set(false);
+           }
+
+           switch(intakeState) {
+               case NONE:
+                   break;
+               case MID_WRIST:
+                   Bot.intake.midMisumiWrist();
+                   if (Bot.intake.isWristMid()) { intakeState = IntakeState.EXTEND; }
+                   break;
+               case EXTEND:
+                   Bot.intake.extendMisumiDrive();
+                   Bot.intakeClaw.clawDown();
+                   intakeState = IntakeState.NONE;
+                   break;
            }
 
             intakeClawToggle.toggle(gamepad1.b);
@@ -126,6 +147,52 @@ public class Teleop extends LinearOpMode {
                 }
             }
 
+            // Transfer entry point and interrupt
+            if (gamepad1.dpad_right) {
+                transferState = TransferState.WRIST_UP;
+            }
+            if (gamepad1.touchpad) {
+                transferState = TransferState.NONE;
+            }
+
+            // Handles a full transfer without spawning a thread or interrupting opMode
+            // Waits for each action to be done before moving on to the next state
+            switch (transferState) {
+                case NONE:
+                    break;
+                case WRIST_UP:
+                    Bot.intake.misumiWristUp();
+                    if (Bot.intake.isWristUp()) { transferState = TransferState.OCG_UP; }
+                    break;
+                case OCG_UP:
+                    Bot.ocgBox.ocgPitchUp();
+                    if (Bot.ocgBox.isPitchUp()) {
+                        transferTimer.reset();
+                        transferState = TransferState.DROP;
+                    }
+                    break;
+                case DROP:
+                    if (transferTimer.milliseconds() > 500) {
+                        Bot.intakeClaw.openClaw();
+                    }
+                    if (Bot.intakeClaw.isClawOpen()) {
+                        transferTimer.reset();
+                        transferState = TransferState.OCG_IDLE;
+                    }
+                    break;
+                case OCG_IDLE:
+                    if (transferTimer.milliseconds() > 3000) {
+                        Bot.ocgBox.idle();
+                    }
+                    if (Bot.ocgBox.isIdle()) { transferState = TransferState.WRIST_DOWN; }
+                    break;
+                case WRIST_DOWN:
+                    // As there is nothing after, the state is immediately set to NONE
+                    Bot.intake.misumiWristDown();
+                    Bot.intakeClaw.closeClaw();
+                    transferState = TransferState.NONE;
+            }
+
             /* ------------------
                -    GamePad 2   -
                ------------------ */
@@ -138,42 +205,6 @@ public class Teleop extends LinearOpMode {
             } else if (gamepad2.dpad_left) {
                 Bot.specimenArm.moveToCollect(0.4);
             }
-
-            // Transfer entry point and interrupt
-            if (gamepad2.dpad_right) {
-                transferState = TransferState.OCG_UP;
-            }
-            if (gamepad2.touchpad) {
-                transferState = TransferState.NONE;
-            }
-
-            // Handles a full transfer without spawning a thread or interrupting opMode
-            // Waits for each action to be done before moving on to the next state
-            switch (transferState) {
-                case NONE:
-                    break;
-                case OCG_UP:
-                    Bot.ocgBox.ocgPitchUp();
-                    if (Bot.ocgBox.isPitchUp()) { transferState = TransferState.WRIST_UP; }
-                    break;
-                case WRIST_UP:
-                    Bot.intake.misumiWristUp();
-                    if (Bot.intake.isWristUp()) { transferState = TransferState.DROP; }
-                    break;
-                case DROP:
-                    Bot.intakeClaw.openClaw();
-                    if (Bot.intakeClaw.isClawOpen()) { transferState = TransferState.OCG_IDLE; }
-                    break;
-                case OCG_IDLE:
-                    Bot.ocgBox.idle();
-                    if (Bot.ocgBox.isIdle()) { transferState = TransferState.WRIST_DOWN; }
-                    break;
-                case WRIST_DOWN:
-                    // As there is nothing after, the state is immediately set to NONE
-                    Bot.intake.misumiWristDown();
-                    transferState = TransferState.NONE;
-            }
-
 
             // Reset arm
             if (gamepad2.left_trigger > 0.1 || gamepad2.right_trigger > 0.1) {
@@ -235,11 +266,13 @@ public class Teleop extends LinearOpMode {
 
             // Manual slide arm controls
             if (gamepad2.right_stick_y > 0.5) {
-                Bot.slideArm.move(gamepad2.right_stick_y - 0.5);
+                Bot.slideArm.move(0.1);
+//                Bot.slideArm.move(gamepad2.right_stick_y*0.3);
             } else if (gamepad2.right_stick_y < -0.5){
-                Bot.slideArm.move(gamepad2.right_stick_y + 0.5);
+                Bot.slideArm.move(gamepad2.right_stick_y*0.3);
             } else if(Math.abs(gamepad2.right_stick_x)>0.5) {
                 Bot.slideArm.motorOff();
+                Bot.ocgBox.idle();
             }
 
             // Box state
@@ -268,6 +301,7 @@ public class Teleop extends LinearOpMode {
 
             // Telemetry and update
             Bot.pinpoint.update();
+            telemetry.addData("TransferState", transferState);
             telemetry.addData("Total Current", Bot.currentThreads.getTotalCurrent());
             telemetry.addData("dt", timer.milliseconds() - prevMilliseconds);
             telemetry.addData("Refresh Rate (Hz)", 1000 / (timer.milliseconds() - prevMilliseconds));
@@ -288,8 +322,9 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("Voltage", voltage);
             telemetry.update();
 
-            packet.put("Slide 1 Velocity", Bot.slideArm.getMotor1().getVelocity());
-            packet.put("Slide 2 Velocity", Bot.slideArm.getMotor2().getVelocity());
+            Bot.dashboardTelemetry.addData("Slide 1 Velocity", Bot.slideArm.getMotor1().getVelocity());
+            Bot.dashboardTelemetry.addData("Slide 2 Velocity", Bot.slideArm.getMotor2().getVelocity());
+            Bot.dashboardTelemetry.update();
 
             prevMilliseconds = timer.milliseconds();
         }

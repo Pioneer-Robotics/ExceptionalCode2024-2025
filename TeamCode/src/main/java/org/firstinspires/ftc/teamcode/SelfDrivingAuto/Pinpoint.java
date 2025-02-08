@@ -27,7 +27,7 @@ public class Pinpoint {
     }
 
     public void resetIMU() {
-        pinpoint.recalibrateIMU();
+        pinpoint.resetPosAndIMU();
     }
 
     public Pose2D getPositionPose2D() {
