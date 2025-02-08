@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
-
 @TeleOp(name="Slide Test")
 public class SlideTest extends LinearOpMode {
 
@@ -24,145 +23,70 @@ public class SlideTest extends LinearOpMode {
 
         Bot.init(this);
 
+        DcMotorEx motor1 = hardwareMap.get(DcMotorEx.class, "slideMotor1");
+        DcMotorEx motor2 = hardwareMap.get(DcMotorEx.class, "slideMotor2");
+
+        // Reset encoder before starting
+        motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        // Set motor direction explicitly
+        motor1.setDirection(DcMotorSimple.Direction.FORWARD); // or REVERSE
+        motor2.setDirection(DcMotorSimple.Direction.FORWARD); // or REVERSE
+
+        // Set motor Zero Power Behavior
+        motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        // Set PDIF if necessary - this may not be needed
+        PIDFCoefficients pidf = new PIDFCoefficients(10, 3, 0, 0); // retune these values if necessary
+        motor1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidf);
+        motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidf);
+
         waitForStart();
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
         Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
-        DcMotorEx motor1 = hardwareMap.get(DcMotorEx.class, "slideMotor1");
-        DcMotorEx motor2 = hardwareMap.get(DcMotorEx.class, "slideMotor2");
-
-        motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motor1.setDirection(DcMotorSimple.Direction.REVERSE);
-
-//        Boolean leftSide = false;
-
-//        motor1.setTargetPosition(0);
-//        motor2.setTargetPosition(0);
-//
-//        motor1.setVelocity(Config.maxSlideTicksPerSecond*0.25);
-//        motor2.setVelocity(Config.maxSlideTicksPerSecond*0.25);
-
         while(opModeIsActive()) {
-            DcMotorSimple.Direction direction1 = motor1.getDirection();
-            DcMotorSimple.Direction direction2 = motor2.getDirection();
-
-            if (direction1 == DcMotorSimple.Direction.FORWARD) {
+            if (gamepad1.a) {
+                // Reset the Encoder with the A button if issues arise
+                motor.setPower(0);  // Stop the motor
+                motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            } else {
+                // Look for up or down
                 if (gamepad1.dpad_up) {
                     motor1.setVelocity(0.25 * Config.maxSlideTicksPerSecond);
-//                    motor2.setVelocity(0.25 * Config.maxSlideTicksPerSecond);
-                } else if (gamepad1.dpad_down) {
-                    motor1.setVelocity(-0.25 * Config.maxSlideTicksPerSecond);
-//                    motor2.setVelocity(-0.25 * Config.maxSlideTicksPerSecond);
-                } else {
-                    motor1.setVelocity(0);
-//                    motor2.setVelocity(0);
-                }
-            } else {
-                if (!gamepad1.dpad_up) {
-                    motor1.setVelocity(0.25 * Config.maxSlideTicksPerSecond);
-//                    motor2.setVelocity(0.25 * Config.maxSlideTicksPerSecond);
-                } else if (!gamepad1.dpad_down) {
-                    motor1.setVelocity(-0.25 * Config.maxSlideTicksPerSecond);
-//                    motor2.setVelocity(-0.25 * Config.maxSlideTicksPerSecond);
-                } else {
-                    motor1.setVelocity(0);
-//                    motor2.setVelocity(0);
-                }
-            }
-
-            if (direction2 == DcMotorSimple.Direction.FORWARD) {
-                if (gamepad1.dpad_up) {
-//                    motor1.setVelocity(0.25 * Config.maxSlideTicksPerSecond);
                     motor2.setVelocity(0.25 * Config.maxSlideTicksPerSecond);
                 } else if (gamepad1.dpad_down) {
-//                    motor1.setVelocity(-0.25 * Config.maxSlideTicksPerSecond);
+                    motor1.setVelocity(-0.25 * Config.maxSlideTicksPerSecond);
                     motor2.setVelocity(-0.25 * Config.maxSlideTicksPerSecond);
                 } else {
-//                    motor1.setVelocity(0);
-                    motor2.setVelocity(0);
-                }
-            } else {
-                if (!gamepad1.dpad_up) {
-//                    motor1.setVelocity(0.25 * Config.maxSlideTicksPerSecond);
-                    motor2.setVelocity(0.25 * Config.maxSlideTicksPerSecond);
-                } else if (!gamepad1.dpad_down) {
-//                    motor1.setVelocity(-0.25 * Config.maxSlideTicksPerSecond);
-                    motor2.setVelocity(-0.25 * Config.maxSlideTicksPerSecond);
-                } else {
-//                    motor1.setVelocity(0);
+                    motor1.setVelocity(0);
                     motor2.setVelocity(0);
                 }
             }
 
+            // Log motors current positions
+            dashboardTelemetry.addData("Encoder Position 1", motor1.getCurrentPosition());
+            dashboardTelemetry.addData("Encoder Position 2", motor2.getCurrentPosition());
 
-//            if (gamepad1.right_trigger > 0.05) {
-//                motor1.setVelocity(gamepad1.right_trigger * Config.maxSlideTicksPerSecond);
-//                motor2.setVelocity(gamepad1.right_trigger * Config.maxSlideTicksPerSecond);
-//            } else if (gamepad1.left_trigger > 0.05) {
-//                motor1.setVelocity(-gamepad1.left_trigger * Config.maxSlideTicksPerSecond);
-//                motor2.setVelocity(-gamepad1.left_trigger * Config.maxSlideTicksPerSecond);
-//            } else {
-//                motor1.setVelocity(0);
-//                motor2.setVelocity(0);
-//            }
-//            if (gamepad1.y && gamepad1.a) {
-//                if (gamepad1.dpad_up) {
-//                    motor1.setVelocity(0.2 * Config.maxSlideTicksPerSecond);
-//                    motor2.setVelocity(-0.2 * Config.maxSlideTicksPerSecond);
-//                } else if (gamepad1.dpad_down) {
-//                    motor1.setVelocity(-0.2 * Config.maxSlideTicksPerSecond);
-//                    motor2.setVelocity(0.2 * Config.maxSlideTicksPerSecond);
-//                } else {
-//                    motor1.setVelocity(0);
-//                    motor2.setVelocity(0);
-//                }
-//            } else {
-//                if (gamepad1.dpad_up && gamepad1.y) {
-//                    motor1.setVelocity(0.2 * Config.maxSlideTicksPerSecond);
-//                } else if (gamepad1.dpad_down && gamepad1.y) {
-//                    motor1.setVelocity(-0.2 * Config.maxSlideTicksPerSecond);
-//                } else {
-//                    motor1.setVelocity(0);
-//                }
-//
-//                if (gamepad1.dpad_up && gamepad1.a) {
-//                    motor2.setVelocity(-0.2 * Config.maxSlideTicksPerSecond);
-//                } else if (gamepad1.dpad_down && gamepad1.a) {
-//                    motor2.setVelocity(0.2 * Config.maxSlideTicksPerSecond);
-//                } else {
-//                    motor2.setVelocity(0);
-//                }
-//            }
+            // Log PIDF
+            PIDFCoefficients pidf1 = motor1.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
+            dashboardTelemetry.addData("PIDF 1", pidf1);
+            PIDFCoefficients pidf2 = motor2.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
+            dashboardTelemetry.addData("PIDF 2", pidf2);
 
-//            if (gamepad1.dpad_up) {
-//                motor1.setTargetPosition(-500);
-//                motor2.setTargetPosition(-500);
-//            }
-//
-//            if (gamepad1.dpad_down) {
-//                motor1.setTargetPosition(0);
-//                motor2.setTargetPosition(0);
-//            }
-//
-//            motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//
-//            dashboardTelemetry.addData("M1 Velocity", motor1.getVelocity());
-//            dashboardTelemetry.addData("M2 Velocity", motor2.getVelocity());
-//            dashboardTelemetry.addData("M1 Current", motor1.getCurrent(CurrentUnit.MILLIAMPS));
-//            dashboardTelemetry.addData("M2 Current", motor2.getCurrent(CurrentUnit.MILLIAMPS));
-//
-//            if (gamepad1.dpad_up) {
-//                Bot.slideArm.moveMid(0.25);
-//            }
-//
-//            if (gamepad1.dpad_down) {
-//                Bot.slideArm.moveDown(0.25);
-//            }
+            // Log additional related values
+            dashboardTelemetry.addData("Motor Velocity 1", motor1.getVelocity());
+            dashboardTelemetry.addData("Motor Direction 1", motor1.getDirection());
+            dashboardTelemetry.addData("Motor Velocity 2", motor2.getVelocity());
+            dashboardTelemetry.addData("Motor Direction 2", motor2.getDirection());
 
-//            dashboardTelemetry.update();
+            dashboardTelemetry.update();
         }
     }
 }
