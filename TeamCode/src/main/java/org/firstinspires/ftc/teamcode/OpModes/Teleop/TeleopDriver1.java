@@ -37,6 +37,13 @@ public class TeleopDriver1 {
     TeleopDriver1.TransferState transferState;
     TeleopDriver1.IntakeState intakeState;
 
+    Toggle incSpeedToggle;
+    Toggle decSpeedToggle;
+
+    Toggle intakeClawToggle;
+    Toggle intakeWristToggle;
+
+
     // Private constructor to enforce the use of the factory method
     private TeleopDriver1(Gamepad gamepad1, Telemetry telemetry) {
         this.gamepad1 = gamepad1;
@@ -54,17 +61,34 @@ public class TeleopDriver1 {
         return new TeleopDriver1(gamepad1, telemetry);
     }
 
-
     public void loopGameController() {
+        resetTransferAndIntakeStateToNone();
+        setupProperties();
+        moveRobot();
+        handleToggleForFieldCentric();
+        resetIMU();
+        handleToggleSpeed();
+        handleDpadUpOrDown();
+        updateIntakeState();
+        handleIntakeClawToggle();
+        handleIntakeWristToggle();
+        handleTransferEntryPointAndInterrupt();
+        updateTransferState();
+        updateTelemetry();
+    }
+
+    private void resetTransferAndIntakeStateToNone() {
         transferState = TeleopDriver1.TransferState.NONE;
         intakeState = TeleopDriver1.IntakeState.NONE;
+    }
+    private void setupProperties() {
+        incSpeedToggle = new Toggle(false);
+        decSpeedToggle = new Toggle(false);
+        intakeClawToggle = new Toggle(false);
+        intakeWristToggle = new Toggle(false);
+    }
 
-        Toggle incSpeedToggle = new Toggle(false);
-        Toggle decSpeedToggle = new Toggle(false);
-
-        Toggle intakeClawToggle = new Toggle(false);
-        Toggle intakeWristToggle = new Toggle(false);
-
+    private void moveRobot() {
         // Inputs for driving
         double px = gamepad1.left_stick_x;
         double py = -gamepad1.left_stick_y;
@@ -72,16 +96,21 @@ public class TeleopDriver1 {
 
         // Move
         Bot.mecanumBase.move(px, py, turn, maxSpeed);
+    }
 
-        // Toggle for field centric
+    private void handleToggleForFieldCentric() {
         bothTrigPressed = gamepad1.left_trigger > 0.8 && gamepad1.right_trigger > 0.8;
         northModeToggle.toggle(bothTrigPressed); // Toggle north mode
         Bot.mecanumBase.setNorthMode(northModeToggle.get()); // Update north mode
+    }
 
+    private void resetIMU() {
         if (gamepad1.x) {
             Bot.pinpoint.resetIMU();
         }
+    }
 
+    private void handleToggleSpeed() {
         incSpeedToggle.toggle(gamepad1.right_bumper);
         decSpeedToggle.toggle(gamepad1.left_bumper);
         if (incSpeedToggle.justChanged()) {
@@ -90,7 +119,9 @@ public class TeleopDriver1 {
         if (decSpeedToggle.justChanged()) {
             maxSpeed -= 0.1;
         }
+    }
 
+    private void handleDpadUpOrDown() {
         if (gamepad1.dpad_up) {
             intakeState = TeleopDriver1.IntakeState.MID_WRIST;
             intakeWristToggle.set(true);
@@ -100,30 +131,44 @@ public class TeleopDriver1 {
             Bot.intakeClaw.clawUp();
             intakeWristToggle.set(false);
         }
+    }
 
+    private void updateIntakeState() {
         switch (intakeState) {
             case NONE:
                 break;
             case MID_WRIST:
-                Bot.intake.midMisumiWrist();
-                if (Bot.intake.isWristMid()) {
-                    intakeState = TeleopDriver1.IntakeState.EXTEND;
-                }
+                updateMidWristIntakeState();
                 break;
             case EXTEND:
-                Bot.intake.extendMisumiDrive();
-                Bot.intakeClaw.clawDown();
-                intakeState = TeleopDriver1.IntakeState.NONE;
+                updateExtendIntakeState();
                 break;
         }
+    }
 
+    private void updateMidWristIntakeState() {
+        Bot.intake.midMisumiWrist();
+        if (Bot.intake.isWristMid()) {
+            intakeState = TeleopDriver1.IntakeState.EXTEND;
+        }
+    }
+
+    private void updateExtendIntakeState() {
+        Bot.intake.extendMisumiDrive();
+        Bot.intakeClaw.clawDown();
+        intakeState = TeleopDriver1.IntakeState.NONE;
+    }
+
+    private void handleIntakeClawToggle() {
         intakeClawToggle.toggle(gamepad1.b);
         if (intakeClawToggle.justChanged() && intakeClawToggle.get()) {
             Bot.intakeClaw.openClaw();
         } else if (intakeClawToggle.justChanged() && !intakeClawToggle.get()) {
             Bot.intakeClaw.closeClaw();
         }
+    }
 
+    private void handleIntakeWristToggle() {
         intakeWristToggle.toggle(gamepad1.y);
         if (intakeWristToggle.justChanged() && intakeWristToggle.get()) {
             // Down state
@@ -145,58 +190,80 @@ public class TeleopDriver1 {
                 Bot.ocgBox.ocgPitchUp();
             }
         }
+    }
 
-        // Transfer entry point and interrupt
+    private void handleTransferEntryPointAndInterrupt() {
         if (gamepad1.dpad_right) {
             transferState = TeleopDriver1.TransferState.WRIST_UP;
         }
         if (gamepad1.touchpad) {
             transferState = TeleopDriver1.TransferState.NONE;
         }
+    }
 
+        private void updateTransferState() {
         // Handles a full transfer without spawning a thread or interrupting opMode
         // Waits for each action to be done before moving on to the next state
         switch (transferState) {
             case NONE:
                 break;
             case WRIST_UP:
-                Bot.intake.misumiWristUp();
-                if (Bot.intake.isWristUp()) {
-                    transferState = TeleopDriver1.TransferState.OCG_UP;
-                }
+                updateWristUpTransferState();
                 break;
             case OCG_UP:
-                Bot.ocgBox.ocgPitchUp();
-                if (Bot.ocgBox.isPitchUp()) {
-                    transferTimer.reset();
-                    transferState = TeleopDriver1.TransferState.DROP;
-                }
+                updateOCGUpTransferState();
                 break;
             case DROP:
-                if (transferTimer.milliseconds() > 500) {
-                    Bot.intakeClaw.openClaw();
-                }
-                if (Bot.intakeClaw.isClawOpen()) {
-                    transferTimer.reset();
-                    transferState = TeleopDriver1.TransferState.OCG_IDLE;
-                }
+                updateDropTransferState();
                 break;
             case OCG_IDLE:
-                if (transferTimer.milliseconds() > 3000) {
-                    Bot.ocgBox.idle();
-                }
-                if (Bot.ocgBox.isIdle()) {
-                    transferState = TeleopDriver1.TransferState.WRIST_DOWN;
-                }
+                updateOCGIdleTransferState();
                 break;
             case WRIST_DOWN:
-                // As there is nothing after, the state is immediately set to NONE
-                Bot.intake.misumiWristDown();
-                Bot.intakeClaw.closeClaw();
-                transferState = TeleopDriver1.TransferState.NONE;
+                updateWristDownTransferState();
+                break;
         }
+    }
 
-        updateTelemetry();
+    private void updateWristUpTransferState() {
+        Bot.intake.misumiWristUp();
+        if (Bot.intake.isWristUp()) {
+            transferState = TeleopDriver1.TransferState.OCG_UP;
+        }
+    }
+
+    private void updateOCGUpTransferState() {
+        Bot.ocgBox.ocgPitchUp();
+        if (Bot.ocgBox.isPitchUp()) {
+            transferTimer.reset();
+            transferState = TeleopDriver1.TransferState.DROP;
+        }
+    }
+
+    private void updateDropTransferState() {
+        if (transferTimer.milliseconds() > 500) {
+            Bot.intakeClaw.openClaw();
+        }
+        if (Bot.intakeClaw.isClawOpen()) {
+            transferTimer.reset();
+            transferState = TeleopDriver1.TransferState.OCG_IDLE;
+        }
+    }
+
+    private void updateOCGIdleTransferState() {
+        if (transferTimer.milliseconds() > 3000) {
+            Bot.ocgBox.idle();
+        }
+        if (Bot.ocgBox.isIdle()) {
+            transferState = TeleopDriver1.TransferState.WRIST_DOWN;
+        }
+    }
+
+    private void updateWristDownTransferState() {
+        // As there is nothing after, the state is immediately set to NONE
+        Bot.intake.misumiWristDown();
+        Bot.intakeClaw.closeClaw();
+        transferState = TeleopDriver1.TransferState.NONE;
     }
 
     public void updateTelemetry() {

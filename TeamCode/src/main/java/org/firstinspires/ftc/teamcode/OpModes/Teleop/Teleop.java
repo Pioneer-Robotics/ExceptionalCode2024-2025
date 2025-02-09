@@ -34,6 +34,7 @@ public class Teleop extends LinearOpMode {
             driver1.loopGameController();
             driver2.loopGameController();
             updateTelemetry();
+            updateRobotLights();
             prevMilliseconds = timer.milliseconds();
         }
         Bot.currentThreads.stopThreads();
@@ -60,12 +61,23 @@ public class Teleop extends LinearOpMode {
         telemetry.addData("X", Bot.pinpoint.getX());
         telemetry.addData("Y", Bot.pinpoint.getY());
         telemetry.addData("Heading", Bot.pinpoint.getHeading());
-
         telemetry.update();
 
         Bot.dashboardTelemetry.addData("Slide 1 Velocity", Bot.slideArm.getMotor1().getVelocity());
         Bot.dashboardTelemetry.addData("Slide 2 Velocity", Bot.slideArm.getMotor2().getVelocity());
         Bot.dashboardTelemetry.update();
+    }
+
+    private void updateRobotLights() {
+        // Get data for telemetry
+        double voltage = Bot.voltageHandler.getVoltage();
+        if (voltage < 10) {
+            Bot.led.lightsOn(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+            telemetry.addData("WARNING: Voltage Low", voltage);
+        } else {
+            Bot.led.lightsOn(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+        }
+        telemetry.addData("Voltage", voltage);
     }
 
 }
