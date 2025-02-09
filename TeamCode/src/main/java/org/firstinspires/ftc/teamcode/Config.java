@@ -113,7 +113,7 @@ public class Config {
        -------------------- */
     // Specimen Arm Claw
     public static final double clawOpen = 0.4;
-    public static final double clawClose = 0.6;
+    public static final double clawClose = 0.7;
     public static final double specWristCollect = 0.165;
     public static final double specWristHang = 0.82;
     // Misumi Drive
@@ -166,8 +166,8 @@ public class Config {
     public static final int minSlideHeight = 15;
     public static final int maxSlideHeight = 4350;
     public static final int slideDown = 15;
-    public static final int slideLowBasket = 2000;
-    public static final int slideHighBasket = 3500;
+    public static final int slideLowBasket = 1500;
+    public static final int slideHighBasket = 2900;
 
     /* -------------------------
        -  Coordinates of Note  -

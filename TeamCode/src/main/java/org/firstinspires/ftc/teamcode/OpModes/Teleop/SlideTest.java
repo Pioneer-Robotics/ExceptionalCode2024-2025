@@ -22,7 +22,7 @@ public class SlideTest extends LinearOpMode {
 
     public void runOpMode() {
 
-        Bot.init(this);
+//        Bot.init(this);
 
         waitForStart();
 
@@ -34,135 +34,51 @@ public class SlideTest extends LinearOpMode {
 
         motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motor1.setDirection(DcMotorSimple.Direction.REVERSE);
+//        motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-//        Boolean leftSide = false;
-
-//        motor1.setTargetPosition(0);
-//        motor2.setTargetPosition(0);
-//
-//        motor1.setVelocity(Config.maxSlideTicksPerSecond*0.25);
-//        motor2.setVelocity(Config.maxSlideTicksPerSecond*0.25);
+        motor1.setTargetPosition(15);
 
         while(opModeIsActive()) {
-            DcMotorSimple.Direction direction1 = motor1.getDirection();
-            DcMotorSimple.Direction direction2 = motor2.getDirection();
-
-            if (direction1 == DcMotorSimple.Direction.FORWARD) {
-                if (gamepad1.dpad_up) {
-                    motor1.setVelocity(0.25 * Config.maxSlideTicksPerSecond);
-//                    motor2.setVelocity(0.25 * Config.maxSlideTicksPerSecond);
-                } else if (gamepad1.dpad_down) {
-                    motor1.setVelocity(-0.25 * Config.maxSlideTicksPerSecond);
-//                    motor2.setVelocity(-0.25 * Config.maxSlideTicksPerSecond);
-                } else {
-                    motor1.setVelocity(0);
-//                    motor2.setVelocity(0);
-                }
-            } else {
-                if (!gamepad1.dpad_up) {
-                    motor1.setVelocity(0.25 * Config.maxSlideTicksPerSecond);
-//                    motor2.setVelocity(0.25 * Config.maxSlideTicksPerSecond);
-                } else if (!gamepad1.dpad_down) {
-                    motor1.setVelocity(-0.25 * Config.maxSlideTicksPerSecond);
-//                    motor2.setVelocity(-0.25 * Config.maxSlideTicksPerSecond);
-                } else {
-                    motor1.setVelocity(0);
-//                    motor2.setVelocity(0);
-                }
-            }
-
-            if (direction2 == DcMotorSimple.Direction.FORWARD) {
-                if (gamepad1.dpad_up) {
-//                    motor1.setVelocity(0.25 * Config.maxSlideTicksPerSecond);
-                    motor2.setVelocity(0.25 * Config.maxSlideTicksPerSecond);
-                } else if (gamepad1.dpad_down) {
-//                    motor1.setVelocity(-0.25 * Config.maxSlideTicksPerSecond);
-                    motor2.setVelocity(-0.25 * Config.maxSlideTicksPerSecond);
-                } else {
-//                    motor1.setVelocity(0);
-                    motor2.setVelocity(0);
-                }
-            } else {
-                if (!gamepad1.dpad_up) {
-//                    motor1.setVelocity(0.25 * Config.maxSlideTicksPerSecond);
-                    motor2.setVelocity(0.25 * Config.maxSlideTicksPerSecond);
-                } else if (!gamepad1.dpad_down) {
-//                    motor1.setVelocity(-0.25 * Config.maxSlideTicksPerSecond);
-                    motor2.setVelocity(-0.25 * Config.maxSlideTicksPerSecond);
-                } else {
-//                    motor1.setVelocity(0);
-                    motor2.setVelocity(0);
-                }
-            }
-
-
-//            if (gamepad1.right_trigger > 0.05) {
-//                motor1.setVelocity(gamepad1.right_trigger * Config.maxSlideTicksPerSecond);
-//                motor2.setVelocity(gamepad1.right_trigger * Config.maxSlideTicksPerSecond);
-//            } else if (gamepad1.left_trigger > 0.05) {
-//                motor1.setVelocity(-gamepad1.left_trigger * Config.maxSlideTicksPerSecond);
-//                motor2.setVelocity(-gamepad1.left_trigger * Config.maxSlideTicksPerSecond);
-//            } else {
-//                motor1.setVelocity(0);
-//                motor2.setVelocity(0);
-//            }
-//            if (gamepad1.y && gamepad1.a) {
-//                if (gamepad1.dpad_up) {
-//                    motor1.setVelocity(0.2 * Config.maxSlideTicksPerSecond);
-//                    motor2.setVelocity(-0.2 * Config.maxSlideTicksPerSecond);
-//                } else if (gamepad1.dpad_down) {
-//                    motor1.setVelocity(-0.2 * Config.maxSlideTicksPerSecond);
-//                    motor2.setVelocity(0.2 * Config.maxSlideTicksPerSecond);
-//                } else {
-//                    motor1.setVelocity(0);
-//                    motor2.setVelocity(0);
-//                }
-//            } else {
-//                if (gamepad1.dpad_up && gamepad1.y) {
-//                    motor1.setVelocity(0.2 * Config.maxSlideTicksPerSecond);
-//                } else if (gamepad1.dpad_down && gamepad1.y) {
-//                    motor1.setVelocity(-0.2 * Config.maxSlideTicksPerSecond);
-//                } else {
-//                    motor1.setVelocity(0);
-//                }
-//
-//                if (gamepad1.dpad_up && gamepad1.a) {
-//                    motor2.setVelocity(-0.2 * Config.maxSlideTicksPerSecond);
-//                } else if (gamepad1.dpad_down && gamepad1.a) {
-//                    motor2.setVelocity(0.2 * Config.maxSlideTicksPerSecond);
-//                } else {
-//                    motor2.setVelocity(0);
-//                }
-//            }
 
 //            if (gamepad1.dpad_up) {
-//                motor1.setTargetPosition(-500);
-//                motor2.setTargetPosition(-500);
+//                motor1.setVelocity(0.5 * Config.maxSlideTicksPerSecond);
+//            } else if (gamepad1.dpad_down) {
+//                motor1.setVelocity(-0.5 * Config.maxSlideTicksPerSecond);
+//            } else {
+//                motor1.setPower(0);
 //            }
 //
-//            if (gamepad1.dpad_down) {
-//                motor1.setTargetPosition(0);
-//                motor2.setTargetPosition(0);
-//            }
-//
-//            motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//
-//            dashboardTelemetry.addData("M1 Velocity", motor1.getVelocity());
-//            dashboardTelemetry.addData("M2 Velocity", motor2.getVelocity());
-//            dashboardTelemetry.addData("M1 Current", motor1.getCurrent(CurrentUnit.MILLIAMPS));
-//            dashboardTelemetry.addData("M2 Current", motor2.getCurrent(CurrentUnit.MILLIAMPS));
-//
-//            if (gamepad1.dpad_up) {
-//                Bot.slideArm.moveMid(0.25);
-//            }
-//
-//            if (gamepad1.dpad_down) {
-//                Bot.slideArm.moveDown(0.25);
+//            if (gamepad1.triangle) {
+//                motor2.setVelocity(-0.5 * Config.maxSlideTicksPerSecond);
+//            } else if (gamepad1.cross) {
+//                motor2.setVelocity(0.5 * Config.maxSlideTicksPerSecond);
+//            } else {
+//                motor2.setPower(0);
 //            }
 
-//            dashboardTelemetry.update();
+            if (gamepad1.right_bumper) {
+                motor1.setTargetPosition(-1500);
+                motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motor1.setVelocity(0.5 * Config.maxSlideTicksPerSecond);
+            }
+            else if (gamepad1.left_bumper) {
+                motor1.setTargetPosition(15);
+                motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motor1.setVelocity(0.5 * Config.maxSlideTicksPerSecond);
+            } else {
+                motor1.setVelocity(0);
+            }
+
+//            if (gamepad1.circle) {
+//                motor1.setPower(-0.25);
+//                motor2.setPower(0.25);
+//            }
+            telemetry.addData("Slide Arm 1 Position", motor1.getCurrentPosition());
+            telemetry.addData("Slide Arm 2 Position", motor2.getCurrentPosition());
+            telemetry.addData("Slide Arm 1 Target Position", motor1.getTargetPosition());
+            telemetry.addData("Slide Arm 2 Target Position", motor2.getTargetPosition());
+            telemetry.update();
         }
     }
 }

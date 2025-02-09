@@ -41,6 +41,11 @@ public class SpecimenAuto extends LinearOpMode {
         Timer armSchedule;
         TimerTask armTask;
 
+        Bot.dashboardTelemetry.addData("X", 0);
+        Bot.dashboardTelemetry.addData("Y", 0);
+        Bot.dashboardTelemetry.addData("Theta", 0);
+        Bot.dashboardTelemetry.update();
+
         Toggle preloadToggle = new Toggle(true);
         while (!isStarted()) {
             preloadToggle.toggle(gamepad1.a);
@@ -77,7 +82,6 @@ public class SpecimenAuto extends LinearOpMode {
                         @Override
                         public void run() {
                             Bot.specimenArm.movePrepHang(1);
-
                         }
                     };
                     armSchedule.schedule(armTask, 350);
@@ -274,6 +278,7 @@ public class SpecimenAuto extends LinearOpMode {
             telemetry.update();
             Bot.dashboardTelemetry.addData("X", Bot.pinpoint.getX());
             Bot.dashboardTelemetry.addData("Y", Bot.pinpoint.getY());
+            Bot.dashboardTelemetry.addData("Theta", Bot.pinpoint.getHeading());
             Bot.dashboardTelemetry.update();
         }
         Bot.currentThreads.stopThreads();

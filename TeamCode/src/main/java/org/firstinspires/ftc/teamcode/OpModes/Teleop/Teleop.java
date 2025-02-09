@@ -64,8 +64,8 @@ public class Teleop extends LinearOpMode {
                ------------------ */
 
             // Inputs for driving
-            double px = gamepad1.left_stick_x;
-            double py = -gamepad1.left_stick_y;
+            double px = Math.pow(gamepad1.left_stick_x, 3);
+            double py = -Math.pow(gamepad1.left_stick_y, 3);
             double turn = gamepad1.right_stick_x;
 
             // Move
@@ -248,28 +248,28 @@ public class Teleop extends LinearOpMode {
 //                Bot.intake.midMisumiDrive();
                 Bot.intake.midMisumiWrist();
 //                Bot.intake.closeClaw();
-                Bot.slideArm.moveUp(0.8);
+                Bot.slideArm.moveUp(0.65);
                 Bot.ocgBox.idle();
             } else if (gamepad2.a) {
                 Bot.intakeClaw.clawDown();
 //                Bot.intake.midMisumiDrive();
                 Bot.intake.midMisumiWrist();
-                Bot.slideArm.moveDown(0.8);
+                Bot.slideArm.moveDown(0.65);
                 Bot.ocgBox.idle();
             } else if (gamepad2.x) {
-//                Bot.intakeClaw.clawDown();
+                Bot.intakeClaw.clawDown();
 //                Bot.intake.midMisumiDrive();
-                Bot.slideArm.moveMid(0.8);
+                Bot.slideArm.moveMid(0.65);
                 Bot.ocgBox.idle();
 //                Bot.intake.closeClaw();
             }
 
             // Manual slide arm controls
-            if (gamepad2.right_stick_y > 0.5) {
-                Bot.slideArm.move(0.1);
-//                Bot.slideArm.move(gamepad2.right_stick_y*0.3);
-            } else if (gamepad2.right_stick_y < -0.5){
-                Bot.slideArm.move(gamepad2.right_stick_y*0.3);
+            if (gamepad2.right_stick_y > 0.3) {
+//                Bot.slideArm.move(0.1);
+                Bot.slideArm.move(gamepad2.right_stick_y*0.5);
+            } else if (gamepad2.right_stick_y < -0.3){
+                Bot.slideArm.move(gamepad2.right_stick_y*0.5);
             } else if(Math.abs(gamepad2.right_stick_x)>0.5) {
                 Bot.slideArm.motorOff();
                 Bot.ocgBox.idle();

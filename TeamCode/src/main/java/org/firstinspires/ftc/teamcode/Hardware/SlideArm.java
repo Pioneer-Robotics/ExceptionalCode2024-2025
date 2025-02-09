@@ -18,8 +18,8 @@ public class SlideArm {
         //Motor 2 is OCG box arm
         motor1.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         motor2.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        motor1.setDirection(DcMotorSimple.Direction.REVERSE);
-        motor2.setDirection(DcMotorSimple.Direction.REVERSE);
+//        motor1.setDirection(DcMotorSimple.Direction.REVERSE);
+//        motor2.setDirection(DcMotorSimple.Direction.REVERSE);
         motor1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         motor2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -27,12 +27,12 @@ public class SlideArm {
     }
 
     public void moveToPositionTicks(int ticks, double speed) {
-        motor1.setTargetPosition(-ticks);
-        motor2.setTargetPosition(ticks);
+        motor1.setTargetPosition(ticks);
+        motor2.setTargetPosition(-ticks);
         motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor1.setVelocity(-Config.maxSlideTicksPerSecond * speed);
-        motor2.setVelocity(-Config.maxSlideTicksPerSecond * speed);
+        motor1.setVelocity(Config.maxSlideTicksPerSecond * speed);
+        motor2.setVelocity(Config.maxSlideTicksPerSecond * speed);
     }
 
     public void moveToPositionTicks(int ticks) {
@@ -41,17 +41,16 @@ public class SlideArm {
 
     public void moveDown(double speed) {
         moveToPositionTicks(Config.slideDown, speed);
-        if (getArmPosition() < (Config.slideDown + 50.0)) { motorOff(); }
-        //TODO: Need to update arm position method
+//        if (getArmPosition() < (Config.slideDown + 50.0)) { motorOff(); }
     }
 
     public void moveMid(double speed) {
-        if (!motor1.isMotorEnabled()) { motorOn(); }
+        if (!motor1.isMotorEnabled() || !motor2.isMotorEnabled()) { motorOn(); }
         moveToPositionTicks(Config.slideLowBasket, speed);
     }
 
     public void moveUp(double speed) {
-        if (!motor1.isMotorEnabled()) { motorOn(); }
+        if (!motor1.isMotorEnabled() || !motor2.isMotorEnabled()) { motorOn(); }
         moveToPositionTicks(Config.slideHighBasket, speed);
     }
 
@@ -69,15 +68,15 @@ public class SlideArm {
 
     public void move(double power) {
         if (!motor1.isMotorEnabled() || !motor2.isMotorEnabled()) { motorOn(); }
-        motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor1.setVelocity(-power * Config.maxSlideTicksPerSecond);
-        motor2.setVelocity(-power * Config.maxSlideTicksPerSecond);
+            motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motor1.setVelocity(power * Config.maxSlideTicksPerSecond);
+            motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motor2.setVelocity(-power * Config.maxSlideTicksPerSecond);
     }
 
     // Getters
     public double getArmPosition() {
-        return(motor1.getCurrentPosition());
+        return(motor2.getCurrentPosition());
     }
     public DcMotorEx getMotor1() {
         return(motor1);
