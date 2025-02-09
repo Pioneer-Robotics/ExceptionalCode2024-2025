@@ -8,16 +8,16 @@ import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
 public class TeleopDriver2 {
 
+    // Properties
     Gamepad gamepad2;
-    Telemetry telemetry;
 
     Toggle clawToggle;
     Toggle ocgBoxToggle;
     Toggle ocgBoxToggleRight;
 
-    private TeleopDriver2(Gamepad gamepad2, Telemetry telemetry) {
+    // Initialization
+    private TeleopDriver2(Gamepad gamepad2) {
         this.gamepad2 = gamepad2;
-        this.telemetry = telemetry;
 
         clawToggle = new Toggle(false);
         ocgBoxToggle = new Toggle(true);
@@ -25,11 +25,12 @@ public class TeleopDriver2 {
     }
 
     // Factory method to create instances with variables
-    public static TeleopDriver2 createInstance(Gamepad gamepad2, Telemetry telemetry) {
-        return new TeleopDriver2(gamepad2, telemetry);
+    public static TeleopDriver2 createInstance(Gamepad gamepad2) {
+        return new TeleopDriver2(gamepad2);
     }
 
-    public void loopGameController() {
+    // Run Loop
+    public void doOneStateLoop() {
         presetSpecimenArmPosition();
         resetArm();
         handleSpecimenClawToggle();
@@ -39,6 +40,7 @@ public class TeleopDriver2 {
         handleBoxMovements();
     }
 
+    // SubSystem private methods
     private void presetSpecimenArmPosition() {
         if (gamepad2.dpad_up) {
             Bot.specimenArm.movePostHang(1.0);

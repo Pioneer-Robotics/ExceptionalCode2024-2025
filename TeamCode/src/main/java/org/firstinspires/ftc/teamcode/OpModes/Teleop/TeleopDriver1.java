@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
 public class TeleopDriver1 {
 
+    // State Enums
     public enum TransferState {
         NONE,
         OCG_UP,
@@ -27,6 +28,7 @@ public class TeleopDriver1 {
         EXTEND
     }
 
+    // Properties
     Gamepad gamepad1;
     Telemetry telemetry;
     double maxSpeed;
@@ -43,7 +45,7 @@ public class TeleopDriver1 {
     Toggle intakeClawToggle;
     Toggle intakeWristToggle;
 
-
+    // Initialization
     // Private constructor to enforce the use of the factory method
     private TeleopDriver1(Gamepad gamepad1, Telemetry telemetry) {
         this.gamepad1 = gamepad1;
@@ -61,7 +63,8 @@ public class TeleopDriver1 {
         return new TeleopDriver1(gamepad1, telemetry);
     }
 
-    public void loopGameController() {
+    // Run Loop
+    public void doOneStateLoop() {
         resetTransferAndIntakeStateToNone();
         setupProperties();
         moveRobot();
@@ -77,6 +80,7 @@ public class TeleopDriver1 {
         updateTelemetry();
     }
 
+    // SubSystem private methods
     private void resetTransferAndIntakeStateToNone() {
         transferState = TeleopDriver1.TransferState.NONE;
         intakeState = TeleopDriver1.IntakeState.NONE;

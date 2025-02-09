@@ -21,18 +21,19 @@ public class Teleop extends LinearOpMode {
     TeleopDriver1 driver1;
     TeleopDriver2 driver2;
 
+    // Run Loop
     public void runOpMode() {
         Bot.init(this);
 
         initializeRunLoop();
         driver1 = TeleopDriver1.createInstance(gamepad1, telemetry);
-        driver2 = TeleopDriver2.createInstance(gamepad2, telemetry);
+        driver2 = TeleopDriver2.createInstance(gamepad2);
 
         waitForStart();
 
         while(opModeIsActive()) {
-            driver1.loopGameController();
-            driver2.loopGameController();
+            driver1.doOneStateLoop();
+            driver2.doOneStateLoop();
             updateTelemetry();
             updateRobotLights();
             prevMilliseconds = timer.milliseconds();
@@ -40,6 +41,7 @@ public class Teleop extends LinearOpMode {
         Bot.currentThreads.stopThreads();
     }
 
+    // Private methods
     private void initializeRunLoop() {
         timer = new ElapsedTime();
         prevMilliseconds = 0;
@@ -79,5 +81,4 @@ public class Teleop extends LinearOpMode {
         }
         telemetry.addData("Voltage", voltage);
     }
-
 }
