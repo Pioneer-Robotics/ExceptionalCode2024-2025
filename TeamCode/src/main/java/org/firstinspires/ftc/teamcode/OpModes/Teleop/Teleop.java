@@ -50,13 +50,9 @@ public class Teleop extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()) {
-
             loopGameController1();
-
             loopGameController2();
-
             updateTelemetry();
-
             prevMilliseconds = timer.milliseconds();
         }
         Bot.currentThreads.stopThreads();
@@ -78,7 +74,6 @@ public class Teleop extends LinearOpMode {
         transferTimer = new ElapsedTime();
 
         prevMilliseconds = 0;
-
     }
     public void loopGameController1() {
         TransferState transferState = TransferState.NONE;
@@ -218,7 +213,6 @@ public class Teleop extends LinearOpMode {
         telemetry.addData("TransferState", transferState);
         telemetry.addData("North Mode", northModeToggle.get());
         telemetry.addData("Speed", maxSpeed);
-
     }
 
     public void loopGameController2() {
@@ -235,9 +229,6 @@ public class Teleop extends LinearOpMode {
         if (gamepad2.left_trigger > 0.1 || gamepad2.right_trigger > 0.1) {
             // Will get cast to an int anyways when incrementing the config
             int armAdjust = (int) (7.0 * gamepad2.right_trigger - 7.0 * gamepad2.left_trigger);
-//                Config.specimenArmPostHang += armAdjust;
-//                Config.specimenArmPrepHang += armAdjust;
-
             if (Bot.specimenArm.getPosition() == 2) {
                 Bot.specimenArm.moveToCollect(0.5);
             } else if (Bot.specimenArm.getPosition() == 1) {
@@ -245,7 +236,6 @@ public class Teleop extends LinearOpMode {
             } else if (Bot.specimenArm.getPosition() == 0) {
                 Bot.specimenArm.movePrepHang(0.5);
             }
-
         }
 
         // Specimen Claw toggle
