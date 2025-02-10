@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Bot;
+import org.firstinspires.ftc.teamcode.OpModes.SubSystems.TeleopDriver1;
+import org.firstinspires.ftc.teamcode.OpModes.SubSystems.TeleopDriver2;
 
 
 @TeleOp(name="Teleop")
