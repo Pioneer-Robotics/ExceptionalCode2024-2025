@@ -45,7 +45,7 @@ public class Teleop extends LinearOpMode {
         prevMilliseconds = 0;
     }
 
-    public void updateTelemetry() {
+    private void updateTelemetry() {
         // Telemetry and update
         Bot.pinpoint.update();
         telemetry.addData("Total Current", Bot.currentThreads.getTotalCurrent());
