@@ -33,11 +33,11 @@ public class AutoPaths {
         // Collect a specimen from the wall
         double[] pointsX, pointsY;
         if (fromSubmersible) {
-            pointsX = new double[]{currentX, 200, 290, 285};
-            pointsY = new double[]{currentY, 35, 100, 27.25};
+            pointsX = new double[]{currentX, 200, 290, Config.specCollectX};
+            pointsY = new double[]{currentY, 35, 100, Config.specCollectY};
         } else {
-            pointsX = new double[]{currentX, 265, 285};
-            pointsY = new double[]{currentY, 100, 27.25};
+            pointsX = new double[]{currentX, 265, Config.specCollectX};
+            pointsY = new double[]{currentY, 100, Config.specCollectY};
         }
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);

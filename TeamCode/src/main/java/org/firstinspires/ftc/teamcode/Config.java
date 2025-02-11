@@ -181,6 +181,9 @@ public class Config {
     public static final double specHangX = 185;
     public static final double specHangY = 96.5;
 
+    public static double specCollectX = 285;
+    public static double specCollectY = 27.25;
+
     // Coordinates of observation zone park
     public static final double parkX = 300;
     public static final double parkY = 30;

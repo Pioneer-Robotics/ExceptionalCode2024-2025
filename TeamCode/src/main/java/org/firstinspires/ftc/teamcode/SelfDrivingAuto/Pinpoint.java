@@ -37,6 +37,18 @@ public class Pinpoint {
         );
     }
 
+    public void setPose(double x, double y, double theta) {
+        pinpoint.setPosition(
+                new Pose2D(
+                        DistanceUnit.CM,
+                        x,
+                        y,
+                        AngleUnit.RADIANS,
+                        theta
+                )
+        );
+    }
+
     public Pose2D getPositionPose2D() {
         return pinpoint.getPosition();
     }
