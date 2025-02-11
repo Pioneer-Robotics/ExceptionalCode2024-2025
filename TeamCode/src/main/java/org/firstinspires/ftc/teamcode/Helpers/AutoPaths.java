@@ -16,7 +16,7 @@ public class AutoPaths {
         Bot.purePursuit.setTargetPath(path);
     }
 
-    public static void hangSpecimenUp(double currentX, double currentY, double offsetX, double offsetY) {
+    public static void hangPreloadSpecimen(double currentX, double currentY, double offsetX, double offsetY) {
         // Go to the submersible to hang a specimen
         Bot.purePursuit.setTargetPath(new double[][] {{currentX, currentY}, {200, 30}, {Config.specHangX + offsetX, Config.specHangY + offsetY}});
     }
