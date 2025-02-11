@@ -52,7 +52,8 @@ public class RobotSlideArmSubSystem {
         } else if (gamepad.right_stick_y < -0.5){
             Bot.slideArm.move(gamepad.right_stick_y*0.3);
         } else if(Math.abs(gamepad.right_stick_x)>0.5) {
-            Bot.slideArm.motorOff();
+            Bot.slideArm.motor1Off();
+            Bot.slideArm.motor2Off();
             Bot.ocgBox.idle();
         }
     }

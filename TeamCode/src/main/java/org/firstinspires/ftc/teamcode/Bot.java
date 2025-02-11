@@ -69,7 +69,7 @@ public class Bot {
 
         // Motors
         Bot.specimenArm = new SpecimenArm();
-        Bot.slideArm = new SlideArm();
+        Bot.slideArm = new SlideArm(false);
 
         // Servos
         Bot.intake = new Intake();
