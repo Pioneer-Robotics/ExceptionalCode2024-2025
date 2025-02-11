@@ -84,4 +84,9 @@ public class Intake {
         return ((Math.abs(misumiWristL.getPos() - Config.misumiWristLMid) < 0.1) &&
                 (Math.abs(misumiWristR.getPos() - Config.misumiWristRMid) < 0.1));
     }
+
+    public boolean isWristDown() {
+        return ((Math.abs(misumiWristL.getPos() - Config.misumiWristLDown) < 0.1) &&
+                (Math.abs(misumiWristR.getPos() - Config.misumiWristRDown) < 0.1));
+    }
 }

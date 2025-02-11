@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.Bot;
 public class RobotTransferSubSystem {
 
     // State Enum
-    private enum TransferState {
+    public enum TransferState {
         NONE,
         OCG_UP,
         WRIST_UP,
@@ -61,7 +61,7 @@ public class RobotTransferSubSystem {
         }
     }
 
-    private void updateTransferState() {
+    public void updateTransferState() {
         // Handles a full transfer without spawning a thread or interrupting opMode
         // Waits for each action to be done before moving on to the next state
         switch (transferState) {
@@ -129,5 +129,9 @@ public class RobotTransferSubSystem {
     public void updateTelemetry() {
         telemetry.addData("TransferState", transferState);
         telemetry.update();
+    }
+
+    public TransferState getTransferState() {
+        return transferState;
     }
 }
