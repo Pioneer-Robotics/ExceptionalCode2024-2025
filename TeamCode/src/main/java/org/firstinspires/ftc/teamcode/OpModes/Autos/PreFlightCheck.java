@@ -34,6 +34,14 @@ public class PreFlightCheck extends LinearOpMode {
         MOVE_TO_COLLECT
     }
 
+    public enum TransferTestState {
+        OCG_UP,
+        WRIST_UP,
+        DROP,
+        OCG_IDLE,
+        WRIST_DOWN
+    }
+
     private enum IntakeState {
         ARM_OUT,
         CLAW_OPEN,
@@ -42,13 +50,19 @@ public class PreFlightCheck extends LinearOpMode {
         UP
     }
 
+    private enum SlideTestState {
+        SLIDE_UP,
+        SLIDE_DOWN
+    }
+
     // Properties
     PreFlightCheck.State state;
     DriveTestState driveTestState;
     SpecimenArmTestState specimenArmTestState;
     IntakeState intakeState;
     ElapsedTime timer;
-    RobotTransferSubSystem robotTransferSubSystem;
+    TransferTestState transferTestState;
+    SlideTestState slideTestState;
 
     // Run Loop
     public void runOpMode() {
@@ -74,7 +88,9 @@ public class PreFlightCheck extends LinearOpMode {
                     handleTestTransferState();
                     break;
                 case TEST_SLIDE:
-                    handleTestSlideState();
+                    // handleTestSlideState();
+                    // FIXME: Temporary for testing without slide
+                    state = State.TEST_OCG_BOX;
                     break;
                 case TEST_OCG_BOX:
                     handleTestOcgBoxState();
@@ -83,7 +99,7 @@ public class PreFlightCheck extends LinearOpMode {
                     handleTestSetForMatchState();
                     break;
             }
-
+            Bot.pinpoint.update();
             updateTelemetry();
         }
         Bot.currentThreads.stopThreads();
@@ -101,7 +117,8 @@ public class PreFlightCheck extends LinearOpMode {
         driveTestState = DriveTestState.FORWARDS;
         specimenArmTestState = SpecimenArmTestState.MOVE_TO_HANG;
         intakeState = IntakeState.ARM_OUT;
-        robotTransferSubSystem = RobotTransferSubSystem.createInstance(gamepad1, telemetry);
+        transferTestState = TransferTestState.OCG_UP;
+        slideTestState = SlideTestState.SLIDE_UP;
         state = State.TEST_DRIVE;
     }
     private void handleTestDriveState() {
@@ -122,6 +139,8 @@ public class PreFlightCheck extends LinearOpMode {
                 }
                 break;
         }
+        telemetry.addData("X", Bot.pinpoint.getX());
+        telemetry.addData("Y", Bot.pinpoint.getY());
     }
 
     private void testDrivePath(double[][] path) {
@@ -182,12 +201,81 @@ public class PreFlightCheck extends LinearOpMode {
         }
     }
     private void handleTestTransferState() {
-        // TODO
+        switch (transferTestState) {
+            case WRIST_UP:
+                updateWristUpTransferState();
+                break;
+            case OCG_UP:
+                updateOCGUpTransferState();
+                break;
+            case DROP:
+                updateDropTransferState();
+                break;
+            case OCG_IDLE:
+                updateOCGIdleTransferState();
+                break;
+            case WRIST_DOWN:
+                updateWristDownTransferState();
+                break;
+        }
+    }
+
+    private void updateWristUpTransferState() {
+        Bot.intake.misumiWristUp();
+        if (Bot.intake.isWristUp()) {
+            transferTestState = TransferTestState.OCG_UP;
+        }
+    }
+
+    private void updateOCGUpTransferState() {
+        Bot.ocgBox.ocgPitchUp();
+        if (Bot.ocgBox.isPitchUp()) {
+            timer.reset();
+            transferTestState = TransferTestState.DROP;
+        }
+    }
+
+    private void updateDropTransferState() {
+        if (timer.milliseconds() > 500) {
+            Bot.intakeClaw.openClaw();
+        }
+        if (Bot.intakeClaw.isClawOpen()) {
+            timer.reset();
+            transferTestState = TransferTestState.OCG_IDLE;
+        }
+    }
+
+    private void updateOCGIdleTransferState() {
+        if (timer.milliseconds() > 3000) {
+            Bot.ocgBox.idle();
+        }
+        if (Bot.ocgBox.isIdle()) {
+            transferTestState = TransferTestState.WRIST_DOWN;
+        }
+    }
+
+    private void updateWristDownTransferState() {
+        // As there is nothing after, the state is immediately set to NONE
+        Bot.intake.misumiWristDown();
+        Bot.intakeClaw.closeClaw();
         state = State.TEST_SLIDE;
     }
+
     private void handleTestSlideState() {
-        // Add testing Movements HERE
-        state = State.TEST_OCG_BOX;
+        switch (slideTestState) {
+            case SLIDE_UP:
+                Bot.slideArm.moveUp(0.5);
+                if (Bot.slideArm.reachedPosition()) {
+                    slideTestState = SlideTestState.SLIDE_DOWN;
+                }
+                break;
+            case SLIDE_DOWN:
+                Bot.slideArm.moveDown(0.5);
+                if (Bot.slideArm.reachedPosition()) {
+                    state = State.TEST_OCG_BOX;
+                }
+                break;
+        }
     }
     private void handleTestOcgBoxState() {
         // Add testing Movements HERE
@@ -195,21 +283,11 @@ public class PreFlightCheck extends LinearOpMode {
     }
 
     private void handleTestSetForMatchState() {
-        // Add testing Movements HERE
-        Bot.purePursuit.update(1);
-        if (Bot.purePursuit.reachedTarget(5)) {
-            terminateOpModeNow();
-        }
+        terminateOpModeNow();
     }
 
     private void updateTelemetry() {
-        // Add telemetry statements HERE
-
-        Bot.pinpoint.update();
-
         telemetry.update();
-        Bot.dashboardTelemetry.addData("X", Bot.pinpoint.getX());
-        Bot.dashboardTelemetry.addData("Y", Bot.pinpoint.getY());
         Bot.dashboardTelemetry.update();
     }
 

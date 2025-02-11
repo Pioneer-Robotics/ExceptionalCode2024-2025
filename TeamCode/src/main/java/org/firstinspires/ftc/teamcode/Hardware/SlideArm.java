@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
+import org.opencv.core.Mat;
 
 public class SlideArm {
     private final DcMotorEx motor1, motor2;
@@ -85,4 +86,8 @@ public class SlideArm {
     public DcMotorEx getMotor2() {
         return(motor2);
     }
+
+    public boolean reachedPosition() {
+        return Math.abs(motor1.getTargetPosition() - motor1.getCurrentPosition()) < 10;
+    };
 }
