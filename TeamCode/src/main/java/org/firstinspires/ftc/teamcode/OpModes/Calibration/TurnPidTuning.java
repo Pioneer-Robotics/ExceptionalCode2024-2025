@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Helpers.SplineCalc;
 
-@Autonomous(name="TurnPidTuning", group="Calibration")
+@Autonomous(name = "Turn PID Tuning", group = "Calibration")
 public class TurnPidTuning extends LinearOpMode {
     enum State {
         TURN_FORWARD,

@@ -4,7 +4,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Bot;
-import org.firstinspires.ftc.teamcode.Config;
 
 public class Pinpoint {
     GoBildaPinpointDriver pinpoint;
@@ -27,7 +26,15 @@ public class Pinpoint {
     }
 
     public void resetIMU() {
-        pinpoint.resetPosAndIMU();
+        pinpoint.setPosition(
+                new Pose2D(
+                        DistanceUnit.CM,
+                        pinpoint.getPosX(),
+                        pinpoint.getPosY(),
+                        AngleUnit.RADIANS,
+                        0
+                )
+        );
     }
 
     public Pose2D getPositionPose2D() {

@@ -1,13 +1,14 @@
-package org.firstinspires.ftc.teamcode.OpModes.Teleop;
+package org.firstinspires.ftc.teamcode.OpModes.Testing;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
-
+@Disabled
 @TeleOp(name="Test Teleop")
 public class TestTeleop extends LinearOpMode {
     public void runOpMode() {
