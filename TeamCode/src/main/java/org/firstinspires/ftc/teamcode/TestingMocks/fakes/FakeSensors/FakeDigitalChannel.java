@@ -20,24 +20,42 @@
  SOFTWARE.
  */
 
-package org.firstinspires.ftc.teamcode.TestingMocks.fakes;
+package org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeSensors;
 
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.DigitalChannelController;
 
 @SuppressWarnings("unused")
-public class FakeDistanceSensor implements DistanceSensor {
+public class FakeDigitalChannel implements DigitalChannel {
+    private boolean state = true;
 
-    private double distance;
+    private Mode mode;
 
-    public void setDistance(double distance) {
-        this.distance = distance;
+    private DigitalChannelController.Mode controllerMode;
+
+    @Override
+    public Mode getMode() {
+        return mode;
     }
 
     @Override
-    public double getDistance(DistanceUnit unit) {
-        return distance;
+    public void setMode(Mode mode) {
+        this.mode =  mode;
+    }
+
+    @Override
+    public boolean getState() {
+        return state;
+    }
+
+    @Override
+    public void setState(boolean state) {
+        this.state = state;
+    }
+
+    @Override
+    public void setMode(DigitalChannelController.Mode mode) {
+        this.controllerMode = mode;
     }
 
     @Override
@@ -47,7 +65,7 @@ public class FakeDistanceSensor implements DistanceSensor {
 
     @Override
     public String getDeviceName() {
-        return "TNT Fake Distance Sensor";
+        return "TNT Fake Digital Channel";
     }
 
     @Override

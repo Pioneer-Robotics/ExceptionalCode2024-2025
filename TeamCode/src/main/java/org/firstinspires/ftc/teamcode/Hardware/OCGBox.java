@@ -4,15 +4,22 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeDrive.FakeServo;
 
 public class OCGBox {
     public final ServoClass pitchServo; //, rollServo;
     //True is in Up/Transfer position
     public boolean rollState, pitchState;
+    private final boolean isUnitTest;
 
-    public OCGBox() {
-        this.pitchServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.ocgPitchServo), Config.ocgBoxPitchUp, Config.ocgBoxPitchDown);
+    public OCGBox(boolean isUnitTest) {
+        this.isUnitTest = isUnitTest;
+        if (isUnitTest) {
+            this.pitchServo = new ServoClass(new FakeServo(), Config.ocgBoxPitchUp, Config.ocgBoxPitchDown);
+        } else {
+            this.pitchServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.ocgPitchServo), Config.ocgBoxPitchUp, Config.ocgBoxPitchDown);
 //        this.rollServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.ocgRollServo), Config.ocgBoxRollUp, Config.ocgBoxRollDown);
+        }
         rollState = true;
         pitchState = true;
         ocgRollUp();

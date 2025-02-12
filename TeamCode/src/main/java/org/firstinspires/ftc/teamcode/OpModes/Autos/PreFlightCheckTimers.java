@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.SplineCalc;
@@ -68,13 +69,19 @@ public class PreFlightCheckTimers extends LinearOpMode {
     Timer taskTimer;
     TimerTask task;
 
+    public Telemetry _telemetry = telemetry;
+
+    public boolean unitTestIsActive = false;
+
     // Run Loop
     public void runOpMode() {
         initalize();
 
-        waitForStart();
+        if (!Bot.isUnitTest) {
+            waitForStart();
+        }
 
-        while (opModeIsActive()) {
+        while (opModeIsActive() || unitTestIsActive) {
             switch (state) {
                 case INIT:
                     handleInitState();
@@ -100,7 +107,10 @@ public class PreFlightCheckTimers extends LinearOpMode {
                     handleTestOcgBoxState();
                     break;
                 case SET_FOR_MATCH:
-                    handleTestSetForMatchState();
+                    if (!Bot.isUnitTest) {
+                        handleTestSetForMatchState();
+                    }
+                    unitTestIsActive = false;
                     break;
             }
             Bot.pinpoint.update();
@@ -152,8 +162,8 @@ public class PreFlightCheckTimers extends LinearOpMode {
 
                 break;
         }
-        telemetry.addData("X", Bot.pinpoint.getX());
-        telemetry.addData("Y", Bot.pinpoint.getY());
+        _telemetry.addData("X", Bot.pinpoint.getX());
+        _telemetry.addData("Y", Bot.pinpoint.getY());
     }
 
     private void testDrivePath(double[][] path) {
@@ -358,6 +368,11 @@ public class PreFlightCheckTimers extends LinearOpMode {
     }
 
     private void createTaskWithWait(TimerTask task) {
+        if (Bot.isUnitTest) {
+            task.run();
+            return;
+        }
+
         timer.reset();
         taskTimer = new Timer();
         this.task = task;
@@ -365,7 +380,7 @@ public class PreFlightCheckTimers extends LinearOpMode {
     }
 
     private void updateTelemetry() {
-        telemetry.update();
+        _telemetry.update();
         Bot.dashboardTelemetry.update();
     }
 

@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
-import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeDcMotorEx;
-import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeServo;
+import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeDrive.FakeDcMotorEx;
+import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeDrive.FakeServo;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -17,11 +17,9 @@ public class SpecimenArm {
     private final DcMotorEx motor;
     public ServoClass claw, specimenWrist;
     int position = 0;
-
     private final boolean isUnitTest;
 
     public SpecimenArm(boolean isUnitTest) {
-
         this.isUnitTest = isUnitTest;
         if (isUnitTest) {
             motor = new FakeDcMotorEx();
@@ -110,6 +108,10 @@ public class SpecimenArm {
     }
 
     public void startEndStopThread() {
+        if (Bot.isUnitTest) {
+            return;
+        }
+
         Timer timer = new Timer();
         ElapsedTime elapsedTime = new ElapsedTime();
         TimerTask task = new TimerTask() {

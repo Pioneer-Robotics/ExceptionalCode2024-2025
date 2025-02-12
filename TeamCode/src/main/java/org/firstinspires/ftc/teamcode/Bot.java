@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Pinpoint;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PurePursuit;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.SparkfunOTOS;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.TwoWheelOdometry;
+import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeTelemetry;
 
 /**
  * This class is used to create all of the hardware objects and store them in the bot object
@@ -50,39 +51,47 @@ public class Bot {
     public static IntakeClaw intakeClaw;
     public static OCGBox ocgBox;
 
+    public static boolean isUnitTest = false;
+
     /**
      * Constructor for Bot.
      * @param opMode LinearOpMode
      */
     public static void init(@NonNull LinearOpMode opMode, double startX, double startY) {
         Bot.opMode = opMode;
-        Bot.dashboard = FtcDashboard.getInstance();
-        Bot.dashboardTelemetry = dashboard.getTelemetry();
+        if (isUnitTest) {
+            Bot.dashboardTelemetry = new FakeTelemetry();
+        } else {
+            Bot.dashboard = FtcDashboard.getInstance();
+            Bot.dashboardTelemetry = dashboard.getTelemetry();
+        }
 
         // Drive base and self driving
         Bot.pinpoint = new Pinpoint(startX, startY);
 //        Bot.optical_odom = new SparkfunOTOS();
 //        Bot.deadwheel_odom = new TwoWheelOdometry(Config.specimenStartX, Config.specimenStartY);
-        Bot.mecanumBase = new MecanumBase();
+        Bot.mecanumBase = new MecanumBase(isUnitTest);
         Bot.pidDrive = new PIDDrive();
         Bot.purePursuit = new PurePursuit(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2]);
 
         // Motors
-        Bot.specimenArm = new SpecimenArm(false);
-        Bot.slideArm = new SlideArm(false);
+        Bot.specimenArm = new SpecimenArm(isUnitTest);
+        Bot.slideArm = new SlideArm(isUnitTest);
 
         // Servos
-        Bot.intake = new Intake();
-        Bot.intakeClaw = new IntakeClaw(false);
-        Bot.ocgBox = new OCGBox();
+        Bot.intake = new Intake(isUnitTest);
+        Bot.intakeClaw = new IntakeClaw(isUnitTest);
+        Bot.ocgBox = new OCGBox(isUnitTest);
 
 
         // Other
-        Bot.specimenEndStop = opMode.hardwareMap.get(AnalogInput.class, Config.specimenEndStop);
-//        Bot.colorSensor = new ColorSensor();
-        Bot.voltageHandler = new VoltageHandler();
-        Bot.imu = new BotIMU();
-        Bot.led = new LEDController();
+        if (!isUnitTest) {
+            Bot.specimenEndStop = opMode.hardwareMap.get(AnalogInput.class, Config.specimenEndStop);
+            //        Bot.colorSensor = new ColorSensor();
+            Bot.voltageHandler = new VoltageHandler();
+            Bot.imu = new BotIMU();
+            Bot.led = new LEDController();
+        }
 
         // Threads
         Bot.currentThreads = new CurrentUtils(opMode);

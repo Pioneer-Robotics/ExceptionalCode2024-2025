@@ -1,24 +1,38 @@
 package org.firstinspires.ftc.teamcode.SelfDrivingAuto;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeGoBildaPinpointDriver;
+import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeTelemetry;
 
 public class Pinpoint {
     GoBildaPinpointDriver pinpoint;
+
     public Pinpoint(double startX, double startY) {
-        pinpoint = Bot.opMode.hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
+        Telemetry telemetry;
+        if (Bot.isUnitTest) {
+            telemetry = new FakeTelemetry();
+            pinpoint = new FakeGoBildaPinpointDriver(null, false);
+        } else {
+            telemetry = Bot.opMode.telemetry;
+            pinpoint = Bot.opMode.hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
+        }
+
         pinpoint.setOffsets(0,-134);
         pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
         pinpoint.recalibrateIMU();
         pinpoint.setPosition(new Pose2D(DistanceUnit.CM, startX, startY, AngleUnit.RADIANS, 0));
         pinpoint.update();
-        Bot.opMode.telemetry.addData("StartX", startX);
-        Bot.opMode.telemetry.addData("StartY", startY);
-        Bot.opMode.telemetry.update();
+
+        telemetry.addData("StartX", startX);
+        telemetry.addData("StartY", startY);
+        telemetry.update();
+
 //        pinpoint.setPosition(new Pose2D(DistanceUnit.CM, Config.specimenStartX, Config.specimenStartY, AngleUnit.RADIANS, 0));
     }
 

@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeDrive.FakeServo;
 
 /**
  * Class for intake mechanism: Misumi slide and intake wheels
@@ -12,13 +13,21 @@ public class Intake {
 
     public ServoClass misumiDriveL, misumiDriveR, misumiWristL, misumiWristR;
     boolean isExtended;
+    private final boolean isUnitTest;
 
-    public Intake() {
+    public Intake(boolean isUnitTest) {
+        this.isUnitTest = isUnitTest;
+        if (isUnitTest) {
+            misumiDriveR = new ServoClass(new FakeServo(), Config.misumiDriveROpen, Config.misumiDriveRClose);
+            misumiWristL = new ServoClass(new FakeServo(), Config.misumiWristLDown, Config.misumiWristLUp);
+            misumiWristR = new ServoClass(new FakeServo(), Config.misumiWristRDown, Config.misumiWristRUp);
+        } else {
 //        misumiDriveL = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiDriveL), Config.misumiDriveLOpen, Config.misumiDriveLClose);
-        misumiDriveR = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiDriveR), Config.misumiDriveROpen, Config.misumiDriveRClose);
+            misumiDriveR = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiDriveR), Config.misumiDriveROpen, Config.misumiDriveRClose);
 
-        misumiWristL = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiWristL), Config.misumiWristLDown, Config.misumiWristLUp);
-        misumiWristR = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiWristR), Config.misumiWristRDown, Config.misumiWristRUp);
+            misumiWristL = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiWristL), Config.misumiWristLDown, Config.misumiWristLUp);
+            misumiWristR = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiWristR), Config.misumiWristRDown, Config.misumiWristRUp);
+        }
 
 //        retractMisumiDrive();
         misumiDriveR.anyPos(Config.misumiDriveRInit);

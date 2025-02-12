@@ -12,7 +12,7 @@ public class IntakeTest extends LinearOpMode {
     public void runOpMode() {
         Bot.opMode = this;
         IntakeClaw claw = new IntakeClaw(false);
-        Intake intake = new Intake();
+        Intake intake = new Intake(false);
 
         waitForStart();
 

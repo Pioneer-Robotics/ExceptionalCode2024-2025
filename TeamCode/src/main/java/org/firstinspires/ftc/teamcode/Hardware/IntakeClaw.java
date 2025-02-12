@@ -4,14 +4,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
-import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeServo;
+import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeDrive.FakeServo;
 
 public class IntakeClaw {
     public ServoClass clawServo, rollServo, yawServo;
     private final double yawServoMid = (Config.intakeYawLeft + Config.intakeYawRight) / 2;
     private final double yawServo45 = (yawServoMid + Config.intakeYawRight) / 2;
     private final double yawServoNeg45 = (yawServoMid + Config.intakeYawLeft) / 2;
-
     private final boolean isUnitTest;
 
     public IntakeClaw(boolean isUnitTest) {

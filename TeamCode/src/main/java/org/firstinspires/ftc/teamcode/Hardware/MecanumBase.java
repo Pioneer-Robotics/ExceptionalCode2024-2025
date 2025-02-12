@@ -6,16 +6,28 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeDrive.FakeDcMotorEx;
 
 public class MecanumBase {
     private final DcMotorEx LF, LB, RF, RB;
     private boolean northMode = false;
-    public MecanumBase() {
-        // Set up motors
-        RF = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.motorRF);
-        LF = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.motorLF);
-        RB = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.motorRB);
-        LB = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.motorLB);
+    private final boolean isUnitTest;
+
+    public MecanumBase(boolean isUnitTest) {
+        this.isUnitTest = isUnitTest;
+        if (isUnitTest) {
+            // Set up motors
+            RF = new FakeDcMotorEx();
+            LF = new FakeDcMotorEx();
+            RB = new FakeDcMotorEx();
+            LB = new FakeDcMotorEx();
+        } else {
+            // Set up motors
+            RF = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.motorRF);
+            LF = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.motorLF);
+            RB = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.motorRB);
+            LB = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.motorLB);
+        }
 
         LF.setDirection(DcMotor.Direction.REVERSE);
         LB.setDirection(DcMotor.Direction.REVERSE);

@@ -1,6 +1,6 @@
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Hardware.SlideArm;
-import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeDcMotorEx;
+import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeDrive.FakeDcMotorEx;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

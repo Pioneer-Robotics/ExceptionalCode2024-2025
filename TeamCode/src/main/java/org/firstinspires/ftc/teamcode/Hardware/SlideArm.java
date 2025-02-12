@@ -6,8 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
-import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeDcMotorEx;
-import org.opencv.core.Mat;
+import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeDrive.FakeDcMotorEx;
 
 public class SlideArm {
     private final DcMotorEx motor1, motor2;
