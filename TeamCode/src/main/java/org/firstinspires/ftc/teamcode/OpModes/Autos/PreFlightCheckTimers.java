@@ -70,7 +70,6 @@ public class PreFlightCheckTimers extends LinearOpMode {
     TimerTask task;
 
     public Telemetry _telemetry = telemetry;
-
     public boolean unitTestIsActive = false;
 
     // Run Loop
@@ -99,7 +98,7 @@ public class PreFlightCheckTimers extends LinearOpMode {
                     handleTestTransferState();
                     break;
                 case TEST_SLIDE:
-                    // handleTestSlideState();
+                     handleTestSlideState();
                     // FIXME: Temporary for testing without slide
                     state = PreFlightCheckTimers.State.TEST_OCG_BOX;
                     break;
@@ -135,6 +134,7 @@ public class PreFlightCheckTimers extends LinearOpMode {
         slideTestState = PreFlightCheckTimers.SlideTestState.SLIDE_UP;
         state = PreFlightCheckTimers.State.TEST_DRIVE;
     }
+
     private void handleTestDriveState() {
         switch (driveTestState) {
             case FORWARDS:

@@ -12,6 +12,8 @@ public class PurePursuit {
     private int intersectionIndex = 0;
     private double turnMultiplier = 1;
 
+    public double currentSpeedForUnitTest = 0;
+
     public PurePursuit(double kP, double kI, double kD) {
         xPID = new PID(kP, kI, kD);
         yPID = new PID(kP, kI, kD);
@@ -233,6 +235,9 @@ public class PurePursuit {
 //        Bot.opMode.telemetry.addData("pos y", pos[1]);
 //        Bot.opMode.telemetry.addData("target x", targetPoint[0]);
 //        Bot.opMode.telemetry.addData("target y", targetPoint[1]);
+
+        // save values for unit test
+        currentSpeedForUnitTest = speed;
 
         // Move the robot
         Bot.mecanumBase.setNorthMode(true);

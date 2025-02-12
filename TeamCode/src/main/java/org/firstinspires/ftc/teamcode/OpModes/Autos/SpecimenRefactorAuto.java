@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.AutoPaths;
@@ -15,7 +16,7 @@ import java.util.TimerTask;
 @Autonomous(name="Specimen Refactor Auto", group="Autos")
 public class SpecimenRefactorAuto extends LinearOpMode {
     // Possible states for the robot in auto
-    enum State {
+    public enum State {
         INIT,
         SPECIMEN_HANG_UP,
         SPECIMEN_HANG_2,
@@ -29,14 +30,17 @@ public class SpecimenRefactorAuto extends LinearOpMode {
     }
 
     // Properties
-    SpecimenRefactorAuto.State state;
+    public SpecimenRefactorAuto.State state;
     ElapsedTime timer;
     Timer armSchedule;
     TimerTask armTask;
     double offsetX;
-    double hang_number;
+    public double hang_number;
     double initial_hang_number;
     double yCollect;
+
+    public Telemetry _telemetry = telemetry;
+    public boolean unitTestIsActive = false;
 
     // Run Loop
     public void runOpMode() {
@@ -45,8 +49,8 @@ public class SpecimenRefactorAuto extends LinearOpMode {
         // redundant
         // waitForStart();
 
-        while (opModeIsActive()) {
-            switch (state) {
+        while (opModeIsActive() || unitTestIsActive) {
+            switch (this.state) {
                 case INIT:
                     handleInitState();
                     break;
@@ -79,7 +83,7 @@ public class SpecimenRefactorAuto extends LinearOpMode {
     }
 
     // Private Methods
-    private void initalize() { // This method could be further refactored
+    public void initalize() { // This method could be further refactored
         Bot.init(this, Config.specimenStartX, Config.specimenStartY);
         timer = new ElapsedTime();
 
@@ -87,10 +91,12 @@ public class SpecimenRefactorAuto extends LinearOpMode {
         state = SpecimenRefactorAuto.State.INIT;
 
         Toggle preloadToggle = new Toggle(true);
-        while (!isStarted()) {
-            preloadToggle.toggle(gamepad1.a);
-            telemetry.addData("Preload", preloadToggle.get());
-            telemetry.update();
+        if (!Bot.isUnitTest) {
+            while (!isStarted()) {
+                preloadToggle.toggle(gamepad1.a);
+                _telemetry.addData("Preload", preloadToggle.get());
+                _telemetry.update();
+            }
         }
 
         hang_number = 4;
@@ -107,7 +113,7 @@ public class SpecimenRefactorAuto extends LinearOpMode {
 
     // Set the initial path to hang preloaded specimen
     // --> SPECIMEN_HANG_2
-    private void handleInitState() {
+    public void handleInitState() {
         AutoPaths.hangSpecimenUp(
                 Bot.pinpoint.getX(), // Current X
                 Bot.pinpoint.getY(), // Current Y
@@ -121,13 +127,14 @@ public class SpecimenRefactorAuto extends LinearOpMode {
                 Bot.specimenArm.movePrepHang(1);
             }
         };
-        armSchedule.schedule(armTask, 350);
+        createTaskWithWait(armTask, armSchedule, 350);
+
         state = SpecimenRefactorAuto.State.SPECIMEN_HANG_2;
     }
 
     // Release specimen at submersible, set next path (3 possibilities)
     // stop --> PARK; collect --> COLLECT_SPECIMEN_1; else --> PUSH_SAMPLE_1
-    private void handleHang2State() { // This methods should be further refactored ***
+    public void handleHang2State() { // This methods should be further refactored ***
         if (hang_number == initial_hang_number) {
             Bot.purePursuit.update(0.4);
         } else {
@@ -148,7 +155,7 @@ public class SpecimenRefactorAuto extends LinearOpMode {
                         Bot.specimenArm.moveToCollect(0.75);
                     }
                 };
-                armSchedule.schedule(armTask, 750);
+                createTaskWithWait(armTask, armSchedule, 750);
                 state = SpecimenRefactorAuto.State.PARK;
             } else if (hang_number < initial_hang_number) {
                 // Set path to observation zone to grab specimen (COLLECT_SPECIMEN_1)
@@ -162,10 +169,9 @@ public class SpecimenRefactorAuto extends LinearOpMode {
                     @Override
                     public void run() {
                         Bot.specimenArm.moveToCollect(0.75);
-
                     }
                 };
-                armSchedule.schedule(armTask, 750);
+                createTaskWithWait(armTask, armSchedule, 750);
                 state = SpecimenRefactorAuto.State.COLLECT_SPECIMEN_1;
             } else {
                 // Set path to push first sample into observation zone (PUSH_SAMPLE_1)
@@ -179,10 +185,9 @@ public class SpecimenRefactorAuto extends LinearOpMode {
                     @Override
                     public void run() {
                         Bot.specimenArm.moveToCollect(0.4);
-
                     }
                 };
-                armSchedule.schedule(armTask, 750);
+                createTaskWithWait(armTask, armSchedule, 750);
                 state = SpecimenRefactorAuto.State.PUSH_SAMPLE_1;
             }
         }
@@ -192,7 +197,7 @@ public class SpecimenRefactorAuto extends LinearOpMode {
     // Bring first sample into observation zone, set path to bring second sample to
     // observation zone
     // --> PUSH_SAMPLE_2
-    private void handlePushSampleOne() {
+    public void handlePushSampleOne() {
         Bot.purePursuit.update(0.85);
         if (Bot.purePursuit.reachedTarget(5)) {
             AutoPaths.pushSample2(
@@ -205,7 +210,7 @@ public class SpecimenRefactorAuto extends LinearOpMode {
 
     // Bring second sample into observation zone, set path to collect specimen on fence
     // --> PUSH_SAMPLE_3
-    private void handlePushSampleTwo() {
+    public void handlePushSampleTwo() {
         Bot.purePursuit.update(0.8);
         if (Bot.purePursuit.reachedTarget(5)) {
             AutoPaths.pushSample3(
@@ -218,7 +223,7 @@ public class SpecimenRefactorAuto extends LinearOpMode {
 
     // Bring third sample into observation zone, set path to collect specimen on fence
     // --> COLLECT_SPECIMEN_1
-    private void handlePushSampleThree() {
+    public void handlePushSampleThree() {
         Bot.purePursuit.update(0.75);
         if (Bot.purePursuit.reachedTarget(5)) {
             AutoPaths.collectSpecimen(
@@ -232,7 +237,7 @@ public class SpecimenRefactorAuto extends LinearOpMode {
 
     // Go to and collect specimen on fence
     // --> COLLECT_SPECIMEN_2
-    private void handleCollectSpecimenOne() {
+    public void handleCollectSpecimenOne() {
         if (hang_number == initial_hang_number-1) {
             Bot.purePursuit.update(0.475, true);
         } else {
@@ -249,8 +254,8 @@ public class SpecimenRefactorAuto extends LinearOpMode {
     // Wait to grab specimen from fence, set path to hang specimen with an offsetX
     // from the original
     // --> SPECIMEN_HANG_2
-    private void handleSpecimenTwo() {
-        if (timer.seconds() > 0.25) {
+    public void handleSpecimenTwo() {
+        if (timer.seconds() > 0.25 || unitTestIsActive) {
             yCollect = Bot.pinpoint.getY();
             offsetX += Config.hangOffset; // Adjust the hang offsetX
             AutoPaths.hangSpecimen(
@@ -267,23 +272,39 @@ public class SpecimenRefactorAuto extends LinearOpMode {
 
     // Wait to reach observation zone to park
     // End of auto
-    private void handlePark() {
+    public void handlePark() {
         Bot.purePursuit.update(1);
         if (Bot.purePursuit.reachedTarget(5)) {
-            terminateOpModeNow();
+            if (!Bot.isUnitTest) {
+                terminateOpModeNow();
+            } else {
+                unitTestIsActive = false;
+            }
         }
+    }
+
+    private void createTaskWithWait(TimerTask task, Timer taskTimer, long delay) {
+        if (Bot.isUnitTest) {
+            task.run();
+            return;
+        }
+
+        taskTimer = new Timer();
+        taskTimer.schedule(task, delay);
     }
 
     private void updateTelemetry() {
         Bot.pinpoint.update();
-        telemetry.addData("State", state);
-        telemetry.addData("Y Collect", yCollect);
-        telemetry.addData("X", Bot.pinpoint.getX());
-        telemetry.addData("Y", Bot.pinpoint.getY());
-        telemetry.addData("Theta", Bot.pinpoint.getHeading());
-        telemetry.update();
-        Bot.dashboardTelemetry.addData("X", Bot.pinpoint.getX());
-        Bot.dashboardTelemetry.addData("Y", Bot.pinpoint.getY());
-        Bot.dashboardTelemetry.update();
+        _telemetry.addData("State", state);
+        _telemetry.addData("Y Collect", yCollect);
+        _telemetry.addData("X", Bot.pinpoint.getX());
+        _telemetry.addData("Y", Bot.pinpoint.getY());
+        _telemetry.addData("Theta", Bot.pinpoint.getHeading());
+        _telemetry.update();
+        if (!Bot.isUnitTest) {
+            Bot.dashboardTelemetry.addData("X", Bot.pinpoint.getX());
+            Bot.dashboardTelemetry.addData("Y", Bot.pinpoint.getY());
+            Bot.dashboardTelemetry.update();
+        }
     }
 }

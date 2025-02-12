@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Pinpoint;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PurePursuit;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.SparkfunOTOS;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.TwoWheelOdometry;
+import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakePurePursuit;
 import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeTelemetry;
 
 /**
@@ -72,7 +73,11 @@ public class Bot {
 //        Bot.deadwheel_odom = new TwoWheelOdometry(Config.specimenStartX, Config.specimenStartY);
         Bot.mecanumBase = new MecanumBase(isUnitTest);
         Bot.pidDrive = new PIDDrive();
-        Bot.purePursuit = new PurePursuit(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2]);
+        if (isUnitTest) {
+            Bot.purePursuit = new FakePurePursuit(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2]);
+        } else {
+            Bot.purePursuit = new PurePursuit(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2]);
+        }
 
         // Motors
         Bot.specimenArm = new SpecimenArm(isUnitTest);
