@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeDcMotorEx;
+import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeServo;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -16,16 +18,28 @@ public class SpecimenArm {
     public ServoClass claw, specimenWrist;
     int position = 0;
 
-    public SpecimenArm() {
-        motor = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.specimenArmMotor);
+    private final boolean isUnitTest;
+
+    public SpecimenArm(boolean isUnitTest) {
+
+        this.isUnitTest = isUnitTest;
+        if (isUnitTest) {
+            motor = new FakeDcMotorEx();
+
+            claw = new ServoClass(new FakeServo(), Config.clawOpen, Config.clawClose);
+            specimenWrist = new ServoClass(new FakeServo(), Config.specWristCollect, Config.specWristHang);
+        } else {
+            motor = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.specimenArmMotor);
+
+            // Servos
+            claw = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.clawServo), Config.clawOpen, Config.clawClose);
+            specimenWrist = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.specimenWristServo), Config.specWristCollect, Config.specWristHang);
+        }
+
         motor.setTargetPositionTolerance(5);
         motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        // Servos
-        claw = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.clawServo), Config.clawOpen, Config.clawClose);
-        specimenWrist = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.specimenWristServo), Config.specWristCollect, Config.specWristHang);
 
         claw.closeServo();
     }

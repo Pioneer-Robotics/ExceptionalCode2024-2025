@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeServo;
 
 public class IntakeClaw {
     public ServoClass clawServo, rollServo, yawServo;
@@ -11,11 +12,20 @@ public class IntakeClaw {
     private final double yawServo45 = (yawServoMid + Config.intakeYawRight) / 2;
     private final double yawServoNeg45 = (yawServoMid + Config.intakeYawLeft) / 2;
 
+    private final boolean isUnitTest;
 
-    public IntakeClaw() {
-        clawServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeClawServo), Config.intakeClawOpen, Config.intakeClawClose);
-        rollServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeRollServo), Config.intakeYawLeft, Config.intakeYawRight);
-        yawServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeYawServo), Config.intakeRollUp, Config.intakeRollDown);
+    public IntakeClaw(boolean isUnitTest) {
+        this.isUnitTest = isUnitTest;
+        if (isUnitTest) {
+            clawServo = new ServoClass(new FakeServo(), Config.intakeClawOpen, Config.intakeClawClose);
+            rollServo = new ServoClass(new FakeServo(), Config.intakeYawLeft, Config.intakeYawRight);
+            yawServo = new ServoClass(new FakeServo(), Config.intakeRollUp, Config.intakeRollDown);
+        } else {
+            clawServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeClawServo), Config.intakeClawOpen, Config.intakeClawClose);
+            rollServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeRollServo), Config.intakeYawLeft, Config.intakeYawRight);
+            yawServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeYawServo), Config.intakeRollUp, Config.intakeRollDown);
+        }
+
         clawServo.closeServo();
         clawPos0();
         clawUp();

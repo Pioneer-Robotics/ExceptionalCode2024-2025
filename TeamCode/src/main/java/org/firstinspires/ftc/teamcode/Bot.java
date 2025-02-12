@@ -68,12 +68,12 @@ public class Bot {
         Bot.purePursuit = new PurePursuit(Config.drivePID[0], Config.drivePID[1], Config.drivePID[2]);
 
         // Motors
-        Bot.specimenArm = new SpecimenArm();
+        Bot.specimenArm = new SpecimenArm(false);
         Bot.slideArm = new SlideArm(false);
 
         // Servos
         Bot.intake = new Intake();
-        Bot.intakeClaw = new IntakeClaw();
+        Bot.intakeClaw = new IntakeClaw(false);
         Bot.ocgBox = new OCGBox();
 
 

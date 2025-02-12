@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Hardware.IntakeClaw;
 public class IntakeTest extends LinearOpMode {
     public void runOpMode() {
         Bot.opMode = this;
-        IntakeClaw claw = new IntakeClaw();
+        IntakeClaw claw = new IntakeClaw(false);
         Intake intake = new Intake();
 
         waitForStart();
