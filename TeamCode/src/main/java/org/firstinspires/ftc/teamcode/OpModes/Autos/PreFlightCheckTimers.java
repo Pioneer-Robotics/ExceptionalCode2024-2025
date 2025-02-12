@@ -273,17 +273,22 @@ public class PreFlightCheckTimers extends LinearOpMode {
 
     private void updateWristUpTransferState() {
         Bot.intake.misumiWristUp();
-        if (Bot.intake.isWristUp()) {
-            transferTestState = PreFlightCheckTimers.TransferTestState.OCG_UP;
-        }
+        TimerTask upTask = new TimerTask() {
+            @Override public void run() {
+                transferTestState = PreFlightCheckTimers.TransferTestState.OCG_UP;
+            }
+        };
+        createTaskWithWait(upTask);
     }
 
     private void updateOCGUpTransferState() {
         Bot.ocgBox.ocgPitchUp();
-        if (Bot.ocgBox.isPitchUp()) {
-            timer.reset();
-            transferTestState = PreFlightCheckTimers.TransferTestState.DROP;
-        }
+        TimerTask upTask = new TimerTask() {
+            @Override public void run() {
+                transferTestState = PreFlightCheckTimers.TransferTestState.DROP;
+            }
+        };
+        createTaskWithWait(upTask);
     }
 
     private void updateDropTransferState() {
@@ -309,7 +314,12 @@ public class PreFlightCheckTimers extends LinearOpMode {
         // As there is nothing after, the state is immediately set to NONE
         Bot.intake.misumiWristDown();
         Bot.intakeClaw.closeClaw();
-        state = PreFlightCheckTimers.State.TEST_SLIDE;
+        TimerTask upTask = new TimerTask() {
+            @Override public void run() {
+                state = PreFlightCheckTimers.State.TEST_SLIDE;
+            }
+        };
+        createTaskWithWait(upTask);
     }
 
     private void handleTestSlideState() {
