@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes.Autos;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -9,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.AutoPaths;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
+@Disabled
 @Autonomous(name="Intake Specimen Auto", group="Autos")
 public class IntakeSpecimenAuto extends LinearOpMode {
     // Possible states for the robot in auto

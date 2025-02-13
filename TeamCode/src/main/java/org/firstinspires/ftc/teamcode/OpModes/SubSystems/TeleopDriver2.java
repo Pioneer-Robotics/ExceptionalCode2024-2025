@@ -28,7 +28,7 @@ public class TeleopDriver2 {
     }
 
     // Run Loop
-    public void doOneStateLoop() {
+    public void loopGamepad() {
         specimenArmSubSystem.doOneStateLoop();
         ocgBoxSubSystem.doOneStateLoop();
         slideArmSubSystem.doOneStateLoop();

@@ -102,7 +102,6 @@ public class SpecimenArm {
         return motor.getCurrentPosition();
     }
     public boolean reachedPosition() { return Math.abs(motor.getTargetPosition() - motor.getCurrentPosition()) < Config.specimenArmTolerance; }
-
     public DcMotorEx getMotor() {
         return motor;
     }

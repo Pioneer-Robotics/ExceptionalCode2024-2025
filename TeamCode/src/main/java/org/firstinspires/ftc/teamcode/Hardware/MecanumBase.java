@@ -67,7 +67,7 @@ public class MecanumBase {
     public void move(double x, double y, double turn, double speed) {
         if (northMode) {
             // Rotate x and y
-            double theta = Bot.pinpoint.getHeading();
+            double theta = (!Bot.isUnitTest) ? Bot.imu.getRadians(): 0;
             double tempX = x * Math.cos(theta) - y * Math.sin(theta);
             double tempY = x * Math.sin(theta) + y * Math.cos(theta);
             x = tempX;

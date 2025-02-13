@@ -114,7 +114,7 @@ public class SpecimenRefactorAuto extends LinearOpMode {
     // Set the initial path to hang preloaded specimen
     // --> SPECIMEN_HANG_2
     public void handleInitState() {
-        AutoPaths.hangSpecimenUp(
+        AutoPaths.hangPreloadSpecimen(
                 Bot.pinpoint.getX(), // Current X
                 Bot.pinpoint.getY(), // Current Y
                 5, // Hang offsetX X

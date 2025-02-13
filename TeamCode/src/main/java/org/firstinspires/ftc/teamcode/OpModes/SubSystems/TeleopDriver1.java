@@ -30,7 +30,7 @@ public class TeleopDriver1 {
     }
 
     // Run Loop
-    public void doOneStateLoop() {
+    public void loopGamepad() {
         driveSubSystem.doOneStateLoop();
         intakeSubSystem.doOneStateLoop();
         transferSubSystem.doOneStateLoop();

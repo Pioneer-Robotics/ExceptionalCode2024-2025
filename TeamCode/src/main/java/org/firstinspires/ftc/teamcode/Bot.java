@@ -88,11 +88,10 @@ public class Bot {
         Bot.intakeClaw = new IntakeClaw(isUnitTest);
         Bot.ocgBox = new OCGBox(isUnitTest);
 
-
         // Other
         if (!isUnitTest) {
             Bot.specimenEndStop = opMode.hardwareMap.get(AnalogInput.class, Config.specimenEndStop);
-            //        Bot.colorSensor = new ColorSensor();
+//        Bot.colorSensor = new ColorSensor();
             Bot.voltageHandler = new VoltageHandler();
             Bot.imu = new BotIMU();
             Bot.led = new LEDController();

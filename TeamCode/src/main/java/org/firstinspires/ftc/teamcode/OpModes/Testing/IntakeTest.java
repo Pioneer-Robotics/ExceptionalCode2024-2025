@@ -1,5 +1,6 @@
-package org.firstinspires.ftc.teamcode.OpModes.Teleop;
+package org.firstinspires.ftc.teamcode.OpModes.Testing;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -7,6 +8,7 @@ import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Hardware.Intake;
 import org.firstinspires.ftc.teamcode.Hardware.IntakeClaw;
 
+@Disabled
 @TeleOp(name = "Intake Test")
 public class IntakeTest extends LinearOpMode {
     public void runOpMode() {
