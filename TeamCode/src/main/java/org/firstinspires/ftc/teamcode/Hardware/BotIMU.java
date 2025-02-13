@@ -21,11 +21,11 @@ public class BotIMU {
             this.imu = new FakeIMU();
         } else {
             this.imu = Bot.opMode.hardwareMap.get(IMU.class, Config.imu);
+            this.imu.initialize(new com.qualcomm.robotcore.hardware.IMU.Parameters(new RevHubOrientationOnRobot(
+                    RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                    RevHubOrientationOnRobot.UsbFacingDirection.FORWARD)));
+            this.imu.resetYaw();
         }
-        this.imu.initialize(new com.qualcomm.robotcore.hardware.IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD)));
-        this.imu.resetYaw();
     }
 
     /**
@@ -39,7 +39,11 @@ public class BotIMU {
      * @return the yaw of the robot in radians
      */
     public double getRadians(){
-        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        if (Bot.isUnitTest) {
+            return 0;
+        } else {
+            return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        }
     }
 
     /**
