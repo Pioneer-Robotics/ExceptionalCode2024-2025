@@ -1,6 +1,7 @@
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.Bot;
+import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.OpModes.Teleop.Teleop;
 import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeGamepad;
 import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeTelemetry;
@@ -38,6 +39,7 @@ public class TestTeleop {
     }
 
     // Tests
+    // Game Pad 1 **************
     @Test
     public void test_Driver1_Bumpers_ButtonPressed() {
         systemUnderTest._gamepad1.right_bumper = true;
@@ -138,7 +140,111 @@ public class TestTeleop {
         Assert.assertEquals(true, Bot.intake.isWristUp());
     }
 
+    // Game Pad 2 *************
+    @Test
+    public void test_Driver2_DPad_ButtonPressed() {
+        systemUnderTest._gamepad2.dpad_down = true;
+        systemUnderTest.runOpMode();
 
+        // check to see position 0
+        Assert.assertEquals(0, Bot.specimenArm.position);
+
+        systemUnderTest._gamepad2.dpad_down = false;
+        systemUnderTest._gamepad2.dpad_left = true;
+        systemUnderTest.runOpMode();
+
+        // check to see if position 2
+        Assert.assertEquals(2, Bot.specimenArm.position);
+    }
+
+    @Test
+    public void test_Driver2_A_ButtonPressed() { // **** This might be a bug ****
+        systemUnderTest._gamepad2.a = true;
+        systemUnderTest.runOpMode();
+
+        // check to see if Specimen arm is at open position
+        Assert.assertEquals(Bot.specimenArm.claw.openPos, Bot.specimenArm.claw.getPos(), 0.01);
+
+        systemUnderTest._gamepad2.a = false; // let go of button
+        systemUnderTest.runOpMode();
+        systemUnderTest._gamepad2.a = true; // wait another loop
+        systemUnderTest.runOpMode();
+        systemUnderTest.runOpMode();
+
+        systemUnderTest._gamepad2.a = true; // press button again
+
+        systemUnderTest.runOpMode();
+
+        // check to see if Specimen arm is at closed position
+        Assert.assertEquals(Bot.specimenArm.claw.closePos, Bot.specimenArm.claw.getPos(), 0.01);
+    }
+
+    // TODO: - Claw Rotation
+
+    // TODO: - Slide Arm - Test misumi wrist for each button ****
+    // *** these next 3 button are either or and if all together then Y is first, A is second and X is last
+    @Test
+    public void test_Driver2_SlideArm_Y_ButtonsPressed() {
+        // Y button
+        systemUnderTest._gamepad2.y = true;
+        systemUnderTest.runOpMode();
+
+        // check to see if slide target position is accurate
+        // *** note motor 1 is negative
+        Assert.assertEquals(-Config.slideHighBasket, Bot.slideArm.getMotor1().getTargetPosition(), 0.01);
+        Assert.assertEquals(Config.slideHighBasket, Bot.slideArm.getMotor2().getTargetPosition(), 0.01);
+        systemUnderTest._gamepad2.y = false;
+    }
+
+    @Test
+    public void test_Driver2_SlideArm_A_ButtonsPressed() {
+        // A button
+        systemUnderTest.initalize();
+
+        // **** Note this has a limiter at the bottom so the slide MUST be up in order for it to go down****
+        int turnOffThreshold = Config.slideDown + 50;
+        Bot.slideArm.setTestingOnlyMotor1Position(turnOffThreshold + 1); // anything over Threshold should turn on the motor
+        Bot.slideArm.setTestingOnlyMotor2Position(turnOffThreshold + 1); // anything over Threshold should turn on the motor
+
+        systemUnderTest._gamepad2.a = true;
+        systemUnderTest.runLoop();
+
+        // check to see if slide target position is accurate
+        // *** note motor 1 is negative
+        Assert.assertEquals(-Config.slideDown, Bot.slideArm.getMotor1().getTargetPosition(), 0.01);
+        Assert.assertEquals(Config.slideDown, Bot.slideArm.getMotor2().getTargetPosition(), 0.01);
+        systemUnderTest._gamepad2.a = false;
+    }
+
+    @Test
+    public void test_Driver2_SlideArm_X_ButtonsPressed() {
+        systemUnderTest._gamepad2.x = true;
+        systemUnderTest.runOpMode();
+
+        // check to see if slide target position is accurate
+        // *** note motor 1 is negative
+        Assert.assertEquals(-Config.slideLowBasket, Bot.slideArm.getMotor1().getTargetPosition(), 0.01);
+        Assert.assertEquals(Config.slideLowBasket, Bot.slideArm.getMotor2().getTargetPosition(), 0.01);
+        systemUnderTest._gamepad2.x = false;
+    }
+
+
+    @Test
+    public void test_Driver2_Bumpers_ButtonPressed() {
+        // either or, but if both pressed box goes up ****
+        systemUnderTest._gamepad2.left_bumper = true;
+        systemUnderTest.runOpMode();
+
+        // check to see if ocg box is pitch up
+        Assert.assertEquals(true, Bot.ocgBox.pitchState);
+
+        systemUnderTest._gamepad2.left_bumper = false;
+        systemUnderTest._gamepad2.right_bumper = true;
+        systemUnderTest.runOpMode();
+
+        // check to see if ocg box is pitch down
+        Assert.assertEquals(false, Bot.ocgBox.pitchState);
+    }
 
 
 }

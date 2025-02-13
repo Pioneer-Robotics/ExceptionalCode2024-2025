@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  */
 public class ServoClass {
     private final Servo servo;
-    private final double closePos, openPos;
+    public final double closePos, openPos;
     private double pos1;
     private double pos2;
     private double pos3;

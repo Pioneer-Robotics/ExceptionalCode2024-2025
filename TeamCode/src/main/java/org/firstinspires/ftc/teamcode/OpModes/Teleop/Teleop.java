@@ -39,12 +39,11 @@ public class Teleop extends LinearOpMode {
 
     // Run Loop
     public void runOpMode() {
-        Bot.init(this);
+        initalize();
+        runLoop();
+    }
 
-        driver1 = TeleopDriver1.createInstance(_gamepad1);
-        driver2 = TeleopDriver2.createInstance(_gamepad2);
-        specimenCycle = SpecimenCycle.createInstance();
-
+    public void runLoop() {
         if (!Bot.isUnitTest) {
             waitForStart();
         } else {
@@ -70,6 +69,14 @@ public class Teleop extends LinearOpMode {
     }
 
     // Private methods
+    public void initalize() {
+        Bot.init(this);
+
+        driver1 = TeleopDriver1.createInstance(_gamepad1);
+        driver2 = TeleopDriver2.createInstance(_gamepad2);
+        specimenCycle = SpecimenCycle.createInstance();
+    }
+
     private void updateCycleState() {
         specimenCycleToggle.toggle(_gamepad1.touchpad);
         // When the button is first pressed, set robot position with specimenCycle.start()

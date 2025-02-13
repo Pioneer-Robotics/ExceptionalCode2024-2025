@@ -41,6 +41,8 @@ public class TeleopDriver2 {
 
     private void toggleSpecimenClaw() {
         specimenClawToggle.toggle(gamepad.a);
+        boolean clawTog = specimenClawToggle.get();
+        boolean justChanged = specimenClawToggle.justChanged();
         if (specimenClawToggle.justChanged() && specimenClawToggle.get()) {
             Bot.specimenArm.openClaw();
         } else if (specimenClawToggle.justChanged() && !specimenClawToggle.get()) {

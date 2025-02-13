@@ -16,7 +16,7 @@ import java.util.TimerTask;
 public class SpecimenArm {
     private final DcMotorEx motor;
     public ServoClass claw, specimenWrist;
-    int position = 0;
+    public int position = 0;
     private final boolean isUnitTest;
 
     public SpecimenArm(boolean isUnitTest) {
