@@ -27,8 +27,8 @@ public class TeleopDriver1 {
     }
 
     // Variables
-    private double speed = 0.5;
-    private boolean northMode = true;
+    public double speed = 0.5;
+    public boolean northMode = true;
     private IntakeState intakeState = IntakeState.NONE;
     private TransferState transferState = TransferState.NONE;
 
@@ -36,7 +36,7 @@ public class TeleopDriver1 {
     private final Toggle northModeToggle = new Toggle(true);
     private final Toggle incSpeedToggle = new Toggle(false);
     private final Toggle decSpeedToggle = new Toggle(false);
-    private final Toggle resetIMUToggle = new Toggle(false);
+    public final Toggle resetIMUToggle = new Toggle(false);
     private final Toggle extendIntakeToggle = new Toggle(false);
     private final Toggle intakeClawToggle = new Toggle(false);
     private final Toggle intakeWristToggle = new Toggle(false);

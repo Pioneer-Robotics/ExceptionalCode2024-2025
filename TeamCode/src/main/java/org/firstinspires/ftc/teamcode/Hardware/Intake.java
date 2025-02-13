@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeDrive.FakeServo;
 public class Intake {
 
     public ServoClass misumiDriveL, misumiDriveR, misumiWristL, misumiWristR;
-    boolean isExtended;
+    public boolean isExtended;
     private final boolean isUnitTest;
 
     public Intake(boolean isUnitTest) {
