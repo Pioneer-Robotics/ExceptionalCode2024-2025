@@ -18,6 +18,10 @@ public class TestTeleop {
     FakeGamepad gamepad1;
     FakeGamepad gamepad2;
 
+    private final double yawServoMid = (Config.intakeYawLeft + Config.intakeYawRight) / 2;
+    private final double yawServo45 = (yawServoMid + Config.intakeYawRight) / 2;
+    private final double yawServoNeg45 = (yawServoMid + Config.intakeYawLeft) / 2;
+
     // Setup & Tear Down
     @Before
     public void setUp() throws Exception {
@@ -180,6 +184,42 @@ public class TestTeleop {
     }
 
     // TODO: - Claw Rotation
+    @Test
+    public void test_Driver2_LeftStick_X_Moveded() {
+        systemUnderTest._gamepad2.left_stick_x = (float) -1.0; // left_stick_x < -0.5
+        systemUnderTest.runOpMode();
+
+        // FIXME: - This test is failing - Could be a test issue
+        // check to see if claw position is correct
+        Assert.assertEquals(Config.intakeYawRight, Bot.intakeClaw.yawServo.getPos(), 0.01);
+
+        systemUnderTest._gamepad2.left_stick_x = (float) -0.4; // left_stick_x > -0.5 && left_stick_x < -0.1
+        systemUnderTest.runOpMode();
+
+        // check to see if claw position is correct
+        Assert.assertEquals(yawServoNeg45, Bot.intakeClaw.yawServo.getPos(), 0.01);
+
+        systemUnderTest._gamepad2.left_stick_x = (float) 1.0; // left_stick_x > 0.5
+        systemUnderTest.runOpMode();
+
+        // check to see if claw position is correct
+        Assert.assertEquals(Config.intakeYawRight, Bot.intakeClaw.yawServo.getPos(), 0.01);
+
+        systemUnderTest._gamepad2.left_stick_x = (float) 0.2; // left_stick_x < 0.5 && left_stick_x > 0.1
+        systemUnderTest.runOpMode();
+
+        // check to see if claw position is correct
+        Assert.assertEquals(yawServo45, Bot.intakeClaw.yawServo.getPos(), 0.01);
+
+        // FIXME: - Bug - if values are -0.5 or between -0.1 and 0.1 or 0.5 they all go to else case
+        systemUnderTest._gamepad2.left_stick_x = (float) -0.0; // else...
+        systemUnderTest.runOpMode();
+
+        // check to see if claw position is correct
+        Assert.assertEquals(yawServoMid, Bot.intakeClaw.yawServo.getPos(), 0.01);
+
+
+    }
 
     // TODO: - Slide Arm - Test misumi wrist for each button ****
     // *** these next 3 button are either or and if all together then Y is first, A is second and X is last
