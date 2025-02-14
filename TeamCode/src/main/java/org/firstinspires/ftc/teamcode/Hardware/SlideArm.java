@@ -40,7 +40,6 @@ public class SlideArm {
         motor2.setTargetPosition(ticks);
         motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        // FIXME: Isn't velocity always positive? I changed motor 2 to be positive for now.
         motor1.setVelocity(-Config.maxSlideTicksPerSecond * speed);
         motor2.setVelocity(Config.maxSlideTicksPerSecond * speed);
     }
@@ -55,7 +54,6 @@ public class SlideArm {
         if (!motor2.isMotorEnabled()) { motor2On(); }
         motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        // FIXME: Isn't velocity always positive? I changed motor 2 to be positive for now.
         motor1.setVelocity(-power * Config.maxSlideTicksPerSecond);
         motor2.setVelocity(power * Config.maxSlideTicksPerSecond);
     }

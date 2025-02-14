@@ -162,22 +162,19 @@ public class TestTeleop {
     }
 
     @Test
-    public void test_Driver2_A_ButtonPressed() { // **** This might be a bug ****
-        systemUnderTest._gamepad2.a = true;
-        systemUnderTest.runOpMode();
+    public void test_Driver2_Circle_ButtonPressed() { // **** This might be a bug ****
+        systemUnderTest.initalize();
+
+        systemUnderTest._gamepad2.circle = true;
+        systemUnderTest.runLoop(); // only run runloop after initialize
 
         // check to see if Specimen arm is at open position
         Assert.assertEquals(Bot.specimenArm.claw.openPos, Bot.specimenArm.claw.getPos(), 0.01);
 
-        systemUnderTest._gamepad2.a = false; // let go of button
-        systemUnderTest.runOpMode();
-        systemUnderTest._gamepad2.a = true; // wait another loop
-        systemUnderTest.runOpMode();
-        systemUnderTest.runOpMode();
-
-        systemUnderTest._gamepad2.a = true; // press button again
-
-        systemUnderTest.runOpMode();
+        systemUnderTest._gamepad2.circle = false; // let go of button
+        systemUnderTest.runLoop(); // only run runloop after initialize
+        systemUnderTest._gamepad2.circle = true; // press button again
+        systemUnderTest.runLoop(); // only run runloop after initialize
 
         // check to see if Specimen arm is at closed position
         Assert.assertEquals(Bot.specimenArm.claw.closePos, Bot.specimenArm.claw.getPos(), 0.01);
@@ -185,40 +182,51 @@ public class TestTeleop {
 
     // TODO: - Claw Rotation
     @Test
-    public void test_Driver2_LeftStick_X_Moveded() {
-        systemUnderTest._gamepad2.left_stick_x = (float) -1.0; // left_stick_x < -0.5
-        systemUnderTest.runOpMode();
+    public void test_Driver2_LeftStick_X_Moved() {
+        systemUnderTest.initalize();
 
-        // FIXME: - This test is failing - Could be a test issue
+        double test = Bot.intakeClaw.yawServo.getPos();
+        systemUnderTest._gamepad2.left_stick_x = (float) -1.0; // left_stick_x < -0.5
+        systemUnderTest.runLoop(); // only run runloop after initialize
+
         // check to see if claw position is correct
-        Assert.assertEquals(Config.intakeYawRight, Bot.intakeClaw.yawServo.getPos(), 0.01);
+        Assert.assertEquals(Config.intakeYawLeft, Bot.intakeClaw.yawServo.getPos(), 0.01);
 
         systemUnderTest._gamepad2.left_stick_x = (float) -0.4; // left_stick_x > -0.5 && left_stick_x < -0.1
-        systemUnderTest.runOpMode();
+        systemUnderTest.runLoop(); // only run runloop after initialize
 
         // check to see if claw position is correct
         Assert.assertEquals(yawServoNeg45, Bot.intakeClaw.yawServo.getPos(), 0.01);
 
         systemUnderTest._gamepad2.left_stick_x = (float) 1.0; // left_stick_x > 0.5
-        systemUnderTest.runOpMode();
+        systemUnderTest.runLoop(); // only run runloop after initialize
 
         // check to see if claw position is correct
         Assert.assertEquals(Config.intakeYawRight, Bot.intakeClaw.yawServo.getPos(), 0.01);
 
         systemUnderTest._gamepad2.left_stick_x = (float) 0.2; // left_stick_x < 0.5 && left_stick_x > 0.1
-        systemUnderTest.runOpMode();
+        systemUnderTest.runLoop(); // only run runloop after initialize
 
         // check to see if claw position is correct
         Assert.assertEquals(yawServo45, Bot.intakeClaw.yawServo.getPos(), 0.01);
 
-        // FIXME: - Bug - if values are -0.5 or between -0.1 and 0.1 or 0.5 they all go to else case
         systemUnderTest._gamepad2.left_stick_x = (float) -0.0; // else...
-        systemUnderTest.runOpMode();
+        systemUnderTest.runLoop(); // only run runloop after initialize
 
         // check to see if claw position is correct
         Assert.assertEquals(yawServoMid, Bot.intakeClaw.yawServo.getPos(), 0.01);
 
+        systemUnderTest._gamepad2.left_stick_x = (float) -0.5; // else...
+        systemUnderTest.runLoop(); // only run runloop after initialize
 
+        // check to see if claw position is correct
+        Assert.assertEquals(Config.intakeYawLeft, Bot.intakeClaw.yawServo.getPos(), 0.01);
+
+        systemUnderTest._gamepad2.left_stick_x = (float) 0.5; // else...
+        systemUnderTest.runLoop(); // only run runloop after initialize
+
+        // check to see if claw position is correct
+        Assert.assertEquals(Config.intakeYawRight, Bot.intakeClaw.yawServo.getPos(), 0.01);
     }
 
     // TODO: - Slide Arm - Test misumi wrist for each button ****

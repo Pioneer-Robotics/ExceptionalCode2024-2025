@@ -91,7 +91,9 @@ public class SpecimenArm {
 
     // Servo control
     public void openClaw() { claw.openServo(); }
-    public void closeClaw() { claw.closeServo(); }
+    public void closeClaw() {
+        claw.closeServo();
+    }
     public void wristCollect() { specimenWrist.openServo(); }
     public void wristHang() { specimenWrist.closeServo(); }
 
