@@ -175,7 +175,7 @@ public class Config {
        ------------------------- */
 
     // Specimen hang offset (space between hangs)
-    public static final double hangOffset = 5;
+    public static final double hangOffset = 3;
 
     // Coordinates of default specimen hang
     public static final double specHangX = 185;

@@ -171,36 +171,28 @@ public class TeleopDriver1 {
 
             case WRIST_UP:
                 Bot.intake.misumiWristUp();
-                if (Bot.intake.isWristUp()) {
-                    transferState = TransferState.OCG_UP;
-                }
+                timer.reset();
+                transferState = TransferState.OCG_UP;
                 break;
 
             case OCG_UP:
                 Bot.ocgBox.ocgPitchUp();
-                if (Bot.ocgBox.isPitchUp()) {
+                if (timer.milliseconds() > 500) {
                     timer.reset();
+                    Bot.intakeClaw.openClaw();
                     transferState = TransferState.DROP;
                 }
                 break;
 
             case DROP:
-                if (timer.milliseconds() > 500) {
-                    Bot.intakeClaw.openClaw();
-                }
-                if (Bot.intakeClaw.isClawOpen()) {
-                    timer.reset();
+                if (timer.milliseconds() > 750) {
+                    Bot.ocgBox.idle();
                     transferState = TransferState.OCG_IDLE;
                 }
                 break;
 
             case OCG_IDLE:
-                if (timer.milliseconds() > 3000) {
-                    Bot.ocgBox.idle();
-                }
-                if (Bot.ocgBox.isIdle()) {
-                    transferState = TransferState.WRIST_DOWN;
-                }
+                transferState = TransferState.WRIST_DOWN;
                 break;
 
             case WRIST_DOWN:

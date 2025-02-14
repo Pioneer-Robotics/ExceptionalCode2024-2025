@@ -40,7 +40,7 @@ public class TeleopDriver2 {
     }
 
     private void toggleSpecimenClaw() {
-        specimenClawToggle.toggle(gamepad.a);
+        specimenClawToggle.toggle(gamepad.circle);
         if (specimenClawToggle.justChanged() && specimenClawToggle.get()) {
             Bot.specimenArm.openClaw();
         } else if (specimenClawToggle.justChanged() && !specimenClawToggle.get()) {
@@ -49,11 +49,11 @@ public class TeleopDriver2 {
     }
 
     private void controlClawRotation() {
-        if (gamepad.left_stick_x < -0.5) {
+        if (gamepad.left_stick_x <= -0.5) {
             Bot.intakeClaw.clawNeg90();
         } else if (gamepad.left_stick_x > -0.5 && gamepad.left_stick_x < -0.1) {
             Bot.intakeClaw.clawNeg45();
-        } else if (gamepad.left_stick_x > 0.5) {
+        } else if (gamepad.left_stick_x >= 0.5) {
             Bot.intakeClaw.clawPos90();
         } else if (gamepad.left_stick_x < 0.5 && gamepad.left_stick_x > 0.1) {
             Bot.intakeClaw.clawPos45();
