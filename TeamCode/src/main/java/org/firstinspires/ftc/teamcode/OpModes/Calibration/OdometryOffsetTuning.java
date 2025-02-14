@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.OpModes.Calibration;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Bot;
 
+@Disabled
 @Autonomous(name = "Odometry Offset Tuning", group = "Calibration")
 public class OdometryOffsetTuning extends LinearOpMode {
     public void runOpMode() {

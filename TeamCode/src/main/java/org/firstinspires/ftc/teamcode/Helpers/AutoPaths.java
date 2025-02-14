@@ -12,6 +12,8 @@ public class AutoPaths {
         // Go to the submersible to hang a specimen
         double[] pointsX = {currentX, 280, 190, Config.specHangX + offsetX};
         double[] pointsY = {currentY, 70, 40, Config.specHangY + offsetY};
+//        double[] pointsX = {currentX, 190, 210, Config.specHangX + offsetX};
+//        double[] pointsY = {currentY, 56, Config.specHangY + offsetY, 92.5};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
     }
@@ -47,7 +49,7 @@ public class AutoPaths {
         // TODO: Repeats the path for no reason sometimes
         // Push the first (farthest left) sample into the observation zone
         // Should start from the submersible
-        double[] pointsX = {currentX, 235, 280, 280, 300, 285};
+        double[] pointsX = {currentX, 245, 280, 280, 300, 285};
         double[] pointsY = {currentY, 7.5, 50, 280, 145, 65};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 50);
         Bot.purePursuit.setTargetPath(path);

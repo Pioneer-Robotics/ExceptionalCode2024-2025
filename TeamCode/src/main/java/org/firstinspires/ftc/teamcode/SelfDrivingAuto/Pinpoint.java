@@ -27,11 +27,6 @@ public class Pinpoint {
         pinpoint.recalibrateIMU();
         pinpoint.setPosition(new Pose2D(DistanceUnit.CM, startX, startY, AngleUnit.RADIANS, 0));
         pinpoint.update();
-
-        telemetry.addData("StartX", startX);
-        telemetry.addData("StartY", startY);
-        telemetry.update();
-
 //        pinpoint.setPosition(new Pose2D(DistanceUnit.CM, Config.specimenStartX, Config.specimenStartY, AngleUnit.RADIANS, 0));
     }
 

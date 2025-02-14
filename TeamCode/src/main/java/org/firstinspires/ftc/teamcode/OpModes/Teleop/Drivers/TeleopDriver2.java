@@ -42,8 +42,6 @@ public class TeleopDriver2 {
 
     private void toggleSpecimenClaw() {
         specimenClawToggle.toggle(gamepad.circle);
-        ServoClass claw = Bot.specimenArm.claw;
-        // Toggle changed and button is down
         if (specimenClawToggle.justChanged() && specimenClawToggle.get()) {
             Bot.specimenArm.openClaw();
         } else if (specimenClawToggle.justChanged() && !specimenClawToggle.get()) {

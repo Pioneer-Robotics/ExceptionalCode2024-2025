@@ -25,7 +25,12 @@ public class SpecimenCycle {
 
     public void start() {
         Bot.pinpoint.setPose(Config.specCollectX, Config.specCollectY, 0);
-        state = State.HANG;
+        AutoPaths.collectSpecimen(
+                Bot.pinpoint.getX(), // Current X
+                Bot.pinpoint.getY(), // Current Y
+                true // Coming from the submersible
+        );
+        state = State.COLLECT;
     }
 
     public void update() {
@@ -52,9 +57,20 @@ public class SpecimenCycle {
         }, 750);
     }
 
+    private void scheduleSpecimenArmHang() {
+        Timer armSchedule = new Timer();
+        armSchedule.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Bot.specimenArm.movePrepHang(0.5);
+            }
+        }, 100);
+    }
+
     private void handleHang() {
         Bot.purePursuit.update(0.65);
-        if (Bot.purePursuit.reachedTarget(2.5)) {
+        if (Bot.purePursuit.reachedTarget(3)) {
+            Bot.specimenArm.openClaw();
             AutoPaths.collectSpecimen(
                     Bot.pinpoint.getX(), // Current X
                     Bot.pinpoint.getY(), // Current Y
@@ -81,10 +97,10 @@ public class SpecimenCycle {
             AutoPaths.hangSpecimen(
                     Bot.pinpoint.getX(), // Current X
                     Bot.pinpoint.getY(), // Current Y
-                    0, // Hang offsetX X
+                    -5, // Hang offsetX X
                     0 // Offset Y
             );
-            Bot.specimenArm.movePrepHang(0.5);
+            scheduleSpecimenArmHang();
             state = State.HANG;
         }
     }

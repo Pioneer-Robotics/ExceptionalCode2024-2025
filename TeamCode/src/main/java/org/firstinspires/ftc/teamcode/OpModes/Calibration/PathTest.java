@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.OpModes.Calibration;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Helpers.SplineCalc;
-
+@Disabled
 @TeleOp(name = "Path Test")
 public class PathTest extends LinearOpMode {
     public void runOpMode() {

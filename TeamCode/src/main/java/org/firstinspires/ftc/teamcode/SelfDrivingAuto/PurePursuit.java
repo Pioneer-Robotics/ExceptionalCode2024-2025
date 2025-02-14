@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.SelfDrivingAuto;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 
-import java.util.Arrays;
-
 public class PurePursuit {
     private final PID xPID, yPID, turnPID;
     private double[][] path; // {{x1, y1}, {x2, y2}, ...}

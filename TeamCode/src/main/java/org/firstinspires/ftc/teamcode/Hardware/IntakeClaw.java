@@ -40,6 +40,12 @@ public class IntakeClaw {
         yawServo.anyPos(yawServoMid);
     }
 
+    public void yawAnyPosAngle(double angle){yawServo.anyPos((yawServoMid+Config.intakeYawRight)/(90/angle));}
+
+    public void yawAnyNegAngle(double angle){yawServo.anyPos((yawServoMid+Config.intakeYawLeft)/(90/angle));}
+
+
+
     public void clawPos90() {
         yawServo.anyPos(Config.intakeYawRight);
     }
@@ -51,10 +57,6 @@ public class IntakeClaw {
     public void clawPos0() {
         yawServo.anyPos(yawServoMid);
     }
-
-//    public void clawYawMid(){ //Temp
-//        yawServo.anyPos(Config.intakeYawMid);
-//    }
 
     public void clawNeg45() {
         yawServo.anyPos(yawServoNeg45);

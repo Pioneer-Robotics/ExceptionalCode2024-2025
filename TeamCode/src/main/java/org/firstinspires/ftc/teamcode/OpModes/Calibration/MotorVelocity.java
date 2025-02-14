@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.OpModes.Calibration;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Bot;
 
-
+@Disabled
 @TeleOp(name = "Motor Velocity", group = "Calibration")
 public class MotorVelocity extends LinearOpMode {
     public void runOpMode() {

@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode.OpModes.Calibration;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Bot;
 
 import java.io.FileWriter;
 import java.io.IOException;
-
+@Disabled
 @Autonomous(name = "Stop Distance Calibration", group = "Calibration")
 public class StopDistanceCalibration extends LinearOpMode {
     FileWriter fileWriter;
