@@ -8,8 +8,10 @@ import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.AutoPaths;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 @Autonomous(name="Specimen Auto", group="Autos")
 public class SpecimenAuto extends LinearOpMode {
@@ -27,12 +29,14 @@ public class SpecimenAuto extends LinearOpMode {
 
     private State state = State.INIT;
     private final ElapsedTime timer = new ElapsedTime();
-    private Timer armSchedule;
     private final int totalSpecimens = 5;
     private int specimensLeft = totalSpecimens;
     private double offsetX = 0;
-    TimerTask prepHangTask;
-    TimerTask specimenCollectTask;
+
+    ScheduledExecutorService armScheduleSes;
+    ScheduledFuture scheduledFuture;
+    Runnable prepHangRunnable;
+    Runnable specimenCollectRunnable;
 
     public void runOpMode() {
 
@@ -76,18 +80,12 @@ public class SpecimenAuto extends LinearOpMode {
     }
 
     private void initalizeObjects() {
-        armSchedule = new Timer();
-        prepHangTask = new TimerTask() {
-            @Override
-            public void run() {
-                Bot.specimenArm.movePrepHang(1);
-            }
+        armScheduleSes = Executors.newScheduledThreadPool(5);
+        prepHangRunnable = () -> {
+            Bot.specimenArm.movePrepHang(1);
         };
-        specimenCollectTask = new TimerTask() {
-            @Override
-            public void run() {
-                Bot.specimenArm.moveToCollect(0.75);
-            }
+        specimenCollectRunnable = () -> {
+            Bot.specimenArm.moveToCollect(0.75);
         };
     }
     private void handleInitState() {
@@ -100,13 +98,13 @@ public class SpecimenAuto extends LinearOpMode {
                 0.25 // Offset Y
         );
         // Schedule specimen arm movement
-        armSchedule.cancel();
-        armSchedule.schedule(prepHangTask, 350);
+        scheduledFuture = armScheduleSes.schedule(prepHangRunnable, 350, TimeUnit.MILLISECONDS);
+        state = State.SPECIMEN_HANG;
     }
 
     private void scheduleSpecimenArmCollect() {
-        armSchedule.cancel();
-        armSchedule.schedule(specimenCollectTask, 750);
+        scheduledFuture =  armScheduleSes.schedule(specimenCollectRunnable, 750, TimeUnit.MILLISECONDS);
+        state = State.SPECIMEN_HANG;
     }
 
     private void handleHangState() {
