@@ -54,13 +54,13 @@ public class Bot {
      * Constructor for Bot.
      * @param opMode LinearOpMode
      */
-    public static void init(@NonNull LinearOpMode opMode, double startX, double startY) {
+    public static void init(@NonNull LinearOpMode opMode, double startX, double startY, double startTheta) {
         Bot.opMode = opMode;
         Bot.dashboard = FtcDashboard.getInstance();
         Bot.dashboardTelemetry = dashboard.getTelemetry();
 
         // Drive base and self driving
-        Bot.pinpoint = new Pinpoint(startX, startY);
+        Bot.pinpoint = new Pinpoint(startX, startY, startTheta);
 //        Bot.optical_odom = new SparkfunOTOS();
 //        Bot.deadwheel_odom = new TwoWheelOdometry(Config.specimenStartX, Config.specimenStartY);
         Bot.mecanumBase = new MecanumBase();
@@ -89,6 +89,6 @@ public class Bot {
     }
 
     public static void init(@NonNull LinearOpMode opMode) {
-        Bot.init(opMode, 0, 0);
+        Bot.init(opMode, 0, 0, 0);
     }
 }

@@ -32,7 +32,7 @@ public class SpecimenAuto extends LinearOpMode {
     }
 
     public void runOpMode() {
-        Bot.init(this, Config.specimenStartX, Config.specimenStartY);
+        Bot.init(this, Config.specimenStartX, Config.specimenStartY, 0);
         ElapsedTime timer = new ElapsedTime();
 
         double offsetX = 0;

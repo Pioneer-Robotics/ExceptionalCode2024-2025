@@ -63,4 +63,5 @@ public class IntakeClaw {
     public double getRoll() { return(yawServo.getPos()); }
     public double getClawPos() { return(clawServo.getPos()); }
     public boolean isClawOpen() { return (Math.abs(getClawPos() - Config.intakeClawOpen) < 0.1); }
+    public boolean isClawClosed() { return (Math.abs(getClawPos() - Config.intakeClawClose) < 0.1); }
 }

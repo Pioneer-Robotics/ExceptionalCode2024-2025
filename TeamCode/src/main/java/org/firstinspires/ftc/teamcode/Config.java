@@ -188,14 +188,15 @@ public class Config {
     // Robot starting position for autos
     public static final double specimenStartX = 198;
     public static final double specimenStartY = 21.5;
-    public static final double sampleStartX = 85;
-    public static final double sampleStartY = 20.5;
+    public static final double sampleStartX = 82;
+    public static final double sampleStartY = 21.5;
 
     // Hermite Points of Interest
-    public static final double[] pickSample1 = {58, 65};
-    public static final double[] pickSample2 = {25, 65};
-    public static final double[] pickSample3 = {25, 65};
-    public static final double[] submersablePickup = {120, 160};
+    public static final double[] pickSample1 = {31, 42};
+    public static final double[] pickSample2 = {35, 39};
+    public static final double[] pickSample3 = {42, 42};
+    public static final double[] submersiblePickup = {120, 160};
+    public static final double[] basketLoc = {30, 30};
 
     // ---- Misc ----
     public static final double defaultMaxCurrent = 8000;
