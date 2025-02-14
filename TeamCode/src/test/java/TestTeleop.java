@@ -95,7 +95,7 @@ public class TestTeleop {
         Assert.assertEquals(true, Bot.intake.isWristMid());
 
         systemUnderTest._gamepad1.dpad_down = true;
-        systemUnderTest.runOpMode();
+        systemUnderTest.runLoop();
 
         // check to see if Mid Wrist has been toggled
         Assert.assertEquals(true, Bot.intake.isWristMid());
