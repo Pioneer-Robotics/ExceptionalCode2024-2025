@@ -52,6 +52,7 @@ public class TeleopDriver1 {
 
     public void loopGamepad() {
         handleSpeedControls();
+        handleSmallAdjustMisumiDrive();
         handleNorthMode();
         handleIMUReset();
         driveRobot();
@@ -72,6 +73,19 @@ public class TeleopDriver1 {
         if (decSpeedToggle.justChanged()) {
             speed -= 0.1;
         }
+    }
+
+    private void handleSmallAdjustMisumiDrive() {
+        incSpeedToggle.toggle(gamepad.start);
+        decSpeedToggle.toggle(gamepad.back);
+        if (incSpeedToggle.justChanged() && decSpeedToggle.justChanged()) { // press both down by mistake
+            // do nothing for now
+        } else if (incSpeedToggle.justChanged()) {
+            Bot.intake.incrementExtendMisumiDrive();
+        } else if (decSpeedToggle.justChanged()) {
+            Bot.intake.decrementExtendMisumiDrive();
+        }
+        Bot.intakeClaw.clawDown();
     }
 
     private void handleNorthMode() {

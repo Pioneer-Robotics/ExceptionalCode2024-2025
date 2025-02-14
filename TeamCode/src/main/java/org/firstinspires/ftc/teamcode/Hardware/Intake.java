@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
+import static java.lang.Double.max;
+import static java.lang.Double.min;
+
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Bot;
@@ -38,6 +41,18 @@ public class Intake {
 //        misumiDriveL.closeServo();
         misumiDriveR.closeServo();
         isExtended = false;
+    }
+
+    public void incrementExtendMisumiDrive() {
+        double currentPosition = getDrivePos();
+        double newPosition = min(currentPosition + 0.1, 1);
+        misumiDriveR.anyPos(newPosition);
+    }
+
+    public void decrementExtendMisumiDrive() {
+        double currentPosition = getDrivePos();
+        double newPosition = max(currentPosition - 0.1, 0);
+        misumiDriveR.anyPos(newPosition);
     }
 
     public void midMisumiDrive() {
