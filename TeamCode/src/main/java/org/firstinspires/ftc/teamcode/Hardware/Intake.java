@@ -87,7 +87,8 @@ public class Intake {
     }
 
     public boolean isExtended() {
-        return (Math.abs(getDrivePos() - Config.misumiDriveROpen) < 0.05);
+//        return (Math.abs(getDrivePos() - Config.misumiDriveROpen) < 0.05);
+        return (getDrivePos() > 0.5); // maybe only allow if servo it a half way out ???
     }
 
     public boolean isWristUp() {
