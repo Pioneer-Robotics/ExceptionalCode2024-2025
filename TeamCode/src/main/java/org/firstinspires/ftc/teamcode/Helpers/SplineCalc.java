@@ -19,8 +19,10 @@ public class SplineCalc {
             double pointX = 0;
             double pointY = 0;
             for (int j = 0; j <= degree; j++) {
-                pointX += Utils.choose(degree, j) * (Math.pow(1 - t, degree - j)) * (Math.pow(t, j)) * px[j];
-                pointY += Utils.choose(degree, j) * (Math.pow(1 - t, degree - j)) * (Math.pow(t, j)) * py[j];
+                // only calculate once for quicker performance
+                double calculation = Utils.choose(degree, j) * (Math.pow(1 - t, degree - j)) * (Math.pow(t, j));
+                pointX += calculation * px[j];
+                pointY += calculation * py[j];
             }
             points[i][0] = pointX;
             points[i][1] = pointY;
@@ -40,15 +42,20 @@ public class SplineCalc {
 
         for (int i = 0; i < samples; i++) {
             double t = (double) i / (samples - 1);
-            double pointX = (2*Math.pow(t, 3) - 3*Math.pow(t, 2) + 1) * p0[0] +
-                    (Math.pow(t, 3) - 2*Math.pow(t, 2) + t) * p0[2] +
-                    (-2*Math.pow(t, 3) + 3*Math.pow(t, 2)) * p1[0] +
-                    (Math.pow(t, 3) - Math.pow(t, 2)) * p1[2];
+            // only calculate these once for quicker performance
+            double calculation1 = (2*Math.pow(t, 3) - 3*Math.pow(t, 2) + 1);
+            double calculation2 = (Math.pow(t, 3) - 2*Math.pow(t, 2) + t);
+            double calculation3 = (-2*Math.pow(t, 3) + 3*Math.pow(t, 2));
+            double calculation4 = (Math.pow(t, 3) - Math.pow(t, 2));
+            double pointX = calculation1 * p0[0] +
+                    calculation2 * p0[2] +
+                    calculation3 * p1[0] +
+                    calculation4 * p1[2];
 
-            double pointY = (2*Math.pow(t, 3) - 3*Math.pow(t, 2) + 1) * p0[1] +
-                    (Math.pow(t, 3) - 2*Math.pow(t, 2) + t) * p0[3] +
-                    (-2*Math.pow(t, 3) + 3*Math.pow(t, 2)) * p1[1] +
-                    (Math.pow(t, 3) - Math.pow(t, 2)) * p1[3];
+            double pointY = calculation1 * p0[1] +
+                    calculation2 * p0[3] +
+                    calculation3 * p1[1] +
+                    calculation4 * p1[3];
 
             points[i][0] = pointX;
             points[i][1] = pointY;
