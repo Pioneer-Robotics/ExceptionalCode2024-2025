@@ -27,14 +27,18 @@ public class SpecimenAuto extends LinearOpMode {
 
     private State state = State.INIT;
     private final ElapsedTime timer = new ElapsedTime();
-
+    private Timer armSchedule;
     private final int totalSpecimens = 5;
     private int specimensLeft = totalSpecimens;
     private double offsetX = 0;
+    TimerTask prepHangTask;
+    TimerTask specimenCollectTask;
 
     public void runOpMode() {
 
         Bot.init(this, Config.specimenStartX, Config.specimenStartY);
+
+        initalizeObjects();
 
         waitForStart();
 
@@ -71,6 +75,21 @@ public class SpecimenAuto extends LinearOpMode {
         Bot.currentThreads.stopThreads();
     }
 
+    private void initalizeObjects() {
+        armSchedule = new Timer();
+        prepHangTask = new TimerTask() {
+            @Override
+            public void run() {
+                Bot.specimenArm.movePrepHang(1);
+            }
+        };
+        specimenCollectTask = new TimerTask() {
+            @Override
+            public void run() {
+                Bot.specimenArm.moveToCollect(0.75);
+            }
+        };
+    }
     private void handleInitState() {
         // Set the initial path to hang preloaded specimen
         // --> SPECIMEN_HANG
@@ -81,24 +100,13 @@ public class SpecimenAuto extends LinearOpMode {
                 0.25 // Offset Y
         );
         // Schedule specimen arm movement
-        Timer armSchedule = new Timer();
-        armSchedule.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                Bot.specimenArm.movePrepHang(1);
-            }
-        }, 350);
-        state = State.SPECIMEN_HANG;
+        armSchedule.cancel();
+        armSchedule.schedule(prepHangTask, 350);
     }
 
     private void scheduleSpecimenArmCollect() {
-        Timer armSchedule = new Timer();
-        armSchedule.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                Bot.specimenArm.moveToCollect(0.75);
-            }
-        }, 750);
+        armSchedule.cancel();
+        armSchedule.schedule(specimenCollectTask, 750);
     }
 
     private void handleHangState() {
