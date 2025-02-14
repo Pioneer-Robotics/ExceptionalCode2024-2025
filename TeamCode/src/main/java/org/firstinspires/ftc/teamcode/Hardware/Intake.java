@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
+import static java.lang.Double.max;
+import static java.lang.Double.min;
+
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Bot;
@@ -49,6 +52,18 @@ public class Intake {
         isExtended = false;
     }
 
+    public void incrementExtendMisumiDrive() {
+        double currentPosition = getDrivePos();
+        double newPosition = min(currentPosition + 0.1, 1);
+        misumiDriveR.anyPos(newPosition);
+    }
+
+    public void decrementExtendMisumiDrive() {
+        double currentPosition = getDrivePos();
+        double newPosition = max(currentPosition - 0.1, 0);
+        misumiDriveR.anyPos(newPosition);
+    }
+
     public void midMisumiDrive() {
 //        misumiDriveL.anyPos(Config.misumiDriveLMid);
         misumiDriveR.anyPos(Config.misumiDriveRMid);
@@ -81,7 +96,8 @@ public class Intake {
     }
 
     public boolean isExtended() {
-        return (Math.abs(getDrivePos() - Config.misumiDriveROpen) < 0.05);
+//        return (Math.abs(getDrivePos() - Config.misumiDriveROpen) < 0.05);
+        return (getDrivePos() > 0.5); // maybe only allow if servo it a half way out ???
     }
 
     public boolean isWristUp() {
