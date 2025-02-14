@@ -9,11 +9,13 @@ public class Pinpoint {
     GoBildaPinpointDriver pinpoint;
     public Pinpoint(double startX, double startY) {
         pinpoint = Bot.opMode.hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
-        pinpoint.setOffsets(43,-134);
+        pinpoint.setOffsets(0,-134);
         pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
         pinpoint.recalibrateIMU();
         pinpoint.setPosition(new Pose2D(DistanceUnit.CM, startX, startY, AngleUnit.RADIANS, 0));
+        pinpoint.update();
+//        pinpoint.setPosition(new Pose2D(DistanceUnit.CM, Config.specimenStartX, Config.specimenStartY, AngleUnit.RADIANS, 0));
     }
 
     public void update() {
@@ -21,7 +23,27 @@ public class Pinpoint {
     }
 
     public void resetIMU() {
-        pinpoint.recalibrateIMU();
+        pinpoint.setPosition(
+                new Pose2D(
+                        DistanceUnit.CM,
+                        pinpoint.getPosX(),
+                        pinpoint.getPosY(),
+                        AngleUnit.RADIANS,
+                        0
+                )
+        );
+    }
+
+    public void setPose(double x, double y, double theta) {
+        pinpoint.setPosition(
+                new Pose2D(
+                        DistanceUnit.CM,
+                        x,
+                        y,
+                        AngleUnit.RADIANS,
+                        theta
+                )
+        );
     }
 
     public Pose2D getPositionPose2D() {
@@ -34,10 +56,12 @@ public class Pinpoint {
     }
 
     public double getX() {
+        update();
         return pinpoint.getPosX() / 10;
     }
 
     public double getY() {
+        update();
         return pinpoint.getPosY() / 10;
     }
 

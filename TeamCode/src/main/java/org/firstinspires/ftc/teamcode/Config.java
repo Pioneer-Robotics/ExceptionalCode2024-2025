@@ -29,7 +29,7 @@ public class Config {
     public static final double offsetOdoCenter = 635;
 
     // PID constants
-    public static double[] drivePID = {0.08, 0.0001, 0.25}; // kP, kI, kD
+    public static double[] drivePID = {0.08, 0.0001, 0.175}; // kP, kI, kD
     public static double[] turnPID = {2.5, 0.00001, 0.1}; // kP, kI, kD
     public static double driveSpeed = 0.4;
 
@@ -100,10 +100,11 @@ public class Config {
     public static final String intakeYawServo = "intakeYawServo";
     public static final String intakeRollServo = "intakeRollServo";
     public static final String intakeClawServo = "intakeClawServo";
+    public static final String specimenWristServo = "specimenWrist";
 
     // Other names
-    public static final String touchSensor = "touch";
-    public static final String colorSensor = "colorSensor";
+    public static final String specimenEndStop = "specimenEndStop";
+//    public static final String colorSensor = "colorSensor";
     public static final String led = "led";
     public static final String imu = "expansionIMU";
 
@@ -111,22 +112,25 @@ public class Config {
        - Servo Positions  -
        -------------------- */
     // Specimen Arm Claw
-    public static final double clawOpen = 0.3;
-    public static final double clawClose = 0.5;
+    public static final double clawOpen = 0.4;
+    public static final double clawClose = 0.7;
+    public static final double specWristCollect = 0.165;
+    public static final double specWristHang = 0.82;
     // Misumi Drive
     public static final double misumiDriveLOpen = 0.475;
     public static final double misumiDriveLMid = 0.3;
     public static final double misumiDriveLClose = 0.2;
-    //    public static double misumiDriveROpen = 0.175;
-//    public static double misumiDriveRMid = 0.4;
-//    public static double misumiDriveRClose = 0.525;
+        public static double misumiDriveROpen = 0.64;
+    public static double misumiDriveRMid = 0.4;
+    public static double misumiDriveRClose = 0.84;
+    public static double misumiDriveRInit = 0.88;
     // Misumi Wrist
-    public static final double misumiWristLDown = 0.85;
-    public static final double misumiWristLMid = 0.75;
-    public static final double misumiWristLUp = 0.5; // Up to OCG box
-    public static final double misumiWristRDown = 0.15;
-    public static final double misumiWristRMid = 0.24;
-    public static final double misumiWristRUp = 0.4;
+    public static final double misumiWristLDown = 0.66;
+    public static final double misumiWristLMid = 0.58;
+    public static final double misumiWristLUp = 0.31; // Up to OCG box
+    public static final double misumiWristRDown = 0.33;
+    public static final double misumiWristRMid = 0.42;
+    public static final double misumiWristRUp = 0.7;
     // Intake Wrist
     public static final double intakeWristClose = 0;
     public static final double intakeWristOpen = 1;
@@ -138,38 +142,31 @@ public class Config {
     public static final double intakeClawOpen = 1;
     public static final double intakeClawClose = 0.5;
     // OCG Box
+    // Not used
     public static final double ocgBoxDropRight = 0.1;
     public static final double ocgBoxHold = 0.375;
     public static final double ocgBoxDrop = 0.8;
-    public static final double ocgBoxPitchUp = 0.705;
-    public static final double ocgBoxPitchDown = 0.275;
     public static final double ocgBoxRollUp = 0.867;
     public static final double ocgBoxRollDown = 0.635;
+    // Used
+    public static final double ocgBoxPitchUp = 0.87;
+    public static final double ocgBoxPitchDown = 0.23;
+    public static final double ocgBoxIdle = 0.97;
 
     /* --------------------
        - Motor Positions  -
        -------------------- */
     // Specimen Arm
     public static final double defaultSpecimenArmSpeed = 0.4;
-    public static int specimenArmPostHang = -1250;
-    public static int specimenArmPrepHang = -800;
-//    public static int specimenArmPostHang = 800;
-//    public static int specimenArmPrepHang = 1250;
-//    public static final int specimenArmPrepHangUp = 1000;
-//    public static final int specimenArmPostHangUp = 650;
-    public static final int specimenArmPrepHangUp = -1000;
-    public static final int specimenArmPostHangUp = -650;
-    public static final int specimenArmCollect1 = 2010;
-    public static final int specimenArmCollect2 = 0;
-//    public static final int specimenArmCollect1 = -2010;
-//    public static final int specimenArmCollect2 = -0;
+    public static final int specimenCollect = -1300;
+
     // Linear Slide
     public static final double defaultSlideSpeed = 0.25;
     public static final int minSlideHeight = 15;
     public static final int maxSlideHeight = 4350;
     public static final int slideDown = 15;
-    public static final int slideLowBasket = 2500;
-    public static final int slideHighBasket = 4300;
+    public static final int slideLowBasket = 1500;
+    public static final int slideHighBasket = 2900;
 
     /* -------------------------
        -  Coordinates of Note  -
@@ -177,11 +174,14 @@ public class Config {
        ------------------------- */
 
     // Specimen hang offset (space between hangs)
-    public static final double hangOffset = 6.5;
+    public static final double hangOffset = 3;
 
     // Coordinates of default specimen hang
-    public static final double specHangX = 195;
-    public static final double specHangY = 94.95;
+    public static final double specHangX = 185;
+    public static final double specHangY = 96.5;
+
+    public static double specCollectX = 285;
+    public static double specCollectY = 27.25;
 
     // Coordinates of observation zone park
     public static final double parkX = 300;
