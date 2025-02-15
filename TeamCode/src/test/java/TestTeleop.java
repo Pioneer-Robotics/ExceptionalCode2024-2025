@@ -144,6 +144,40 @@ public class TestTeleop {
         Assert.assertEquals(true, Bot.intake.isWristUp());
     }
 
+    @Test
+    public void test_Driver1_Y_ButtonPressed() {
+        systemUnderTest.initalize();
+        systemUnderTest._gamepad1.y = true;
+        systemUnderTest._gamepad1.a = true;
+        systemUnderTest._gamepad1.x = true;
+
+        // Nothing should happen - write assert
+//        Assert.assertEquals(???, ???);
+
+        systemUnderTest._gamepad1.y = true;
+        systemUnderTest._gamepad1.a = true;
+        systemUnderTest._gamepad1.x = false;
+
+        // Nothing should happen - write assert
+//        Assert.assertEquals(???, ???);
+
+        systemUnderTest._gamepad1.y = false;
+        systemUnderTest._gamepad1.a = true;
+        systemUnderTest._gamepad1.x = true;
+
+        // Nothing should happen - write assert
+//        Assert.assertEquals(???, ???);
+
+        systemUnderTest._gamepad1.y = true;
+        systemUnderTest._gamepad1.a = false;
+        systemUnderTest._gamepad1.x = true;
+
+        // Nothing should happen - write assert
+//        Assert.assertEquals(???, ???);
+
+    }
+
+
     // Game Pad 2 *************
     @Test
     public void test_Driver2_DPad_ButtonPressed() {
@@ -339,9 +373,6 @@ public class TestTeleop {
         Assert.assertEquals(initalValue, Bot.intake.misumiDriveR.getPos(), 0.01);
         systemUnderTest._gamepad1.back = false;
         systemUnderTest.runLoop();
-
-
-
     }
 
 }
