@@ -34,7 +34,6 @@ public class SpecimenAuto extends LinearOpMode {
     private double offsetX = 0;
 
     ScheduledExecutorService armScheduleSes;
-    ScheduledFuture scheduledFuture;
     Runnable prepHangRunnable;
     Runnable specimenCollectRunnable;
 
@@ -98,12 +97,12 @@ public class SpecimenAuto extends LinearOpMode {
                 0.25 // Offset Y
         );
         // Schedule specimen arm movement
-        scheduledFuture = armScheduleSes.schedule(prepHangRunnable, 350, TimeUnit.MILLISECONDS);
+        armScheduleSes.schedule(prepHangRunnable, 350, TimeUnit.MILLISECONDS);
         state = State.SPECIMEN_HANG;
     }
 
     private void scheduleSpecimenArmCollect() {
-        scheduledFuture =  armScheduleSes.schedule(specimenCollectRunnable, 750, TimeUnit.MILLISECONDS);
+        armScheduleSes.schedule(specimenCollectRunnable, 750, TimeUnit.MILLISECONDS);
         state = State.SPECIMEN_HANG;
     }
 

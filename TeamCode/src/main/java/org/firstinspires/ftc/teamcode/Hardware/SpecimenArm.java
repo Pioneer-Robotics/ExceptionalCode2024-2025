@@ -12,6 +12,10 @@ import org.firstinspires.ftc.teamcode.TestingMocks.fakes.FakeDrive.FakeServo;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 public class SpecimenArm {
     private final DcMotorEx motor;
@@ -113,9 +117,10 @@ public class SpecimenArm {
             return;
         }
 
-        Timer timer = new Timer();
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        final ScheduledFuture<?>[] futureHolder = new ScheduledFuture<?>[1];
         ElapsedTime elapsedTime = new ElapsedTime();
-        TimerTask task = new TimerTask() {
+        Runnable task = new Runnable() {
             @Override
             public void run() {
                 if (elapsedTime.seconds() > 0.5) {
@@ -124,11 +129,12 @@ public class SpecimenArm {
                 if (Bot.specimenEndStop.getVoltage() < 0.5 || !Bot.opMode.opModeIsActive()) {
                     motor.setPower(0);
                     motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    timer.cancel();
+                    futureHolder[0].cancel(false); // Cancel further executions
+                    scheduler.shutdown();         // Shutdown scheduler
                 }
             }
         };
         elapsedTime.reset();
-        timer.schedule(task, 0, 10);
+        futureHolder[0] = scheduler.scheduleWithFixedDelay(task, 0, 10, TimeUnit.MILLISECONDS);
     }
 }
