@@ -78,11 +78,20 @@ public class TeleopDriver1 {
     private void handleSmallAdjustMisumiDrive() {
         incSpeedToggle.toggle(gamepad.start);
         decSpeedToggle.toggle(gamepad.back);
-        if (incSpeedToggle.justChanged() && decSpeedToggle.justChanged()) { // press both down by mistake
+        boolean bothPressed = incSpeedToggle.justChanged() && decSpeedToggle.justChanged();
+        boolean longPressDownInc = !incSpeedToggle.justChanged() && gamepad.start;
+        boolean longPressDownDec = !decSpeedToggle.justChanged() && gamepad.back;
+        boolean tapDownInc = incSpeedToggle.justChanged() && gamepad.start;
+        boolean tapDownDec = decSpeedToggle.justChanged() && gamepad.back;
+        if (bothPressed) { // press both down by mistake
             // do nothing for now
-        } else if (incSpeedToggle.justChanged()) {
+        } else if (longPressDownInc) {
+            Bot.intake.incrementExtendMisumiDrive(); // on long press this calls increment over and over
+        } else if (longPressDownDec) {
+            Bot.intake.decrementExtendMisumiDrive(); // on long press this calls decrement over and over
+        } else if (tapDownInc) {
             Bot.intake.incrementExtendMisumiDrive();
-        } else if (decSpeedToggle.justChanged()) {
+        } else if (tapDownDec) {
             Bot.intake.decrementExtendMisumiDrive();
         }
         Bot.intakeClaw.clawDown();

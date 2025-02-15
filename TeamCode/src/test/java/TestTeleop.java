@@ -294,5 +294,54 @@ public class TestTeleop {
         Assert.assertEquals(false, Bot.ocgBox.pitchState);
     }
 
+    @Test
+    public void test_Driver2_Start_And_Back_ButtonsPressed() {
+        systemUnderTest.initalize();
+        Bot.intake.misumiDriveR.anyPos(0.5);
+        double initalValue = Bot.intake.misumiDriveR.getPos();
+
+        // inc
+        systemUnderTest._gamepad1.start = true;
+        systemUnderTest.runLoop();
+
+        // check to see if Speed changed + 0.1 from default
+        Assert.assertEquals(initalValue + 0.1, Bot.intake.misumiDriveR.getPos(), 0.01);
+        systemUnderTest._gamepad1.start = false;
+        systemUnderTest.runLoop();
+
+        // dec
+        systemUnderTest._gamepad1.back = true;
+        systemUnderTest.runLoop();
+
+        // check to see if Speed changed - 0.1 back to default
+        Assert.assertEquals(initalValue, Bot.intake.misumiDriveR.getPos(), 0.01);
+        systemUnderTest._gamepad1.back = false;
+        systemUnderTest.runLoop();
+
+        // Long press...
+        // inc
+        systemUnderTest._gamepad1.start = true;
+        systemUnderTest.runLoop();
+        systemUnderTest._gamepad1.start = true;
+        systemUnderTest.runLoop(); // this should trigger long press
+        // check to see if Speed changed + 0.1 from default
+        Assert.assertEquals(initalValue + 0.2, Bot.intake.misumiDriveR.getPos(), 0.01);
+        systemUnderTest._gamepad1.start = false;
+        systemUnderTest.runLoop();
+
+
+        // dec
+        systemUnderTest._gamepad1.back = true;
+        systemUnderTest.runLoop();
+        systemUnderTest._gamepad1.back = true;
+        systemUnderTest.runLoop(); // this should trigger long press
+        // check to see if Speed changed + 0.1 from default
+        Assert.assertEquals(initalValue, Bot.intake.misumiDriveR.getPos(), 0.01);
+        systemUnderTest._gamepad1.back = false;
+        systemUnderTest.runLoop();
+
+
+
+    }
 
 }
