@@ -66,15 +66,30 @@ public class LocatorClass {
 
         blobs = colorLocator.getBlobs();
         //Check if list is empty, because the initial frame isn't processed, which can cause null pointer errors
-        if (blobs.toArray().length == 0) {
+        if (blobs.isEmpty()){ {
             blobs = colorLocator.getBlobs();
         }
         //Filter out very small blobs
         ColorBlobLocatorProcessor.Util.filterByArea(50, 80000, blobs);
         //Sorts blobs
         ColorBlobLocatorProcessor.Util.sortByArea(SortOrder.DESCENDING, blobs); // Largest blob is first, which is ideally the sample
-        //TODO: NEED TO SORT BY CLoSEST TO CENTER OF SCREEN
+
+        // Sort blobs by closest to center of screen
+        Point center = new Point(streamWidth/2, streamHeight/2); // Based on Camera Properties
+
+        blobs.sort((o1, o2) -> {
+            if(o1.getBoxFit() == null || o2.getBoxFit() == null) return 0;
+
+            double d1 = pointDistance(o1.getBoxFit().center, center);
+            double d2 = pointDistance(o2.getBoxFit().center, center);
+            return Double.compare(d1, d2); // sort in ascending order of distance from center
+        });
+
         return (blobs);
+    }
+
+    private double pointDistance(Point p1, Point p2){
+        return Math.sqrt((Math.pow((p2.x - p1.x),2))+Math.pow((p2.y - p1.y), 2));
     }
 
     /***
