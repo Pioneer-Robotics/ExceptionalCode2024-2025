@@ -122,8 +122,8 @@ public class Config {
     public static final double misumiDriveLOpen = 0.475;
     public static final double misumiDriveLMid = 0.3;
     public static final double misumiDriveLClose = 0.2;
-        public static double misumiDriveROpen = 0.64;
-    public static double misumiDriveRMid = 0.4;
+    public static double misumiDriveROpen = 0.64;
+    public static double misumiDriveRMid = 0.675;
     public static double misumiDriveRClose = 0.84;
     public static double misumiDriveRInit = 0.88;
     // Misumi Wrist
@@ -196,11 +196,11 @@ public class Config {
     public static final double sampleStartY = 21.5;
 
     // Hermite Points of Interest
-    public static final double[] pickSample1 = {31, 42};
-    public static final double[] pickSample2 = {35, 39};
-    public static final double[] pickSample3 = {42, 42};
+    public static final double[] pickSample1 = {46, 46};
+    public static final double[] pickSample2 = {50, 39};
+    public static final double[] pickSample3 = {57, 42};
     public static final double[] submersiblePickup = {120, 160};
-    public static final double[] basketLoc = {30, 30};
+    public static final double[] basketLoc = {35, 35};
 
     // ---- Misc ----
     public static final double defaultMaxCurrent = 6000;

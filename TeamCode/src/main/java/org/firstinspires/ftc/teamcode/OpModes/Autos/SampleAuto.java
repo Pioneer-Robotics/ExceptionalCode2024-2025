@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.SplineCalc;
-import org.firstinspires.ftc.teamcode.OpModes.Teleop.Teleop;
 
 @Autonomous(name = "Sample Auto", group = "Autos")
 public class SampleAuto extends LinearOpMode {
@@ -284,7 +283,7 @@ public class SampleAuto extends LinearOpMode {
             case NONE:
                 break;
             case MID_WRIST:
-                Bot.intake.midMisumiWrist();
+                Bot.intake.misumiWristMid();
                 if (Bot.intake.isWristMid()) { intakeState = IntakeState.EXTEND; }
                 break;
             case EXTEND:

@@ -69,7 +69,7 @@ public class TestTeleop extends LinearOpMode {
             } else if (gamepad1.dpad_right) {
                 Bot.intake.misumiWristUp();
             } else if (gamepad1.x){
-                Bot.intake.midMisumiWrist();
+                Bot.intake.misumiWristMid();
             }
 
             if (gamepad1.left_bumper){

@@ -96,7 +96,7 @@ public class OldTeleop extends LinearOpMode {
 //               Bot.intake.openIntakeWrist();
                 intakeWristToggle.set(true);
             } else if (gamepad1.dpad_down) {
-                Bot.intake.midMisumiWrist();
+                Bot.intake.misumiWristMid();
 //               Bot.intake.closeIntakeWrist();
                 Bot.intake.retractMisumiDrive();
                 Bot.intakeClaw.clawUp();
@@ -107,7 +107,7 @@ public class OldTeleop extends LinearOpMode {
                 case NONE:
                     break;
                 case MID_WRIST:
-                    Bot.intake.midMisumiWrist();
+                    Bot.intake.misumiWristMid();
                     if (Bot.intake.isWristMid()) {
                         intakeState = IntakeState.EXTEND;
                     }
@@ -134,13 +134,13 @@ public class OldTeleop extends LinearOpMode {
                     Bot.intake.misumiWristDown();
                 } else {
                     // If intake not extended
-                    Bot.intake.midMisumiWrist();
+                    Bot.intake.misumiWristMid();
                 }
             } else if (intakeWristToggle.justChanged() && !intakeWristToggle.get()) {
                 // Up state
                 if (Bot.intake.isExtended()) {
                     // If intake extended
-                    Bot.intake.midMisumiWrist();
+                    Bot.intake.misumiWristMid();
                 } else {
                     // If intake not extended
                     Bot.intake.misumiWristUp();
@@ -251,14 +251,14 @@ public class OldTeleop extends LinearOpMode {
             if (gamepad2.y) {
                 Bot.intakeClaw.clawDown();
 //                Bot.intake.midMisumiDrive();
-                Bot.intake.midMisumiWrist();
+                Bot.intake.misumiWristMid();
 //                Bot.intake.closeClaw();
                 Bot.slideArm.moveUp(0.65);
                 Bot.ocgBox.idle();
             } else if (gamepad2.a) {
                 Bot.intakeClaw.clawDown();
 //                Bot.intake.midMisumiDrive();
-                Bot.intake.midMisumiWrist();
+                Bot.intake.misumiWristMid();
                 Bot.slideArm.moveDown(0.65);
                 Bot.ocgBox.idle();
             } else if (gamepad2.x) {

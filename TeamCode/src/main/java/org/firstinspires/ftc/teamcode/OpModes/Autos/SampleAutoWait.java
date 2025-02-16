@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.SplineCalc;
+import org.firstinspires.ftc.teamcode.OpModes.Teleop.Drivers.TeleopDriver2;
 
 @Autonomous(name = "Sample Auto WAITTTTT", group = "Autos")
 public class SampleAutoWait extends LinearOpMode {
@@ -26,6 +27,7 @@ public class SampleAutoWait extends LinearOpMode {
 
     private enum TransferState {
         NONE,
+        INTAKE_IN,
         OCG_UP,
         WRIST_UP,
         DROP,
@@ -43,7 +45,7 @@ public class SampleAutoWait extends LinearOpMode {
     TransferState transferState;
     IntakeState intakeState;
     ElapsedTime transferTimer;
-    ElapsedTime servoPosTimer, transferServoPosTimer, intakeServoPosTimer;
+    ElapsedTime servoPosTimer, intakeServoPosTimer;
     int pickupSampleNumber = 1;
 
     public void runOpMode() {
@@ -53,6 +55,7 @@ public class SampleAutoWait extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            Bot.slideArm.update();
             switch (state) {
                 case GOTO_BASKET:
                     handleGOTO_BASKET();
@@ -88,6 +91,9 @@ public class SampleAutoWait extends LinearOpMode {
             telemetry.addData("Pos X", Bot.pinpoint.getX());
             telemetry.addData("Pos Y", Bot.pinpoint.getY());
             telemetry.addData("Heading", Bot.pinpoint.getHeading());
+            telemetry.addData("State", state);
+            telemetry.addData("Intake State", intakeState);
+            telemetry.addData("Transfer State", transferState);
             telemetry.update();
         }
     }
@@ -99,7 +105,6 @@ public class SampleAutoWait extends LinearOpMode {
         transferTimer = new ElapsedTime();
         servoPosTimer = new ElapsedTime();
         intakeServoPosTimer = new ElapsedTime();
-        transferServoPosTimer = new ElapsedTime();
     }
 
     public void handleGOTO_BASKET() {
@@ -146,11 +151,10 @@ public class SampleAutoWait extends LinearOpMode {
             double[] vector1 = {Bot.pinpoint.getX(), Bot.pinpoint.getY(), 0, 0};
             double[] vector2 = {Config.pickSample1[0], Config.pickSample1[1], 0, 0};
             double[][] path = SplineCalc.cubicHermite(vector1, vector2, 25);
-            double[][] turnPath = SplineCalc.linearPath(new double[] {0, 1}, new double[] {Bot.pinpoint.getHeading(), Math.PI / 8}, 25);
+            double[][] turnPath = SplineCalc.linearPath(new double[] {0, 1}, new double[] {Bot.pinpoint.getHeading(), (Math.PI / 16)}, 25);
             Bot.purePursuit.setTargetPath(path);
             Bot.purePursuit.setTurnPath(turnPath);
 
-            Bot.slideArm.moveDown(0.4);
             triggerIntake();
             Bot.intakeClaw.openClaw();
 
@@ -196,9 +200,11 @@ public class SampleAutoWait extends LinearOpMode {
 
     public void handleGRAB_SAMPLE() {
         handleIntake();
+        Bot.slideArm.moveDown(0.4);
         Bot.purePursuit.update();
         if (Bot.purePursuit.reachedTarget() && intakeState == IntakeState.NONE && Bot.slideArm.isDown()) {
-            Bot.intakeClaw.closeClaw();
+            Bot.purePursuit.stop();
+            Bot.intake.misumiWristDown();
             servoPosTimer.reset();
             pickupSampleNumber++;
             state = State.GOTO_BASKET_TRANSFER;
@@ -208,6 +214,9 @@ public class SampleAutoWait extends LinearOpMode {
     public void handleGOTO_BASKET_TRANSFER() {
 //        if (Bot.intakeClaw.isClawClosed()) {
         if (servoPosTimer.milliseconds() > 1000) {
+            Bot.intakeClaw.closeClaw();
+        }
+        if (servoPosTimer.milliseconds() > 1500) {
             triggerTransfer();
 
             double[] vector1 = {Bot.pinpoint.getX(), Bot.pinpoint.getY(), 0, 0};
@@ -237,58 +246,60 @@ public class SampleAutoWait extends LinearOpMode {
 
 
     public void triggerTransfer() {
-        transferState = TransferState.WRIST_UP;
-        transferServoPosTimer.reset();
+        transferState = TransferState.INTAKE_IN;
+        transferTimer.reset();
     }
+
     public void cancelTransfer() {
         transferState = TransferState.NONE;
     }
 
-    public void handleTransfer() {
+    private void handleTransfer() {
         switch (transferState) {
             case NONE:
                 break;
+
+            case INTAKE_IN:
+                Bot.intake.retractMisumiDrive();
+                Bot.intakeClaw.clawUp();
+                transferTimer.reset();
+                transferState = TransferState.WRIST_UP;
+                break;
+
             case WRIST_UP:
-                Bot.intake.misumiWristUp();
-                //if (Bot.intake.isWristUp()) { transferState = TransferState.OCG_UP; }
-                if (transferServoPosTimer.milliseconds() > 1000) {
+                if (transferTimer.milliseconds() > 750) {
+                    Bot.intake.misumiWristUp();
+                    transferTimer.reset();
                     transferState = TransferState.OCG_UP;
-                    transferServoPosTimer.reset();
                 }
                 break;
+
             case OCG_UP:
-                Bot.ocgBox.ocgPitchUp();
-//                if (Bot.ocgBox.isPitchUp()) {
-                if (transferServoPosTimer.milliseconds() > 1000) {
+                if (transferTimer.milliseconds() > 300) {
+                    Bot.ocgBox.ocgPitchUp();
                     transferTimer.reset();
                     transferState = TransferState.DROP;
                 }
                 break;
+
             case DROP:
-                if (transferTimer.milliseconds() > 500) {
+                if (transferTimer.milliseconds() > 300) {
                     Bot.intakeClaw.openClaw();
-                    transferServoPosTimer.reset();
-                }
-//                if (Bot.intakeClaw.isClawOpen()) {
-                if (transferServoPosTimer.milliseconds() > 1000) {
                     transferTimer.reset();
                     transferState = TransferState.OCG_IDLE;
                 }
                 break;
+
             case OCG_IDLE:
-                if (transferTimer.milliseconds() > 3000) {
-                    Bot.ocgBox.idle();
-                    transferServoPosTimer.reset();
-                }
-//                if (Bot.ocgBox.isIdle()) {
-                if (transferServoPosTimer.milliseconds() > 1000) {
+                if (transferTimer.milliseconds() > 300)
                     transferState = TransferState.WRIST_DOWN;
-                }
                 break;
+
             case WRIST_DOWN:
                 // As there is nothing after, the state is immediately set to NONE
                 Bot.intake.misumiWristDown();
                 Bot.intakeClaw.closeClaw();
+                Bot.ocgBox.idle();
                 transferState = TransferState.NONE;
         }
     }
@@ -302,22 +313,20 @@ public class SampleAutoWait extends LinearOpMode {
         intakeState = IntakeState.NONE;
     }
 
-    public void handleIntake() {
-        switch(intakeState) {
+    private void handleIntake() {
+        switch (intakeState) {
             case NONE:
                 break;
             case MID_WRIST:
-                Bot.intake.midMisumiWrist();
-//                if (Bot.intake.isWristMid()) {
-                if (intakeServoPosTimer.milliseconds() > 1000) {
+                Bot.intake.misumiWristMid();
+                if (intakeServoPosTimer.milliseconds() > 250) {
                     intakeState = IntakeState.EXTEND;
                 }
                 break;
             case EXTEND:
-                Bot.intake.extendMisumiDrive();
+                Bot.intake.midMisumiDrive();
                 Bot.intakeClaw.clawDown();
                 intakeState = IntakeState.NONE;
-                break;
         }
     }
 

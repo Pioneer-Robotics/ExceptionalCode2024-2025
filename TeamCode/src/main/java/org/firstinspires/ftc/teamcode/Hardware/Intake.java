@@ -54,7 +54,7 @@ public class Intake {
         misumiWristR.openServo();
     }
 
-    public void midMisumiWrist() {
+    public void misumiWristMid() {
         misumiWristL.anyPos(Config.misumiWristLMid);
         misumiWristR.anyPos(Config.misumiWristRMid);
     }

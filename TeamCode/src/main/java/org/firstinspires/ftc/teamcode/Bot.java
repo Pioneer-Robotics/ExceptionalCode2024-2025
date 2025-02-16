@@ -92,4 +92,7 @@ public class Bot {
     public static void init(@NonNull LinearOpMode opMode) {
         Bot.init(opMode, 0, 0, 0);
     }
+    public static void init(@NonNull LinearOpMode opMode, double startX, double startY) {
+        Bot.init(opMode, startX, startY, 0);
+    }
 }
