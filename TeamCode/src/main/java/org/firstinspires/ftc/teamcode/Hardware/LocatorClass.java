@@ -73,7 +73,18 @@ public class LocatorClass {
         ColorBlobLocatorProcessor.Util.filterByArea(50, 80000, blobs);
         //Sorts blobs
         ColorBlobLocatorProcessor.Util.sortByArea(SortOrder.DESCENDING, blobs); // Largest blob is first, which is ideally the sample
-        //TODO: NEED TO SORT BY CLoSEST TO CENTER OF SCREEN
+
+        // Sort blobs by closest to center of screen
+        Point center = new Point(streamWidth/2, streamHeight/2); // Based on Camera Properties
+
+        blobs.sort((o1, o2) -> {
+            if(o1.getBoxFit() == null || o2.getBoxFit() == null) return 0;
+
+            double d1 = pointDistance(o1.getBoxFit().center, center);
+            double d2 = pointDistance(o2.getBoxFit().center, center);
+            return Double.compare(d1, d2); // sort in ascending order of distance from center
+        });
+
         return (blobs);
     }
 
