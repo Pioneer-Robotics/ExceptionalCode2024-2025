@@ -58,6 +58,7 @@ public class Config {
     // Multiplier starts at 0.1 and increments by acceleration each loop up to 1
     // Only used in PID Drive (deprecated)
     public static final double acceleration = 0.04;
+    public static final double EXTENSION_TURN_POWER_DEMULTIPLIER = 0.5;
 
     // Color sensor
     public static final int[] colorRed = {190, 110, 65}; // Red sample color (rgb)
