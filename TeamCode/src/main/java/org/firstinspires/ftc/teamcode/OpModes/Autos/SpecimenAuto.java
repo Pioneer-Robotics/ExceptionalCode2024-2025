@@ -27,6 +27,7 @@ public class SpecimenAuto extends LinearOpMode {
 
     private State state = State.INIT;
     private final ElapsedTime timer = new ElapsedTime();
+    Timer armSchedule = new Timer();
 
     private final int totalSpecimens = 5;
     private int specimensLeft = totalSpecimens;
@@ -81,7 +82,6 @@ public class SpecimenAuto extends LinearOpMode {
                 0.25 // Offset Y
         );
         // Schedule specimen arm movement
-        Timer armSchedule = new Timer();
         armSchedule.schedule(new TimerTask() {
             @Override
             public void run() {

@@ -19,8 +19,9 @@ public class SplineCalc {
             double pointX = 0;
             double pointY = 0;
             for (int j = 0; j <= degree; j++) {
-                pointX += Utils.choose(degree, j) * (Math.pow(1 - t, degree - j)) * (Math.pow(t, j)) * px[j];
-                pointY += Utils.choose(degree, j) * (Math.pow(1 - t, degree - j)) * (Math.pow(t, j)) * py[j];
+                double calculation = Utils.choose(degree, j) * (Math.pow(1 - t, degree - j)) * (Math.pow(t, j));
+                pointX += calculation * px[j];
+                pointY += calculation * py[j];
             }
             points[i][0] = pointX;
             points[i][1] = pointY;

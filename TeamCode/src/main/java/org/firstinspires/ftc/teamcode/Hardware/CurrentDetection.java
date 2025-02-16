@@ -72,11 +72,9 @@ public class CurrentDetection {
         current = motor.getCurrent(CurrentUnit.MILLIAMPS);
         if (current > maxCurrent) {
             Bot.opMode.telemetry.addLine("MOTOR REACHED MAX CURRENT");
-            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motor.setPower(0);
             Bot.opMode.gamepad1.rumble(500);
             Bot.opMode.gamepad2.rumble(500);
-            motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            motor.setPower(0);
         }
     }
 

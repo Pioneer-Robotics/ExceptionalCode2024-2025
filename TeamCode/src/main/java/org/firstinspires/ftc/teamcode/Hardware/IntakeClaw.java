@@ -11,13 +11,10 @@ public class IntakeClaw {
     private final double yawServo45 = (yawServoMid + Config.intakeYawRight) / 2;
     private final double yawServoNeg45 = (yawServoMid + Config.intakeYawLeft) / 2;
 
-
-
-
     public IntakeClaw() {
         clawServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeClawServo), Config.intakeClawOpen, Config.intakeClawClose);
-        rollServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeRollServo), Config.intakeYawLeft, Config.intakeYawRight);
-        yawServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeYawServo), Config.intakeRollUp, Config.intakeRollDown);
+        rollServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeRollServo), Config.intakeRollUp, Config.intakeRollDown);
+        yawServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeYawServo), Config.intakeYawLeft, Config.intakeYawRight);
         clawServo.closeServo();
         clawPos0();
         clawUp();
