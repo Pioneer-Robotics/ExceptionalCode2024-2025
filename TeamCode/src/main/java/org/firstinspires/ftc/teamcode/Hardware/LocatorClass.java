@@ -66,7 +66,7 @@ public class LocatorClass {
 
         blobs = colorLocator.getBlobs();
         //Check if list is empty, because the initial frame isn't processed, which can cause null pointer errors
-        if (blobs.toArray().length == 0) {
+        if (blobs.isEmpty()){ {
             blobs = colorLocator.getBlobs();
         }
         //Filter out very small blobs
