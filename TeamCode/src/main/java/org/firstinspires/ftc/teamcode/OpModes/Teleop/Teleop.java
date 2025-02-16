@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Bot;
-import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 import org.firstinspires.ftc.teamcode.OpModes.Teleop.AutomatedTeleop.SpecimenCycle;
 import org.firstinspires.ftc.teamcode.OpModes.Teleop.Drivers.TeleopDriver1;
@@ -72,15 +71,6 @@ public class Teleop extends LinearOpMode {
         telemetry.addData("Y", Bot.pinpoint.getY());
         telemetry.addData("Theta", Bot.pinpoint.getHeading());
         telemetry.addData("Total Current", Bot.currentThreads.getTotalCurrent());
-
-        telemetry.addData("Motor 1 Position", Bot.slideArm.getMotor1().getCurrentPosition());
-        telemetry.addData("Motor 2 Position", Bot.slideArm.getMotor2().getCurrentPosition());
-        telemetry.addData("Motor 1 Target", Bot.slideArm.getMotor1().getTargetPosition());
-        telemetry.addData("Motor 2 Target", Bot.slideArm.getMotor2().getTargetPosition());
-        telemetry.addData("Motor 1 Velocity", Bot.slideArm.getMotor1().getVelocity());
-        telemetry.addData("Motor 2 Velocity", Bot.slideArm.getMotor2().getVelocity());
-        telemetry.addData("Motor 1 Target Velocity", Math.round(-gamepad2.right_stick_y * Config.maxSlideTicksPerSecond));
-        telemetry.addData("Motor 2 Target Velocity", Math.round(-gamepad2.right_stick_y * Config.maxSlideTicksPerSecond));
 
         telemetry.update();
         Bot.dashboardTelemetry.update();

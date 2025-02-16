@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
-import org.firstinspires.ftc.teamcode.Config;
 
 public class TeleopDriver1 {
     private final Gamepad gamepad;
@@ -67,10 +66,10 @@ public class TeleopDriver1 {
     private void handleSpeedControls() {
         incSpeedToggle.toggle(gamepad.right_bumper);
         decSpeedToggle.toggle(gamepad.left_bumper);
-        if (incSpeedToggle.justChanged()) {
+        if (incSpeedToggle.justChanged() && incSpeedToggle.get()) {
             speed += 0.1;
         }
-        if (decSpeedToggle.justChanged()) {
+        if (decSpeedToggle.justChanged() && decSpeedToggle.get()) {
             speed -= 0.1;
         }
     }
@@ -83,7 +82,7 @@ public class TeleopDriver1 {
 
     private void handleIMUReset() {
         resetIMUToggle.toggle(gamepad.x);
-        if (resetIMUToggle.justChanged()) {
+        if (resetIMUToggle.justChanged() && resetIMUToggle.get()) {
             Bot.pinpoint.resetIMU();
         }
     }
@@ -91,14 +90,15 @@ public class TeleopDriver1 {
     private void driveRobot() {
         double px = Math.pow(gamepad.left_stick_x, 3);
         double py = -Math.pow(gamepad.left_stick_y, 3);
-        double turn = gamepad.right_stick_x * (Bot.intake.isExtended() ? Config.EXTENSION_TURN_POWER_DEMULTIPLIER : 1);
+        double turn = gamepad.right_stick_x;
         Bot.mecanumBase.move(px, py, turn, speed);
     }
 
     private void updateIntakeState() {
         // Toggle prevents the state being set multiple times if the button is held
         extendIntakeToggle.toggle(gamepad.dpad_up);
-        if (extendIntakeToggle.justChanged()) {
+        if (extendIntakeToggle.justChanged() && extendIntakeToggle.get()) {
+            timer.reset();
             intakeState = IntakeState.MID_WRIST;
         } else if (gamepad.dpad_down) {
             intakeState = IntakeState.NONE;
@@ -114,7 +114,7 @@ public class TeleopDriver1 {
                 break;
             case MID_WRIST:
                 Bot.intake.midMisumiWrist();
-                if (Bot.intake.isWristMid()) {
+                if (timer.milliseconds() > 250) {
                     intakeState = IntakeState.EXTEND;
                 }
                 break;
@@ -159,8 +159,8 @@ public class TeleopDriver1 {
     }
 
     private void updateTransferState() {
-        intakeTransferToggle.toggle(gamepad.dpad_right);
-        if (intakeTransferToggle.justChanged()) {
+        intakeTransferToggle.toggle(gamepad.share);
+        if (intakeTransferToggle.justChanged() && intakeTransferToggle.get()) {
             transferState = TransferState.WRIST_UP;
         }
     }
@@ -177,7 +177,7 @@ public class TeleopDriver1 {
                 break;
 
             case OCG_UP:
-                if (timer.milliseconds() > 100) {
+                if (timer.milliseconds() > 300) {
                     Bot.ocgBox.ocgPitchUp();
                     timer.reset();
                     transferState = TransferState.DROP;
@@ -193,16 +193,15 @@ public class TeleopDriver1 {
                 break;
 
             case OCG_IDLE:
-                if (timer.milliseconds() > 300) {
-                    Bot.ocgBox.idle();
+                if (timer.milliseconds() > 300)
                     transferState = TransferState.WRIST_DOWN;
-                }
                 break;
 
             case WRIST_DOWN:
                 // As there is nothing after, the state is immediately set to NONE
                 Bot.intake.misumiWristDown();
                 Bot.intakeClaw.closeClaw();
+                Bot.ocgBox.idle();
                 transferState = TransferState.NONE;
         }
     }

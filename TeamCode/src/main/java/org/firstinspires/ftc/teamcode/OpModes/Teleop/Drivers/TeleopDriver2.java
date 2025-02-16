@@ -34,7 +34,7 @@ public class TeleopDriver2 {
 
     private void runSpecimenArm() {
         if (gamepad.dpad_down) {
-            Bot.specimenArm.movePrepHang(0.4);
+            Bot.specimenArm.movePrepHang(0.65);
         } else if (gamepad.dpad_left) {
             Bot.specimenArm.moveToCollect(0.4);
         }
