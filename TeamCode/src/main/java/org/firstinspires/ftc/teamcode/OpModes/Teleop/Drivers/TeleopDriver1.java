@@ -76,7 +76,7 @@ public class TeleopDriver1 {
     }
 
     private void handleNorthMode() {
-        northModeToggle.toggle(gamepad.left_trigger > 0.8 && gamepad.right_trigger > 0.8);
+        northModeToggle.toggle(gamepad.share && gamepad.options);
         northMode = northModeToggle.get();
         Bot.mecanumBase.setNorthMode(northMode);
     }
@@ -177,23 +177,26 @@ public class TeleopDriver1 {
                 break;
 
             case OCG_UP:
-                Bot.ocgBox.ocgPitchUp();
-                if (timer.milliseconds() > 500) {
+                if (timer.milliseconds() > 100) {
+                    Bot.ocgBox.ocgPitchUp();
                     timer.reset();
-                    Bot.intakeClaw.openClaw();
                     transferState = TransferState.DROP;
                 }
                 break;
 
             case DROP:
-                if (timer.milliseconds() > 750) {
-                    Bot.ocgBox.idle();
+                if (timer.milliseconds() > 300) {
+                    Bot.intakeClaw.openClaw();
+                    timer.reset();
                     transferState = TransferState.OCG_IDLE;
                 }
                 break;
 
             case OCG_IDLE:
-                transferState = TransferState.WRIST_DOWN;
+                if (timer.milliseconds() > 300) {
+                    Bot.ocgBox.idle();
+                    transferState = TransferState.WRIST_DOWN;
+                }
                 break;
 
             case WRIST_DOWN:

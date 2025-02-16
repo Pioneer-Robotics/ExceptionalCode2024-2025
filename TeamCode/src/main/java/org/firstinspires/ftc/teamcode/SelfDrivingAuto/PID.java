@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
  * PID controller class
  */
 public class PID {
-    private final double kP, kI, kD;
+    private double kP, kI, kD;
     private double integral, prevError;
     private boolean haltIntegral; // Stop the integral from accumulating if the system is moving at 100% to prevent windup
 
@@ -42,6 +42,12 @@ public class PID {
         integral = 0;
         prevError = initialError;
         haltIntegral = false;
+    }
+
+    public void setPIDCoefficients(double kP, double kI, double kD) {
+        this.kP = kP;
+        this.kI = kI;
+        this.kD = kD;
     }
 
     /**
