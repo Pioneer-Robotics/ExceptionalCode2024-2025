@@ -11,15 +11,6 @@ public class TeleopDriver1 {
     private final ElapsedTime timer = new ElapsedTime();
 
     // Enums for state machine
-    private enum TransferState {
-        NONE,
-        OCG_UP,
-        WRIST_UP,
-        DROP,
-        OCG_IDLE,
-        WRIST_DOWN
-    }
-
     private enum IntakeState {
         NONE,
         MID_WRIST,
@@ -30,7 +21,6 @@ public class TeleopDriver1 {
     private double speed = 0.5;
     private boolean northMode = true;
     private IntakeState intakeState = IntakeState.NONE;
-    private TransferState transferState = TransferState.NONE;
 
     // Toggles
     private final Toggle northModeToggle = new Toggle(true);
@@ -40,7 +30,6 @@ public class TeleopDriver1 {
     private final Toggle extendIntakeToggle = new Toggle(false);
     private final Toggle intakeClawToggle = new Toggle(false);
     private final Toggle intakeWristToggle = new Toggle(false);
-    private final Toggle intakeTransferToggle = new Toggle(false);
 
     private TeleopDriver1(Gamepad gamepad) {
         this.gamepad = gamepad;
@@ -59,8 +48,6 @@ public class TeleopDriver1 {
         driveIntake();
         toggleIntakeClaw();
         toggleIntakeWrist();
-        updateTransferState();
-        handleTransfer();
     }
 
     private void handleSpeedControls() {
@@ -155,54 +142,6 @@ public class TeleopDriver1 {
                 Bot.intake.misumiWristUp();
                 Bot.ocgBox.ocgPitchUp();
             }
-        }
-    }
-
-    private void updateTransferState() {
-        intakeTransferToggle.toggle(gamepad.share);
-        if (intakeTransferToggle.justChanged() && intakeTransferToggle.get()) {
-            transferState = TransferState.WRIST_UP;
-        }
-    }
-
-    private void handleTransfer() {
-        switch (transferState) {
-            case NONE:
-                break;
-
-            case WRIST_UP:
-                Bot.intake.misumiWristUp();
-                timer.reset();
-                transferState = TransferState.OCG_UP;
-                break;
-
-            case OCG_UP:
-                if (timer.milliseconds() > 300) {
-                    Bot.ocgBox.ocgPitchUp();
-                    timer.reset();
-                    transferState = TransferState.DROP;
-                }
-                break;
-
-            case DROP:
-                if (timer.milliseconds() > 300) {
-                    Bot.intakeClaw.openClaw();
-                    timer.reset();
-                    transferState = TransferState.OCG_IDLE;
-                }
-                break;
-
-            case OCG_IDLE:
-                if (timer.milliseconds() > 300)
-                    transferState = TransferState.WRIST_DOWN;
-                break;
-
-            case WRIST_DOWN:
-                // As there is nothing after, the state is immediately set to NONE
-                Bot.intake.misumiWristDown();
-                Bot.intakeClaw.closeClaw();
-                Bot.ocgBox.idle();
-                transferState = TransferState.NONE;
         }
     }
 
