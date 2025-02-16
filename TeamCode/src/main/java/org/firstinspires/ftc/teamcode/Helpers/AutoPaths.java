@@ -12,11 +12,13 @@ public class AutoPaths {
         // Go to the submersible to hang a specimen
         double[] pointsX = {currentX, 280, 190, Config.specHangX + offsetX};
         double[] pointsY = {currentY, 70, 40, Config.specHangY + offsetY};
+//        double[] pointsX = {currentX, 190, 210, Config.specHangX + offsetX};
+//        double[] pointsY = {currentY, 56, Config.specHangY + offsetY, 92.5};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
     }
 
-    public static void hangSpecimenUp(double currentX, double currentY, double offsetX, double offsetY) {
+    public static void hangPreloadSpecimen(double currentX, double currentY, double offsetX, double offsetY) {
         // Go to the submersible to hang a specimen
         Bot.purePursuit.setTargetPath(new double[][] {{currentX, currentY}, {200, 30}, {Config.specHangX + offsetX, Config.specHangY + offsetY}});
     }
@@ -33,11 +35,11 @@ public class AutoPaths {
         // Collect a specimen from the wall
         double[] pointsX, pointsY;
         if (fromSubmersible) {
-            pointsX = new double[]{currentX, 200, 290, 285};
-            pointsY = new double[]{currentY, 35, 100, 27.25};
+            pointsX = new double[]{currentX, 200, 290, Config.specCollectX};
+            pointsY = new double[]{currentY, 35, 100, Config.specCollectY};
         } else {
-            pointsX = new double[]{currentX, 265, 285};
-            pointsY = new double[]{currentY, 100, 27.25};
+            pointsX = new double[]{currentX, 265, Config.specCollectX};
+            pointsY = new double[]{currentY, 100, Config.specCollectY};
         }
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
@@ -47,7 +49,7 @@ public class AutoPaths {
         // TODO: Repeats the path for no reason sometimes
         // Push the first (farthest left) sample into the observation zone
         // Should start from the submersible
-        double[] pointsX = {currentX, 235, 280, 280, 300, 285};
+        double[] pointsX = {currentX, 245, 280, 280, 300, 285};
         double[] pointsY = {currentY, 7.5, 50, 280, 145, 65};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 50);
         Bot.purePursuit.setTargetPath(path);
@@ -59,7 +61,7 @@ public class AutoPaths {
     public static void pushSample2(double currentX, double currentY) {
         // Push the second (middle) sample into the observation zone
         // Should start at the observation zone area
-        double[] pointsX = {currentX, 280, 295, 305, 305};
+        double[] pointsX = {currentX, 285, 305, 310, 305};
         double[] pointsY = {currentY, 135, 170, 175, 55};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
@@ -70,7 +72,7 @@ public class AutoPaths {
     public static void pushSample3(double currentX, double currentY) {
         // Push the third (right) sample into the observation zone
         // Should start at the observation zone area
-        double[] pointsX = {currentX, 295, 315, 325, 325};
+        double[] pointsX = {currentX, 305, 320, 327.5, 327.5};
         double[] pointsY = {currentY, 135, 170, 175, 55};
         double[][] path = SplineCalc.nDegBez(pointsX, pointsY, 25);
         Bot.purePursuit.setTargetPath(path);
