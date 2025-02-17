@@ -139,10 +139,10 @@ public class Config {
     // Intake Claw
     public static final double intakeYawLeft = 0;
     public static final double intakeYawRight = 0.58;
-    public static final double intakeRollUp = 0.43;
+    public static final double intakeRollUp = 0.45;
     public static final double intakeRollDown = 0.96;
     public static final double intakeClawOpen = 1;
-    public static final double intakeClawClose = 0.5;
+    public static final double intakeClawClose = 0.48;
     // OCG Box
     // Not used
     public static final double ocgBoxDropRight = 0.1;
@@ -161,6 +161,7 @@ public class Config {
     // Specimen Arm
     public static final double defaultSpecimenArmSpeed = 0.4;
     public static final int specimenCollect = -1300;
+
 
     // Linear Slide
     public static final double defaultSlideSpeed = 0.25;

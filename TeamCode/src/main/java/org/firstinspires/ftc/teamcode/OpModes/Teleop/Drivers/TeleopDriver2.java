@@ -125,7 +125,7 @@ public class TeleopDriver2 {
     }
 
     private void updateTransferState() {
-        intakeTransferToggle.toggle(gamepad.share);
+        intakeTransferToggle.toggle(gamepad.left_bumper);
         if (intakeTransferToggle.justChanged() && intakeTransferToggle.get()) {
             transferState = TransferState.WRIST_UP;
         }
@@ -137,11 +137,10 @@ public class TeleopDriver2 {
                 break;
 
             case WRIST_UP:
-                if (timer.milliseconds() > 750) {
-                    Bot.intake.misumiWristUp();
-                    timer.reset();
-                    transferState = TransferState.OCG_UP;
-                }
+                Bot.specimenArm.movePrepHang(0.6);
+                Bot.intake.misumiWristUp();
+                timer.reset();
+                transferState = TransferState.OCG_UP;
                 break;
 
             case OCG_UP:
