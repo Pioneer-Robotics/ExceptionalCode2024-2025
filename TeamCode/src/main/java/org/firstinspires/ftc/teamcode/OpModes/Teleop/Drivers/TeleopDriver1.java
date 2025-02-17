@@ -66,7 +66,9 @@ public class TeleopDriver1 {
 
     public void loopGamepad() {
         handleSpeedControls();
-        handleCamera();
+        if (useCameraCode) {
+            handleCamera();
+        }
         handleNorthMode();
         handleIMUReset();
         driveRobot();
@@ -88,8 +90,8 @@ public class TeleopDriver1 {
 
         // Change state based on button
         if (cameraToggle.justChanged() && cameraToggle.get()) {
-            boolean isArmOut = true;
-            boolean isArmMid = false;
+            boolean isArmOut = true; // TODO: -
+            boolean isArmMid = false; // TODO: -
 
             if (isArmOut) {
                 seachingState = SeachingState.IN;
