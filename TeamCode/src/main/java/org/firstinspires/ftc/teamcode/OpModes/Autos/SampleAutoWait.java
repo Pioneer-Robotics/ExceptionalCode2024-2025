@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.OpModes.Autos;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Bot;
@@ -22,6 +23,7 @@ public class SampleAutoWait extends LinearOpMode {
         GRAB_SAMPLE,
         GOTO_BASKET_TRANSFER,
         SLIDE_UP,
+        GOTO_SUB,
         PARK
     }
 
@@ -84,6 +86,9 @@ public class SampleAutoWait extends LinearOpMode {
                 case SLIDE_UP:
                     handleSLIDE_UP();
                     break;
+                case GOTO_SUB:
+                    handleGOTO_SUB();
+                    break;
                 case PARK:
                     handlePARK();
                     break;
@@ -137,9 +142,11 @@ public class SampleAutoWait extends LinearOpMode {
             if (pickupSampleNumber == 1) {
                 state = State.PICKUP_SAMPLE1;
             } else if (pickupSampleNumber == 2) {
-                state = State.PICKUP_SAMPLE1;
+                state = State.PICKUP_SAMPLE2;
             } else if (pickupSampleNumber == 3) {
-                state = State.PICKUP_SAMPLE1;
+                state = State.PICKUP_SAMPLE3;
+            } else if (pickupSampleNumber == 4) {
+                state = State.GOTO_SUB;
             }
 
         }
@@ -186,7 +193,7 @@ public class SampleAutoWait extends LinearOpMode {
             double[] vector1 = {Bot.pinpoint.getX(), Bot.pinpoint.getY(), 0, 0};
             double[] vector2 = {Config.pickSample3[0], Config.pickSample3[1], 0, 0};
             double[][] path = SplineCalc.cubicHermite(vector1, vector2, 25);
-            double[][] turnPath = SplineCalc.linearPath(new double[] {0, 1}, new double[] {Bot.pinpoint.getHeading(), -Math.PI/8}, 25);
+            double[][] turnPath = SplineCalc.linearPath(new double[] {0, 1}, new double[] {Bot.pinpoint.getHeading(), -Math.PI/16}, 25);
             Bot.purePursuit.setTargetPath(path);
             Bot.purePursuit.setTurnPath(turnPath);
 
@@ -239,11 +246,33 @@ public class SampleAutoWait extends LinearOpMode {
         }
     }
 
+    public void handleGOTO_SUB() {
+//        if (Bot.ocgBox.isPitchUp()) {
+        if (servoPosTimer.milliseconds() > 1000) {
+            double[] vector1 = {Bot.pinpoint.getX(), Bot.pinpoint.getY(), 0, 0};
+            double[] vector2 = {Config.pickSample2[0], Config.pickSample2[1], 275, -25};
+            double[][] path = SplineCalc.cubicHermite(vector1, vector2, 25);
+            double[][] turnPath = SplineCalc.linearPath(new double[] {0, 0.5, 1}, new double[] {Bot.pinpoint.getHeading(), 0, Math.PI/2}, 25);
+            Bot.purePursuit.setTargetPath(path);
+            Bot.purePursuit.setTurnPath(turnPath);
+
+            Bot.specimenArm.movePrepHang(0.4);
+        }
+    }
+
     public void handlePARK() {
-        terminateOpModeNow();
+        Bot.purePursuit.update(0.4);
+        // Stop the robot early and let momentum drift into the submersible to not damage arm
+        if (Bot.purePursuit.reachedTarget(20)) {
+            Bot.mecanumBase.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            terminateOpModeNow();
+        }
     }
 
 
+    /* -------------------------
+       - Finite State Machines -
+       ------------------------- */
 
     public void triggerTransfer() {
         transferState = TransferState.INTAKE_IN;
