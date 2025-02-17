@@ -5,22 +5,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
-import org.firstinspires.ftc.teamcode.Config;
 
 public class TeleopDriver1 {
     private final Gamepad gamepad;
     private final ElapsedTime timer = new ElapsedTime();
 
     // Enums for state machine
-    private enum TransferState {
-        NONE,
-        OCG_UP,
-        WRIST_UP,
-        DROP,
-        OCG_IDLE,
-        WRIST_DOWN
-    }
-
     private enum IntakeState {
         NONE,
         MID_WRIST,
@@ -31,7 +21,6 @@ public class TeleopDriver1 {
     private double speed = 0.5;
     private boolean northMode = true;
     private IntakeState intakeState = IntakeState.NONE;
-    private TransferState transferState = TransferState.NONE;
 
     // Toggles
     private final Toggle northModeToggle = new Toggle(true);
@@ -41,7 +30,6 @@ public class TeleopDriver1 {
     private final Toggle extendIntakeToggle = new Toggle(false);
     private final Toggle intakeClawToggle = new Toggle(false);
     private final Toggle intakeWristToggle = new Toggle(false);
-    private final Toggle intakeTransferToggle = new Toggle(false);
 
     private TeleopDriver1(Gamepad gamepad) {
         this.gamepad = gamepad;
@@ -60,30 +48,28 @@ public class TeleopDriver1 {
         driveIntake();
         toggleIntakeClaw();
         toggleIntakeWrist();
-        updateTransferState();
-        handleTransfer();
     }
 
     private void handleSpeedControls() {
         incSpeedToggle.toggle(gamepad.right_bumper);
         decSpeedToggle.toggle(gamepad.left_bumper);
-        if (incSpeedToggle.justChanged()) {
+        if (incSpeedToggle.justChanged() && incSpeedToggle.get()) {
             speed += 0.1;
         }
-        if (decSpeedToggle.justChanged()) {
+        if (decSpeedToggle.justChanged() && decSpeedToggle.get()) {
             speed -= 0.1;
         }
     }
 
     private void handleNorthMode() {
-        northModeToggle.toggle(gamepad.left_trigger > 0.8 && gamepad.right_trigger > 0.8);
+        northModeToggle.toggle(gamepad.share && gamepad.options);
         northMode = northModeToggle.get();
         Bot.mecanumBase.setNorthMode(northMode);
     }
 
     private void handleIMUReset() {
         resetIMUToggle.toggle(gamepad.x);
-        if (resetIMUToggle.justChanged()) {
+        if (resetIMUToggle.justChanged() && resetIMUToggle.get()) {
             Bot.pinpoint.resetIMU();
         }
     }
@@ -91,14 +77,15 @@ public class TeleopDriver1 {
     private void driveRobot() {
         double px = Math.pow(gamepad.left_stick_x, 3);
         double py = -Math.pow(gamepad.left_stick_y, 3);
-        double turn = gamepad.right_stick_x * (Bot.intake.isExtended() ? Config.EXTENSION_TURN_POWER_DEMULTIPLIER : 1);
+        double turn = gamepad.right_stick_x;
         Bot.mecanumBase.move(px, py, turn, speed);
     }
 
     private void updateIntakeState() {
         // Toggle prevents the state being set multiple times if the button is held
         extendIntakeToggle.toggle(gamepad.dpad_up);
-        if (extendIntakeToggle.justChanged()) {
+        if (extendIntakeToggle.justChanged() && extendIntakeToggle.get()) {
+            timer.reset();
             intakeState = IntakeState.MID_WRIST;
         } else if (gamepad.dpad_down) {
             intakeState = IntakeState.NONE;
@@ -114,7 +101,7 @@ public class TeleopDriver1 {
                 break;
             case MID_WRIST:
                 Bot.intake.midMisumiWrist();
-                if (Bot.intake.isWristMid()) {
+                if (timer.milliseconds() > 250) {
                     intakeState = IntakeState.EXTEND;
                 }
                 break;
@@ -155,52 +142,6 @@ public class TeleopDriver1 {
                 Bot.intake.misumiWristUp();
                 Bot.ocgBox.ocgPitchUp();
             }
-        }
-    }
-
-    private void updateTransferState() {
-        intakeTransferToggle.toggle(gamepad.dpad_right);
-        if (intakeTransferToggle.justChanged()) {
-            transferState = TransferState.WRIST_UP;
-        }
-    }
-
-    private void handleTransfer() {
-        switch (transferState) {
-            case NONE:
-                break;
-
-            case WRIST_UP:
-                Bot.intake.misumiWristUp();
-                timer.reset();
-                transferState = TransferState.OCG_UP;
-                break;
-
-            case OCG_UP:
-                Bot.ocgBox.ocgPitchUp();
-                if (timer.milliseconds() > 500) {
-                    timer.reset();
-                    Bot.intakeClaw.openClaw();
-                    transferState = TransferState.DROP;
-                }
-                break;
-
-            case DROP:
-                if (timer.milliseconds() > 750) {
-                    Bot.ocgBox.idle();
-                    transferState = TransferState.OCG_IDLE;
-                }
-                break;
-
-            case OCG_IDLE:
-                transferState = TransferState.WRIST_DOWN;
-                break;
-
-            case WRIST_DOWN:
-                // As there is nothing after, the state is immediately set to NONE
-                Bot.intake.misumiWristDown();
-                Bot.intakeClaw.closeClaw();
-                transferState = TransferState.NONE;
         }
     }
 

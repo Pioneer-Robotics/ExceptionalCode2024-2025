@@ -31,6 +31,7 @@ public class Config {
     // PID constants
     public static double[] drivePID = {0.08, 0.0001, 0.175}; // kP, kI, kD
     public static double[] turnPID = {2.5, 0.00001, 0.1}; // kP, kI, kD
+    public static double[] slidePIDF = {0.0025, 0.00001, 0.001, 0.005}; // kP, kI, kD, kF
     public static double driveSpeed = 0.4;
 
     // Feedforward constants
@@ -114,7 +115,7 @@ public class Config {
        -------------------- */
     // Specimen Arm Claw
     public static final double clawOpen = 0.4;
-    public static final double clawClose = 0.7;
+    public static final double clawClose = 0.65;
     public static final double specWristCollect = 0.165;
     public static final double specWristHang = 0.82;
     // Misumi Drive
@@ -136,7 +137,7 @@ public class Config {
     public static final double intakeWristClose = 0;
     public static final double intakeWristOpen = 1;
     // Intake Claw
-    public static final double intakeYawLeft = 0.05;
+    public static final double intakeYawLeft = 0;
     public static final double intakeYawRight = 0.58;
     public static final double intakeRollUp = 0.43;
     public static final double intakeRollDown = 0.96;
@@ -150,7 +151,7 @@ public class Config {
     public static final double ocgBoxRollUp = 0.867;
     public static final double ocgBoxRollDown = 0.635;
     // Used
-    public static final double ocgBoxPitchUp = 0.87;
+    public static final double ocgBoxPitchUp = 0.86;
     public static final double ocgBoxPitchDown = 0.23;
     public static final double ocgBoxIdle = 0.97;
 
@@ -163,11 +164,11 @@ public class Config {
 
     // Linear Slide
     public static final double defaultSlideSpeed = 0.25;
-    public static final int minSlideHeight = 15;
-    public static final int maxSlideHeight = 4350;
-    public static final int slideDown = 15;
+    public static final int minSlideHeight = 40;
+    public static final int maxSlideHeight = 3120;
+    public static final int slideDown = 40;
     public static final int slideLowBasket = 1500;
-    public static final int slideHighBasket = 2900;
+    public static final int slideHighBasket = 3200;
 
     /* -------------------------
        -  Coordinates of Note  -
@@ -201,5 +202,5 @@ public class Config {
     public static final double[] submersablePickup = {120, 160};
 
     // ---- Misc ----
-    public static final double defaultMaxCurrent = 8000;
+    public static final double defaultMaxCurrent = 6000;
 }

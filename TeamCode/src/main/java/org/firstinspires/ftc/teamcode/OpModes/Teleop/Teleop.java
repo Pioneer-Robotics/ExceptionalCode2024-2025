@@ -71,6 +71,8 @@ public class Teleop extends LinearOpMode {
         telemetry.addData("Y", Bot.pinpoint.getY());
         telemetry.addData("Theta", Bot.pinpoint.getHeading());
         telemetry.addData("Total Current", Bot.currentThreads.getTotalCurrent());
+
         telemetry.update();
+        Bot.dashboardTelemetry.update();
     }
 }

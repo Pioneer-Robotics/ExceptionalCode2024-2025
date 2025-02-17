@@ -1,13 +1,19 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PID;
 
 public class SlideArm {
     private final DcMotorEx motor1, motor2;
+    private final PID pid;
+    private int targetPosition = 0;
+    private double kP = Config.slidePIDF[0];
+    private double kI = Config.slidePIDF[1];
+    private double kD = Config.slidePIDF[2];
+    private double kF = Config.slidePIDF[3];
 
     public SlideArm() {
         motor1 = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.slideMotor1);
@@ -15,42 +21,55 @@ public class SlideArm {
 
         //Motor 1 is non OCG box arm
         //Motor 2 is OCG box arm
+        motor1.setDirection(DcMotorEx.Direction.REVERSE);
+        motor2.setDirection(DcMotorEx.Direction.REVERSE);
         motor1.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         motor2.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-//        motor1.setDirection(DcMotorSimple.Direction.REVERSE);
-//        motor2.setDirection(DcMotorSimple.Direction.REVERSE);
         motor1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         motor2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        motor1.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        motor2.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        pid = new PID(kP, kI, kD);
     }
 
-    public void moveToPositionTicks(int ticks, double speed) {
-        motor1.setTargetPosition(ticks);
-        motor2.setTargetPosition(-ticks);
-        motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor1.setVelocity(Config.maxSlideTicksPerSecond * speed);
-        motor2.setVelocity(Config.maxSlideTicksPerSecond * speed);
+    public void setPIDFCoefficients(double kP, double kI, double kD, double kF) {
+        this.kP = kP;
+        this.kI = kI;
+        this.kD = kD;
+        this.kF = kF;
+
+        pid.setPIDCoefficients(kP, kI, kD);
     }
 
-    public void moveToPositionTicks(int ticks) {
-        moveToPositionTicks(ticks, Config.defaultSlideSpeed);
+    public void setTargetPosition(int ticks, double speed) {
+        targetPosition = ticks;
+    }
+
+    public void setTargetPosition(int ticks) {
+        setTargetPosition(ticks, Config.defaultSlideSpeed);
+    }
+
+    public void update() {
+        double currentPosition = getArmPosition();
+        double power = pid.calculate(currentPosition, targetPosition);
+        if (targetPosition > Config.slideDown + 50 || currentPosition > Config.slideDown + 50) {
+            move(power);
+        } else {
+            motorOff();
+        }
     }
 
     public void moveDown(double speed) {
-        moveToPositionTicks(Config.slideDown, speed);
-//        if (getArmPosition() < (Config.slideDown + 50.0)) { motorOff(); }
+        setTargetPosition(Config.slideDown, speed);
     }
 
     public void moveMid(double speed) {
-        if (!motor1.isMotorEnabled() || !motor2.isMotorEnabled()) { motorOn(); }
-        moveToPositionTicks(Config.slideLowBasket, speed);
+        setTargetPosition(Config.slideLowBasket, speed);
     }
 
     public void moveUp(double speed) {
-        if (!motor1.isMotorEnabled() || !motor2.isMotorEnabled()) { motorOn(); }
-        moveToPositionTicks(Config.slideHighBasket, speed);
+        setTargetPosition(Config.slideHighBasket, speed);
     }
 
 
@@ -66,21 +85,26 @@ public class SlideArm {
     }
 
     public void move(double power) {
-        if (!motor1.isMotorEnabled() || !motor2.isMotorEnabled()) { motorOn(); }
-            motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motor1.setVelocity(power * Config.maxSlideTicksPerSecond);
-            motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motor2.setVelocity(-power * Config.maxSlideTicksPerSecond);
+        power += kF;
+        motor1.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        motor1.setVelocity(power * Config.maxSlideTicksPerSecond);
+        motor2.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        motor2.setVelocity(power * Config.maxSlideTicksPerSecond);
     }
 
     // Getters
     public double getArmPosition() {
-        return(motor2.getCurrentPosition());
+        return Math.round((float) (motor1.getCurrentPosition() + motor2.getCurrentPosition()) / 2);
     }
     public DcMotorEx getMotor1() {
         return(motor1);
     }
     public DcMotorEx getMotor2() {
         return(motor2);
+    }
+
+    public void resetEncoders() {
+        motor1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        motor2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
     }
 }
