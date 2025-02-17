@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.OpModes.Testing.BlockDetector;
 
 public class TeleopDriver1 {
     private final Gamepad gamepad;
@@ -27,11 +28,20 @@ public class TeleopDriver1 {
         EXTEND
     }
 
+    private enum SeachingState {
+        OUT,
+        IN,
+        NONE
+    }
+
     // Variables
     private double speed = 0.5;
     private boolean northMode = true;
     private IntakeState intakeState = IntakeState.NONE;
     private TransferState transferState = TransferState.NONE;
+    boolean useCameraCode;
+    BlockDetector detector;
+    SeachingState seachingState = SeachingState.NONE;
 
     // Toggles
     private final Toggle northModeToggle = new Toggle(true);
@@ -42,17 +52,21 @@ public class TeleopDriver1 {
     private final Toggle intakeClawToggle = new Toggle(false);
     private final Toggle intakeWristToggle = new Toggle(false);
     private final Toggle intakeTransferToggle = new Toggle(false);
+    private final Toggle cameraToggle = new Toggle(false);
 
-    private TeleopDriver1(Gamepad gamepad) {
+    private TeleopDriver1(Gamepad gamepad, boolean useCameraCode, BlockDetector detector) {
         this.gamepad = gamepad;
+        this.useCameraCode = useCameraCode;
+        this.detector = detector;
     }
 
-    public static TeleopDriver1 createInstance(Gamepad gamepad) {
-        return new TeleopDriver1(gamepad);
+    public static TeleopDriver1 createInstance(Gamepad gamepad, boolean useCameraCode, BlockDetector detector) {
+        return new TeleopDriver1(gamepad, useCameraCode, detector);
     }
 
     public void loopGamepad() {
         handleSpeedControls();
+        handleCamera();
         handleNorthMode();
         handleIMUReset();
         driveRobot();
@@ -62,6 +76,74 @@ public class TeleopDriver1 {
         toggleIntakeWrist();
         updateTransferState();
         handleTransfer();
+    }
+
+    private void handleCamera() {
+        updateCameraButtonState();
+        updateRobotBasedOnCameraState();
+    }
+
+    private void updateCameraButtonState() {
+        cameraToggle.toggle(gamepad.back);
+
+        // Change state based on button
+        if (cameraToggle.justChanged() && cameraToggle.get()) {
+            boolean isArmOut = true;
+            boolean isArmMid = false;
+
+            if (isArmOut) {
+                seachingState = SeachingState.IN;
+            } else if (isArmMid) {
+                seachingState = SeachingState.OUT;
+            } else {
+                // In the middle of out and in so do nothing
+            }
+        }
+    }
+
+    private void updateRobotBasedOnCameraState() {
+        // update robot based on current state
+        switch (seachingState) {
+            case IN:
+                if (Bot.intake.isWristMid()) {
+                    // if at mid - change state to none
+                    seachingState = SeachingState.NONE;
+                } else {
+                    if (detector.isTeamColorFound()) {
+                        teamColorPieceFound();
+                    } else {
+                        // move in more
+                        Bot.intake.decrementExtendMisumiDrive();
+                    }
+                }
+            case OUT:
+                if (Bot.intake.isExtended()) {
+                    // if at end - change state to none
+                    seachingState = SeachingState.NONE;
+                } else {
+                    if (detector.isTeamColorFound()) {
+                        teamColorPieceFound();
+                    } else {
+                        // else move out more
+                        Bot.intake.incrementExtendMisumiDrive();
+                    }
+                }
+            case NONE:
+                break;
+        };
+    }
+
+    private void teamColorPieceFound() {
+        // if found then haptic feedback
+        gamepad.rumble(500);
+
+        // stop state
+        seachingState = SeachingState.NONE;
+
+        // Move claw to angle
+        double angleInDegrees = detector.getTeamColorAngle();
+        double convertedAngle = angleInDegrees/360;
+        Bot.intakeClaw.yawAnyPosAngle(convertedAngle);
     }
 
     private void handleSpeedControls() {
@@ -136,22 +218,21 @@ public class TeleopDriver1 {
 
     private void toggleIntakeWrist() {
         intakeWristToggle.toggle(gamepad.y);
-        if (intakeWristToggle.justChanged() && intakeWristToggle.get()) {
-            // Down state
-            if (Bot.intake.isExtended()) {
-                // If intake extended
+
+        boolean isInDownState = intakeWristToggle.justChanged() && intakeWristToggle.get();
+        boolean isInUpState = intakeWristToggle.justChanged() && !intakeWristToggle.get();
+        boolean isIntakeExtended = Bot.intake.isExtended();
+
+        if (isInDownState) {
+            if (isIntakeExtended) {
                 Bot.intake.misumiWristDown();
             } else {
-                // If intake not extended
                 Bot.intake.midMisumiWrist();
             }
-        } else if (intakeWristToggle.justChanged() && !intakeWristToggle.get()) {
-            // Up state
-            if (Bot.intake.isExtended()) {
-                // If intake extended
+        } else if (isInUpState) {
+            if (isIntakeExtended) {
                 Bot.intake.midMisumiWrist();
             } else {
-                // If intake not extended
                 Bot.intake.misumiWristUp();
                 Bot.ocgBox.ocgPitchUp();
             }

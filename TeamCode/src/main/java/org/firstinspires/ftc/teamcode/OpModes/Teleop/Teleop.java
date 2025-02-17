@@ -8,12 +8,20 @@ import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 import org.firstinspires.ftc.teamcode.OpModes.Teleop.AutomatedTeleop.SpecimenCycle;
 import org.firstinspires.ftc.teamcode.OpModes.Teleop.Drivers.TeleopDriver1;
 import org.firstinspires.ftc.teamcode.OpModes.Teleop.Drivers.TeleopDriver2;
+import org.firstinspires.ftc.teamcode.OpModes.Testing.BlockDetector;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvInternalCamera;
 
 @TeleOp(name="Teleop")
 public class Teleop extends LinearOpMode {
     TeleopDriver1 driver1;
     TeleopDriver2 driver2;
     SpecimenCycle specimenCycle;
+
+    OpenCvCamera phoneCam;
+    BlockDetector detector;
 
     private enum CycleState {
         MANUAL,
@@ -26,13 +34,16 @@ public class Teleop extends LinearOpMode {
     public void runOpMode() {
         Bot.init(this);
 
-        driver1 = TeleopDriver1.createInstance(gamepad1);
+        driver1 = TeleopDriver1.createInstance(gamepad1, useCameraCode(), detector);
         driver2 = TeleopDriver2.createInstance(gamepad2);
         specimenCycle = SpecimenCycle.createInstance();
 
+        if (useCameraCode()) {
+            initalizeCameraCode();
+        }
         waitForStart();
 
-        while(opModeIsActive()) {
+        while (opModeIsActive()) {
             updateCycleState();
             switch (cycleState) {
                 case MANUAL:
@@ -49,6 +60,16 @@ public class Teleop extends LinearOpMode {
         Bot.currentThreads.stopThreads();
     }
 
+    // Override methods
+    BlockDetector.TeamColor teamColor() {
+        return BlockDetector.TeamColor.RED; // default to red
+    }
+
+    boolean useCameraCode() {
+        return false;
+    }
+
+    // Private methods
     private void updateCycleState() {
         specimenCycleToggle.toggle(gamepad1.touchpad);
         // When the button is first pressed, set robot position with specimenCycle.start()
@@ -61,6 +82,27 @@ public class Teleop extends LinearOpMode {
         } else {
             cycleState = CycleState.MANUAL;
         }
+    }
+
+    private void initalizeCameraCode() {
+        int cameraMonitorViewId = hardwareMap.appContext
+                .getResources().getIdentifier("cameraMonitorViewId",
+                        "id", hardwareMap.appContext.getPackageName());
+        phoneCam = OpenCvCameraFactory.getInstance()
+                .createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+        BlockDetector detector = new BlockDetector(telemetry, teamColor());
+        phoneCam.setPipeline(detector);
+        phoneCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                phoneCam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                // TODO: -
+            }
+        });
     }
 
     private void updateTelemetry() {
