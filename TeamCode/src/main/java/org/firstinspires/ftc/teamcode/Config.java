@@ -196,11 +196,11 @@ public class Config {
     public static final double sampleStartY = 21.5;
 
     // Hermite Points of Interest
-    public static final double[] pickSample1 = {46, 46};
-    public static final double[] pickSample2 = {50, 39};
-    public static final double[] pickSample3 = {57, 42};
+    public static final double[] pickSample1 = {46.5, 46};
+    public static final double[] pickSample2 = {41.5, 46};
+    public static final double[] pickSample3 = {44, 54};
     public static final double[] submersiblePickup = {120, 160};
-    public static final double[] basketLoc = {35, 35};
+    public static final double[] basketLoc = {33.5, 36.5};
 
     // ---- Misc ----
     public static final double defaultMaxCurrent = 6000;

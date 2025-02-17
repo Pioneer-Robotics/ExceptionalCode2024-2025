@@ -42,9 +42,7 @@ public class PurePursuit {
         double[] turnPathArray = new double[turnPath.length];
         for (int i = 0; i < turnPath.length; i++) {
             turnPathArray[i] = turnPath[i][1];
-            Bot.dashboardTelemetry.addData("pointy " + i, turnPath[i][1]);
         }
-        Bot.dashboardTelemetry.update();
         this.turnPath = turnPathArray;
     }
 
