@@ -141,8 +141,8 @@ public class Config {
     public static final double intakeYawRight = 0.11;
     public static final double intakeRollUp = 0.94;
     public static final double intakeRollDown = 0.3;
-    public static final double intakeClawOpen = 1;
-    public static final double intakeClawClose = 0.5;
+    public static final double intakeClawOpen = 0.2;
+    public static final double intakeClawClose = 0;
     // OCG Box
     // Not used
     public static final double ocgBoxDropRight = 0.1;
