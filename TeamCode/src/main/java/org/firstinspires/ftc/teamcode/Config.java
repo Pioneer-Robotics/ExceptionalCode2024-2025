@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PID;
+import org.opencv.core.Point;
+
 /**
  * This class is used to store all of the constants and hardware map names for the robot
  */
@@ -205,4 +208,11 @@ public class Config {
 
     // ---- Misc ----
     public static final double defaultMaxCurrent = 6000;
+
+    // ---- Camera ----
+    public static final double[] autoIntakePIDX = {0,0,0};
+    public static final double[] autoIntakePIDY = {0,0,0};
+    public static final int streamWidth = 640;
+    public static final int streamHeight = 480;
+    public static final Point blobTargetPoint = new Point(320,240);
 }

@@ -22,7 +22,7 @@ import org.firstinspires.ftc.vision.opencv.ColorRange;
 public class VisionTest extends LinearOpMode {
     ServoClass testServo;
     public void runOpMode(){
-        LocatorClass blueLocator = new LocatorClass(ColorRange.BLUE, this);
+        LocatorClass blueLocator = new LocatorClass(ColorRange.BLUE, this, LocatorClass.CameraOrientation.HORIZONTAL);
         List<ColorBlobLocatorProcessor.Blob> locatedBlobs;
         ColorBlobLocatorProcessor.Blob largestBlob;
         FtcDashboard dashboard = FtcDashboard.getInstance();
