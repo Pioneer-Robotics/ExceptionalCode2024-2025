@@ -120,7 +120,7 @@ public class SampleAutoWait extends LinearOpMode {
         Bot.purePursuit.setTargetPath(path);
         Bot.purePursuit.setTurnPath(turnPath);
         Bot.intake.misumiWristMid();
-        Bot.slideArm.moveUp(0.4);
+        Bot.slideArm.moveUp(0.8);
 
         state = State.DROP_SAMPLE;
     }
@@ -180,7 +180,7 @@ public class SampleAutoWait extends LinearOpMode {
             Bot.purePursuit.setTargetPath(path);
             Bot.purePursuit.setTurnPath(turnPath);
 
-            Bot.slideArm.moveDown(0.4);
+            Bot.slideArm.moveDown(0.8);
             triggerIntake();
             Bot.intakeClaw.openClaw();
 
@@ -198,7 +198,7 @@ public class SampleAutoWait extends LinearOpMode {
             Bot.purePursuit.setTargetPath(path);
             Bot.purePursuit.setTurnPath(turnPath);
 
-            Bot.slideArm.moveDown(0.4);
+            Bot.slideArm.moveDown(0.8);
             triggerIntake();
             Bot.intakeClaw.openClaw();
             Bot.intakeClaw.clawPos45();
@@ -209,7 +209,7 @@ public class SampleAutoWait extends LinearOpMode {
 
     public void handleGRAB_SAMPLE() {
         handleIntake();
-        Bot.slideArm.moveDown(0.4);
+        Bot.slideArm.moveDown(0.8);
         Bot.purePursuit.update();
         if (Bot.purePursuit.reachedTarget(1) && intakeState == IntakeState.NONE && Bot.slideArm.isDown()) {
             Bot.purePursuit.stop();
@@ -243,7 +243,7 @@ public class SampleAutoWait extends LinearOpMode {
         handleTransfer();
         Bot.purePursuit.update();
         if (transferState == TransferState.NONE) {
-            Bot.slideArm.moveUp(0.4);
+            Bot.slideArm.moveUp(0.8);
             state = State.DROP_SAMPLE;
         }
     }

@@ -87,7 +87,7 @@ public class Bot {
         Bot.imu = new BotIMU();
         Bot.led = new LEDController();
 
-        Bot.locator = new LocatorClass(ColorRange.BLUE,opMode, LocatorClass.CameraOrientation.HORIZONTAL);
+//        Bot.locator = new LocatorClass(ColorRange.BLUE,opMode, LocatorClass.CameraOrientation.HORIZONTAL);
 
         // Threads
         Bot.currentThreads = new CurrentUtils(opMode);
