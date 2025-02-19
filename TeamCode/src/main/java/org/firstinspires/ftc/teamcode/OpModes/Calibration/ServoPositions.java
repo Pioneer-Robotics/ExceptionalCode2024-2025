@@ -17,6 +17,7 @@ public class ServoPositions extends LinearOpMode {
                 new ServoClass(hardwareMap.get(Servo.class, Config.intakeYawServo), Config.intakeYawLeft, Config.intakeYawRight),
                 new ServoClass(hardwareMap.get(Servo.class, Config.intakeRollServo), Config.intakeRollUp, Config.intakeRollDown),
                 new ServoClass(hardwareMap.get(Servo.class, Config.intakeClawServo), Config.intakeClawOpen, Config.intakeClawClose),
+
                 new ServoClass(hardwareMap.get(Servo.class, Config.clawServo), Config.clawOpen, Config.clawClose),
                 new ServoClass(hardwareMap.get(Servo.class, Config.ocgPitchServo), Config.ocgBoxPitchUp, Config.ocgBoxPitchDown),
                 new ServoClass(hardwareMap.get(Servo.class, Config.specimenWristServo), Config.specWristCollect, Config.specWristHang),
@@ -48,8 +49,10 @@ public class ServoPositions extends LinearOpMode {
                 servo.closeServo();
             } else if (gamepad1.right_bumper) {
                 servo.openServo();
-            } else {
+            } else if (gamepad1.right_trigger > 0.01){
                 servo.anyPos(gamepad1.right_trigger);
+            } else {
+                servo.anyPos(0.5);
             }
 
             telemetry.addData("Servo Pos", servo.getPos());

@@ -114,8 +114,8 @@ public class Config {
        - Servo Positions  -
        -------------------- */
     // Specimen Arm Claw
-    public static final double clawOpen = 0.4;
-    public static final double clawClose = 0.65;
+    public static final double clawOpen = 0.12;
+    public static final double clawClose = 0.3;
     public static final double specWristCollect = 0.165;
     public static final double specWristHang = 0.82;
     // Misumi Drive
@@ -152,8 +152,8 @@ public class Config {
     public static final double ocgBoxRollDown = 0.635;
     // Used
     public static final double ocgBoxPitchUp = 0.86;
-    public static final double ocgBoxPitchDown = 0.23;
-    public static final double ocgBoxIdle = 0.97;
+    public static final double ocgBoxPitchDown = 0.15;
+    public static final double ocgBoxIdle = 0.05;
 
     /* --------------------
        - Motor Positions  -
