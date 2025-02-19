@@ -211,7 +211,16 @@ public class SampleAutoWait extends LinearOpMode {
         handleIntake();
         Bot.slideArm.moveDown(0.8);
         Bot.purePursuit.update();
-        if (Bot.purePursuit.reachedTarget(1) && intakeState == IntakeState.NONE && Bot.slideArm.isDown()) {
+
+        boolean didReachTarget = Bot.purePursuit.reachedTarget(1);
+        boolean currentIntakeState = intakeState == IntakeState.NONE;
+        boolean isSlideArmDown = Bot.slideArm.isDown();
+
+        telemetry.addData("didReachTarget", didReachTarget);
+        telemetry.addData("currentIntakeState", currentIntakeState);
+        telemetry.addData("isSlideArmDown", isSlideArmDown);
+
+        if (didReachTarget && currentIntakeState && isSlideArmDown) {
             Bot.purePursuit.stop();
             Bot.intake.misumiWristDown();
             servoPosTimer.reset();
