@@ -87,7 +87,7 @@ public class SpecimenAuto extends LinearOpMode {
             public void run() {
                 Bot.specimenArm.movePrepHang(1);
             }
-        }, 350);
+        }, 250); // UPDATED: - was 350
         state = State.SPECIMEN_HANG;
     }
 
@@ -107,10 +107,10 @@ public class SpecimenAuto extends LinearOpMode {
 
         if (specimensLeft == totalSpecimens) {
             // Go slower on first hang
-            Bot.purePursuit.update(0.4);
+            Bot.purePursuit.update(0.65); // UPDATED: - was 0.4
         } else {
             // Go faster on subsequent hangs
-            Bot.purePursuit.update(0.65);
+            Bot.purePursuit.update(0.9); // UPDATED: - was 0.65
         }
 
         if (Bot.purePursuit.reachedTarget(2.5)) {
@@ -144,7 +144,7 @@ public class SpecimenAuto extends LinearOpMode {
     }
 
     private void handlePushSampleOne() {
-        Bot.purePursuit.update(0.85);
+        Bot.purePursuit.update(0.95); // UPDATED: - was 0.85
         if (Bot.purePursuit.reachedTarget(5)) {
             AutoPaths.pushSample2(
                     Bot.pinpoint.getX(), // Current X
@@ -155,7 +155,7 @@ public class SpecimenAuto extends LinearOpMode {
     }
 
     private void handlePushSampleTwo() {
-        Bot.purePursuit.update(0.8);
+        Bot.purePursuit.update(0.9); // UPDATED: - was 0.8
         if (Bot.purePursuit.reachedTarget(5)) {
             AutoPaths.pushSample3(
                     Bot.pinpoint.getX(), // Current X
@@ -166,7 +166,7 @@ public class SpecimenAuto extends LinearOpMode {
     }
 
     private void handlePushSampleThree() {
-        Bot.purePursuit.update(0.75);
+        Bot.purePursuit.update(0.85); // UPDATED: - was 0.75
         if (Bot.purePursuit.reachedTarget(5)) {
             AutoPaths.collectSpecimen(
                     Bot.pinpoint.getX(), // Current X
@@ -196,7 +196,7 @@ public class SpecimenAuto extends LinearOpMode {
                     offsetX, // Hang offsetX X
                     0 // Offset Y
             );
-            Bot.specimenArm.movePrepHang(0.5);
+            Bot.specimenArm.movePrepHang(0.75); // UPDATED: - was 0.5
             specimensLeft--;
             state = State.SPECIMEN_HANG;
         }
