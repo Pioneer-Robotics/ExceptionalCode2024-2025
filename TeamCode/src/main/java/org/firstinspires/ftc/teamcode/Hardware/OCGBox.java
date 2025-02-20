@@ -39,6 +39,11 @@ public class OCGBox {
         pitchState = true;
     }
 
+    public void ocgPitchMid(){
+        goToPitch(Config.ocgBoxPitchMid);
+        pitchState = true;
+    }
+
     public void ocgPitchDrop(){
         if (rollState){
             goToPitch(Config.ocgBoxPitchDown);

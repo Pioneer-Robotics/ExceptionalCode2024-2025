@@ -25,6 +25,10 @@ public class IntakeClaw {
         yawServo.anyPos(yawServoMid);
     }
 
+    public void clawDownKeepYaw() {
+        rollServo.anyPos(Config.intakeRollDown);
+    }
+
     public void clawUp() {
         rollServo.anyPos(Config.intakeRollUp);
         yawServo.anyPos(yawServoMid);
