@@ -127,11 +127,11 @@ public class Config {
     public static double misumiDriveRClose = 0.85;
     public static double misumiDriveRInit = 0.9;
     // Misumi Wrist
-    public static final double misumiWristLDown = 0.66;
-    public static final double misumiWristLMid = 0.58;
-    public static final double misumiWristLUp = 0.31; // Up to OCG box
+    public static final double misumiWristLDown = 0.87;
+    public static final double misumiWristLMid = 0.83;
+    public static final double misumiWristLUp = 0.53; // Up to OCG box
     public static final double misumiWristRDown = 0.33;
-    public static final double misumiWristRMid = 0.42;
+    public static final double misumiWristRMid = 0.4;
     public static final double misumiWristRUp = 0.7;
     // Intake Wrist
     public static final double intakeWristClose = 0;
@@ -141,8 +141,8 @@ public class Config {
     public static final double intakeYawRight = 0.11;
     public static final double intakeRollUp = 0.94;
     public static final double intakeRollDown = 0.3;
-    public static final double intakeClawOpen = 0.2;
-    public static final double intakeClawClose = 0;
+    public static final double intakeClawOpen = 0.23;
+    public static final double intakeClawClose = 0.36;
     // OCG Box
     // Not used
     public static final double ocgBoxDropRight = 0.1;

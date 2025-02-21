@@ -13,16 +13,16 @@ public class ServoPositions extends LinearOpMode {
     public void runOpMode() {
 
         ServoClass[] servos = new ServoClass[]{
-                new ServoClass(hardwareMap.get(Servo.class, Config.misumiDriveR), Config.misumiDriveROpen, Config.misumiDriveRClose),
-                new ServoClass(hardwareMap.get(Servo.class, Config.intakeYawServo), Config.intakeYawLeft, Config.intakeYawRight),
-                new ServoClass(hardwareMap.get(Servo.class, Config.intakeRollServo), Config.intakeRollUp, Config.intakeRollDown),
-                new ServoClass(hardwareMap.get(Servo.class, Config.intakeClawServo), Config.intakeClawOpen, Config.intakeClawClose),
+                new ServoClass(hardwareMap.get(Servo.class, Config.misumiDriveR), Config.misumiDriveROpen, Config.misumiDriveRClose),//0
+                new ServoClass(hardwareMap.get(Servo.class, Config.intakeYawServo), Config.intakeYawLeft, Config.intakeYawRight),//1
+                new ServoClass(hardwareMap.get(Servo.class, Config.intakeRollServo), Config.intakeRollUp, Config.intakeRollDown),//2
+                new ServoClass(hardwareMap.get(Servo.class, Config.intakeClawServo), Config.intakeClawOpen, Config.intakeClawClose),//3
 
-                new ServoClass(hardwareMap.get(Servo.class, Config.clawServo), Config.clawOpen, Config.clawClose),
-                new ServoClass(hardwareMap.get(Servo.class, Config.ocgPitchServo), Config.ocgBoxPitchUp, Config.ocgBoxPitchDown),
-                new ServoClass(hardwareMap.get(Servo.class, Config.specimenWristServo), Config.specWristCollect, Config.specWristHang),
-                new ServoClass(hardwareMap.get(Servo.class, Config.misumiWristR), Config.misumiWristRUp, Config.misumiWristRDown),
-                new ServoClass(hardwareMap.get(Servo.class, Config.misumiWristL), Config.misumiWristLUp, Config.misumiWristLDown),
+                new ServoClass(hardwareMap.get(Servo.class, Config.clawServo), Config.clawOpen, Config.clawClose),//4
+                new ServoClass(hardwareMap.get(Servo.class, Config.ocgPitchServo), Config.ocgBoxPitchUp, Config.ocgBoxPitchDown),//5
+                new ServoClass(hardwareMap.get(Servo.class, Config.specimenWristServo), Config.specWristCollect, Config.specWristHang),//6
+                new ServoClass(hardwareMap.get(Servo.class, Config.misumiWristR), Config.misumiWristRUp, Config.misumiWristRDown),//7
+                new ServoClass(hardwareMap.get(Servo.class, Config.misumiWristL), Config.misumiWristLUp, Config.misumiWristLDown),//8
         };
 
         ServoClass servo = servos[0];
@@ -52,7 +52,7 @@ public class ServoPositions extends LinearOpMode {
             } else if (gamepad1.right_trigger > 0.01){
                 servo.anyPos(gamepad1.right_trigger);
             } else {
-                servo.anyPos(0.5);
+                servo.anyPos(0.0);
             }
 
             telemetry.addData("Servo Pos", servo.getPos());
