@@ -12,6 +12,7 @@ public class Intake {
 
     public ServoClass misumiDriveL, misumiDriveR, misumiWristL, misumiWristR;
     boolean isExtended;
+    double targetPosition = Config.misumiDriveROpen;
 
     public Intake() {
 //        misumiDriveL = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.misumiDriveL), Config.misumiDriveLOpen, Config.misumiDriveLClose);
@@ -54,7 +55,7 @@ public class Intake {
         misumiWristR.openServo();
     }
 
-    public void midMisumiWrist() {
+    public void misumiWristMid() {
         misumiWristL.anyPos(Config.misumiWristLMid);
         misumiWristR.anyPos(Config.misumiWristRMid);
     }
@@ -83,5 +84,10 @@ public class Intake {
     public boolean isWristMid() {
         return ((Math.abs(misumiWristL.getPos() - Config.misumiWristLMid) < 0.1) &&
                 (Math.abs(misumiWristR.getPos() - Config.misumiWristRMid) < 0.1));
+    }
+
+    public void changePosition(double amount) {
+        misumiDriveR.anyPos(targetPosition + amount);
+        targetPosition += amount;
     }
 }

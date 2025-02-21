@@ -88,9 +88,10 @@ public class TeleopDriver1 {
             intakeState = IntakeState.MID_WRIST;
         } else if (gamepad.dpad_down) {
             intakeState = IntakeState.NONE;
-            Bot.intake.midMisumiWrist();
+            Bot.intake.misumiWristMid();
             Bot.intake.retractMisumiDrive();
             Bot.intakeClaw.clawUp();
+            Bot.intakeClaw.clawPos0();
         }
     }
 
@@ -99,7 +100,7 @@ public class TeleopDriver1 {
             case NONE:
                 break;
             case MID_WRIST:
-                Bot.intake.midMisumiWrist();
+                Bot.intake.misumiWristMid();
                 if (timer.milliseconds() > 250) {
                     intakeState = IntakeState.EXTEND;
                 }
@@ -129,13 +130,13 @@ public class TeleopDriver1 {
                 Bot.intake.misumiWristDown();
             } else {
                 // If intake not extended
-                Bot.intake.midMisumiWrist();
+                Bot.intake.misumiWristMid();
             }
         } else if (intakeWristToggle.justChanged() && !intakeWristToggle.get()) {
             // Up state
             if (Bot.intake.isExtended()) {
                 // If intake extended
-                Bot.intake.midMisumiWrist();
+                Bot.intake.misumiWristMid();
             } else {
                 // If intake not extended
                 Bot.intake.misumiWristUp();

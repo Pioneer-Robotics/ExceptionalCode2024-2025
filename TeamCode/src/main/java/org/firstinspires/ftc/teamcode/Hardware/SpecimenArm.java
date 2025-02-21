@@ -78,6 +78,10 @@ public class SpecimenArm {
         position = 2;
     }
 
+    public void moveToPark(double speed) {
+        move(speed);
+    }
+
     public int getPosition() {
         return position;
     }

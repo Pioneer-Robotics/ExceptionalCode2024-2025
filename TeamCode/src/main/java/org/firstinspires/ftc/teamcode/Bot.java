@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
 import org.firstinspires.ftc.teamcode.Hardware.Intake;
 import org.firstinspires.ftc.teamcode.Hardware.IntakeClaw;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
+import org.firstinspires.ftc.teamcode.Hardware.LocatorClass;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
 import org.firstinspires.ftc.teamcode.Hardware.OCGBox;
 import org.firstinspires.ftc.teamcode.Hardware.SlideArm;
@@ -22,6 +23,7 @@ import org.firstinspires.ftc.teamcode.SelfDrivingAuto.Pinpoint;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PurePursuit;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.SparkfunOTOS;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.TwoWheelOdometry;
+import org.firstinspires.ftc.vision.opencv.ColorRange;
 
 /**
  * This class is used to create all of the hardware objects and store them in the bot object
@@ -49,18 +51,19 @@ public class Bot {
     public static Telemetry dashboardTelemetry;
     public static IntakeClaw intakeClaw;
     public static OCGBox ocgBox;
+    public static LocatorClass locator;
 
     /**
      * Constructor for Bot.
      * @param opMode LinearOpMode
      */
-    public static void init(@NonNull LinearOpMode opMode, double startX, double startY) {
+    public static void init(@NonNull LinearOpMode opMode, double startX, double startY, double startTheta) {
         Bot.opMode = opMode;
         Bot.dashboard = FtcDashboard.getInstance();
         Bot.dashboardTelemetry = dashboard.getTelemetry();
 
         // Drive base and self driving
-        Bot.pinpoint = new Pinpoint(startX, startY);
+        Bot.pinpoint = new Pinpoint(startX, startY, startTheta);
 //        Bot.optical_odom = new SparkfunOTOS();
 //        Bot.deadwheel_odom = new TwoWheelOdometry(Config.specimenStartX, Config.specimenStartY);
         Bot.mecanumBase = new MecanumBase();
@@ -84,12 +87,16 @@ public class Bot {
         Bot.imu = new BotIMU();
         Bot.led = new LEDController();
 
+//        Bot.locator = new LocatorClass(ColorRange.BLUE,opMode, LocatorClass.CameraOrientation.HORIZONTAL);
 
         // Threads
         Bot.currentThreads = new CurrentUtils(opMode);
     }
 
     public static void init(@NonNull LinearOpMode opMode) {
-        Bot.init(opMode, 0, 0);
+        Bot.init(opMode, 0, 0, 0);
+    }
+    public static void init(@NonNull LinearOpMode opMode, double startX, double startY) {
+        Bot.init(opMode, startX, startY, 0);
     }
 }

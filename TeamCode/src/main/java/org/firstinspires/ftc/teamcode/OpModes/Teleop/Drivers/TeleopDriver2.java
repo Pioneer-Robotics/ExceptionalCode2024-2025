@@ -84,17 +84,17 @@ public class TeleopDriver2 {
     private void driveSlideArm() {
         if (gamepad.y) {
             manualSlideArmControl = false;
-            Bot.intake.midMisumiWrist();
+            Bot.intake.misumiWristMid();
             Bot.slideArm.moveUp(0.65);
             Bot.specimenArm.movePrepHang(0.4);
         } else if (gamepad.a) {
             manualSlideArmControl = false;
-            Bot.intake.midMisumiWrist();
+            Bot.intake.misumiWristMid();
             Bot.ocgBox.idle();
             Bot.slideArm.moveDown(0.65);
         } else if (gamepad.x) {
             manualSlideArmControl = false;
-            Bot.intake.midMisumiWrist();
+            Bot.intake.misumiWristMid();
             Bot.slideArm.moveMid(0.65);
         }
         if (!manualSlideArmControl) {
@@ -106,11 +106,11 @@ public class TeleopDriver2 {
         float rightStickY = -gamepad.right_stick_y;
         if (rightStickY > 0.25) {
             manualSlideArmControl = true;
-            Bot.intake.midMisumiWrist();
+            Bot.intake.misumiWristMid();
             Bot.slideArm.move(rightStickY - 0.25);
         } else if (rightStickY < -0.25) {
             manualSlideArmControl = true;
-            Bot.intake.midMisumiWrist();
+            Bot.intake.misumiWristMid();
             Bot.slideArm.move(rightStickY + 0.25);
         } else if (manualSlideArmControl) {
             Bot.slideArm.move(0);
@@ -139,6 +139,7 @@ public class TeleopDriver2 {
                 break;
 
             case WRIST_UP:
+                Bot.specimenArm.movePrepHang(0.6);
                 Bot.intake.misumiWristUp();
                 timer.reset();
                 transferState = TransferState.OCG_UP;
