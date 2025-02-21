@@ -121,4 +121,7 @@ public class SlideArm {
         motor1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         motor2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
     }
+
+    public boolean isUp() { return (Math.abs(Config.slideHighBasket - getArmPosition()) < 50); }
+    public boolean isDown() { return (Math.abs(Config.slideDown - getArmPosition()) < 50); }
 }

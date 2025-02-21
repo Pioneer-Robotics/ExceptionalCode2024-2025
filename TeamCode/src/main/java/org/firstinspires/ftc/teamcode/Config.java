@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PID;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 /**
@@ -32,7 +33,7 @@ public class Config {
 
     // PID constants
     public static double[] drivePID = {0.08, 0.0001, 0.175}; // kP, kI, kD
-    public static double[] turnPID = {2.5, 0.00001, 0.1}; // kP, kI, kD
+    public static double[] turnPID = {2.5, 0.00005, 0.25}; // kP, kI, kD
     public static double[] slidePIDF = {0.0025, 0.00001, 0.001, 0.005}; // kP, kI, kD, kF
     public static double driveSpeed = 0.4;
 
@@ -46,7 +47,7 @@ public class Config {
     // How close the robot needs to be to the target position to stop (in cm)
     public static double driveTolerance = 1.5;
     // How close the robot needs to be to the target angle to stop (in radians)
-    public static double turnTolerance = 0.25;
+    public static double turnTolerance = 0.125;
     public static final double specimenArmTolerance = 5; // Motor ticks
 
     public static double lookAhead = 15; // Pure pursuit lookahead
@@ -134,8 +135,8 @@ public class Config {
     public static final double misumiDriveLOpen = 0.475;
     public static final double misumiDriveLMid = 0.3;
     public static final double misumiDriveLClose = 0.2;
-        public static double misumiDriveROpen = 0.64;
-    public static double misumiDriveRMid = 0.4;
+    public static double misumiDriveROpen = 0.64;
+    public static double misumiDriveRMid = 0.675;
     public static double misumiDriveRClose = 0.84;
     public static double misumiDriveRInit = 0.88;
     // Misumi Wrist
@@ -153,10 +154,8 @@ public class Config {
     public static final double intakeYawRight = 0.58;
     public static final double intakeRollUp = 0.43;
     public static final double intakeRollDown = 0.96;
-//    public static final double intakeClawClose = 0.6; //Used to be 0.91
-//    public static final double intakeClawOpen = 0.5; //Used to be 0.4
-    public static final double intakeClawOpen = 0.22; //Used to be 0.91
-    public static final double intakeClawClose = 0.36; //Used to be 0.4
+    public static final double intakeClawOpen = 0.22;
+    public static final double intakeClawClose = 0.36;
     // OCG Box
     // Not used
     public static final double ocgBoxDropRight = 0.1;
@@ -166,6 +165,7 @@ public class Config {
     public static final double ocgBoxRollDown = 0.635;
     // Used
     public static final double ocgBoxPitchUp = 0.86;
+    public static final double ocgBoxPitchMid = 0.6;
     public static final double ocgBoxPitchDown = 0.23;
     public static final double ocgBoxIdle = 0.97;
     public static final double hookLeftOpen = 0.5;
@@ -180,6 +180,7 @@ public class Config {
     // Specimen Arm
     public static final double defaultSpecimenArmSpeed = 0.4;
     public static final int specimenCollect = -1300;
+    public static final int specimenArmParkPos = 1400;
 
     // Linear Slide
     public static final double defaultSlideSpeed = 0.25;
@@ -211,14 +212,15 @@ public class Config {
     // Robot starting position for autos
     public static final double specimenStartX = 198;
     public static final double specimenStartY = 21.5;
-    public static final double sampleStartX = 85;
-    public static final double sampleStartY = 20.5;
+    public static final double sampleStartX = 82;
+    public static final double sampleStartY = 21.5;
 
     // Hermite Points of Interest
-    public static final double[] pickSample1 = {58, 65};
-    public static final double[] pickSample2 = {25, 65};
-    public static final double[] pickSample3 = {25, 65};
-    public static final double[] submersablePickup = {120, 160};
+    public static final double[] pickSample1 = {46.5, 46};
+    public static final double[] pickSample2 = {42.5, 46};
+    public static final double[] pickSample3 = {44.5, 54};
+    public static final double[] submersiblePickup = {105, 165};
+    public static final double[] basketLoc = {34.5, 37.5};
 
     // ---- Misc ----
     public static final double defaultMaxCurrent = 6000;

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.SortOrder;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.TrueAngle;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.opencv.ColorBlobLocatorProcessor;
@@ -17,29 +18,33 @@ import org.opencv.core.Point;
 
 import java.util.List;
 
-import org.firstinspires.ftc.teamcode.Helpers.AngleUtils;
 import org.opencv.core.RotatedRect;
 
+//TODO Sweep for samples
 public class LocatorClass {
     List<ColorBlobLocatorProcessor.Blob> blobs;
     ColorBlobLocatorProcessor colorLocator;
-    Point maxYPoint, minYPoint, maxXPoint, minXPoint;
+    Point maxYPoint, minYPoint, maxXPoint, minXPoint, alignPoint;
     Point[] boxPoints = new Point[]{new Point(0,0), new Point(0,0), new Point(0,0), new Point(0,0)};
     double[] blobPos;
     double minX, maxX, minY, maxY, boxX, boxY, dX, dY, sampleThetaRad, sampleThetaDeg;
-    int streamWidth = 320;
-    int streamHeight = 240;
     TrueAngle trueAngle;
     VisionPortal portal;
+    CameraOrientation cameraOrientation;
     enum SampleDirection{
         LEFT,
         RIGHT,
         BLANK
     }
 
+    public enum CameraOrientation {
+        HORIZONTAL,
+        VERTICAL
+    }
+
     SampleDirection sampleDirection;
 
-    public LocatorClass(ColorRange targetColorRange, LinearOpMode opMode){
+    public LocatorClass(ColorRange targetColorRange, LinearOpMode opMode, CameraOrientation orientation){
         //Creates processor that detects blue color blobs
         colorLocator = new ColorBlobLocatorProcessor.Builder()
                 .setTargetColorRange(targetColorRange)         // use a predefined color match
@@ -52,10 +57,10 @@ public class LocatorClass {
         portal = new VisionPortal.Builder()
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .addProcessor(colorLocator)
-                .setCameraResolution(new Size(streamWidth, streamHeight))
+                .setCameraResolution(new Size(Config.streamWidth, Config.streamHeight))
                 .setCamera(opMode.hardwareMap.get(WebcamName.class, "Webcam 1"))
-
                 .build();
+        cameraOrientation = orientation;
     }
     //-------
     //All Try/Catches are because the initial frame of the camera stream isn't processed
@@ -73,6 +78,15 @@ public class LocatorClass {
         ColorBlobLocatorProcessor.Util.filterByArea(50, 80000, blobs);
         //Sorts blobs
         ColorBlobLocatorProcessor.Util.sortByArea(SortOrder.DESCENDING, blobs); // Largest blob is first, which is ideally the sample
+
+//        blobs.sort((o1, o2) -> {
+//            if(o1.getBoxFit() == null || o2.getBoxFit() == null) return 0;
+//
+//            double d1 = pointDistance(o1.getBoxFit().center, center);
+//            double d2 = pointDistance(o2.getBoxFit().center, center);
+//            return Double.compare(d1, d2); // sort in ascending order of distance from center
+//        });
+
         //TODO: NEED TO SORT BY CLoSEST TO CENTER OF SCREEN
         return (blobs);
     }
@@ -154,14 +168,19 @@ public class LocatorClass {
     public Point[] getBoxPoints(ColorBlobLocatorProcessor.Blob blob){
         //ORIGIN IS TOP LEFT
         blob.getBoxFit().points(boxPoints);
-//        int i = 0;
-//        for (Point p : boxPoints){            //Used for testing, rounds coordinates, makes reading points easier
-//            boxPoints[i].x = Math.rint(boxPoints[i].x);
-//            boxPoints[i].y = Math.rint(boxPoints[i].y);
-//            i +=1;
-//        }
+        int i = 0;
+        for (Point p : boxPoints){            //Used for testing, rounds coordinates, makes reading points easier
+            boxPoints[i].x = Math.rint(boxPoints[i].x);
+            boxPoints[i].y = Math.rint(boxPoints[i].y);
+            i +=1;
+        }
         return(boxPoints);
 
+    }
+
+    public int numBoxPoints(ColorBlobLocatorProcessor.Blob blob){
+        getBoxPoints(blob);
+        return (boxPoints.length);
     }
 
     /***
@@ -199,14 +218,34 @@ public class LocatorClass {
         try{
             //Code for trying to account for PI/2 jump when box is rotated 90 degrees, currently broken
 //            sampleThetaRad = trueAngle.updateAngle(sampleThetaRad, Math.PI/3, Math.PI);
-            sampleThetaDeg = Math.toDegrees(sampleThetaRad);
-            if (sampleDirection == SampleDirection.LEFT){
-                return (sampleThetaDeg - 90);
-            } else if (sampleDirection == SampleDirection.RIGHT){
-                return (sampleThetaDeg);
-            }  else {
-                return (-1);
+            if (cameraOrientation == CameraOrientation.VERTICAL){
+                sampleThetaDeg = Math.toDegrees(sampleThetaRad);
+                if (sampleDirection == SampleDirection.LEFT){
+                    return (sampleThetaDeg);
+                } else if (sampleDirection == SampleDirection.RIGHT){
+                    return (sampleThetaDeg - 90);
+                }  else {
+                    return (-1);
+                }
+            } else {
+                sampleThetaDeg = Math.toDegrees(sampleThetaRad);
+                if (sampleDirection == SampleDirection.LEFT){
+                    return (sampleThetaDeg - 90);
+                } else if (sampleDirection == SampleDirection.RIGHT){
+                    return (sampleThetaDeg);
+                }  else {
+                    return (-1);
+                }
             }
+
+//            sampleThetaDeg = AngleUtils.radToDeg(sampleThetaRad);
+//            if (sampleDirection == SampleDirection.LEFT){
+//                return (sampleThetaDeg - 90);
+//            } else if (sampleDirection == SampleDirection.RIGHT){
+//                return (sampleThetaDeg);
+//            }  else {
+//                return (-1);
+//            }
         } catch (Exception e) {
             return (-1);
         }
@@ -233,12 +272,35 @@ public class LocatorClass {
         return ((p2.y-p1.y)/(p2.x-p1.x));
     }
 
+    public Point getAlignPoint(ColorBlobLocatorProcessor.Blob blob){
+        getBoxPoints(blob);
+        double midPointX, midPointY;
+        double slope1 = pointSlope(boxPoints[0], boxPoints[1]);
+        double slope2 = pointSlope(boxPoints[1], boxPoints[2]);
+        double smallSlope = Math.min(Math.abs(slope1),Math.abs(slope2));
+        //Get midpoint of the flatline
+        if (smallSlope == slope2){
+            midPointX = (boxPoints[1].x+boxPoints[2].x)/2;
+            midPointY = (boxPoints[1].y+boxPoints[2].y)/2;
+        } else if (smallSlope == slope1){
+            midPointX = (boxPoints[0].x+boxPoints[1].x)/2;
+            midPointY = (boxPoints[0].y+boxPoints[1].y)/2;
+        } else{
+            midPointX = -1;
+            midPointY = -1;
+        }
+
+        return (new Point(midPointX, midPointY));
+    }
+
+    //Find whichever line is closer to 0
+
     /***
      * @return what percentage of the screen the blob takes up
      */
     public double percentScreen(ColorBlobLocatorProcessor.Blob blob){
         try {
-            return (blob.getContourArea()/((double )streamHeight*streamWidth));
+            return (blob.getContourArea()/((double )Config.streamHeight*Config.streamWidth));
         } catch (Exception e){
             return (0);
         }
@@ -382,6 +444,7 @@ public class LocatorClass {
         }
         return (infoList);
     }
+
 
     public VisionPortal getCameraStream() {
         return portal;

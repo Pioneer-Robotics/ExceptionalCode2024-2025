@@ -39,6 +39,11 @@ public class OCGBox {
         pitchState = true;
     }
 
+    public void ocgPitchMid(){
+        goToPitch(Config.ocgBoxPitchMid);
+        pitchState = true;
+    }
+
     public void ocgPitchDrop(){
         if (rollState){
             goToPitch(Config.ocgBoxPitchDown);
@@ -70,6 +75,7 @@ public class OCGBox {
 
     public boolean isPitchUp() { return (Math.abs(getPitch() - Config.ocgBoxPitchUp) < 0.1); }
     public boolean isIdle() { return (Math.abs(getPitch() - Config.ocgBoxIdle) < 0.1); }
+    public boolean isDrop() { return (Math.abs(getPitch() - Config.ocgBoxPitchDown) < 0.1); }
 
 //    public double getRoll() { return rollServo.getPos(); }
 }
