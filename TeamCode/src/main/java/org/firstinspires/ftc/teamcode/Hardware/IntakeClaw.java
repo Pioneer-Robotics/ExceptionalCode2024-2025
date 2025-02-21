@@ -10,6 +10,7 @@ public class IntakeClaw {
     private final double yawServoMid = (Config.intakeYawLeft + Config.intakeYawRight) / 2;
     private final double yawServo45 = (yawServoMid + Config.intakeYawRight) / 2;
     private final double yawServoNeg45 = (yawServoMid + Config.intakeYawLeft) / 2;
+    private boolean clawState;
 
     public IntakeClaw() {
         clawServo = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.intakeClawServo), Config.intakeClawOpen, Config.intakeClawClose);
@@ -56,12 +57,13 @@ public class IntakeClaw {
         yawServo.anyPos(Config.intakeYawLeft);
     }
 
-    public void openClaw() { clawServo.openServo(); }
-    public void closeClaw() { clawServo.closeServo(); }
+    public void openClaw() { clawServo.openServo(); clawState = true;}
+    public void closeClaw() { clawServo.closeServo(); clawState = false;}
 
     // Getters
     public double getYaw() { return(rollServo.getPos()); }
     public double getRoll() { return(yawServo.getPos()); }
     public double getClawPos() { return(clawServo.getPos()); }
     public boolean isClawOpen() { return (Math.abs(getClawPos() - Config.intakeClawOpen) < 0.1); }
+    public boolean getClawState(){return clawState;}
 }

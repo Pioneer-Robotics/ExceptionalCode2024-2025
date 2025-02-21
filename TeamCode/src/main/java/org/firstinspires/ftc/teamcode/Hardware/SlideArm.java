@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
@@ -8,6 +9,7 @@ import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PID;
 
 public class SlideArm {
     private final DcMotorEx motor1, motor2;
+    private final ServoClass hookServo1, hookServo2;
     private final PID pid;
     private int targetPosition = 0;
     private double kP = Config.slidePIDF[0];
@@ -18,6 +20,8 @@ public class SlideArm {
     public SlideArm() {
         motor1 = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.slideMotor1);
         motor2 = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.slideMotor2);
+        hookServo1 = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.hookServo1), Config.hookServo1Open, Config.hookServo1Close);
+        hookServo2 = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.hookServo2), Config.hookServo2Open, Config.hookServo2Close);
 
         //Motor 1 is non OCG box arm
         //Motor 2 is OCG box arm
@@ -40,6 +44,16 @@ public class SlideArm {
         this.kF = kF;
 
         pid.setPIDCoefficients(kP, kI, kD);
+    }
+
+    public void openHooks() {
+        hookServo1.openServo();
+        hookServo2.openServo();
+    }
+
+    public void closeHooks() {
+        hookServo1.closeServo();
+        hookServo2.closeServo();
     }
 
     public void setTargetPosition(int ticks, double speed) {

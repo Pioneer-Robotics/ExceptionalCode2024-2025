@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PID;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -15,6 +17,8 @@ public class SpecimenArm {
     private final DcMotorEx motor;
     public ServoClass claw, specimenWrist;
     int position = 0;
+
+//    PID armPIDOutput;
 
     public SpecimenArm() {
         motor = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.specimenArmMotor);
@@ -52,6 +56,13 @@ public class SpecimenArm {
         move(speed);
         startEndStopThread();
         position = 0;
+    }
+
+    public void movePrepHangDampen(double speed, int lowPos) {
+        motor.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, Config.specArmDampenPIDCoeff);
+//        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motor.setTargetPosition(lowPos);
+        motor.setVelocity(speed);
     }
 
     public void movePostHang(double speed) {

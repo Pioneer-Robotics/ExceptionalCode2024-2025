@@ -78,7 +78,7 @@ public class SpecimenAuto extends LinearOpMode {
         AutoPaths.hangPreloadSpecimen(
                 Bot.pinpoint.getX(), // Current X
                 Bot.pinpoint.getY(), // Current Y
-                5, // Hang offsetX X
+                0, // Hang offsetX X
                 0.25 // Offset Y
         );
         // Schedule specimen arm movement

@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+
 /**
  * This class is used to store all of the constants and hardware map names for the robot
  */
@@ -103,6 +105,8 @@ public class Config {
     public static final String intakeRollServo = "intakeRollServo";
     public static final String intakeClawServo = "intakeClawServo";
     public static final String specimenWristServo = "specimenWrist";
+    public static final String hookServo1 = "hookServo1";
+    public static final String hookServo2 = "hookServo2";
 
     // Other names
     public static final String specimenEndStop = "specimenEndStop";
@@ -114,10 +118,18 @@ public class Config {
        - Servo Positions  -
        -------------------- */
     // Specimen Arm Claw
-    public static final double clawOpen = 0.4;
-    public static final double clawClose = 0.65;
+    public static final double clawOpen = 0.07;
+    public static final double clawClose = 0.3;
     public static final double specWristCollect = 0.165;
     public static final double specWristHang = 0.82;
+
+    public static double specArmkP = 0.5;
+    public static double specArmkI = 0;
+    public static double specArmkD = 0;
+    public static double specArmkF = 0;
+    public static PIDFCoefficients specArmDampenPIDCoeff = new PIDFCoefficients(specArmkP, specArmkI, specArmkD, specArmkF);
+
+
     // Misumi Drive
     public static final double misumiDriveLOpen = 0.475;
     public static final double misumiDriveLMid = 0.3;
@@ -141,8 +153,10 @@ public class Config {
     public static final double intakeYawRight = 0.58;
     public static final double intakeRollUp = 0.43;
     public static final double intakeRollDown = 0.96;
-    public static final double intakeClawOpen = 1;
-    public static final double intakeClawClose = 0.5;
+//    public static final double intakeClawClose = 0.6; //Used to be 0.91
+//    public static final double intakeClawOpen = 0.5; //Used to be 0.4
+    public static final double intakeClawOpen = 0.22; //Used to be 0.91
+    public static final double intakeClawClose = 0.36; //Used to be 0.4
     // OCG Box
     // Not used
     public static final double ocgBoxDropRight = 0.1;
@@ -154,6 +168,11 @@ public class Config {
     public static final double ocgBoxPitchUp = 0.86;
     public static final double ocgBoxPitchDown = 0.23;
     public static final double ocgBoxIdle = 0.97;
+    public static final double hookServo1Open = 0;
+    public static final double hookServo1Close = 0;
+    public static final double hookServo2Open = 0;
+    public static final double hookServo2Close = 0;
+
 
     /* --------------------
        - Motor Positions  -
@@ -176,7 +195,7 @@ public class Config {
        ------------------------- */
 
     // Specimen hang offset (space between hangs)
-    public static final double hangOffset = 3;
+    public static final double hangOffset = 5;
 
     // Coordinates of default specimen hang
     public static final double specHangX = 185;

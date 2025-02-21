@@ -85,6 +85,7 @@ public class TeleopDriver2 {
             manualSlideArmControl = false;
             Bot.intake.midMisumiWrist();
             Bot.slideArm.moveUp(0.65);
+            Bot.specimenArm.movePrepHang(0.4);
         } else if (gamepad.a) {
             manualSlideArmControl = false;
             Bot.intake.midMisumiWrist();
@@ -125,7 +126,7 @@ public class TeleopDriver2 {
     }
 
     private void updateTransferState() {
-        intakeTransferToggle.toggle(gamepad.share);
+        intakeTransferToggle.toggle(gamepad.left_bumper);
         if (intakeTransferToggle.justChanged() && intakeTransferToggle.get()) {
             transferState = TransferState.WRIST_UP;
         }

@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 public class TeleopDriver1 {
     private final Gamepad gamepad;
     private final ElapsedTime timer = new ElapsedTime();
-
     // Enums for state machine
     private enum IntakeState {
         NONE,
