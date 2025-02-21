@@ -222,6 +222,19 @@ public class Config {
     public static final double[] submersiblePickup = {105, 165};
     public static final double[] basketLoc = {34.5, 37.5};
 
+    // Speed adjustments on Specimen Auto
+    /*
+     If these adjustments can gain 0.5 of a second, then the additional 3 points for park may be attainable
+     These numbers may be too aggressive and cause issues, so they will need to be tested
+     Set these back to 0 to get current speeds
+    */
+    public static final double specimenAutoHandleSampleSpeedAdjustment = 0.10; // could be up to 0.15
+    public static final double specimenAutoPushSpeedAdjustment = 0.25; // could be 0.35
+    public static final double specimenAutoPrepHangSpecimentSpeedAdjustment = 0.25; // could be up to 0.5
+    public static final double specimenAutoDelaySpcimenArmAdjustment = -100; // could be up to -350, but there needs to be some delay so the arm does't hit the wall after pick up
+
     // ---- Misc ----
     public static final double defaultMaxCurrent = 6000;
+
+
 }
