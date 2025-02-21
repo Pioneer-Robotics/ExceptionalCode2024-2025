@@ -103,6 +103,8 @@ public class Config {
     public static final String intakeRollServo = "intakeRollServo";
     public static final String intakeClawServo = "intakeClawServo";
     public static final String specimenWristServo = "specimenWrist";
+    public static final String hookRight = "hookRight";
+    public static final String hookLeft = "hookLeft";
 
     // Other names
     public static final String specimenEndStop = "specimenEndStop";
@@ -144,16 +146,19 @@ public class Config {
     public static final double intakeClawOpen = 1;
     public static final double intakeClawClose = 0.5;
     // OCG Box
-    // Not used
     public static final double ocgBoxDropRight = 0.1;
     public static final double ocgBoxHold = 0.375;
     public static final double ocgBoxDrop = 0.8;
     public static final double ocgBoxRollUp = 0.867;
     public static final double ocgBoxRollDown = 0.635;
-    // Used
     public static final double ocgBoxPitchUp = 0.86;
     public static final double ocgBoxPitchDown = 0.23;
     public static final double ocgBoxIdle = 0.97;
+    // Slide hooks
+    public static final double hookLeftOut = 0.5;
+    public static final double hookLeftIn = 0.21;
+    public static final double hookRightOut = 0.44;
+    public static final double hookRightIn = 0.74;
 
     /* --------------------
        - Motor Positions  -

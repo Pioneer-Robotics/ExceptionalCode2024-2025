@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
@@ -8,6 +9,7 @@ import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PID;
 
 public class SlideArm {
     private final DcMotorEx motor1, motor2;
+    private final ServoClass hookLeft, hookRight;
     private final PID pid;
     private int targetPosition = 0;
     private double kP = Config.slidePIDF[0];
@@ -29,6 +31,12 @@ public class SlideArm {
         motor2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         motor1.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         motor2.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        hookLeft = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.hookLeft), Config.hookLeftOut, Config.hookLeftIn);
+        hookRight = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.hookRight), Config.hookRightOut, Config.hookRightIn);
+
+        hookLeft.closeServo();
+        hookRight.closeServo();
 
         pid = new PID(kP, kI, kD);
     }
@@ -92,19 +100,41 @@ public class SlideArm {
         motor2.setVelocity(power * Config.maxSlideTicksPerSecond);
     }
 
-    // Getters
-    public double getArmPosition() {
-        return Math.round((float) (motor1.getCurrentPosition() + motor2.getCurrentPosition()) / 2);
+    public void hooksOut() {
+        hookRight.openServo();
+        hookLeft.openServo();
     }
-    public DcMotorEx getMotor1() {
-        return(motor1);
-    }
-    public DcMotorEx getMotor2() {
-        return(motor2);
+
+    public void hooksIn() {
+        hookRight.closeServo();
+        hookLeft.closeServo();
     }
 
     public void resetEncoders() {
         motor1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         motor2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    // Getters
+    public ServoClass getHookLeft() {
+        return hookLeft;
+    }
+
+    public ServoClass getHookRight() {
+        return hookRight;
+    }
+
+    public double getArmPosition() {
+        return Math.round((float) (motor1.getCurrentPosition() + motor2.getCurrentPosition()) / 2);
+    }
+
+    public boolean isUp() { return (Math.abs(Config.slideHighBasket - getArmPosition()) < 25); }
+    public boolean isDown() { return (Math.abs(Config.slideDown - getArmPosition()) < 25); }
+
+    public DcMotorEx getMotor1() {
+        return(motor1);
+    }
+    public DcMotorEx getMotor2() {
+        return(motor2);
     }
 }

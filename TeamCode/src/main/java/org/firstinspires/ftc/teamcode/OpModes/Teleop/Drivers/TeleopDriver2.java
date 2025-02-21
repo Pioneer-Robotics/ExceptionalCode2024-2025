@@ -24,6 +24,7 @@ public class TeleopDriver2 {
     private final Toggle intakeTransferToggle = new Toggle(false);
     private final Toggle specimenClawToggle = new Toggle(false);
     private final Toggle ocgBoxToggle = new Toggle(false);
+    private final Toggle slideHooksToggle = new Toggle(false);
 
     // Variables
     private boolean manualSlideArmControl = false;
@@ -47,6 +48,7 @@ public class TeleopDriver2 {
         handleResetSlideEncoders();
         updateTransferState();
         handleTransfer();
+        handleSlideHooks();
     }
 
     private void runSpecimenArm() {
@@ -175,6 +177,15 @@ public class TeleopDriver2 {
     private void handleResetSlideEncoders() {
         if (gamepad.share && gamepad.options) {
             Bot.slideArm.resetEncoders();
+        }
+    }
+
+    private void handleSlideHooks() {
+        slideHooksToggle.toggle(gamepad.share);
+        if (slideHooksToggle.justChanged() && slideHooksToggle.get()) {
+            Bot.slideArm.hooksOut();
+        } else if (slideHooksToggle.justChanged() && !slideHooksToggle.get()) {
+            Bot.slideArm.hooksIn();
         }
     }
 }

@@ -13,6 +13,8 @@ public class ServoPositions extends LinearOpMode {
     public void runOpMode() {
 
         ServoClass[] servos = new ServoClass[]{
+                new ServoClass(hardwareMap.get(Servo.class, Config.hookRight), Config.hookRightOut, Config.hookRightIn),
+                new ServoClass(hardwareMap.get(Servo.class, Config.hookLeft), Config.hookLeftOut, Config.hookLeftIn),
                 new ServoClass(hardwareMap.get(Servo.class, Config.misumiDriveR), Config.misumiDriveROpen, Config.misumiDriveRClose),
                 new ServoClass(hardwareMap.get(Servo.class, Config.intakeYawServo), Config.intakeYawLeft, Config.intakeYawRight),
                 new ServoClass(hardwareMap.get(Servo.class, Config.intakeRollServo), Config.intakeRollUp, Config.intakeRollDown),
