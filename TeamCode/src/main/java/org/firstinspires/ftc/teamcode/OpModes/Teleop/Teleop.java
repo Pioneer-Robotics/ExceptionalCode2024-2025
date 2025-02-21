@@ -28,7 +28,7 @@ public class Teleop extends LinearOpMode {
 
         driver1 = TeleopDriver1.createInstance(gamepad1);
         driver2 = TeleopDriver2.createInstance(gamepad2);
-        specimenCycle = SpecimenCycle.createInstance();
+        specimenCycle = SpecimenCycle.createInstance(gamepad1);
 
         waitForStart();
 

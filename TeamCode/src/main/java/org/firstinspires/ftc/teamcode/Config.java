@@ -201,6 +201,9 @@ public class Config {
     // Coordinates of default specimen hang
     public static final double specHangX = 185;
     public static final double specHangY = 96.5;
+    // TODO: Adjust points as necessary
+    public static final double specHangMinX = 170;
+    public static final double specHangMaxX = 200;
 
     public static double specCollectX = 285;
     public static double specCollectY = 27.25;
