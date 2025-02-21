@@ -60,16 +60,43 @@ public class MecanumBase {
             x = tempX;
             y = tempY;
         }
+
+        // Normalize movement vector
+        double moveMag = Math.hypot(x, y);
+        if (moveMag > 1) {
+            x /= moveMag;
+            y /= moveMag;
+            moveMag = 1;
+        }
+
+        // Apply speed to movement
+        x *= speed;
+        y *= speed;
+
+        // Limit turn to available power
+        double remainingPower = Math.max(0, 1 - speed * moveMag);
+        turn = Math.signum(turn) * Math.min(Math.abs(turn), remainingPower);
+
+        // Ensure minimum turn of 0.5 if any turn is requested
+        if (Math.abs(turn) > 0 && Math.abs(turn) < 0.5) {
+            double scale = 0.5 / Math.abs(turn);
+            turn *= scale;
+            x /= scale;
+            y /= scale;
+        }
+
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(turn), 1);
         double powerRF = (y - x - turn) / denominator;
         double powerLF = (y + x + turn) / denominator;
         double powerRB = (y + x - turn) / denominator;
         double powerLB = (y - x + turn) / denominator;
 
-        RF.setVelocity(powerRF * Config.maxDriveTicksPerSecond * speed + (Math.signum(powerRF) * Config.fRF * Config.maxDriveTicksPerSecond));
-        LF.setVelocity(powerLF * Config.maxDriveTicksPerSecond * speed + (Math.signum(powerLF) * Config.fLF * Config.maxDriveTicksPerSecond));
-        RB.setVelocity(powerRB * Config.maxDriveTicksPerSecond * speed + (Math.signum(powerRB) * Config.fRB * Config.maxDriveTicksPerSecond));
-        LB.setVelocity(powerLB * Config.maxDriveTicksPerSecond * speed + (Math.signum(powerLB) * Config.fLB * Config.maxDriveTicksPerSecond));
+        double MDTPS = Config.maxDriveTicksPerSecond;
+
+        RF.setVelocity(powerRF * MDTPS + (Math.signum(powerRF) * Config.fRF * MDTPS));
+        LF.setVelocity(powerLF * MDTPS + (Math.signum(powerLF) * Config.fLF * MDTPS));
+        RB.setVelocity(powerRB * MDTPS + (Math.signum(powerRB) * Config.fRB * MDTPS));
+        LB.setVelocity(powerLB * MDTPS + (Math.signum(powerLB) * Config.fLB * MDTPS));
     }
 
     public void stop() {
