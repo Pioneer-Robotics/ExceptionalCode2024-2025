@@ -17,11 +17,15 @@ public class ServoPositions extends LinearOpMode {
                 new ServoClass(hardwareMap.get(Servo.class, Config.intakeYawServo), Config.intakeYawLeft, Config.intakeYawRight),
                 new ServoClass(hardwareMap.get(Servo.class, Config.intakeRollServo), Config.intakeRollUp, Config.intakeRollDown),
                 new ServoClass(hardwareMap.get(Servo.class, Config.intakeClawServo), Config.intakeClawOpen, Config.intakeClawClose),
+
                 new ServoClass(hardwareMap.get(Servo.class, Config.clawServo), Config.clawOpen, Config.clawClose),
                 new ServoClass(hardwareMap.get(Servo.class, Config.ocgPitchServo), Config.ocgBoxPitchUp, Config.ocgBoxPitchDown),
                 new ServoClass(hardwareMap.get(Servo.class, Config.specimenWristServo), Config.specWristCollect, Config.specWristHang),
                 new ServoClass(hardwareMap.get(Servo.class, Config.misumiWristR), Config.misumiWristRUp, Config.misumiWristRDown),
+
                 new ServoClass(hardwareMap.get(Servo.class, Config.misumiWristL), Config.misumiWristLUp, Config.misumiWristLDown),
+                new ServoClass(hardwareMap.get(Servo.class, Config.hookLeft), Config.hookLeftOpen, Config.hookLeftClose),
+                new ServoClass(hardwareMap.get(Servo.class, Config.hookRight), Config.hookRightOpen, Config.hookRightClose)
         };
 
         ServoClass servo = servos[0];

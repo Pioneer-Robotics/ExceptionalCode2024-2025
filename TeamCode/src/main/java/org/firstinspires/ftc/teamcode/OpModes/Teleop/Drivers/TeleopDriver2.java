@@ -48,6 +48,7 @@ public class TeleopDriver2 {
         handleResetSlideEncoders();
         updateTransferState();
         handleTransfer();
+        handleHooks();
     }
 
     private void runSpecimenArm() {

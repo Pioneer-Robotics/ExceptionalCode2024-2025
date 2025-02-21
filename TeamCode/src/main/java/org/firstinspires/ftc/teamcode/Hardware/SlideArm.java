@@ -20,8 +20,8 @@ public class SlideArm {
     public SlideArm() {
         motor1 = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.slideMotor1);
         motor2 = Bot.opMode.hardwareMap.get(DcMotorEx.class, Config.slideMotor2);
-        hookServo1 = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.hookServo1), Config.hookServo1Open, Config.hookServo1Close);
-        hookServo2 = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.hookServo2), Config.hookServo2Open, Config.hookServo2Close);
+        hookServo1 = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.hookLeft), Config.hookLeftOpen, Config.hookLeftClose);
+        hookServo2 = new ServoClass(Bot.opMode.hardwareMap.get(Servo.class, Config.hookRight), Config.hookRightOpen, Config.hookRightClose);
 
         //Motor 1 is non OCG box arm
         //Motor 2 is OCG box arm
