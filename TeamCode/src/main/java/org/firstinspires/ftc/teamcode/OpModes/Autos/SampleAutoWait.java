@@ -276,10 +276,11 @@ public class SampleAutoWait extends LinearOpMode {
     public void handlePARK() {
         Bot.purePursuit.update(0.75);
         // Stop the robot early and let momentum drift into the submersible to not damage arm
-        if (Bot.purePursuit.reachedTarget(15)) {
+        if (Bot.purePursuit.reachedTarget(25)) {
             Bot.mecanumBase.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             Bot.purePursuit.stop();
             Bot.specimenArm.moveToPark(0.8);
+            Bot.slideArm.moveDown(0.4);
             state = State.SPECIMEN_ARM_DOWN;
         }
     }

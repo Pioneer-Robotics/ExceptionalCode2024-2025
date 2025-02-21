@@ -47,7 +47,7 @@ public class Config {
     // How close the robot needs to be to the target position to stop (in cm)
     public static double driveTolerance = 1.5;
     // How close the robot needs to be to the target angle to stop (in radians)
-    public static double turnTolerance = 0.075;
+    public static double turnTolerance = 0.125;
     public static final double specimenArmTolerance = 5; // Motor ticks
 
     public static double lookAhead = 15; // Pure pursuit lookahead
@@ -117,8 +117,8 @@ public class Config {
        - Servo Positions  -
        -------------------- */
     // Specimen Arm Claw
-    public static final double clawOpen = 0.4;
-    public static final double clawClose = 0.65;
+    public static final double clawOpen = 0.07;
+    public static final double clawClose = 0.3;
     public static final double specWristCollect = 0.165;
     public static final double specWristHang = 0.82;
     // Misumi Drive
@@ -142,10 +142,10 @@ public class Config {
     // Intake Claw
     public static final double intakeYawLeft = 0;
     public static final double intakeYawRight = 0.58;
-    public static final double intakeRollUp = 0.45;
+    public static final double intakeRollUp = 0.43;
     public static final double intakeRollDown = 0.96;
-    public static final double intakeClawOpen = 0.64;
-    public static final double intakeClawClose = 0.455;
+    public static final double intakeClawOpen = 0.22;
+    public static final double intakeClawClose = 0.36;
     // OCG Box
     // Not used
     public static final double ocgBoxDropRight = 0.1;
