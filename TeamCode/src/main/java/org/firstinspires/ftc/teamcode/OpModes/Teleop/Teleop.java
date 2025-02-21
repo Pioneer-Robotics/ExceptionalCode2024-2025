@@ -73,6 +73,8 @@ public class Teleop extends LinearOpMode {
         telemetry.addData("Total Current", Bot.currentThreads.getTotalCurrent());
         telemetry.addData("Specimen Arm Pos", Bot.specimenArm.getPositionTicks());
 
+        telemetry.addData("Claw State", Bot.intakeClaw.getClawState());
+
         telemetry.update();
         Bot.dashboardTelemetry.update();
     }

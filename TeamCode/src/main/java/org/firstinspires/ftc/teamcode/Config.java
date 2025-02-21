@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PID;
-import org.opencv.core.Point;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 /**
  * This class is used to store all of the constants and hardware map names for the robot
@@ -106,6 +106,8 @@ public class Config {
     public static final String intakeRollServo = "intakeRollServo";
     public static final String intakeClawServo = "intakeClawServo";
     public static final String specimenWristServo = "specimenWrist";
+    public static final String hookServo1 = "hookServo1";
+    public static final String hookServo2 = "hookServo2";
 
     // Other names
     public static final String specimenEndStop = "specimenEndStop";
@@ -121,6 +123,14 @@ public class Config {
     public static final double clawClose = 0.3;
     public static final double specWristCollect = 0.165;
     public static final double specWristHang = 0.82;
+
+    public static double specArmkP = 0.5;
+    public static double specArmkI = 0;
+    public static double specArmkD = 0;
+    public static double specArmkF = 0;
+    public static PIDFCoefficients specArmDampenPIDCoeff = new PIDFCoefficients(specArmkP, specArmkI, specArmkD, specArmkF);
+
+
     // Misumi Drive
     public static final double misumiDriveLOpen = 0.475;
     public static final double misumiDriveLMid = 0.3;
@@ -158,6 +168,11 @@ public class Config {
     public static final double ocgBoxPitchMid = 0.6;
     public static final double ocgBoxPitchDown = 0.23;
     public static final double ocgBoxIdle = 0.97;
+    public static final double hookServo1Open = 0;
+    public static final double hookServo1Close = 0;
+    public static final double hookServo2Open = 0;
+    public static final double hookServo2Close = 0;
+
 
     /* --------------------
        - Motor Positions  -
@@ -181,7 +196,7 @@ public class Config {
        ------------------------- */
 
     // Specimen hang offset (space between hangs)
-    public static final double hangOffset = 3;
+    public static final double hangOffset = 5;
 
     // Coordinates of default specimen hang
     public static final double specHangX = 185;
@@ -209,11 +224,4 @@ public class Config {
 
     // ---- Misc ----
     public static final double defaultMaxCurrent = 6000;
-
-    // ---- Camera ----
-    public static final double[] autoIntakePIDX = {0,0,0};
-    public static final double[] autoIntakePIDY = {0,0,0};
-    public static final int streamWidth = 640;
-    public static final int streamHeight = 480;
-    public static final Point blobTargetPoint = new Point(320,240);
 }
