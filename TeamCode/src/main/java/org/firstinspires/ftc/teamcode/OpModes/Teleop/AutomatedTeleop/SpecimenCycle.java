@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes.Teleop.AutomatedTeleop;
 
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Bot;
@@ -10,6 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class SpecimenCycle {
+    private final Gamepad gamepad;
     private enum State {
         HANG,
         COLLECT,
@@ -19,8 +21,12 @@ public class SpecimenCycle {
     private State state = State.HANG;
     private final ElapsedTime timer = new ElapsedTime();
 
-    public static SpecimenCycle createInstance() {
-        return new SpecimenCycle();
+    private SpecimenCycle(Gamepad gamepad) {
+        this.gamepad = gamepad;
+    }
+
+    public static SpecimenCycle createInstance(Gamepad gamepad) {
+        return new SpecimenCycle(gamepad);
     }
 
     public void start() {
@@ -92,12 +98,14 @@ public class SpecimenCycle {
     }
 
     private void handleWaitForClaw() {
+        double scaledInput = (gamepad.touchpad_finger_1_x + 1) / 2; // [-1, 1] -> [0, 1]
+        double specHangRange = Config.specHangMaxX - Config.specHangMinX;
+        double offsetX = scaledInput * specHangRange + Config.specHangMinX;
         if (timer.milliseconds() > 250) {
-            // FIXME: Add sliding motion to hang specimens without offset
             AutoPaths.hangSpecimen(
                     Bot.pinpoint.getX(), // Current X
                     Bot.pinpoint.getY(), // Current Y
-                    -5, // Hang offsetX X
+                    offsetX, // Hang offsetX X
                     0 // Offset Y
             );
             scheduleSpecimenArmHang();
