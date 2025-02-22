@@ -106,8 +106,8 @@ public class Config {
     public static final String intakeRollServo = "intakeRollServo";
     public static final String intakeClawServo = "intakeClawServo";
     public static final String specimenWristServo = "specimenWrist";
-    public static final String hookServo1 = "hookServo1";
-    public static final String hookServo2 = "hookServo2";
+    public static final String hookLeft = "hookLeft";
+    public static final String hookRight = "hookRight";
 
     // Other names
     public static final String specimenEndStop = "specimenEndStop";
@@ -168,10 +168,10 @@ public class Config {
     public static final double ocgBoxPitchMid = 0.6;
     public static final double ocgBoxPitchDown = 0.23;
     public static final double ocgBoxIdle = 0.97;
-    public static final double hookServo1Open = 0;
-    public static final double hookServo1Close = 0;
-    public static final double hookServo2Open = 0;
-    public static final double hookServo2Close = 0;
+    public static final double hookLeftOpen = 0.5;
+    public static final double hookLeftClose = 0;
+    public static final double hookRightOpen = 0.47;
+    public static final double hookRightClose = 1;
 
 
     /* --------------------
