@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Bot;
+import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
 public class TeleopDriver1 {
@@ -77,7 +78,11 @@ public class TeleopDriver1 {
         double px = Math.pow(gamepad.left_stick_x, 3);
         double py = -Math.pow(gamepad.left_stick_y, 3);
         double turn = gamepad.right_stick_x;
-        Bot.mecanumBase.move(px, py, turn, speed);
+        if (Bot.intake.isExtended()) {
+            Bot.mecanumBase.move(px, py, turn, speed * Config.EXTENSION_POWER_DEMULTIPLIER);
+        } else {
+            Bot.mecanumBase.move(px, py, turn, speed);
+        }
     }
 
     private void updateIntakeState() {

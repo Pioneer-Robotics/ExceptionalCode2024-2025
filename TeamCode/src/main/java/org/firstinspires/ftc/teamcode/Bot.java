@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Hardware.BotIMU;
 import org.firstinspires.ftc.teamcode.Hardware.Intake;
 import org.firstinspires.ftc.teamcode.Hardware.IntakeClaw;
 import org.firstinspires.ftc.teamcode.Hardware.LEDController;
-import org.firstinspires.ftc.teamcode.Hardware.LocatorClass;
+//import org.firstinspires.ftc.teamcode.Hardware.LocatorClass;
 import org.firstinspires.ftc.teamcode.Hardware.MecanumBase;
 import org.firstinspires.ftc.teamcode.Hardware.OCGBox;
 import org.firstinspires.ftc.teamcode.Hardware.SlideArm;
@@ -51,7 +51,7 @@ public class Bot {
     public static Telemetry dashboardTelemetry;
     public static IntakeClaw intakeClaw;
     public static OCGBox ocgBox;
-    public static LocatorClass locator;
+//    public static LocatorClass locator;
 
     /**
      * Constructor for Bot.
