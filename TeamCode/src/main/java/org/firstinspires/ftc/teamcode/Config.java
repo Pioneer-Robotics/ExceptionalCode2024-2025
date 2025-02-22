@@ -154,7 +154,7 @@ public class Config {
     public static final double intakeYawRight = 0.58;
     public static final double intakeRollUp = 0.43;
     public static final double intakeRollDown = 0.96;
-    public static final double intakeClawOpen = 0.22;
+    public static final double intakeClawOpen = 0.2;
     public static final double intakeClawClose = 0.36;
     // OCG Box
     // Not used
@@ -187,7 +187,7 @@ public class Config {
     public static final int maxSlideHeight = 3120;
     public static final int slideDown = 40;
     public static final int slideLowBasket = 1500;
-    public static final int slideHighBasket = 3200;
+    public static final int slideHighBasket = 3150;
 
     /* -------------------------
        -  Coordinates of Note  -
@@ -200,6 +200,9 @@ public class Config {
     // Coordinates of default specimen hang
     public static final double specHangX = 185;
     public static final double specHangY = 96.5;
+
+    public static final double specHangMinX = 160;
+    public static final double specHangMaxX = 215;
 
     public static double specCollectX = 285;
     public static double specCollectY = 27.25;
@@ -216,8 +219,8 @@ public class Config {
 
     // Hermite Points of Interest
     public static final double[] pickSample1 = {46.5, 46};
-    public static final double[] pickSample2 = {42.5, 46};
-    public static final double[] pickSample3 = {44.5, 54};
+    public static final double[] pickSample2 = {41, 46};
+    public static final double[] pickSample3 = {44, 55};
     public static final double[] submersiblePickup = {105, 165};
     public static final double[] basketLoc = {34.5, 37.5};
 

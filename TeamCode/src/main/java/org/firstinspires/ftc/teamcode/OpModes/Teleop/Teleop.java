@@ -28,7 +28,7 @@ public class Teleop extends LinearOpMode {
 
         driver1 = TeleopDriver1.createInstance(gamepad1);
         driver2 = TeleopDriver2.createInstance(gamepad2);
-        specimenCycle = SpecimenCycle.createInstance();
+        specimenCycle = SpecimenCycle.createInstance(gamepad1);
 
         waitForStart();
 
@@ -64,6 +64,7 @@ public class Teleop extends LinearOpMode {
     }
 
     private void updateTelemetry() {
+        telemetry.addData("Slide pos", Bot.slideArm.getArmPosition());
         telemetry.addData("North Mode", driver1.getNorthModeToggle());
         telemetry.addData("Speed", driver1.getSpeed());
         telemetry.addData("Cycle State", cycleState);

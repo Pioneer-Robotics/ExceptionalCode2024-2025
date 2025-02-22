@@ -169,6 +169,13 @@ public class PurePursuit {
         double dx = Math.abs(targetPoint[0] - pos[0]);
         double dy = Math.abs(targetPoint[1] - pos[1]);
         double dTheta = Math.abs(turnTarget - Bot.pinpoint.getHeading());
+
+        Bot.opMode.telemetry.addData("pos tolerance", Math.sqrt(dx*dx + dy*dy) < tolerance);
+        Bot.opMode.telemetry.addData("turn tolerance", dTheta < turnTolerance);
+        Bot.opMode.telemetry.addData("both tolerance", (Math.sqrt(dx*dx + dy*dy) < tolerance) && (dTheta < turnTolerance));
+        Bot.opMode.telemetry.addData("Turn target", turnTarget);
+        Bot.opMode.telemetry.addData("Target PointX", targetPoint[0]);
+        Bot.opMode.telemetry.addData("Target PointY", targetPoint[1]);
         return (Math.sqrt(dx*dx + dy*dy) < tolerance) && (dTheta < turnTolerance) ;
     }
 
