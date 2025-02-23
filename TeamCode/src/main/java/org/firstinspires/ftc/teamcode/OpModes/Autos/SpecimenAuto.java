@@ -79,7 +79,7 @@ public class SpecimenAuto extends LinearOpMode {
                 Bot.pinpoint.getX(), // Current X
                 Bot.pinpoint.getY(), // Current Y
                 0, // Hang offsetX X
-                0.25 // Offset Y
+                0.75 // Offset Y
         );
         // Schedule specimen arm movement
         armSchedule.schedule(new TimerTask() {
@@ -104,6 +104,11 @@ public class SpecimenAuto extends LinearOpMode {
     private void handleHangState() {
         // Release specimen at submersible, set next path (3 possibilities)
         // --> PUSH_SAMPLE_1, COLLECT_SPECIMEN, or PARK
+
+        if (timer.milliseconds() > 250) {
+            // Backup
+            Bot.specimenArm.wristHang();
+        }
 
         if (specimensLeft == totalSpecimens) {
             // Go slower on first hang
@@ -131,6 +136,7 @@ public class SpecimenAuto extends LinearOpMode {
                         true // Coming from the submersible
                 );
                 scheduleSpecimenArmCollect();
+                timer.reset();
                 state = State.COLLECT_SPECIMEN;
             } else {
                 AutoPaths.pushSample1(
@@ -173,12 +179,17 @@ public class SpecimenAuto extends LinearOpMode {
                     Bot.pinpoint.getY(), // Current Y
                     false // Not coming from the submersible
             );
+            timer.reset();
             state = State.COLLECT_SPECIMEN;
         }
     }
 
     private void handleCollectSpecimen() {
         Bot.purePursuit.update(0.525, true);
+        if (timer.milliseconds() > 750) {
+            // Backup
+            Bot.specimenArm.wristCollect();
+        }
         if (Bot.purePursuit.reachedTargetXY(1.5, 1)) {
             Bot.purePursuit.stop();
             Bot.specimenArm.closeClaw();
@@ -198,6 +209,7 @@ public class SpecimenAuto extends LinearOpMode {
             );
             Bot.specimenArm.movePrepHang(0.5);
             specimensLeft--;
+            timer.reset();
             state = State.SPECIMEN_HANG;
         }
     }

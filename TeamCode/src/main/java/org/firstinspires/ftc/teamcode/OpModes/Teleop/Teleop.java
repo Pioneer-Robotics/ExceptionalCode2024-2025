@@ -64,6 +64,7 @@ public class Teleop extends LinearOpMode {
     }
 
     private void updateTelemetry() {
+        telemetry.addData("Touch voltage", Bot.specimenEndStop.getVoltage());
         telemetry.addData("Slide pos", Bot.slideArm.getArmPosition());
         telemetry.addData("North Mode", driver1.getNorthModeToggle());
         telemetry.addData("Speed", driver1.getSpeed());

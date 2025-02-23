@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.SelfDrivingAuto.PID;
@@ -115,10 +116,10 @@ public class SpecimenArm {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                if (elapsedTime.seconds() > 0.5) {
+                if (elapsedTime.milliseconds() > 250) {
                     wristHang();
                 }
-                if (Bot.specimenEndStop.getVoltage() < 0.5 || !Bot.opMode.opModeIsActive()) {
+                if (Bot.specimenEndStop.getVoltage() < 0.7 || !Bot.opMode.opModeIsActive()) {
                     motor.setPower(0);
                     motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     timer.cancel();

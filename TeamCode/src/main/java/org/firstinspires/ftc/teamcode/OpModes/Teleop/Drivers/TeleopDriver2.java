@@ -25,6 +25,7 @@ public class TeleopDriver2 {
     private final Toggle specimenClawToggle = new Toggle(false);
     private final Toggle ocgBoxToggle = new Toggle(false);
     private final Toggle hookToggle = new Toggle(false);
+    private final Toggle specimenWristToggle = new Toggle(false);
 
     // Variables
     private boolean manualSlideArmControl = false;
@@ -49,6 +50,7 @@ public class TeleopDriver2 {
         updateTransferState();
         handleTransfer();
         handleHooks();
+        specimenWrist();
     }
 
     private void runSpecimenArm() {
@@ -188,6 +190,15 @@ public class TeleopDriver2 {
             Bot.slideArm.openHooks();
         } else if (hookToggle.justChanged() && !hookToggle.get()) {
             Bot.slideArm.closeHooks();
+        }
+    }
+
+    private void specimenWrist() {
+        specimenWristToggle.toggle(gamepad.options);
+        if (specimenWristToggle.justChanged() && specimenWristToggle.get()) {
+            Bot.specimenArm.wristHang();
+        } else if (specimenWristToggle.justChanged() && !specimenWristToggle.get()) {
+            Bot.specimenArm.wristCollect();
         }
     }
 }

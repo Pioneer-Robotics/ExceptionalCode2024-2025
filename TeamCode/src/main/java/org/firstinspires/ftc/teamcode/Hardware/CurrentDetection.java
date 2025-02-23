@@ -40,7 +40,7 @@ public class CurrentDetection {
         if (current > maxCurrent) {
             Bot.opMode.telemetry.addLine("MOTOR REACHED MAX CURRENT");
             motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motor.setPower(0);
+//            motor.setPower(0);
             Bot.opMode.gamepad1.rumble(500);
             Bot.opMode.gamepad2.rumble(500);
         }
